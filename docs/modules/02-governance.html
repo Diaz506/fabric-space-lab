@@ -418,18 +418,50 @@
         <strong>💡 Note:</strong> For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
       </div>
 
-      <h5>D) Groups &amp; sites — Container-level protection</h5>
+      <h5>D) Groups &amp; sites — "Define protection settings for groups and sites"</h5>
+
+      <p>This page shows three checkboxes under <strong>Protection settings</strong> plus an <strong>Auto apply settings</strong> section:</p>
 
       <table class="data-table">
         <thead>
-          <tr><th>Label</th><th>External sharing</th><th>Privacy</th><th>Conditional Access</th></tr>
+          <tr><th>Label</th><th>☐ Privacy and external user access</th><th>☐ External sharing and Conditional Access</th><th>☐ Private teams discoverability</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Public</strong></td><td>Allow external sharing</td><td>Public</td><td>No restriction</td></tr>
-          <tr><td><strong>Internal</strong></td><td>Organization only</td><td>Private</td><td>No restriction</td></tr>
-          <tr><td><strong>Confidential</strong></td><td>Organization only</td><td>Private</td><td>Require MFA (if available)</td></tr>
+          <tr><td><strong>Public</strong></td><td>✅ Check</td><td>❌ Leave unchecked</td><td>❌ Leave unchecked</td></tr>
+          <tr><td><strong>Internal</strong></td><td>✅ Check</td><td>❌ Leave unchecked</td><td>❌ Leave unchecked</td></tr>
+          <tr><td><strong>Confidential</strong></td><td>✅ Check</td><td>✅ Check</td><td>❌ Leave unchecked</td></tr>
         </tbody>
       </table>
+
+      <p><strong>If you checked "Privacy and external user access"</strong> → configure on the next page:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>Privacy</th><th>External user access</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Public</strong></td><td><strong>Public</strong> — anyone in the org can access</td><td>✅ Let group owners add external users</td></tr>
+          <tr><td><strong>Internal</strong></td><td><strong>Private</strong> — only members can access</td><td>❌ Don't let group owners add external users</td></tr>
+          <tr><td><strong>Confidential</strong></td><td><strong>Private</strong> — only members can access</td><td>❌ Don't let group owners add external users</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>If you checked "External sharing and Conditional Access"</strong> → configure on the next page:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>External sharing from SharePoint sites</th><th>Conditional Access</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Confidential</strong></td><td>Only people in your organization</td><td>Require MFA (if Conditional Access policies are configured)</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Auto apply settings</strong> → Leave the "Apply a label to channel meetings" dropdown as default for all labels.</p>
+
+      <div class="info-box">
+        <strong>💡 Note:</strong> Top Secret has Groups &amp; sites <strong>unchecked in Scope</strong> (Step B), so this page won't appear for that label.
+      </div>
 
       <h5>E) Finish</h5>
       <p>Review the summary and click <strong>Create label</strong>.</p>

@@ -215,13 +215,33 @@ This page shows two checkboxes. Check them based on the label:
 
 > **💡 Note:** For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
 
-**D) Groups & sites** — Container-level protection (only for labels with this scope enabled):
+**D) Groups & sites** — "Define protection settings for groups and sites":
 
-| Label | External sharing | Privacy | Conditional Access |
-|-------|------------------|---------|--------------------|
-| **Public** | Allow external sharing | Public | No restriction |
-| **Internal** | Organization only | Private | No restriction |
-| **Confidential** | Organization only | Private | Require MFA (if available) |
+This page shows three checkboxes under **Protection settings** plus an **Auto apply settings** section:
+
+| Label | ☐ Privacy and external user access | ☐ External sharing and Conditional Access | ☐ Private teams discoverability |
+|-------|-------------------------------------|-------------------------------------------|-------------------------------|
+| **Public** | ✅ Check | ❌ Leave unchecked | ❌ Leave unchecked |
+| **Internal** | ✅ Check | ❌ Leave unchecked | ❌ Leave unchecked |
+| **Confidential** | ✅ Check | ✅ Check | ❌ Leave unchecked |
+
+**If you checked "Privacy and external user access"** → configure on the next page:
+
+| Label | Privacy | External user access |
+|-------|---------|---------------------|
+| **Public** | **Public** — anyone in the org can access | ✅ Let group owners add external users |
+| **Internal** | **Private** — only members can access | ❌ Don't let group owners add external users |
+| **Confidential** | **Private** — only members can access | ❌ Don't let group owners add external users |
+
+**If you checked "External sharing and Conditional Access"** → configure on the next page:
+
+| Label | External sharing from SharePoint sites | Conditional Access |
+|-------|----------------------------------------|-------------------|
+| **Confidential** | Only people in your organization | Require MFA (if Conditional Access policies are configured) |
+
+**Auto apply settings** → Leave the "Apply a label to channel meetings" dropdown as default for all labels.
+
+> **💡 Note:** Top Secret has Groups & sites **unchecked in Scope** (Step B), so this page won't appear for that label.
 
 **E) Finish** — Review the summary and click **Create label**
 
