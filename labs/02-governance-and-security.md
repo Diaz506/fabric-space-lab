@@ -52,30 +52,49 @@ Fabric security isn't a single gate — it's a series of concentric walls. Each 
 
 Instead of assigning permissions to individual users, you'll create **Entra ID security groups** and assign those groups to workspace roles. This is how real organizations manage access at scale.
 
-### Step 1: Create Security Groups
+### Step 1: Create Test Users
+
+To properly validate security rules later, you need accounts that represent different personas. You'll create **2 test users** in addition to your admin account.
 
 1. Navigate to [entra.microsoft.com](https://entra.microsoft.com)
-2. Go to **Identity** → **Groups** → **All groups**
-3. Click **New group**
-4. Configure each group:
+2. Go to **Identity** → **Users** → **All users**
+3. Click **New user** → **Create new user**
+4. Create each user:
+
+| Display Name | User Principal Name | Password | Purpose |
+|-------------|---------------------|----------|---------|
+| **ZOSA Scientist** | `zosa.scientist@{your-tenant}.onmicrosoft.com` | Set a temporary password | Tests restricted data views |
+| **ZOSA Executive** | `zosa.executive@{your-tenant}.onmicrosoft.com` | Set a temporary password | Tests executive-level access |
+
+5. For each user, under **Assignments**, assign a **Microsoft Fabric (Free)** license
+6. **Sign in once** as each test user (in an InPrivate/Incognito browser window) to accept the terms and change the temporary password
+
+> **💡 Tip:** Use separate browser profiles or InPrivate windows to test as different users. This avoids cached-auth confusion that can make security appear broken.
+
+> **⚠️ Note:** Your admin account (the one you've been using) acts as the third persona — the admin/engineer with full access. No need to create a separate user for this.
+
+### Step 2: Create Security Groups
+
+1. In Entra, go to **Identity** → **Groups** → **All groups**
+2. Click **New group**
+3. Configure each group:
    - **Group type:** Security
    - **Group name:** (see table below)
-   - **Group description:** (describe the role)
    - **Membership type:** Assigned
-5. Click **Create**
+4. Click **Create**
 
-Create these four groups:
+Create these four groups and assign the **correct members**:
 
 | Group Name | Description | Members |
 |------------|-------------|---------|
-| `ZOSA-Admins` | Fabric administrators and platform owners | Your account (for this lab) |
-| `ZOSA-Engineers` | Data engineers who build and maintain pipelines | Your account (for this lab) |
-| `ZOSA-Scientists` | Data scientists and analysts who consume data | Your account (for this lab) |
-| `ZOSA-Executives` | Executive stakeholders who view dashboards | Your account (for this lab) |
+| `ZOSA-Admins` | Fabric administrators and platform owners | Your admin account |
+| `ZOSA-Engineers` | Data engineers who build and maintain pipelines | Your admin account |
+| `ZOSA-Scientists` | Data scientists and analysts who consume data | `zosa.scientist` test user |
+| `ZOSA-Executives` | Executive stakeholders who view dashboards | `zosa.executive` test user |
 
-**💡 Tip:** In a real environment, each user would be in only the group(s) matching their role. For this lab, add yourself to all four so you can test each perspective.
+**Why this separation matters:** Your admin account is in the builder groups (Admins + Engineers) so you can create and manage everything. The test users are in the consumer groups (Scientists + Executives) so you can validate that security rules actually restrict their access.
 
-### Step 2: Assign Groups to Workspace Roles
+### Step 3: Assign Groups to Workspace Roles
 
 Open each workspace → click **Manage access** → **Add people or groups** → search for the Entra group → assign the role.
 
@@ -232,7 +251,7 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];
 
 **What happens:** If a scientist runs `SELECT * FROM missions`, the `budget_usd` column is simply **not returned**. No error — the column is invisible. If they explicitly reference it (`SELECT budget_usd FROM missions`), they get a permission error.
 
-**⚠️ Note:** CLS works at the SQL analytics endpoint level. Ensure users are accessing data through the endpoint (or Power BI semantic model) rather than directly reading Parquet files via Spark with a storage account key.
+**🧪 How to verify:** Sign in as `zosa.scientist` in an InPrivate browser → open the SQL analytics endpoint → run `SELECT * FROM missions` → the `budget_usd` column should not appear in the results.
 
 ---
 
@@ -295,6 +314,8 @@ To grant unmasking to specific users:
 GRANT UNMASK TO [ZOSA-Admins];
 ```
 
+**🧪 How to verify:** Sign in as `zosa.scientist` in an InPrivate browser → open the SQL analytics endpoint → run `SELECT TOP 5 * FROM crew` → emails should appear as `s***@zosa.org`. Then sign in as your admin account → same query → real data appears.
+
 **💡 Tip:** DDM is different from the other layers. It doesn't block access — it **obscures** the actual values. Use it for PII that needs to be present but not readable.
 
 ---
@@ -321,12 +342,25 @@ Here's a summary of which security layer protects what at ZOSA:
 
 Verify you've completed the following:
 
+- [ ] Created 2 test users in Entra ID (`zosa.scientist` and `zosa.executive`) and signed in once with each
 - [ ] Created 4 Entra ID security groups (`ZOSA-Admins`, `ZOSA-Engineers`, `ZOSA-Scientists`, `ZOSA-Executives`)
+- [ ] Assigned your admin account to `ZOSA-Admins` + `ZOSA-Engineers`, test users to `ZOSA-Scientists` + `ZOSA-Executives`
 - [ ] Assigned groups to appropriate workspace roles in ZOSA-Dev, ZOSA-Test, and ZOSA-Prod
 - [ ] Sensitivity labels configured and applied to workspaces (Confidential baseline)
 - [ ] Endorsement process understood (Promoted vs. Certified)
 - [ ] You understand the 4 data security layers: **RLS** (row filter), **CLS** (column deny), **OLS** (object hide), **DDM** (value mask)
 - [ ] OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded
+
+### 🧪 How You'll Validate Security (Preview)
+
+You've defined the rules — but how do you prove they work? Here's what you'll do once data exists (Modules 04–05):
+
+| Security Layer | Validation Method |
+|---------------|-------------------|
+| **RLS** | Power BI → **Modeling** → **View as Role** → select `Europe_Analysts` and confirm only European data appears |
+| **CLS** | Sign in as `zosa.scientist` in an InPrivate browser → open the SQL analytics endpoint → run `SELECT * FROM missions` → confirm `budget_usd` column is missing |
+| **DDM** | Sign in as `zosa.scientist` → query `SELECT * FROM crew` → confirm emails show as `s***@zosa.org` |
+| **OLS** | Sign in as `zosa.scientist` → open the Power BI semantic model → confirm `classified_defense_missions` table is not visible |
 
 **⚠️ Note:** We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be **implemented** in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.
 

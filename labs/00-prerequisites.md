@@ -44,6 +44,8 @@ Over the next 13 modules (~8 hours total), you'll go from an empty Fabric tenant
 
 ## ✅ Prerequisites Checklist
 
+> **💡 Heads-up for Module 02:** To fully validate security rules (RLS, CLS, DDM), you'll need **Entra ID admin rights** to create 2 test users. If you're on a Fabric trial tenant, you already have admin rights. We'll walk you through it in Module 02.
+
 ### 1. Microsoft Fabric Capacity
 
 You need access to a Fabric-enabled workspace. Two options:

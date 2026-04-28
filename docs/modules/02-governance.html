@@ -145,15 +145,48 @@
 
       <p>Instead of assigning permissions to individual users, you'll create <strong>Entra ID security groups</strong> and assign those groups to workspace roles. This is how real organizations manage access at scale.</p>
 
-      <h3>Step 1: Create Security Groups</h3>
+      <h3>Step 1: Create Test Users</h3>
+
+      <p>To properly validate security rules later, you need accounts that represent different personas. You'll create <strong>2 test users</strong> in addition to your admin account.</p>
 
       <div class="step-card">
         <div class="step-number">1</div>
-        <div class="step-title">Navigate to Entra ID</div>
+        <div class="step-title">Create Test Users in Entra ID</div>
         <div class="step-body">
           <ol>
             <li>Navigate to <a href="https://entra.microsoft.com" target="_blank" rel="noopener">entra.microsoft.com</a></li>
-            <li>Go to <strong>Identity</strong> → <strong>Groups</strong> → <strong>All groups</strong></li>
+            <li>Go to <strong>Identity</strong> → <strong>Users</strong> → <strong>All users</strong></li>
+            <li>Click <strong>New user</strong> → <strong>Create new user</strong></li>
+            <li>Create each user per the table below</li>
+            <li>Assign a <strong>Microsoft Fabric (Free)</strong> license under Assignments</li>
+            <li><strong>Sign in once</strong> as each user (InPrivate browser) to accept terms and change password</li>
+          </ol>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Display Name</th><th>User Principal Name</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>ZOSA Scientist</strong></td><td><code>zosa.scientist@{tenant}.onmicrosoft.com</code></td><td>Tests restricted data views</td></tr>
+          <tr><td><strong>ZOSA Executive</strong></td><td><code>zosa.executive@{tenant}.onmicrosoft.com</code></td><td>Tests executive-level access</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Browser Tip</div>
+        <p>Use separate browser profiles or InPrivate/Incognito windows to test as different users. This avoids cached-auth confusion that can make security appear broken.</p>
+      </div>
+
+      <h3>Step 2: Create Security Groups</h3>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create Entra ID Security Groups</div>
+        <div class="step-body">
+          <ol>
+            <li>In Entra, go to <strong>Identity</strong> → <strong>Groups</strong> → <strong>All groups</strong></li>
             <li>Click <strong>New group</strong></li>
             <li>Configure each group:
               <ul>
@@ -167,26 +200,26 @@
         </div>
       </div>
 
-      <p>Create these four groups:</p>
+      <p>Create these four groups with the <strong>correct members</strong>:</p>
 
       <table class="data-table">
         <thead>
           <tr><th>Group Name</th><th>Description</th><th>Members</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>ZOSA-Admins</code></td><td>Fabric administrators and platform owners</td><td>Your account (for this lab)</td></tr>
-          <tr><td><code>ZOSA-Engineers</code></td><td>Data engineers who build and maintain pipelines</td><td>Your account (for this lab)</td></tr>
-          <tr><td><code>ZOSA-Scientists</code></td><td>Data scientists and analysts who consume data</td><td>Your account (for this lab)</td></tr>
-          <tr><td><code>ZOSA-Executives</code></td><td>Executive stakeholders who view dashboards</td><td>Your account (for this lab)</td></tr>
+          <tr><td><code>ZOSA-Admins</code></td><td>Fabric administrators and platform owners</td><td>Your admin account</td></tr>
+          <tr><td><code>ZOSA-Engineers</code></td><td>Data engineers who build and maintain pipelines</td><td>Your admin account</td></tr>
+          <tr><td><code>ZOSA-Scientists</code></td><td>Data scientists and analysts who consume data</td><td><code>zosa.scientist</code> test user</td></tr>
+          <tr><td><code>ZOSA-Executives</code></td><td>Executive stakeholders who view dashboards</td><td><code>zosa.executive</code> test user</td></tr>
         </tbody>
       </table>
 
-      <div class="mission-alert tip">
-        <div class="alert-title">Lab Shortcut</div>
-        <p>In a real environment, each user would be in only the group(s) matching their role. For this lab, add yourself to all four so you can test each perspective.</p>
+      <div class="mission-alert info">
+        <div class="alert-title">Why This Separation?</div>
+        <p>Your admin account is in the builder groups (Admins + Engineers) so you can create and manage everything. The test users are in the consumer groups (Scientists + Executives) so you can validate that security rules actually restrict their access.</p>
       </div>
 
-      <h3>Step 2: Assign Groups to Workspace Roles</h3>
+      <h3>Step 3: Assign Groups to Workspace Roles</h3>
 
       <p>Open each workspace → click <strong>Manage access</strong> → <strong>Add people or groups</strong> → search for the Entra group → assign the role.</p>
 
