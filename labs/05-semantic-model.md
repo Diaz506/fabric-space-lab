@@ -31,8 +31,8 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
 
 ### Steps
 
-1. Open your **ZOSA_Lakehouse** in the Fabric portal.
-2. In the top command bar, click **New** → **Semantic model**.
+1. Open your **zosa_lakehouse** in the Fabric portal.
+2. In the top command bar, click **+ New item** → **Semantic model**.
 3. Name the model: `ZOSA Analytics Model`.
 4. In the table picker, select the **Gold layer** tables:
    - `gold_asteroid_risk`
@@ -131,13 +131,51 @@ Critical Asteroids =
 Habitable Candidates =
     CALCULATE(
         COUNTROWS(gold_exoplanet_catalog),
-        gold_exoplanet_catalog[in_habitable_zone] = TRUE()
+        gold_exoplanet_catalog[habitability_zone] = "Habitable Zone"
     )
+```
+
+### 4.5 Total Missions
+
+```dax
+Total Missions =
+    COUNTROWS(gold_mission_summary)
+```
+
+### 4.6 Active Missions
+
+```dax
+Active Missions =
+    CALCULATE(
+        COUNTROWS(gold_mission_summary),
+        gold_mission_summary[status] = "Active"
+    )
+```
+
+### 4.7 Total Budget
+
+```dax
+Total Budget =
+    SUM(gold_mission_summary[total_budget_usd])
+```
+
+### 4.8 Max Hazard Score
+
+```dax
+Max Hazard Score =
+    MAX(gold_asteroid_risk[hazard_score])
+```
+
+### 4.9 Near-Earth Objects
+
+```dax
+Near-Earth Objects =
+    COUNTROWS(gold_asteroid_risk)
 ```
 
 ### Validation
 
-After creating all four measures, click on each one in the **Fields** pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.
+After creating all nine measures, click on each one in the **Fields** pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.
 
 ---
 
@@ -205,11 +243,16 @@ Before moving on, verify that everything is in place:
 - [ ] **Semantic model** `ZOSA Analytics Model` exists in your workspace and uses **Direct Lake** mode.
 - [ ] **Seven tables** are loaded: four Gold, three Silver.
 - [ ] **Relationships** form a star schema centered on `gold_mission_summary`.
-- [ ] **Four DAX measures** return valid values:
+- [ ] **Nine DAX measures** return valid values:
   - `Hazard Index` — a decimal number
   - `Mission Success Rate` — a percentage (0–1 range)
   - `Critical Asteroids` — an integer count
   - `Habitable Candidates` — an integer count
+  - `Total Missions` — an integer count
+  - `Active Missions` — an integer count
+  - `Total Budget` — a currency value
+  - `Max Hazard Score` — a decimal number
+  - `Near-Earth Objects` — an integer count
 - [ ] **RLS role** `Europe_Analysts` filters correctly (verified with "View as").
 - [ ] **OLS** hides `budget_usd` for `Non_Executive` role (verified in Tabular Editor).
 

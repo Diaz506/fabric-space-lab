@@ -144,7 +144,7 @@
         </thead>
         <tbody>
           <tr><td>Total Missions</td><td><code>[Total Missions]</code></td><td>Whole number</td></tr>
-          <tr><td>Success Rate</td><td><code>[Success Rate]</code></td><td>Percentage, 1 decimal</td></tr>
+          <tr><td>Success Rate</td><td><code>[Mission Success Rate]</code></td><td>Percentage, 1 decimal</td></tr>
           <tr><td>Active Missions</td><td><code>[Active Missions]</code></td><td>Whole number</td></tr>
           <tr><td>Critical Asteroids</td><td><code>[Critical Asteroids]</code></td><td>Whole number, <strong style="color:#FF4444;">red</strong> callout color</td></tr>
         </tbody>
@@ -160,7 +160,7 @@
         <div class="step-body">
           <p>Add a <strong>Donut chart</strong> visual below the KPI cards (left side).</p>
           <ul>
-            <li><strong>Legend:</strong> <code>missions[status]</code></li>
+            <li><strong>Legend:</strong> <code>gold_mission_summary[status]</code></li>
             <li><strong>Values:</strong> <code>[Total Missions]</code></li>
           </ul>
           <p>In <strong>Format → Data colors</strong>, assign:</p>
@@ -181,7 +181,7 @@
         <div class="step-body">
           <p>Add a <strong>Clustered bar chart</strong> (right side, next to the donut).</p>
           <ul>
-            <li><strong>Y-axis:</strong> <code>missions[mission_type]</code></li>
+            <li><strong>Y-axis:</strong> <code>gold_mission_summary[mission_type]</code></li>
             <li><strong>X-axis:</strong> <code>[Total Budget]</code></li>
           </ul>
           <p>Sort descending by Total Budget. In <strong>Format → Data colors</strong>, use a gradient from navy (<code>#0D1B2A</code>) to gold (<code>#FFD700</code>).</p>
@@ -195,8 +195,8 @@
         <div class="step-title">Add Slicers</div>
         <div class="step-body">
           <ol>
-            <li>Add a <strong>Date range slicer</strong> at the top of the page: Field: <code>dim_date[date]</code>, Style: <strong>Between</strong> (date range picker)</li>
-            <li>Add a <strong>Region dropdown slicer</strong> next to it: Field: <code>missions[region]</code>, Style: <strong>Dropdown</strong></li>
+            <li>Add a <strong>Date range slicer</strong> at the top of the page: Field: <code>gold_mission_summary[launch_date]</code>, Style: <strong>Between</strong> (date range picker)</li>
+            <li>Add a <strong>Region dropdown slicer</strong> next to it: Field: <code>gold_mission_summary[region]</code>, Style: <strong>Dropdown</strong></li>
           </ol>
         </div>
       </div>
@@ -218,11 +218,11 @@
         <div class="step-body">
           <p>Add a <strong>Scatter chart</strong> as the main visual (top half of the page).</p>
           <ul>
-            <li><strong>X-axis:</strong> <code>asteroids[miss_distance_km]</code></li>
-            <li><strong>Y-axis:</strong> <code>asteroids[velocity_km_s]</code></li>
-            <li><strong>Size:</strong> <code>asteroids[diameter_m]</code></li>
-            <li><strong>Legend (color):</strong> <code>asteroids[risk_category]</code></li>
-            <li><strong>Tooltips:</strong> Add <code>asteroids[name]</code>, <code>[Hazard Score]</code></li>
+            <li><strong>X-axis:</strong> <code>gold_asteroid_risk[min_miss_distance_au]</code></li>
+            <li><strong>Y-axis:</strong> <code>gold_asteroid_risk[max_relative_velocity_kmps]</code></li>
+            <li><strong>Size:</strong> <code>gold_asteroid_risk[avg_diameter_km]</code></li>
+            <li><strong>Legend (color):</strong> <code>gold_asteroid_risk[risk_category]</code></li>
+            <li><strong>Tooltips:</strong> Add <code>gold_asteroid_risk[name]</code>, <code>[Hazard Score]</code></li>
           </ul>
           <p>Apply conditional formatting on the legend:</p>
           <ul>
@@ -247,12 +247,12 @@
         <div class="step-body">
           <p>Add a <strong>Table</strong> visual (bottom-left) with columns:</p>
           <ul>
-            <li><code>asteroids[name]</code></li>
-            <li><code>asteroids[diameter_m]</code></li>
-            <li><code>asteroids[miss_distance_km]</code></li>
-            <li><code>asteroids[velocity_km_s]</code></li>
+            <li><code>gold_asteroid_risk[name]</code></li>
+            <li><code>gold_asteroid_risk[avg_diameter_km]</code></li>
+            <li><code>gold_asteroid_risk[min_miss_distance_au]</code></li>
+            <li><code>gold_asteroid_risk[max_relative_velocity_kmps]</code></li>
             <li><code>[Hazard Score]</code></li>
-            <li><code>asteroids[risk_category]</code></li>
+            <li><code>gold_asteroid_risk[risk_category]</code></li>
           </ul>
           <p>Apply a <strong>Top N filter</strong>: Top <strong>10</strong> by <code>[Hazard Score]</code>.</p>
           <p>Add <strong>conditional formatting</strong> on the <code>risk_category</code> column:</p>
@@ -292,9 +292,9 @@
         <div class="step-title">Configure the Line Chart</div>
         <div class="step-body">
           <ul>
-            <li><strong>X-axis:</strong> <code>solar_events[event_date]</code></li>
-            <li><strong>Y-axis:</strong> Count of <code>solar_events[event_id]</code></li>
-            <li><strong>Legend:</strong> <code>solar_events[event_type]</code></li>
+            <li><strong>X-axis:</strong> <code>gold_solar_activity[event_month]</code></li>
+            <li><strong>Y-axis:</strong> <code>gold_solar_activity[event_count]</code></li>
+            <li><strong>Legend:</strong> <code>gold_solar_activity[event_type]</code></li>
           </ul>
           <p>Set the X-axis to a <strong>continuous date axis</strong> (not categorical).</p>
         </div>
@@ -307,9 +307,9 @@
         <div class="step-title">Configure the Column Chart</div>
         <div class="step-body">
           <ul>
-            <li><strong>X-axis:</strong> <code>solar_events[event_type]</code></li>
-            <li><strong>Y-axis:</strong> Count of <code>solar_events[event_id]</code></li>
-            <li><strong>Legend:</strong> <code>solar_events[severity]</code></li>
+            <li><strong>X-axis:</strong> <code>gold_solar_activity[event_type]</code></li>
+            <li><strong>Y-axis:</strong> <code>gold_solar_activity[event_count]</code></li>
+            <li><strong>Legend:</strong> <code>gold_solar_activity[avg_severity]</code></li>
           </ul>
           <p>Color the severity levels: Extreme → Red, Severe → Orange, Moderate → Yellow, Minor → Green.</p>
         </div>
@@ -321,8 +321,8 @@
         <div class="step-number">3</div>
         <div class="step-title">Add the Events Table</div>
         <div class="step-body">
-          <p>Columns: <code>event_date</code>, <code>event_type</code>, <code>severity</code>, <code>description</code>.</p>
-          <p>Apply a <strong>Top N</strong> filter: Top 15 by <code>event_date</code> (most recent).</p>
+          <p>Columns: <code>event_month</code>, <code>event_type</code>, <code>avg_severity</code>, <code>max_severity</code>.</p>
+          <p>Apply a <strong>Top N</strong> filter: Top 15 by <code>event_month</code> (most recent).</p>
         </div>
       </div>
 
@@ -357,7 +357,7 @@
           <p>Add a drillthrough page for individual mission details:</p>
           <ol>
             <li>Create a new page with mission details (launch date, cost, crew, outcomes).</li>
-            <li>Add <code>missions[mission_id]</code> as a <strong>drillthrough field</strong>.</li>
+            <li>Add <code>gold_mission_summary[mission_id]</code> as a <strong>drillthrough field</strong>.</li>
             <li>Right-click any mission in the donut chart → <strong>Drillthrough</strong> → Mission Detail.</li>
           </ol>
         </div>
@@ -401,10 +401,10 @@
         <div class="step-body">
           <p>Add a <strong>Scatter chart</strong> as the centerpiece of the page:</p>
           <ul>
-            <li><strong>X-axis:</strong> <code>exoplanets[orbital_period_days]</code> (consider log scale)</li>
-            <li><strong>Y-axis:</strong> <code>exoplanets[planet_mass_jupiter]</code></li>
-            <li><strong>Legend (color):</strong> <code>exoplanets[discovery_method]</code></li>
-            <li><strong>Tooltips:</strong> <code>exoplanets[planet_name]</code>, <code>exoplanets[host_star]</code>, <code>exoplanets[distance_ly]</code>, <code>exoplanets[habitable_zone]</code></li>
+            <li><strong>X-axis:</strong> <code>gold_exoplanet_catalog[orbital_period_days]</code> (consider log scale)</li>
+            <li><strong>Y-axis:</strong> <code>gold_exoplanet_catalog[planet_mass_earth]</code></li>
+            <li><strong>Legend (color):</strong> <code>gold_exoplanet_catalog[discovery_method]</code></li>
+            <li><strong>Tooltips:</strong> <code>gold_exoplanet_catalog[planet_name]</code>, <code>gold_exoplanet_catalog[host_star]</code>, <code>gold_exoplanet_catalog[distance_ly]</code>, <code>gold_exoplanet_catalog[habitability_zone]</code></li>
           </ul>
           <p>Enable <strong>zoom sliders</strong> on both axes. Set axis scaling to <strong>Logarithmic</strong> for orbital period (values span many orders of magnitude).</p>
         </div>
@@ -419,10 +419,10 @@
           <tr><th>Slicer</th><th>Field</th><th>Style</th></tr>
         </thead>
         <tbody>
-          <tr><td>Habitable Zone</td><td><code>exoplanets[habitable_zone]</code></td><td><strong>Toggle</strong> (Yes/No buttons)</td></tr>
-          <tr><td>Discovery Year</td><td><code>exoplanets[discovery_year]</code></td><td><strong>Between</strong> (range slider)</td></tr>
-          <tr><td>Distance (ly)</td><td><code>exoplanets[distance_ly]</code></td><td><strong>Between</strong> (range slider)</td></tr>
-          <tr><td>Discovery Method</td><td><code>exoplanets[discovery_method]</code></td><td><strong>Dropdown</strong> (multi-select)</td></tr>
+          <tr><td>Habitable Zone</td><td><code>gold_exoplanet_catalog[habitability_zone]</code></td><td><strong>Toggle</strong> (Yes/No buttons)</td></tr>
+          <tr><td>Discovery Year</td><td><code>gold_exoplanet_catalog[discovery_year]</code></td><td><strong>Between</strong> (range slider)</td></tr>
+          <tr><td>Distance (ly)</td><td><code>gold_exoplanet_catalog[distance_ly]</code></td><td><strong>Between</strong> (range slider)</td></tr>
+          <tr><td>Discovery Method</td><td><code>gold_exoplanet_catalog[discovery_method]</code></td><td><strong>Dropdown</strong> (multi-select)</td></tr>
         </tbody>
       </table>
 
@@ -440,8 +440,8 @@
           <p>Add a <strong>Multi-row card</strong> visual on the right side with fields:</p>
           <ul>
             <li><code>planet_name</code>, <code>host_star</code>, <code>discovery_method</code>, <code>discovery_year</code></li>
-            <li><code>planet_mass_jupiter</code>, <code>orbital_period_days</code>, <code>distance_ly</code></li>
-            <li><code>habitable_zone</code>, <code>planet_radius_earth</code></li>
+            <li><code>planet_mass_earth</code>, <code>orbital_period_days</code>, <code>distance_ly</code></li>
+            <li><code>habitability_zone</code>, <code>planet_radius_earth</code></li>
           </ul>
           <p>This card updates dynamically when you click a dot on the scatter plot.</p>
         </div>
@@ -631,7 +631,7 @@
         <div class="step-body">
           <ol>
             <li>Open the <strong>Mission Control Dashboard</strong> report in the service.</li>
-            <li>Hover over the <strong>Success Rate</strong> KPI card → click the <strong>📌 Pin</strong> icon.</li>
+            <li>Hover over the <strong>Mission Success Rate</strong> KPI card → click the <strong>📌 Pin</strong> icon.</li>
             <li>Select <strong>New dashboard</strong> → Name it <strong>ZOSA Mission Control</strong>.</li>
             <li>Pin additional visuals: Mission Status donut chart, Critical Asteroids KPI card, Hazard Score card, Solar Events line chart.</li>
             <li>Arrange tiles on the dashboard by dragging and resizing.</li>

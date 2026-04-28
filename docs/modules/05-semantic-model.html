@@ -143,7 +143,7 @@
         <div class="step-number">1</div>
         <div class="step-title">Open your Lakehouse</div>
         <div class="step-body">
-          <p>Open your <strong>ZOSA_Lakehouse</strong> in the Fabric portal.</p>
+          <p>Open your <strong>zosa_lakehouse</strong> in the Fabric portal.</p>
         </div>
       </div>
 
@@ -151,7 +151,7 @@
         <div class="step-number">2</div>
         <div class="step-title">Create the model</div>
         <div class="step-body">
-          <p>In the top command bar, click <strong>New</strong> → <strong>Semantic model</strong>.</p>
+          <p>In the top command bar, click <strong>+ New item</strong> → <strong>Semantic model</strong>.</p>
           <p>Name the model: <code>ZOSA Analytics Model</code>.</p>
         </div>
       </div>
@@ -383,13 +383,76 @@
         <pre><code class="language-javascript">Habitable Candidates =
     CALCULATE(
         COUNTROWS(gold_exoplanet_catalog),
-        gold_exoplanet_catalog[in_habitable_zone] = TRUE()
+        gold_exoplanet_catalog[habitability_zone] = "Habitable Zone"
     )</code></pre>
+      </div>
+
+      <h3>4.5 — Total Missions</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Total Missions</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Total Missions =
+    COUNTROWS(gold_mission_summary)</code></pre>
+      </div>
+
+      <h3>4.6 — Active Missions</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Active Missions</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Active Missions =
+    CALCULATE(
+        COUNTROWS(gold_mission_summary),
+        gold_mission_summary[status] = "Active"
+    )</code></pre>
+      </div>
+
+      <h3>4.7 — Total Budget</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Total Budget</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Total Budget =
+    SUM(gold_mission_summary[total_budget_usd])</code></pre>
+      </div>
+
+      <h3>4.8 — Max Hazard Score</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Max Hazard Score</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Max Hazard Score =
+    MAX(gold_asteroid_risk[hazard_score])</code></pre>
+      </div>
+
+      <h3>4.9 — Near-Earth Objects</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Near-Earth Objects</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Near-Earth Objects =
+    COUNTROWS(gold_asteroid_risk)</code></pre>
       </div>
 
       <h3>Validation</h3>
 
-      <p>After creating all four measures, click on each one in the <strong>Fields</strong> pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.</p>
+      <p>After creating all nine measures, click on each one in the <strong>Fields</strong> pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.</p>
     </section>
 
     <!-- CHAPTER 5: Row-Level Security -->
@@ -531,12 +594,17 @@
           <li><strong>Semantic model</strong> <code>ZOSA Analytics Model</code> exists in your workspace and uses <strong>Direct Lake</strong> mode.</li>
           <li><strong>Seven tables</strong> are loaded: four Gold, three Silver.</li>
           <li><strong>Relationships</strong> form a star schema centered on <code>gold_mission_summary</code>.</li>
-          <li><strong>Four DAX measures</strong> return valid values:
+          <li><strong>Nine DAX measures</strong> return valid values:
             <ul>
               <li><code>Hazard Index</code> — a decimal number</li>
               <li><code>Mission Success Rate</code> — a percentage (0–1 range)</li>
               <li><code>Critical Asteroids</code> — an integer count</li>
               <li><code>Habitable Candidates</code> — an integer count</li>
+              <li><code>Total Missions</code> — an integer count</li>
+              <li><code>Active Missions</code> — an integer count</li>
+              <li><code>Total Budget</code> — a currency value</li>
+              <li><code>Max Hazard Score</code> — a decimal number</li>
+              <li><code>Near-Earth Objects</code> — an integer count</li>
             </ul>
           </li>
           <li><strong>RLS role</strong> <code>Europe_Analysts</code> filters correctly (verified with "View as").</li>

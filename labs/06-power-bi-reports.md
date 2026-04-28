@@ -50,7 +50,7 @@ This is the "at-a-glance" page — KPIs across the top, charts below.
    | Card | Measure / Field | Format |
    |---|---|---|
    | Total Missions | `[Total Missions]` | Whole number |
-   | Success Rate | `[Success Rate]` | Percentage, 1 decimal |
+   | Success Rate | `[Mission Success Rate]` | Percentage, 1 decimal |
    | Active Missions | `[Active Missions]` | Whole number |
    | Critical Asteroids | `[Critical Asteroids]` | Whole number, **red** callout color |
 
@@ -63,7 +63,7 @@ This is the "at-a-glance" page — KPIs across the top, charts below.
 
 1. Add a **Donut chart** visual below the KPI cards (left side).
 2. Configure:
-   - **Legend:** `missions[status]`
+   - **Legend:** `gold_mission_summary[status]`
    - **Values:** `[Total Missions]`
 3. In **Format → Data colors**, assign:
    - Completed → Green (`#4CAF50`)
@@ -75,7 +75,7 @@ This is the "at-a-glance" page — KPIs across the top, charts below.
 
 1. Add a **Clustered bar chart** (right side, next to the donut).
 2. Configure:
-   - **Y-axis:** `missions[mission_type]`
+   - **Y-axis:** `gold_mission_summary[mission_type]`
    - **X-axis:** `[Total Budget]`
 3. Sort descending by Total Budget.
 4. In **Format → Data colors**, use a gradient from navy (`#0D1B2A`) to gold (`#FFD700`).
@@ -83,10 +83,10 @@ This is the "at-a-glance" page — KPIs across the top, charts below.
 #### Slicers
 
 1. Add a **Date range slicer** at the top of the page:
-   - Field: `dim_date[date]`
+   - Field: `gold_mission_summary[launch_date]`
    - Style: **Between** (date range picker)
 2. Add a **Region dropdown slicer** next to it:
-   - Field: `missions[region]`
+   - Field: `gold_mission_summary[region]`
    - Style: **Dropdown**
 
 > ⚠️ **Important:** Place slicers consistently at the top of every page. Users expect filters in the same location across pages.
@@ -99,11 +99,11 @@ This is the page that keeps Major Nakamura up at night.
 
 1. Add a **Scatter chart** as the main visual (top half of the page).
 2. Configure:
-   - **X-axis:** `asteroids[miss_distance_km]`
-   - **Y-axis:** `asteroids[velocity_km_s]`
-   - **Size:** `asteroids[diameter_m]`
-   - **Legend (color):** `asteroids[risk_category]`
-   - **Tooltips:** Add `asteroids[name]`, `[Hazard Score]`
+   - **X-axis:** `gold_asteroid_risk[min_miss_distance_au]`
+   - **Y-axis:** `gold_asteroid_risk[max_relative_velocity_kmps]`
+   - **Size:** `gold_asteroid_risk[avg_diameter_km]`
+   - **Legend (color):** `gold_asteroid_risk[risk_category]`
+   - **Tooltips:** Add `gold_asteroid_risk[name]`, `[Hazard Score]`
 3. Apply conditional formatting on the legend:
    - Critical → Red (`#FF4444`)
    - High → Orange (`#FF9800`)
@@ -116,12 +116,12 @@ This is the page that keeps Major Nakamura up at night.
 
 1. Add a **Table** visual (bottom-left).
 2. Add columns:
-   - `asteroids[name]`
-   - `asteroids[diameter_m]`
-   - `asteroids[miss_distance_km]`
-   - `asteroids[velocity_km_s]`
+   - `gold_asteroid_risk[name]`
+   - `gold_asteroid_risk[avg_diameter_km]`
+   - `gold_asteroid_risk[min_miss_distance_au]`
+   - `gold_asteroid_risk[max_relative_velocity_kmps]`
    - `[Hazard Score]`
-   - `asteroids[risk_category]`
+   - `gold_asteroid_risk[risk_category]`
 3. Apply a **Top N filter** on the visual:
    - Filter on `[Hazard Score]` → Top **10** → By value: `[Hazard Score]`
 4. Add **conditional formatting** on the `risk_category` column:
@@ -147,18 +147,18 @@ Space weather data for the science team.
 
 1. Add a **Line chart** (top half).
 2. Configure:
-   - **X-axis:** `solar_events[event_date]`
-   - **Y-axis:** Count of `solar_events[event_id]`
-   - **Legend:** `solar_events[event_type]`
+   - **X-axis:** `gold_solar_activity[event_month]`
+   - **Y-axis:** `gold_solar_activity[event_count]`
+   - **Legend:** `gold_solar_activity[event_type]`
 3. Set the X-axis to a continuous date axis (not categorical).
 
 #### Severity Breakdown (Stacked Column Chart)
 
 1. Add a **Stacked column chart** (bottom-left).
 2. Configure:
-   - **X-axis:** `solar_events[event_type]`
-   - **Y-axis:** Count of `solar_events[event_id]`
-   - **Legend:** `solar_events[severity]`
+   - **X-axis:** `gold_solar_activity[event_type]`
+   - **Y-axis:** `gold_solar_activity[event_count]`
+   - **Legend:** `gold_solar_activity[avg_severity]`
 3. Color the severity levels:
    - Extreme → Red
    - Severe → Orange
@@ -168,8 +168,8 @@ Space weather data for the science team.
 #### Latest Events Table
 
 1. Add a **Table** visual (bottom-right).
-2. Columns: `event_date`, `event_type`, `severity`, `description`
-3. Apply a **Top N** filter: Top 15 by `event_date` (most recent).
+2. Columns: `event_month`, `event_type`, `avg_severity`, `max_severity`
+3. Apply a **Top N** filter: Top 15 by `event_month` (most recent).
 
 ### Add Tooltips and Interactivity
 
@@ -180,7 +180,7 @@ Space weather data for the science team.
    - On the scatter chart, set **Tooltip → Page** to your tooltip page.
 3. **Drillthrough:** Add a drillthrough page for individual mission details:
    - Create a new page with mission details (launch date, cost, crew, outcomes).
-   - Add `missions[mission_id]` as a **drillthrough field**.
+   - Add `gold_mission_summary[mission_id]` as a **drillthrough field**.
    - Right-click any mission in the donut chart → **Drillthrough** → Mission Detail.
 
 > 💡 **Tip:** Custom tooltip pages are a great way to show contextual detail without cluttering the main visuals. Major Nakamura loves hovering over a dot and seeing the asteroid's full profile.
@@ -200,10 +200,10 @@ This is the public-facing report — designed for curiosity, not crisis. The pub
 
 1. Add a **Scatter chart** as the centerpiece of the page.
 2. Configure:
-   - **X-axis:** `exoplanets[orbital_period_days]` (consider log scale)
-   - **Y-axis:** `exoplanets[planet_mass_jupiter]`
-   - **Legend (color):** `exoplanets[discovery_method]`
-   - **Tooltips:** `exoplanets[planet_name]`, `exoplanets[host_star]`, `exoplanets[distance_ly]`, `exoplanets[habitable_zone]`
+   - **X-axis:** `gold_exoplanet_catalog[orbital_period_days]` (consider log scale)
+   - **Y-axis:** `gold_exoplanet_catalog[planet_mass_earth]`
+   - **Legend (color):** `gold_exoplanet_catalog[discovery_method]`
+   - **Tooltips:** `gold_exoplanet_catalog[planet_name]`, `gold_exoplanet_catalog[host_star]`, `gold_exoplanet_catalog[distance_ly]`, `gold_exoplanet_catalog[habitability_zone]`
 3. Enable **zoom sliders** on both axes.
 4. Set axis scaling to **Logarithmic** for orbital period (values span many orders of magnitude).
 
@@ -213,10 +213,10 @@ Add the following slicers in a vertical panel on the left side:
 
 | Slicer | Field | Style |
 |---|---|---|
-| Habitable Zone | `exoplanets[habitable_zone]` | **Toggle** (Yes/No buttons) |
-| Discovery Year | `exoplanets[discovery_year]` | **Between** (range slider) |
-| Distance (ly) | `exoplanets[distance_ly]` | **Between** (range slider) |
-| Discovery Method | `exoplanets[discovery_method]` | **Dropdown** (multi-select) |
+| Habitable Zone | `gold_exoplanet_catalog[habitability_zone]` | **Toggle** (Yes/No buttons) |
+| Discovery Year | `gold_exoplanet_catalog[discovery_year]` | **Between** (range slider) |
+| Distance (ly) | `gold_exoplanet_catalog[distance_ly]` | **Between** (range slider) |
+| Discovery Method | `gold_exoplanet_catalog[discovery_method]` | **Dropdown** (multi-select) |
 
 > 💡 **Tip:** Group the slicers inside a **rectangle shape** with a subtle background (`#0D1B2A` at 80% transparency) to create a clean filter panel effect.
 
@@ -225,8 +225,8 @@ Add the following slicers in a vertical panel on the left side:
 1. Add a **Multi-row card** visual on the right side.
 2. Include fields:
    - `planet_name`, `host_star`, `discovery_method`, `discovery_year`
-   - `planet_mass_jupiter`, `orbital_period_days`, `distance_ly`
-   - `habitable_zone`, `planet_radius_earth`
+   - `planet_mass_earth`, `orbital_period_days`, `distance_ly`
+   - `habitability_zone`, `planet_radius_earth`
 3. This card updates dynamically when you click a dot on the scatter plot.
 
 ### Bookmarks for Preset Views
@@ -339,7 +339,7 @@ Time to get these reports off your machine and into the hands of the team.
 ### Pin to a Shared Dashboard
 
 1. Open the **Mission Control Dashboard** report in the service.
-2. Hover over the **Success Rate** KPI card → click the **📌 Pin** icon.
+2. Hover over the **Mission Success Rate** KPI card → click the **📌 Pin** icon.
 3. Select **New dashboard** → Name it **ZOSA Mission Control**.
 4. Pin additional visuals:
    - Mission Status donut chart
