@@ -140,29 +140,40 @@ Now that your workspaces exist, let's configure the development workspace with t
 
 1. Click the **Workspace settings** gear icon (⚙️) inside the `ZOSA-Dev` workspace
 
-### 4.1 — OneLake Data Access
+### 4.1 — OneLake Settings
 
-Under **OneLake** settings, you'll find the **"Users can access data stored in OneLake with apps external to Fabric"** toggle.
+Navigate to the **OneLake** tab in your workspace settings. You'll see three key areas:
 
-- **Enabled:** External tools (Azure Databricks, Azure Synapse, custom applications) can connect directly to OneLake via the OneLake API or Azure Data Lake Storage Gen2 endpoint
-- **Disabled:** Only Fabric-native engines can access the data
+**OneLake File Explorer**
+- Download and integrate the OneLake File Explorer app to browse your lakehouse files directly from Windows File Explorer — useful for quick data validation during development.
 
-For this lab, **leave it enabled** — in Module 05, you'll see how external tools can connect to OneLake data.
+**Shortcut Cache Settings**
+- **Enable cache for shortcuts** — when turned on, data accessed through shortcuts (e.g., from ADLS, AWS S3) is cached locally in OneLake for faster subsequent reads and lower egress costs.
+- You can configure the retention period (1–28 days). For this lab, **leave it Off** for now — we'll enable it in Module 03 when we create our first shortcut.
 
-### 4.2 — Default Storage Format
+**OneLake Diagnostic Settings**
+- **Add diagnostic events to a Lakehouse** — when enabled, OneLake logs usage and access events to a lakehouse you specify. Useful for monitoring and auditing.
+- For this lab, **leave it Off** — we'll revisit diagnostics in Module 12 (Monitoring).
 
-The default storage format should be **Delta (Parquet)**. This is the standard for Fabric and should almost never be changed. Here's why:
+> 💡 **Note:** External data access to OneLake (allowing tools like Azure Databricks or Synapse to connect) is controlled at the **tenant level** by your Fabric admin, not at the workspace level. For trial tenants, this is enabled by default.
+
+### 4.2 — Understanding the Storage Format
+
+Fabric uses **Delta (Parquet)** as its default and primary storage format across all workloads. This is important to understand because:
 
 - **Delta** adds ACID transactions, time travel, and schema enforcement on top of Parquet
 - All Fabric engines (Spark, SQL, KQL, Power BI) natively read Delta
 - It's the format that enables the "write once, read from anywhere" promise of OneLake
 
+> 💡 There is no workspace setting to change this — Delta is the standard. You'll see it in action starting in Module 03.
+
 ### 4.3 — Spark Settings
 
-Under Spark settings, you can configure:
+Under **Data Engineering/Science** in the workspace settings sidebar, you can configure:
 
-- **Environment:** Defines the default Spark runtime (libraries, configurations) for notebooks in this workspace. We'll create a custom environment in Module 03.
-- **Runtime version:** Choose the Spark runtime version. Use the latest stable version available.
+- **Spark compute:** Pool settings, node sizes, and autoscale for Spark sessions
+- **Environment:** Defines the default runtime (libraries, configurations) for notebooks in this workspace. We'll create a custom environment in Module 03.
+- **Runtime version:** Choose the Spark runtime version. Use the latest stable version (Runtime 1.3+ recommended; Runtime 2.0 with Spark 4.x is in preview).
 
 **⚠️ Note:** Don't worry about configuring these in detail right now. These settings become important when you start running Spark notebooks in Module 03 (Data Ingestion). We'll revisit them then.
 

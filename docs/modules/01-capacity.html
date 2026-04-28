@@ -323,20 +323,33 @@
         </div>
       </div>
 
-      <h3>4.1 — OneLake Data Access</h3>
+      <h3>4.1 — OneLake Settings</h3>
 
-      <p>Under <strong>OneLake</strong> settings, you'll find the <strong>"Users can access data stored in OneLake with apps external to Fabric"</strong> toggle.</p>
+      <p>Navigate to the <strong>OneLake</strong> tab in your workspace settings. You'll see three key areas:</p>
 
+      <h4>OneLake File Explorer</h4>
+      <p>Download and integrate the OneLake File Explorer app to browse your lakehouse files directly from Windows File Explorer — useful for quick data validation during development.</p>
+
+      <h4>Shortcut Cache Settings</h4>
       <ul>
-        <li><strong>Enabled:</strong> External tools (Azure Databricks, Azure Synapse, custom applications) can connect directly to OneLake via the OneLake API or Azure Data Lake Storage Gen2 endpoint</li>
-        <li><strong>Disabled:</strong> Only Fabric-native engines can access the data</li>
+        <li><strong>Enable cache for shortcuts</strong> — when turned on, data accessed through shortcuts (e.g., from ADLS, AWS S3) is cached locally in OneLake for faster subsequent reads and lower egress costs.</li>
+        <li>You can configure the retention period (1–28 days). For this lab, <strong>leave it Off</strong> for now — we'll enable it in Module 03 when we create our first shortcut.</li>
       </ul>
 
-      <p>For this lab, <strong>leave it enabled</strong> — in Module 05, you'll see how external tools can connect to OneLake data.</p>
+      <h4>OneLake Diagnostic Settings</h4>
+      <ul>
+        <li><strong>Add diagnostic events to a Lakehouse</strong> — when enabled, OneLake logs usage and access events to a lakehouse you specify. Useful for monitoring and auditing.</li>
+        <li>For this lab, <strong>leave it Off</strong> — we'll revisit diagnostics in Module 12 (Monitoring).</li>
+      </ul>
 
-      <h3>4.2 — Default Storage Format</h3>
+      <div class="mission-alert info">
+        <div class="alert-title">Tenant-Level Setting</div>
+        <p>External data access to OneLake (allowing tools like Azure Databricks or Synapse to connect) is controlled at the <strong>tenant level</strong> by your Fabric admin, not at the workspace level. For trial tenants, this is enabled by default.</p>
+      </div>
 
-      <p>The default storage format should be <strong>Delta (Parquet)</strong>. This is the standard for Fabric and should almost never be changed. Here's why:</p>
+      <h3>4.2 — Understanding the Storage Format</h3>
+
+      <p>Fabric uses <strong>Delta (Parquet)</strong> as its default and primary storage format across all workloads:</p>
 
       <ul>
         <li><strong>Delta</strong> adds ACID transactions, time travel, and schema enforcement on top of Parquet</li>
@@ -346,11 +359,12 @@
 
       <h3>4.3 — Spark Settings</h3>
 
-      <p>Under Spark settings, you can configure:</p>
+      <p>Under <strong>Data Engineering/Science</strong> in the workspace settings sidebar, you can configure:</p>
 
       <ul>
-        <li><strong>Environment:</strong> Defines the default Spark runtime (libraries, configurations) for notebooks in this workspace. We'll create a custom environment in Module 03.</li>
-        <li><strong>Runtime version:</strong> Choose the Spark runtime version. Use the latest stable version available.</li>
+        <li><strong>Spark compute:</strong> Pool settings, node sizes, and autoscale for Spark sessions</li>
+        <li><strong>Environment:</strong> Defines the default runtime (libraries, configurations) for notebooks in this workspace. We'll create a custom environment in Module 03.</li>
+        <li><strong>Runtime version:</strong> Choose the Spark runtime version. Use the latest stable version (Runtime 1.3+ recommended; Runtime 2.0 with Spark 4.x is in preview).</li>
       </ul>
 
       <div class="mission-alert info">
