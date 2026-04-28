@@ -380,7 +380,7 @@
         <h2>🏛️ Understanding the OneLake Hierarchy</h2>
       </div>
 
-      <p>Before you move on, take a moment to internalize the hierarchy you've just created:</p>
+      <p>Before you move on, take a moment to internalize the hierarchy you've just set up — and what's coming next:</p>
 
       <div class="code-terminal">
         <div class="terminal-header">
@@ -390,15 +390,17 @@
         </div>
         <pre><code class="language-bash">Fabric Tenant (your organization)
 └── OneLake (one per tenant — the single unified data lake)
-    ├── ZOSA-Dev (workspace)
-    │   ├── Lakehouse items
-    │   ├── Warehouse items
-    │   ├── Notebook items
-    │   └── Other items...
-    ├── ZOSA-Test (workspace)
-    │   └── (empty for now)
-    └── ZOSA-Prod (workspace)
-        └── (empty for now)</code></pre>
+    ├── ZOSA-Dev (workspace)          ✅ Created
+    │   └── (empty — items coming in Modules 03–10)
+    ├── ZOSA-Test (workspace)         ✅ Created
+    │   └── (empty — used for deployment testing)
+    └── ZOSA-Prod (workspace)         ✅ Created
+        └── (empty — production target)</code></pre>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">What's Coming</div>
+        <p>Starting in Module 03, you'll populate ZOSA-Dev with Lakehouses, Notebooks, Pipelines, Semantic Models, and more. Each item you create automatically gets its own folder inside the workspace's OneLake storage.</p>
       </div>
 
       <p>Key takeaways:</p>

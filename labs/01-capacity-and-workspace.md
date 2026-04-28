@@ -181,21 +181,20 @@ Under **Data Engineering/Science** in the workspace settings sidebar, you can co
 
 ## 🏛️ Section 5: Understanding the OneLake Hierarchy
 
-Before you move on, take a moment to internalize the hierarchy you've just created:
+Before you move on, take a moment to internalize the hierarchy you've just set up — and what's coming next:
 
 ```
 Fabric Tenant (your organization)
 └── OneLake (one per tenant — the single unified data lake)
-    ├── ZOSA-Dev (workspace)
-    │   ├── Lakehouse items
-    │   ├── Warehouse items
-    │   ├── Notebook items
-    │   └── Other items...
-    ├── ZOSA-Test (workspace)
-    │   └── (empty for now)
-    └── ZOSA-Prod (workspace)
-        └── (empty for now)
+    ├── ZOSA-Dev (workspace)          ✅ Created
+    │   └── (empty — items coming in Modules 03–10)
+    ├── ZOSA-Test (workspace)         ✅ Created
+    │   └── (empty — used for deployment testing)
+    └── ZOSA-Prod (workspace)         ✅ Created
+        └── (empty — production target)
 ```
+
+> 📡 **What's coming:** Starting in Module 03, you'll populate ZOSA-Dev with Lakehouses, Notebooks, Pipelines, Semantic Models, and more. Each item you create automatically gets its own folder inside the workspace's OneLake storage.
 
 Key takeaways:
 
