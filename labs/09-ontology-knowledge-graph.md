@@ -41,12 +41,12 @@ Before you touch Fabric, grab a whiteboard (or a Mermaid diagram). Good ontology
 
 | Entity | Key Properties | Source Table |
 |---|---|---|
-| **Asteroid** | `neo_id`, `name`, `diameter`, `is_hazardous`, `risk_category` | `gold_asteroids` |
-| **Mission** | `mission_id`, `name`, `type`, `status`, `budget` | `gold_missions` |
-| **Crew Member** | `crew_id`, `name`, `role`, `specialty`, `clearance` | `gold_crew` |
-| **Ground Station** | `station_id`, `name`, `region`, `location` | `gold_stations` |
-| **Solar Event** | `event_id`, `type`, `severity`, `timestamp` | `gold_solar_events` |
-| **Exoplanet** | `planet_name`, `host_star`, `discovery_method`, `habitable` | `gold_exoplanets` |
+| **Asteroid** | `neo_id`, `name`, `diameter`, `is_hazardous`, `risk_category` | `gold_asteroid_risk` |
+| **Mission** | `mission_id`, `name`, `type`, `status`, `budget` | `gold_mission_summary` |
+| **Crew Member** | `crew_id`, `name`, `role`, `specialty`, `clearance` | `silver_crew` |
+| **Ground Station** | `station_id`, `name`, `region`, `location` | `silver_ground_stations` |
+| **Solar Event** | `event_id`, `type`, `severity`, `timestamp` | `gold_solar_activity` |
+| **Exoplanet** | `planet_name`, `host_star`, `discovery_method`, `habitable` | `gold_exoplanet_catalog` |
 
 ### Relationships
 
@@ -148,12 +148,12 @@ Repeat for all six entity types:
 
 | Entity | Delta Table | Primary Key | Display Name |
 |---|---|---|---|
-| Asteroid | `gold_asteroids` | `neo_id` | `name` |
-| Mission | `gold_missions` | `mission_id` | `name` |
-| Crew Member | `gold_crew` | `crew_id` | `name` |
-| Ground Station | `gold_stations` | `station_id` | `name` |
-| Solar Event | `gold_solar_events` | `event_id` | `type` |
-| Exoplanet | `gold_exoplanets` | `planet_name` | `planet_name` |
+| Asteroid | `gold_asteroid_risk` | `neo_id` | `name` |
+| Mission | `gold_mission_summary` | `mission_id` | `name` |
+| Crew Member | `silver_crew` | `crew_id` | `name` |
+| Ground Station | `silver_ground_stations` | `station_id` | `name` |
+| Solar Event | `gold_solar_activity` | `event_id` | `type` |
+| Exoplanet | `gold_exoplanet_catalog` | `planet_name` | `planet_name` |
 
 > 💡 **Tip:** Set friendly property names (e.g., rename `is_hazardous` to `Is Hazardous`). AI agents and search will use these names in natural-language answers.
 

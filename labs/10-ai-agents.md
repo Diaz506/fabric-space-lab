@@ -298,7 +298,7 @@ Simulate a critical asteroid detection to verify the full workflow.
    )
 
    df = spark.createDataFrame([test_asteroid])
-   df.write.mode("append").saveAsTable("gold.gold_asteroid_risk")
+   df.write.mode("append").saveAsTable("zosa_lakehouse.gold_asteroid_risk")
    ```
 
 3. **Watch the Operations Agent trigger.** Within a few minutes:
@@ -310,7 +310,7 @@ Simulate a critical asteroid detection to verify the full workflow.
 
 > ⚠️ **Cleanup:** After testing, remove the test row to avoid confusion:
 > ```python
-> spark.sql("DELETE FROM gold.gold_asteroid_risk WHERE asteroid_id = 'TEST-2029-XR7'")
+> spark.sql("DELETE FROM zosa_lakehouse.gold_asteroid_risk WHERE asteroid_id = 'TEST-2029-XR7'")
 > ```
 
 ---

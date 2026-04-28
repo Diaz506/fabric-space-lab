@@ -160,32 +160,32 @@
           <tr>
             <td><strong>Asteroid</strong></td>
             <td><code>neo_id</code>, <code>name</code>, <code>diameter</code>, <code>is_hazardous</code>, <code>risk_category</code></td>
-            <td><code>gold_asteroids</code></td>
+            <td><code>gold_asteroid_risk</code></td>
           </tr>
           <tr>
             <td><strong>Mission</strong></td>
             <td><code>mission_id</code>, <code>name</code>, <code>type</code>, <code>status</code>, <code>budget</code></td>
-            <td><code>gold_missions</code></td>
+            <td><code>gold_mission_summary</code></td>
           </tr>
           <tr>
             <td><strong>Crew Member</strong></td>
             <td><code>crew_id</code>, <code>name</code>, <code>role</code>, <code>specialty</code>, <code>clearance</code></td>
-            <td><code>gold_crew</code></td>
+            <td><code>silver_crew</code></td>
           </tr>
           <tr>
             <td><strong>Ground Station</strong></td>
             <td><code>station_id</code>, <code>name</code>, <code>region</code>, <code>location</code></td>
-            <td><code>gold_stations</code></td>
+            <td><code>silver_ground_stations</code></td>
           </tr>
           <tr>
             <td><strong>Solar Event</strong></td>
             <td><code>event_id</code>, <code>type</code>, <code>severity</code>, <code>timestamp</code></td>
-            <td><code>gold_solar_events</code></td>
+            <td><code>gold_solar_activity</code></td>
           </tr>
           <tr>
             <td><strong>Exoplanet</strong></td>
             <td><code>planet_name</code>, <code>host_star</code>, <code>discovery_method</code>, <code>habitable</code></td>
-            <td><code>gold_exoplanets</code></td>
+            <td><code>gold_exoplanet_catalog</code></td>
           </tr>
         </tbody>
       </table>
@@ -324,7 +324,7 @@
           <ol>
             <li>In the ontology designer, click <strong>+ Add Entity Type</strong>.</li>
             <li>Name it (e.g., <code>Asteroid</code>).</li>
-            <li>Under <strong>Data Source</strong>, select the Lakehouse → <strong>Tables</strong> → choose the corresponding Gold table (e.g., <code>gold_asteroids</code>).</li>
+            <li>Under <strong>Data Source</strong>, select the Lakehouse → <strong>Tables</strong> → choose the corresponding table (e.g., <code>gold_asteroid_risk</code>).</li>
             <li><strong>Map columns to entity properties:</strong>
               <ul>
                 <li><code>neo_id</code> → Primary Key ✅</li>
@@ -349,12 +349,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Asteroid</td><td><code>gold_asteroids</code></td><td><code>neo_id</code></td><td><code>name</code></td></tr>
-          <tr><td>Mission</td><td><code>gold_missions</code></td><td><code>mission_id</code></td><td><code>name</code></td></tr>
-          <tr><td>Crew Member</td><td><code>gold_crew</code></td><td><code>crew_id</code></td><td><code>name</code></td></tr>
-          <tr><td>Ground Station</td><td><code>gold_stations</code></td><td><code>station_id</code></td><td><code>name</code></td></tr>
-          <tr><td>Solar Event</td><td><code>gold_solar_events</code></td><td><code>event_id</code></td><td><code>type</code></td></tr>
-          <tr><td>Exoplanet</td><td><code>gold_exoplanets</code></td><td><code>planet_name</code></td><td><code>planet_name</code></td></tr>
+          <tr><td>Asteroid</td><td><code>gold_asteroid_risk</code></td><td><code>neo_id</code></td><td><code>name</code></td></tr>
+          <tr><td>Mission</td><td><code>gold_mission_summary</code></td><td><code>mission_id</code></td><td><code>name</code></td></tr>
+          <tr><td>Crew Member</td><td><code>silver_crew</code></td><td><code>crew_id</code></td><td><code>name</code></td></tr>
+          <tr><td>Ground Station</td><td><code>silver_ground_stations</code></td><td><code>station_id</code></td><td><code>name</code></td></tr>
+          <tr><td>Solar Event</td><td><code>gold_solar_activity</code></td><td><code>event_id</code></td><td><code>type</code></td></tr>
+          <tr><td>Exoplanet</td><td><code>gold_exoplanet_catalog</code></td><td><code>planet_name</code></td><td><code>planet_name</code></td></tr>
         </tbody>
       </table>
 

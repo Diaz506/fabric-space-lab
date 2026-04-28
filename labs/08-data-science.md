@@ -14,7 +14,7 @@ By the end of this module you will:
 - Track experiments with MLflow
 - Register the best model and save predictions back to the lakehouse
 
-> **Prerequisites:** You need the `gold_asteroid_risk` table from [Module 06](06-medallion-gold.md) and a working ZOSA-Dev workspace.
+> **Prerequisites:** You need the `gold_asteroid_risk` table from [Module 04](04-medallion-lakehouse.md) and a working ZOSA-Dev workspace.
 
 ---
 

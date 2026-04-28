@@ -616,7 +616,7 @@ test_asteroid = Row(
 )
 
 df = spark.createDataFrame([test_asteroid])
-df.write.mode("append").saveAsTable("gold.gold_asteroid_risk")</code></pre>
+df.write.mode("append").saveAsTable("zosa_lakehouse.gold_asteroid_risk")</code></pre>
           </div>
         </div>
       </div>
@@ -646,7 +646,7 @@ df.write.mode("append").saveAsTable("gold.gold_asteroid_risk")</code></pre>
           <span class="terminal-title">Cleanup Test Data</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code class="language-python">spark.sql("DELETE FROM gold.gold_asteroid_risk WHERE asteroid_id = 'TEST-2029-XR7'")</code></pre>
+        <pre><code class="language-python">spark.sql("DELETE FROM zosa_lakehouse.gold_asteroid_risk WHERE asteroid_id = 'TEST-2029-XR7'")</code></pre>
       </div>
     </section>
 

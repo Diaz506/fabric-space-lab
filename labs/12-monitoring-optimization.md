@@ -337,7 +337,7 @@ The complete ZOSA Space Analytics Platform:
 | 6 | Real-time with Eventstream & KQL | ⬜ |
 | 7 | Semantic model & Power BI reports | ⬜ |
 | 8 | Security, governance & compliance | ⬜ |
-| 9 | Data Activator alerts & automation | ⬜ |
+| 9 | Activator alerts & automation | ⬜ |
 | 10 | AI Agents with Fabric | ⬜ |
 | 11 | CI/CD & Deployment Pipelines | ⬜ |
 | 12 | Monitoring & Optimization | ⬜ |
