@@ -328,13 +328,7 @@
             <li>Navigate to <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a> → <strong>Information Protection</strong> → <strong>Sensitivity labels</strong></li>
             <li>Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard</li>
           </ol>
-          <p>You'll create <strong>4 labels in this exact order</strong> (priority is number-based: <strong>0 = most sensitive</strong>). Create them from most to least sensitive so the numbering is correct:</p>
-          <ol>
-            <li><strong>Top Secret</strong> → Priority <strong>0</strong> (most sensitive)</li>
-            <li><strong>Confidential</strong> → Priority <strong>1</strong></li>
-            <li><strong>Internal</strong> → Priority <strong>2</strong></li>
-            <li><strong>Public</strong> → Priority <strong>3</strong> (least sensitive)</li>
-          </ol>
+          <p>You'll create <strong>4 labels</strong>. Priority is determined by their <strong>position in the label list</strong> — the label at the top has the highest priority (wins when multiple labels could apply). After creating all 4, you'll reorder them.</p>
           <p>Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard. The wizard has 5 steps:</p>
         </div>
       </div>
@@ -350,15 +344,15 @@
         <tbody>
           <tr><td><strong>Name</strong></td><td><code>TopSecret</code></td><td><code>Confidential</code></td><td><code>Internal</code></td><td><code>Public</code></td></tr>
           <tr><td><strong>Display name</strong></td><td><code>Top Secret</code></td><td><code>Confidential</code></td><td><code>Internal</code></td><td><code>Public</code></td></tr>
-          <tr><td><strong>Label priority</strong></td><td>0 (Highest)</td><td>1</td><td>2</td><td>3 (Lowest)</td></tr>
+          <tr><td><strong>Label priority</strong></td><td>Leave as default</td><td>Leave as default</td><td>Leave as default</td><td>Leave as default</td></tr>
           <tr><td><strong>Description for users</strong></td><td>Classified mission data — maximum protection</td><td>Sensitive business data — restricted sharing</td><td>For internal ZOSA use only</td><td>Open data — no restrictions apply</td></tr>
           <tr><td><strong>Description for admins</strong></td><td>Full encryption, no copy/paste/print, access audit</td><td>Encryption, block external sharing</td><td>Watermark on exports</td><td>No protection applied</td></tr>
         </tbody>
       </table>
 
       <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Creation Order Matters</div>
-        <p>Priority is number-based: <strong>0 = most sensitive</strong>. Create labels from most to least sensitive (Top Secret first, Public last) so the priority numbers align correctly. You can always reorder them after creation by dragging labels in the list.</p>
+        <div class="alert-title">💡 About Priority</div>
+        <p>The priority number you see is just the label's <strong>position in the list</strong> — it's not a fixed scale. After creating all 4 labels, you'll drag them into the correct order in Step 2E. The label at the <strong>top of the list = highest sensitivity</strong> (wins when multiple labels apply).</p>
       </div>
 
       <div class="info-box">
@@ -411,7 +405,13 @@
 
       <div class="mission-alert warning">
         <div class="alert-title">Priority Order</div>
-        <p>After creating all 4 labels, verify the <strong>priority order</strong> in the labels list. The correct order should be: Top Secret (0) → Confidential (1) → Internal (2) → Public (3). Drag to reorder if needed.</p>
+        <p>After creating all 4 labels, <strong>drag them into the correct order</strong> in the labels list. Top of the list = highest sensitivity:</p>
+        <ol>
+          <li>🔴 <strong>Top Secret</strong> (top — highest priority)</li>
+          <li>🟠 <strong>Confidential</strong></li>
+          <li>🔵 <strong>Internal</strong></li>
+          <li>🟢 <strong>Public</strong> (bottom — lowest priority)</li>
+        </ol>
       </div>
 
       <h3>Step 3: Publish Labels with a Policy</h3>

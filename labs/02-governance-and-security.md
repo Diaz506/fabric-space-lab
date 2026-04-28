@@ -156,12 +156,7 @@ Sensitivity labels classify your data and enforce protection policies automatica
 1. Navigate to [purview.microsoft.com](https://purview.microsoft.com) → **Information Protection** → **Sensitivity labels**
 2. Click **+ Create a label** — this opens the **New sensitivity label** wizard
 
-You'll create **4 labels in this exact order** (priority is number-based: **0 = most sensitive**). Create them from most to least sensitive so the numbering is correct:
-
-1. **Top Secret** → Priority **0** (most sensitive)
-2. **Confidential** → Priority **1**
-3. **Internal** → Priority **2**
-4. **Public** → Priority **3** (least sensitive)
+You'll create **4 labels**. Priority is determined by their **position in the label list** — the label at the top has the highest priority (wins when multiple labels could apply). After creating all 4, you'll reorder them.
 
 Click **+ Create a label** — this opens the **New sensitivity label** wizard. The wizard has 5 steps:
 
@@ -175,11 +170,11 @@ Click **+ Create a label** — this opens the **New sensitivity label** wizard. 
 |-------|------------|--------------|----------|--------|
 | **Name** | `TopSecret` | `Confidential` | `Internal` | `Public` |
 | **Display name** | `Top Secret` | `Confidential` | `Internal` | `Public` |
-| **Label priority** | 0 (Highest) | 1 | 2 | 3 (Lowest) |
+| **Label priority** | Leave as default | Leave as default | Leave as default | Leave as default |
 | **Description for users** | Classified mission data — maximum protection | Sensitive business data — restricted sharing | For internal ZOSA use only | Open data — no restrictions apply |
 | **Description for admins** | Full encryption, no copy/paste/print, access audit | Encryption, block external sharing | Watermark on exports | No protection applied |
 
-> **⚠️ Creation order matters!** Priority is number-based: **0 = most sensitive**. Create labels from most to least sensitive (Top Secret first, Public last) so the priority numbers align correctly. You can always reorder them after creation by dragging labels in the list.
+> **💡 About Priority:** The priority number you see is just the label's **position in the list** — it's not a fixed scale. After creating all 4 labels, you'll drag them into the correct order in Step 2E. The label at the **top of the list = highest sensitivity** (wins when multiple labels apply).
 > 
 > **💡 Tip:** The **Name** field cannot contain spaces (use `TopSecret` not `Top Secret`). The **Display name** is what users see and can have spaces.
 
@@ -211,7 +206,12 @@ Click **+ Create a label** — this opens the **New sensitivity label** wizard. 
 
 **E) Finish** — Review the summary and click **Create label**
 
-> **⚠️ Important:** After creating all 4 labels, verify the **priority order** in the labels list. The correct order should be: Top Secret (0) → Confidential (1) → Internal (2) → Public (3). Drag to reorder if needed.
+> **⚠️ Important:** After creating all 4 labels, **drag them into the correct order** in the labels list. The top of the list = highest sensitivity:
+>
+> 1. 🔴 **Top Secret** (top — highest priority)
+> 2. 🟠 **Confidential**
+> 3. 🔵 **Internal**
+> 4. 🟢 **Public** (bottom — lowest priority)
 
 ---
 
