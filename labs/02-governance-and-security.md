@@ -256,12 +256,21 @@ This page shows three checkboxes under **Protection settings** plus an **Auto ap
 
 **E) Finish** — Review the summary and click **Create label**
 
-> **⚠️ Important:** After creating all 4 labels, **drag them into the correct order** in the labels list. The top of the list = highest sensitivity:
->
-> 1. 🔴 **Top Secret** (top — highest priority)
-> 2. 🟠 **Confidential**
-> 3. 🔵 **Internal**
-> 4. 🟢 **Public** (bottom — lowest priority)
+After creation, you'll see **"Your sensitivity label was created"** with two options:
+
+- ○ Publish label to users' apps
+- ◉ **Don't create a policy yet** ← Select this one!
+
+> **⚠️ Select "Don't create a policy yet"** for each label. We'll publish all 4 labels together in a single policy in Step 3. Publishing them one at a time creates unnecessary duplicate policies.
+
+Click **Done**, then repeat the wizard for the next label until all 4 are created.
+
+After creating all 4 labels, **drag them into the correct order** in the labels list. The top of the list = highest sensitivity:
+
+1. 🔴 **Top Secret** (top — highest priority)
+2. 🟠 **Confidential**
+3. 🔵 **Internal**
+4. 🟢 **Public** (bottom — lowest priority)
 
 ---
 
