@@ -198,12 +198,18 @@ This page shows two checkboxes. Check them based on the label:
 | **Confidential** | ✅ Check | ✅ Check |
 | **Top Secret** | ✅ Check | ✅ Check |
 
-**If you checked "Control access"** → the next page lets you configure encryption:
+**If you checked "Control access"** → the next page is **Access control**:
 
-| Label | Encryption settings |
-|-------|---------------------|
-| **Confidential** | ✅ **Configure encryption settings** → Select "Only people in your organization" → Leave default permissions |
-| **Top Secret** | ✅ **Configure encryption settings** → Select "Only people in your organization" → Under **Assign permissions**: remove Copy and Print rights |
+First, select the radio button: ◉ **Configure access control settings**
+
+Then configure the dropdowns and permissions:
+
+| Setting | Confidential | Top Secret |
+|---------|-------------|------------|
+| **Assign permissions now or let users decide?** | `Assign permissions now` | `Assign permissions now` |
+| **User access to content expires** | `Never` | `Never` |
+| **Allow offline access** | `Always` | `Never` (forces re-authentication) |
+| **Assign permissions to specific users and groups** | Click **Assign permissions** → **Add all users in your organization** | Click **Assign permissions** → **Add all users in your organization** → then edit to remove **Copy** and **Print** rights |
 
 **If you checked "Apply content marking"** → the next page is **Content marking**:
 
