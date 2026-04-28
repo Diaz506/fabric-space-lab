@@ -96,7 +96,10 @@ License assignments are managed in the **Microsoft 365 Admin Center**, not Entra
 3. Configure each group:
    - **Group type:** Security
    - **Group name:** (see table below)
+   - **Group description:** (see table below)
+   - **Microsoft Entra roles can be assigned to the group:** **No** (we use these for Fabric workspace roles, not Entra admin roles)
    - **Membership type:** Assigned
+   - **Members:** Click "No members selected" and add the correct member (see table below)
 4. Click **Create**
 
 Create these four groups and assign the **correct members**:
