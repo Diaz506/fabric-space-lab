@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 08 — Data Science &amp; AI — Fabric Space Lab</title>
+  <meta name="description" content="Train asteroid risk classifiers with MLflow, feature engineering, and model registry in Microsoft Fabric.">
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC -->
+  <nav class="mini-toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <a href="#top"><span class="toc-dot"></span>Data Science &amp; AI</a>
+    <a href="#overview"><span class="toc-dot"></span>Fabric DS Overview</a>
+    <a href="#experiment"><span class="toc-dot"></span>Create ML Experiment</a>
+    <a href="#features"><span class="toc-dot"></span>Feature Engineering</a>
+    <a href="#training"><span class="toc-dot"></span>Train Models</a>
+    <a href="#compare"><span class="toc-dot"></span>Compare &amp; Select</a>
+    <a href="#predictions"><span class="toc-dot"></span>Save Predictions</a>
+    <a href="#importance"><span class="toc-dot"></span>Feature Importance</a>
+    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 08 · 🔬 Data Science &amp; AI</div>
+      <h1>Data Science &amp; AI</h1>
+      <p class="hero-desc">
+        Dr. Osei leans forward in her chair, the glow of the dashboard reflecting off her glasses.
+        <em>"We can see the asteroids after they pass. But can we predict which ones are dangerous before they get close?"</em>
+        She taps the table. <em>"The Planetary Defense board needs a risk classifier — not hindsight, but foresight."</em>
+      </p>
+      <div class="hero-actions">
+        <a href="#overview" class="btn btn-primary">▶ Start Module</a>
+        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
+      </div>
+    </section>
+
+    <!-- Learning Objectives -->
+    <section class="chapter" id="objectives">
+      <div class="chapter-heading">
+        <span class="chapter-label">Objectives</span>
+        <h2>🎯 Learning Objectives</h2>
+      </div>
+      <p>By the end of this module you will:</p>
+      <ul>
+        <li>Understand Fabric's built-in data science capabilities</li>
+        <li>Engineer features from your Gold layer asteroid data</li>
+        <li>Train and compare multiple classification models</li>
+        <li>Track experiments with MLflow</li>
+        <li>Register the best model and save predictions back to the lakehouse</li>
+      </ul>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Prerequisites</div>
+        <p>You need the <code>gold_asteroid_risk</code> table from <a href="06-medallion-gold.html">Module 06</a> and a working ZOSA-Dev workspace.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1: Fabric Data Science Overview -->
+    <section class="chapter" id="overview">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 1</span>
+        <h2>1️⃣ Fabric Data Science Overview</h2>
+      </div>
+
+      <p>Microsoft Fabric ships a full data science toolkit — no extra provisioning, no separate compute clusters, no third-party integrations required.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>What It Gives You</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Spark Notebooks</strong></td>
+            <td>Interactive PySpark + Python environment with pre-installed ML libraries (scikit-learn, pandas, matplotlib, seaborn)</td>
+          </tr>
+          <tr>
+            <td><strong>MLflow Integration</strong></td>
+            <td>Automatic experiment tracking — every run logs parameters, metrics, and artifacts</td>
+          </tr>
+          <tr>
+            <td><strong>Experiment Tracking</strong></td>
+            <td>Visual UI to compare runs side-by-side, sort by any metric, and drill into individual results</td>
+          </tr>
+          <tr>
+            <td><strong>Model Registry</strong></td>
+            <td>Version, stage, and deploy models directly from the Fabric workspace</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Why This Matters</div>
+        <p>In traditional setups, you'd spend days configuring MLflow servers, connecting storage backends, and wiring up model registries. In Fabric, you open a notebook and start training. The infrastructure is invisible.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2: Create ML Experiment -->
+    <section class="chapter" id="experiment">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 2</span>
+        <h2>2️⃣ Create ML Experiment</h2>
+      </div>
+
+      <p>Before you write any code, create an experiment to organize your runs.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Create the Experiment</div>
+        <div class="step-body">
+          <ol>
+            <li>Navigate to your <strong>ZOSA-Dev</strong> workspace</li>
+            <li>Click <strong>+ New</strong> → <strong>ML Experiment</strong></li>
+            <li>Name it: <code>asteroid_risk_prediction</code></li>
+            <li>Click <strong>Create</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <p>You now have a dedicated experiment container. Every MLflow run you log from a notebook will appear here — with metrics, parameters, and model artifacts organized automatically.</p>
+
+      <div class="mission-alert info">
+        <div class="alert-title">What You Should See</div>
+        <p>A new ML Experiment item in your workspace with zero runs. It will populate once you execute the training code below.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 3: Feature Engineering -->
+    <section class="chapter" id="features">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 3</span>
+        <h2>3️⃣ Feature Engineering Notebook</h2>
+      </div>
+
+      <p>Great models start with great features. You'll transform the raw gold table into a clean feature matrix optimized for classification.</p>
+
+      <div class="comms-panel">
+        <div class="avatar">👨‍💻</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Kwame Osei</div>
+          <div class="comms-role">Lead Data Scientist</div>
+          <div class="comms-text">"Feature engineering is where the real science happens. The model is only as good as the features you give it."</div>
+        </div>
+      </div>
+
+      <h3>Create the Notebook</h3>
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Set Up the Notebook</div>
+        <div class="step-body">
+          <ol>
+            <li>In <strong>ZOSA-Dev</strong>, click <strong>+ New</strong> → <strong>Notebook</strong></li>
+            <li>Rename it to <code>03-asteroid-features</code></li>
+            <li>Attach it to your <strong>zosa_lakehouse</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <h3>Load the Gold Table</h3>
+      <p>In the first cell, load your gold asteroid risk data:</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 1 — Load Gold Data</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 1 — Load gold asteroid risk data
+df = spark.sql("SELECT * FROM zosa_lakehouse.gold_asteroid_risk")
+print(f"Total records: {df.count()}")
+df.printSchema()
+df.show(5)</code></pre>
+      </div>
+
+      <h3>Engineer Features</h3>
+      <p>Now create the features that will power your classifier. You want features that capture the physical characteristics and orbital dynamics of each asteroid:</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 2 — Feature Engineering</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 2 — Feature engineering
+from pyspark.sql import functions as F
+
+features_df = df.select(
+    # === Identification ===
+    F.col("neo_reference_id"),
+
+    # === Size features ===
+    ((F.col("estimated_diameter_max_km") + F.col("estimated_diameter_min_km")) / 2)
+        .alias("avg_diameter_km"),
+    (F.col("estimated_diameter_max_km") - F.col("estimated_diameter_min_km"))
+        .alias("diameter_uncertainty_km"),
+
+    # === Velocity features ===
+    F.col("relative_velocity_kmps").alias("relative_velocity_kmps"),
+
+    # === Distance features ===
+    F.col("miss_distance_au").alias("miss_distance_au"),
+    F.col("miss_distance_km").alias("miss_distance_km"),
+
+    # === Interaction features ===
+    (F.col("relative_velocity_kmps") / F.col("miss_distance_au"))
+        .alias("velocity_distance_ratio"),
+    (((F.col("estimated_diameter_max_km") + F.col("estimated_diameter_min_km")) / 2)
+        * F.col("relative_velocity_kmps"))
+        .alias("size_velocity_product"),
+    (((F.col("estimated_diameter_max_km") + F.col("estimated_diameter_min_km")) / 2)
+        / F.col("miss_distance_au"))
+        .alias("size_distance_ratio"),
+
+    # === Orbital features ===
+    F.col("orbiting_body"),
+
+    # === Label ===
+    F.when(F.col("is_potentially_hazardous") == True, 1)
+     .otherwise(0)
+     .alias("is_hazardous")
+)
+
+print(f"Feature matrix: {features_df.count()} rows, {len(features_df.columns)} columns")
+features_df.show(5)</code></pre>
+      </div>
+
+      <h3>Handle Missing Values and Normalize</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 3 — Clean and Normalize</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 3 — Clean and normalize
+from pyspark.ml.feature import VectorAssembler, StandardScaler
+from pyspark.sql import functions as F
+
+# Drop rows with nulls in feature columns
+feature_cols = [
+    "avg_diameter_km", "diameter_uncertainty_km", "relative_velocity_kmps",
+    "miss_distance_au", "miss_distance_km", "velocity_distance_ratio",
+    "size_velocity_product", "size_distance_ratio"
+]
+
+clean_df = features_df.dropna(subset=feature_cols)
+print(f"Records after cleaning: {clean_df.count()} (dropped {features_df.count() - clean_df.count()} nulls)")
+
+# Convert to Pandas for sklearn
+pdf = clean_df.select(feature_cols + ["is_hazardous"]).toPandas()
+
+# Normalize numeric features
+from sklearn.preprocessing import StandardScaler as SkScaler
+import pandas as pd
+
+scaler = SkScaler()
+pdf[feature_cols] = scaler.fit_transform(pdf[feature_cols])
+
+print(f"\nLabel distribution:")
+print(pdf["is_hazardous"].value_counts())
+print(f"\nHazardous ratio: {pdf['is_hazardous'].mean():.2%}")</code></pre>
+      </div>
+
+      <h3>Train/Test Split</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 4 — Stratified Train/Test Split</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 4 — Stratified train/test split
+from sklearn.model_selection import train_test_split
+
+X = pdf[feature_cols]
+y = pdf["is_hazardous"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y  # preserve class balance
+)
+
+print(f"Training set: {len(X_train)} samples")
+print(f"Test set:     {len(X_test)} samples")
+print(f"\nTraining label distribution:\n{y_train.value_counts(normalize=True)}")
+print(f"\nTest label distribution:\n{y_test.value_counts(normalize=True)}")</code></pre>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Important</div>
+        <p>The <code>stratify=y</code> parameter ensures your train and test sets have the same proportion of hazardous vs. non-hazardous asteroids. Without this, you might accidentally train on an unbalanced split and get misleading metrics.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: Train Classification Models -->
+    <section class="chapter" id="training">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 4</span>
+        <h2>4️⃣ Train Classification Models</h2>
+      </div>
+
+      <p>Now for the fun part. You'll train three different classifiers and let MLflow track everything.</p>
+
+      <h3>Run the Experiment</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 5 — Train &amp; Log 3 Models with MLflow</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 5 — Train and log 3 models with MLflow
+import mlflow
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+mlflow.set_experiment("asteroid_risk_prediction")
+
+models = {
+    "LogisticRegression": LogisticRegression(max_iter=1000),
+    "RandomForest": RandomForestClassifier(n_estimators=100, random_state=42),
+    "GradientBoosting": GradientBoostingClassifier(n_estimators=100, random_state=42)
+}
+
+results = {}
+
+for name, model in models.items():
+    with mlflow.start_run(run_name=name):
+        model.fit(X_train, y_train)
+        preds = model.predict(X_test)
+        proba = model.predict_proba(X_test)[:, 1]
+
+        metrics = {
+            "accuracy": accuracy_score(y_test, preds),
+            "precision": precision_score(y_test, preds),
+            "recall": recall_score(y_test, preds),
+            "f1": f1_score(y_test, preds),
+            "roc_auc": roc_auc_score(y_test, proba)
+        }
+
+        # Log everything
+        mlflow.log_param("model_type", name)
+        mlflow.log_param("n_features", len(feature_cols))
+        mlflow.log_param("train_size", len(X_train))
+        mlflow.log_param("test_size", len(X_test))
+        for metric_name, value in metrics.items():
+            mlflow.log_metric(metric_name, value)
+        mlflow.sklearn.log_model(model, name)
+
+        results[name] = metrics
+        print(f"\n{'='*50}")
+        print(f"  {name}")
+        print(f"{'='*50}")
+        for k, v in metrics.items():
+            print(f"  {k:&gt;12}: {v:.4f}")</code></pre>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Under the Hood</div>
+        <p>Each <code>mlflow.start_run()</code> creates a tracked experiment run. Parameters, metrics, and the serialized model artifact all get stored automatically — no extra storage configuration needed. You'll see all three runs appear in the Fabric experiment UI within seconds.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 5: Compare & Select Best Model -->
+    <section class="chapter" id="compare">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 5</span>
+        <h2>5️⃣ Compare &amp; Select Best Model</h2>
+      </div>
+
+      <h3>Compare in the Fabric UI</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Compare Experiment Runs</div>
+        <div class="step-body">
+          <ol>
+            <li>Go back to your <strong>ZOSA-Dev</strong> workspace</li>
+            <li>Open the <strong>asteroid_risk_prediction</strong> experiment</li>
+            <li>You'll see three runs — one per model</li>
+            <li>Click <strong>Customize columns</strong> to display: accuracy, precision, recall, f1, roc_auc</li>
+            <li>Click a column header to sort — <strong>sort by <code>roc_auc</code> descending</strong> to find the best overall classifier</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">What to Look For</div>
+        <p>For planetary defense, <strong>recall</strong> matters most — you never want to miss a truly hazardous asteroid (a false negative could be catastrophic). But high recall with low precision means too many false alarms. The <strong>F1 score</strong> balances both, and <strong>ROC AUC</strong> captures overall discriminative ability.</p>
+      </div>
+
+      <h3>Select and Register the Best Model</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 6 — Identify Best Model</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 6 — Identify and register the best model
+import pandas as pd
+
+results_df = pd.DataFrame(results).T
+results_df = results_df.sort_values("roc_auc", ascending=False)
+print("Model Comparison (sorted by ROC AUC):\n")
+print(results_df.to_string())
+
+best_model_name = results_df.index[0]
+print(f"\n🏆 Best model: {best_model_name}")</code></pre>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Register in Fabric UI</div>
+        <div class="step-body">
+          <ol>
+            <li>Open the winning run in the experiment view</li>
+            <li>Click <strong>Register model</strong></li>
+            <li>Name: <code>asteroid_hazard_classifier</code></li>
+            <li>Version: <code>1</code></li>
+            <li>Click <strong>Register</strong></li>
+          </ol>
+          <p>Your model is now a first-class citizen in the workspace — versioned, trackable, and ready for downstream use.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 6: Save Predictions -->
+    <section class="chapter" id="predictions">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 6</span>
+        <h2>6️⃣ Save Predictions to Gold Layer</h2>
+      </div>
+
+      <p>The model is trained and registered. Now run it against the full dataset and persist predictions back to the lakehouse.</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 7 — Generate Predictions &amp; Save to Gold</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 7 — Generate predictions on full dataset and save to Gold
+import pandas as pd
+
+# Use the best model from training
+best_model = models[best_model_name]
+
+# Score the full dataset
+full_X = pdf[feature_cols]
+pdf["predicted_hazardous"] = best_model.predict(full_X)
+pdf["hazard_probability"] = best_model.predict_proba(full_X)[:, 1]
+
+# Merge predictions with original IDs
+results_pdf = clean_df.select("neo_reference_id").toPandas()
+results_pdf["predicted_hazardous"] = pdf["predicted_hazardous"]
+results_pdf["hazard_probability"] = pdf["hazard_probability"]
+results_pdf["model_name"] = best_model_name
+results_pdf["prediction_timestamp"] = pd.Timestamp.now()
+
+# Save back to lakehouse as a Gold prediction table
+predictions_df = spark.createDataFrame(results_pdf)
+predictions_df.write.mode("overwrite").format("delta").saveAsTable(
+    "zosa_lakehouse.gold_asteroid_predictions"
+)
+
+print(f"✅ Saved {predictions_df.count()} predictions to gold_asteroid_predictions")
+print(f"\nPrediction distribution:")
+print(results_pdf["predicted_hazardous"].value_counts())
+print(f"\nSample predictions:")
+predictions_df.show(10)</code></pre>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Why Save as a Gold Table?</div>
+        <p>Downstream consumers — Power BI reports, real-time dashboards, and the ontology layer you'll build in Module 09 — can query this table directly. The model's output becomes a reusable data product, not a one-off notebook result.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 7: Feature Importance -->
+    <section class="chapter" id="importance">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 7</span>
+        <h2>7️⃣ Feature Importance Analysis</h2>
+      </div>
+
+      <p>Understanding <em>why</em> the model classifies asteroids as hazardous is just as important as the predictions themselves.</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cell 8 — Feature Importance Visualization</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Cell 8 — Feature importance visualization
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Get feature importances (works for tree-based models)
+if hasattr(best_model, "feature_importances_"):
+    importances = best_model.feature_importances_
+elif hasattr(best_model, "coef_"):
+    importances = np.abs(best_model.coef_[0])
+else:
+    raise ValueError("Model does not expose feature importances")
+
+# Sort by importance
+feat_imp = pd.DataFrame({
+    "feature": feature_cols,
+    "importance": importances
+}).sort_values("importance", ascending=True)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.barh(feat_imp["feature"], feat_imp["importance"], color="#0078D4")
+ax.set_xlabel("Importance")
+ax.set_title(f"Top Feature Importances — {best_model_name}")
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+plt.tight_layout()
+plt.show()
+
+# Log the chart to MLflow
+with mlflow.start_run(run_name=f"{best_model_name}_feature_importance"):
+    mlflow.log_figure(fig, "feature_importance.png")
+    print("📊 Feature importance chart logged to MLflow")</code></pre>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">What to Expect</div>
+        <p>For asteroid risk classification, you'll likely see <code>miss_distance_au</code> and <code>size_distance_ratio</code> dominate — objects that are large <em>and</em> pass close to Earth are the most dangerous. <code>relative_velocity_kmps</code> also matters because fast-moving objects have more kinetic energy on impact.</p>
+      </div>
+    </section>
+
+    <!-- CHECKPOINT -->
+    <section class="chapter" id="checkpoint">
+      <div class="checkpoint">
+        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 08 Complete</div>
+        <p>Verify everything is in place before moving on:</p>
+        <ul>
+          <li>Experiment has 3 runs — open <code>asteroid_risk_prediction</code> → see LogisticRegression, RandomForest, GradientBoosting</li>
+          <li>Metrics logged for all runs — click any run → verify accuracy, precision, recall, f1, roc_auc are present</li>
+          <li>Best model registered — check workspace items → find <code>asteroid_hazard_classifier</code> model, Version 1</li>
+          <li>Predictions in Gold table — run <code>SELECT COUNT(*) FROM zosa_lakehouse.gold_asteroid_predictions</code> → returns non-zero count</li>
+          <li>Feature importance chart — check the MLflow run artifacts for <code>feature_importance.png</code></li>
+        </ul>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Quick Verification Cell</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python"># Quick verification cell
+print("=== Module 08 Checkpoint ===\n")
+
+pred_count = spark.sql("SELECT COUNT(*) as cnt FROM zosa_lakehouse.gold_asteroid_predictions").collect()[0]["cnt"]
+print(f"✅ gold_asteroid_predictions: {pred_count} rows")
+
+hazard_count = spark.sql("""
+    SELECT predicted_hazardous, COUNT(*) as cnt
+    FROM zosa_lakehouse.gold_asteroid_predictions
+    GROUP BY predicted_hazardous
+""").show()
+
+print("\n✅ All checkpoint items verified!")</code></pre>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Troubleshooting</div>
+        <p>If the predictions table is empty, re-run Cell 7. If MLflow runs don't appear, confirm you called <code>mlflow.set_experiment("asteroid_risk_prediction")</code> before starting runs. If feature importances fail, make sure your best model is a tree-based classifier (RandomForest or GradientBoosting).</p>
+      </div>
+
+      <!-- Story bridge -->
+      <div class="comms-panel">
+        <div class="avatar">👨‍💻</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Kwame Osei</div>
+          <div class="comms-role">Lead Data Scientist</div>
+          <div class="comms-text">"Good — the model catches 96% of the hazardous ones. But this knowledge is trapped in a table. How do we make this accessible to every team at ZOSA — scientists, engineers, mission planners — without everyone needing to write SQL?"</div>
+        </div>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">What's Next</div>
+        <p>In <strong><a href="09-ontology.html">Module 09 — Ontology &amp; Knowledge Graph</a></strong>, you'll build a semantic layer that turns your lakehouse tables and ML predictions into a navigable knowledge graph — making ZOSA's data self-describing and discoverable.</p>
+      </div>
+    </section>
+
+    <!-- Module Navigation -->
+    <nav class="module-nav">
+      <a href="07-real-time.html" class="prev">
+        <span class="nav-label">← Previous</span>
+        <span class="nav-title">Module 07: Real-Time Intelligence</span>
+      </a>
+      <a href="09-ontology.html" class="next">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Module 09: Ontology &amp; Knowledge Graph</span>
+      </a>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

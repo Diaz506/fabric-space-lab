@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 10 — AI Agents — Fabric Space Lab</title>
+  <meta name="description" content="Create Data Agents for natural language Q&amp;A and Operations Agents for automated threat response in Microsoft Fabric.">
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC -->
+  <nav class="mini-toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <a href="#top"><span class="toc-dot"></span>AI Agents</a>
+    <a href="#data-agent-intro"><span class="toc-dot"></span>What Are Data Agents?</a>
+    <a href="#create-data-agent"><span class="toc-dot"></span>Create Data Agent</a>
+    <a href="#grounding"><span class="toc-dot"></span>Configure Grounding</a>
+    <a href="#test-queries"><span class="toc-dot"></span>Test NL Queries</a>
+    <a href="#fine-tune"><span class="toc-dot"></span>Fine-Tune Behavior</a>
+    <a href="#share-agent"><span class="toc-dot"></span>Share the Agent</a>
+    <a href="#ops-agent-intro"><span class="toc-dot"></span>Operations Agent</a>
+    <a href="#design-automation"><span class="toc-dot"></span>Design Automation</a>
+    <a href="#create-ops-agent"><span class="toc-dot"></span>Create Ops Agent</a>
+    <a href="#test-e2e"><span class="toc-dot"></span>Test End-to-End</a>
+    <a href="#monitor"><span class="toc-dot"></span>Monitor Execution</a>
+    <a href="#agent-governance"><span class="toc-dot"></span>Agent Governance</a>
+    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 10 · 🤖 AI Agents · ⏱️ 45 minutes</div>
+      <h1>AI Agents</h1>
+      <p class="hero-desc">
+        Ask in plain English, act automatically — Data Agents and Operations Agents bring natural language intelligence
+        and autonomous workflows to your unified data estate.
+      </p>
+      <div class="hero-actions">
+        <a href="#data-agent-intro" class="btn btn-primary">▶ Start Module</a>
+        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
+      </div>
+    </section>
+
+    <!-- Story -->
+    <section class="chapter" id="story">
+      <div class="chapter-heading">
+        <span class="chapter-label">The Story So Far</span>
+        <h2>🎬 A Demand for Simplicity</h2>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👨‍🚀</div>
+        <div class="comms-body">
+          <div class="comms-name">Major Kenji Nakamura</div>
+          <div class="comms-role">Director of Planetary Defense</div>
+          <div class="comms-text">"I don't want to learn KQL. I don't want to write DAX. I want to ask: Which asteroids are dangerous? And when one IS dangerous, I want the system to do something about it — automatically."</div>
+        </div>
+      </div>
+
+      <p>You glance at Dr. Vasquez, who raises an eyebrow. You know the ontology is ready. The ML models are scoring risk in real time. The Activator is firing alerts. All the pieces are in place — you just need to put a conversational interface on top and wire up the automation.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Detail</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>⏱ Estimated time</td><td>45 minutes</td></tr>
+          <tr><td>🎯 Goal</td><td>Create a <strong>Data Agent</strong> <span class="status-badge ga">GA</span> for natural language Q&amp;A and an <strong>Operations Agent</strong> <span class="status-badge preview">Preview</span> for automated threat response — both grounded to the ontology from Module 09.</td></tr>
+          <tr><td>📋 Prerequisites</td><td>Modules <a href="07-real-time.html">07</a>, <a href="08-data-science.html">08</a>, and <a href="09-ontology.html">09</a> completed. Gold lakehouse tables populated. ZOSA Knowledge Model ontology published.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- =============================== -->
+    <!-- PART A: Data Agent (GA)         -->
+    <!-- =============================== -->
+
+    <section class="chapter" id="data-agent-intro">
+      <div class="chapter-heading">
+        <span class="chapter-label">Part A</span>
+        <h2>📘 Data Agent <span class="status-badge ga">GA</span></h2>
+      </div>
+
+      <h3>🤖 What Are Data Agents?</h3>
+
+      <p>Data Agents provide <strong>natural language Q&amp;A</strong> over your entire data estate. They were announced as GA at <strong>FabCon Atlanta (March 2026)</strong> and represent the evolution of what was previously called "AI Skills."</p>
+
+      <p>What makes Data Agents special:</p>
+      <ul>
+        <li><strong>Grounded to your ontology</strong> — the agent doesn't just guess at table relationships. It operates on the shared business meaning you defined in Module 09. When someone asks about "dangerous asteroids," the agent <em>knows</em> that means <code>hazard_score &gt; 100</code> because your ontology says so.</li>
+        <li><strong>Not just ad-hoc SQL</strong> — Data Agents understand business concepts, hierarchies, and relationships. They translate intent into precise queries across lakehouses, warehouses, and semantic models.</li>
+        <li><strong>Security-aware</strong> — every query respects Row-Level Security (RLS), Column-Level Security (CLS), and Object-Level Security (OLS). Users only see what they're authorized to see.</li>
+      </ul>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Key Distinction</div>
+        <p>Data Agents are the GA product name. You may see older references to "AI Skills" in documentation — they refer to the same capability, but <strong>always use "Data Agent"</strong> going forward.</p>
+      </div>
+    </section>
+
+    <!-- Step 1: Create Data Agent -->
+    <section class="chapter" id="create-data-agent">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 1</span>
+        <h2>🛠️ Create a Data Agent</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Create the Data Agent</div>
+        <div class="step-body">
+          <ol>
+            <li>Open your <strong>ZOSA-Dev</strong> workspace in the Fabric portal.</li>
+            <li>Click <strong>+ New</strong> → <strong>Data Agent</strong>.</li>
+            <li>Configure the agent:</li>
+          </ol>
+
+          <table class="data-table">
+            <thead>
+              <tr><th>Setting</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Name</strong></td><td><code>ZOSA Mission Intelligence</code></td></tr>
+              <tr><td><strong>Description</strong></td><td>Natural language Q&amp;A for ZOSA mission data, asteroid risk, and exoplanet catalog</td></tr>
+            </tbody>
+          </table>
+
+          <ol start="4">
+            <li>On the <strong>Grounding</strong> tab, connect the agent to your data sources:
+              <ul>
+                <li>Select <strong>ZOSA Knowledge Model</strong> (the ontology from Module 09)</li>
+                <li>Add grounding sources: ✅ Gold Lakehouse tables, ✅ ZOSA semantic model</li>
+              </ul>
+            </li>
+            <li>Click <strong>Create</strong>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Note</div>
+        <p>Connecting the ontology is the critical step. Without it, the agent would rely on column names and basic metadata to interpret queries. With it, the agent has full context: business definitions, relationships, hierarchies, and validated business rules.</p>
+      </div>
+    </section>
+
+    <!-- Step 2: Configure Grounding -->
+    <section class="chapter" id="grounding">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 2</span>
+        <h2>🎯 Configure Grounding Sources</h2>
+      </div>
+
+      <p>Select which entities and tables the agent can query. You're giving it a "lens" into your data estate.</p>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Select Tables</div>
+        <div class="step-body">
+          <ol>
+            <li>In the agent configuration, go to <strong>Grounding → Select Tables</strong>.</li>
+            <li>Enable the following Gold lakehouse tables:</li>
+          </ol>
+
+          <table class="data-table">
+            <thead>
+              <tr><th>Table</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>gold_asteroid_risk</code></td><td>Near-Earth object tracking with hazard scores and risk categories</td></tr>
+              <tr><td><code>gold_mission_summary</code></td><td>Mission assignments, statuses, crew, and ground stations</td></tr>
+              <tr><td><code>gold_exoplanet_catalog</code></td><td>Exoplanet discoveries with habitability scores</td></tr>
+              <tr><td><code>gold_solar_activity</code></td><td>Solar flare events, intensity, and impact assessments</td></tr>
+            </tbody>
+          </table>
+
+          <ol start="3">
+            <li>Review the <strong>ontology mappings</strong> — the agent should show which ontology entities map to which tables. Confirm the mappings look correct.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Why This Matters</div>
+        <p>The ontology provides the semantic layer. When a user asks about "dangerous asteroids," the agent resolves this through the ontology:</p>
+        <ul>
+          <li>"dangerous" → <code>risk_category IN ('Critical', 'High')</code> (from the ontology's business rule)</li>
+          <li>"asteroids" → <code>gold_asteroid_risk</code> table (from the entity mapping)</li>
+        </ul>
+        <p>Without the ontology, the agent would have to guess what "dangerous" means.</p>
+      </div>
+    </section>
+
+    <!-- Step 3: Test Queries -->
+    <section class="chapter" id="test-queries">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 3</span>
+        <h2>🧪 Test Natural Language Queries</h2>
+      </div>
+
+      <p>Time to put the agent through its paces. Open the <strong>Test</strong> panel and try these queries:</p>
+
+      <h3>Basic Lookups</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Natural Language Queries</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">Which asteroids passed within 0.1 AU last month?</code></pre>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Mission Query</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">Show me all missions assigned to the Tanegashima ground station.</code></pre>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Solar Activity Query</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">What was the strongest solar flare this year?</code></pre>
+      </div>
+
+      <h3>Aggregations</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Aggregation Queries</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">How many habitable exoplanets have we discovered?</code></pre>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Mission Success Rate</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">What is our mission success rate by region?</code></pre>
+      </div>
+
+      <h3>Security-Scoped Queries</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">RLS-Scoped Query</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">List crew members with Top Secret clearance at European stations.</code></pre>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Expected Behavior</div>
+        <p>If your RLS rules from Module 06 are active, this last query should only return results for crew members the current user is authorized to see. Try testing with different user accounts to verify.</p>
+      </div>
+
+      <p>For each query, review:</p>
+      <ul>
+        <li>✅ Did the agent return the correct results?</li>
+        <li>✅ Does the generated SQL/KQL make sense?</li>
+        <li>✅ Did it use the ontology definitions to resolve ambiguous terms?</li>
+      </ul>
+    </section>
+
+    <!-- Step 4: Fine-Tune -->
+    <section class="chapter" id="fine-tune">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 4</span>
+        <h2>⚙️ Fine-Tune Agent Behavior</h2>
+      </div>
+
+      <p>You can improve accuracy by adding custom instructions and example Q&amp;A pairs.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Add Custom Instructions</div>
+        <div class="step-body">
+          <p>Go to <strong>Agent Settings → Instructions</strong> and add:</p>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">Custom Instructions</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-text">When asked about "dangerous asteroids" or "threats," filter by
+risk_category IN ('Critical', 'High').
+
+When asked about "habitable" exoplanets, use habitability_score &gt; 0.7.
+
+Always include the asteroid name and discovery date in risk queries.
+
+When reporting mission success rates, exclude missions with status = 'Planned'.</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Add Example Q&amp;A Pairs</div>
+        <div class="step-body">
+          <p>Add disambiguation examples:</p>
+
+          <table class="data-table">
+            <thead>
+              <tr><th>User Question</th><th>Expected Behavior</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>"What's coming close?"</td><td>Query <code>gold_asteroid_risk</code> for objects with <code>miss_distance_au &lt; 0.05</code> in the next 30 days</td></tr>
+              <tr><td>"Any solar storms?"</td><td>Query <code>gold_solar_activity</code> for flares with <code>intensity_class IN ('X', 'M')</code> in the past 7 days</td></tr>
+              <tr><td>"Station status"</td><td>Query <code>gold_mission_summary</code> grouped by <code>ground_station</code> showing active mission count</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Configure Response Settings</div>
+        <div class="step-body">
+          <p>Under <strong>Response Settings</strong>, configure:</p>
+          <ul>
+            <li><strong>Show generated SQL/KQL:</strong> ✅ Yes (transparency for technical users)</li>
+            <li><strong>Include confidence score:</strong> ✅ Yes</li>
+            <li><strong>Max results per query:</strong> 50</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 5: Share Agent -->
+    <section class="chapter" id="share-agent">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 5</span>
+        <h2>🔗 Share the Agent</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Assign Permissions</div>
+        <div class="step-body">
+          <ol>
+            <li>Go to <strong>Manage Access</strong> on the Data Agent.</li>
+            <li>Assign permissions:</li>
+          </ol>
+
+          <table class="data-table">
+            <thead>
+              <tr><th>Role</th><th>Access</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ZOSA-Science team</td><td>Can use the agent (query)</td></tr>
+              <tr><td>ZOSA-Defense team</td><td>Can use the agent (query)</td></tr>
+              <tr><td>ZOSA-Admin team</td><td>Can use and configure the agent</td></tr>
+            </tbody>
+          </table>
+
+          <ol start="3">
+            <li>The Data Agent <strong>inherits all security layers</strong> — RLS, CLS, and OLS rules apply automatically. You don't need to configure security separately for the agent.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Tip</div>
+        <p>Share the agent URL with Major Nakamura's team. They can access it directly from the Fabric portal or embed it in a Power BI report for inline Q&amp;A.</p>
+      </div>
+    </section>
+
+    <!-- =============================== -->
+    <!-- PART B: Operations Agent         -->
+    <!-- =============================== -->
+
+    <section class="chapter" id="ops-agent-intro">
+      <div class="chapter-heading">
+        <span class="chapter-label">Part B</span>
+        <h2>⚡ Operations Agent <span class="status-badge preview">Preview</span></h2>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Preview Notice</div>
+        <p>Operations Agents are currently in <strong>Preview</strong>. Features, APIs, and UX may change before General Availability. Do not use for production-critical automation without a fallback plan.</p>
+      </div>
+
+      <h3>🤖 What Are Operations Agents?</h3>
+
+      <p>Operations Agents are <strong>autonomous agents that interpret live signals, make decisions, and take action</strong>. They don't just report — they <em>act</em>.</p>
+
+      <p>Think of the difference this way:</p>
+      <ul>
+        <li><strong>Data Agent:</strong> "Which asteroids are dangerous?" → returns a table of results</li>
+        <li><strong>Operations Agent:</strong> A new dangerous asteroid is detected → <em>automatically</em> generates a threat brief, notifies the Defense team, and creates a mission proposal</li>
+      </ul>
+
+      <p>Operations Agents are powered by the ontology and can chain multiple actions together in response to data events.</p>
+    </section>
+
+    <!-- Step 6: Design Automation -->
+    <section class="chapter" id="design-automation">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 6</span>
+        <h2>📐 Design the Automation</h2>
+      </div>
+
+      <p>Before building, plan the workflow. When the ML model (Module 08) scores a new asteroid as <strong>Critical</strong>, or the Activator (Module 07) fires an alert, the Operations Agent should:</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Automation Workflow</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-text">┌─────────────────────────────────────────────────────┐
+│  TRIGGER: New row in gold_asteroid_risk              │
+│           where risk_category = 'Critical'           │
+├─────────────────────────────────────────────────────┤
+│  ACTION 1: Generate threat assessment brief          │
+│            (asteroid name, hazard_score,             │
+│             miss_distance, estimated_impact_date)    │
+├─────────────────────────────────────────────────────┤
+│  ACTION 2: Send Teams notification                   │
+│            to "ZOSA-Defense" channel                 │
+│            with brief attached                       │
+├─────────────────────────────────────────────────────┤
+│  ACTION 3: Insert mission proposal                   │
+│            into mission_proposals table              │
+│            with status = 'Pending Review'            │
+└─────────────────────────────────────────────────────┘</code></pre>
+      </div>
+    </section>
+
+    <!-- Step 7: Create Ops Agent -->
+    <section class="chapter" id="create-ops-agent">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 7</span>
+        <h2>🛠️ Create the Operations Agent</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Create &amp; Configure the Agent</div>
+        <div class="step-body">
+          <ol>
+            <li>Open your <strong>ZOSA-Dev</strong> workspace.</li>
+            <li>Click <strong>+ New</strong> → <strong>Operations Agent</strong>.</li>
+            <li>Configure:</li>
+          </ol>
+
+          <table class="data-table">
+            <thead>
+              <tr><th>Setting</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Name</strong></td><td><code>ZOSA Threat Response</code></td></tr>
+              <tr><td><strong>Description</strong></td><td>Automated threat response for critical asteroid detections</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Configure the Trigger</div>
+        <div class="step-body">
+          <ul>
+            <li><strong>Trigger type:</strong> Data change</li>
+            <li><strong>Source table:</strong> <code>gold_asteroid_risk</code></li>
+            <li><strong>Condition:</strong> <code>risk_category = 'Critical'</code></li>
+            <li><strong>Evaluation:</strong> On new rows</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Define Action 1 — Generate Report</div>
+        <div class="step-body">
+          <ul>
+            <li><strong>Action type:</strong> Generate content</li>
+            <li><strong>Template:</strong> Threat assessment brief (markdown format)</li>
+            <li><strong>Parameters</strong> (dynamically bound to the triggering event):
+              <ul>
+                <li><code>{{asteroid_name}}</code> — from the new row</li>
+                <li><code>{{hazard_score}}</code> — from the new row</li>
+                <li><code>{{miss_distance_au}}</code> — from the new row</li>
+                <li><code>{{estimated_close_approach}}</code> — from the new row</li>
+                <li><code>{{risk_category}}</code> — from the new row</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-title">Define Action 2 — Send Teams Notification</div>
+        <div class="step-body">
+          <ul>
+            <li><strong>Action type:</strong> Send notification</li>
+            <li><strong>Channel:</strong> <code>ZOSA-Defense</code></li>
+            <li><strong>Message:</strong> Include the generated threat brief</li>
+            <li><strong>Priority:</strong> Urgent</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">5</div>
+        <div class="step-title">Define Action 3 — Create Mission Proposal</div>
+        <div class="step-body">
+          <ul>
+            <li><strong>Action type:</strong> Insert data</li>
+            <li><strong>Target table:</strong> <code>mission_proposals</code></li>
+            <li><strong>Row values:</strong>
+              <ul>
+                <li><code>proposal_name</code>: <code>"Threat Response: {{asteroid_name}}"</code></li>
+                <li><code>source_asteroid_id</code>: <code>{{asteroid_id}}</code></li>
+                <li><code>priority</code>: <code>Critical</code></li>
+                <li><code>status</code>: <code>Pending Review</code></li>
+                <li><code>created_by</code>: <code>ZOSA Threat Response Agent</code></li>
+                <li><code>created_at</code>: <code>{{current_timestamp}}</code></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">6</div>
+        <div class="step-title">Activate</div>
+        <div class="step-body">
+          <p>Click <strong>Save and Activate</strong>.</p>
+        </div>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Note</div>
+        <p>Actions pass parameters dynamically using the event context. Each <code>{{placeholder}}</code> is resolved at runtime from the triggering data change. This is what makes Operations Agents powerful — they chain context-aware actions without hardcoded values.</p>
+      </div>
+    </section>
+
+    <!-- Step 8: Test E2E -->
+    <section class="chapter" id="test-e2e">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 8</span>
+        <h2>🧪 Test End-to-End</h2>
+      </div>
+
+      <p>Simulate a critical asteroid detection to verify the full workflow.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Insert a Test Row</div>
+        <div class="step-body">
+          <p>Open a <strong>notebook</strong> in your ZOSA-Dev workspace and insert a test row:</p>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">Insert Test Asteroid</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-python">from pyspark.sql import Row
+from datetime import datetime, timedelta
+
+test_asteroid = Row(
+    asteroid_id="TEST-2029-XR7",
+    asteroid_name="2029 XR7",
+    hazard_score=187.4,
+    miss_distance_au=0.0023,
+    risk_category="Critical",
+    estimated_close_approach=(datetime.now() + timedelta(days=45)).strftime("%Y-%m-%d"),
+    velocity_km_s=28.7,
+    diameter_m=340,
+    detection_timestamp=datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+)
+
+df = spark.createDataFrame([test_asteroid])
+df.write.mode("append").saveAsTable("gold.gold_asteroid_risk")</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Watch the Agent Trigger</div>
+        <div class="step-body">
+          <p><strong>Watch the Operations Agent trigger.</strong> Within a few minutes:</p>
+          <ul>
+            <li>✅ A threat assessment brief should be generated</li>
+            <li>✅ A Teams notification should appear in the ZOSA-Defense channel</li>
+            <li>✅ A new row should appear in <code>mission_proposals</code></li>
+          </ul>
+          <p>Verify each step completed successfully in the agent's <strong>Execution History</strong>.</p>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Cleanup</div>
+        <p>After testing, remove the test row to avoid confusion:</p>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Cleanup Test Data</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-python">spark.sql("DELETE FROM gold.gold_asteroid_risk WHERE asteroid_id = 'TEST-2029-XR7'")</code></pre>
+      </div>
+    </section>
+
+    <!-- Step 9: Monitor -->
+    <section class="chapter" id="monitor">
+      <div class="chapter-heading">
+        <span class="chapter-label">Step 9</span>
+        <h2>📊 Monitor Agent Execution</h2>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Review Execution History</div>
+        <div class="step-body">
+          <ol>
+            <li>Open the Operations Agent and go to the <strong>Monitoring</strong> tab.</li>
+            <li>Review:
+              <ul>
+                <li><strong>Execution history</strong> — each trigger event and the actions taken</li>
+                <li><strong>Success/failure status</strong> — per action in the chain</li>
+                <li><strong>Execution duration</strong> — how long each action took</li>
+                <li><strong>Error details</strong> — if any action failed, review the error message and stack trace</li>
+              </ul>
+            </li>
+            <li>Set up <strong>alerting on agent failures</strong> — if the Operations Agent itself fails, you want to know immediately. Configure a secondary Activator alert on the agent's execution log.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agent Governance -->
+    <section class="chapter" id="agent-governance">
+      <div class="chapter-heading">
+        <span class="chapter-label">Governance</span>
+        <h2>🛡️ Agent Governance</h2>
+      </div>
+
+      <p>Both Data Agents and Operations Agents include governance controls critical for a defense scenario like ZOSA.</p>
+
+      <h3>Audit Trails</h3>
+      <p>Every interaction is logged:</p>
+      <ul>
+        <li><strong>Data Agent:</strong> Each natural language query, the generated SQL/KQL, the results returned, and the user who asked</li>
+        <li><strong>Operations Agent:</strong> Each trigger event, every action executed, parameters passed, and outcomes</li>
+      </ul>
+
+      <h3>Approval Workflows</h3>
+      <p>Operations Agents can be configured to require <strong>human approval</strong> before executing critical actions:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Risk Level</th><th>Approval Behavior</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Low</strong> (informational)</td><td>Fully automatic — no approval needed</td></tr>
+          <tr><td><strong>Medium</strong> (notifications)</td><td>Automatic with post-action review</td></tr>
+          <tr><td><strong>High</strong> (data writes)</td><td>Requires approval before executing</td></tr>
+          <tr><td><strong>Critical</strong> (external actions)</td><td>Requires multi-person approval</td></tr>
+        </tbody>
+      </table>
+
+      <p>For ZOSA, you might configure Action 3 (creating mission proposals) to require approval from a Defense team lead before the row is inserted.</p>
+
+      <h3>Human-in-the-Loop Patterns</h3>
+      <p>Configure when and how humans are involved:</p>
+      <ul>
+        <li><strong>Pre-action approval:</strong> Agent pauses and waits for human sign-off</li>
+        <li><strong>Post-action review:</strong> Agent acts immediately but flags the action for review</li>
+        <li><strong>Escalation:</strong> If the agent can't resolve ambiguity, it escalates to a human operator</li>
+      </ul>
+
+      <h3>Security Inheritance</h3>
+      <p>Data Agents respect <strong>all security layers</strong> configured in your Fabric estate:</p>
+      <ul>
+        <li>Row-Level Security (RLS)</li>
+        <li>Column-Level Security (CLS)</li>
+        <li>Object-Level Security (OLS)</li>
+        <li>Workspace roles and permissions</li>
+      </ul>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍💼</div>
+        <div class="comms-body">
+          <div class="comms-name">Sofia Lindqvist</div>
+          <div class="comms-role">Chief Information Security Officer</div>
+          <div class="comms-text">"This is critical for ZOSA: When Major Nakamura queries the Data Agent, he sees defense-relevant data. When a scientist queries the same agent, they see science-relevant data. Same agent, same ontology, different views — all enforced automatically."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKPOINT -->
+    <section class="chapter" id="checkpoint">
+      <div class="checkpoint">
+        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 10 Complete</div>
+        <p>Verify you've completed all key objectives:</p>
+        <ul>
+          <li>Data Agent <code>ZOSA Mission Intelligence</code> created and grounded to the ZOSA Knowledge Model ontology</li>
+          <li>Natural language queries return accurate, ontology-informed results</li>
+          <li>Custom instructions and example Q&amp;A pairs configured for disambiguation</li>
+          <li>Agent shared with appropriate teams, RLS verified with different user accounts</li>
+          <li>Operations Agent <code>ZOSA Threat Response</code> configured with trigger on <code>gold_asteroid_risk</code></li>
+          <li>Three actions defined: generate report, send Teams notification, create mission proposal</li>
+          <li>End-to-end test completed — simulated critical asteroid triggers full workflow</li>
+          <li>Agent execution history shows all logged actions with success status</li>
+          <li>Test data cleaned up</li>
+        </ul>
+      </div>
+
+      <!-- Closing Story -->
+      <div class="comms-panel">
+        <div class="avatar">👨‍🚀</div>
+        <div class="comms-body">
+          <div class="comms-name">Major Kenji Nakamura</div>
+          <div class="comms-role">Director of Planetary Defense</div>
+          <div class="comms-text">"This is why we migrated to Fabric."</div>
+        </div>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"Now let's make sure this runs reliably in production. We need CI/CD pipelines, deployment gates, and a rollback plan. One workspace for dev, one for prod — no cowboy deployments."</div>
+        </div>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">What's Next</div>
+        <p>In <strong><a href="11-ci-cd.html">Module 11 — CI/CD &amp; Deployment</a></strong>, you'll set up Git integration, deployment pipelines, and promotion workflows to move ZOSA from dev to production safely.</p>
+      </div>
+    </section>
+
+    <!-- Module Navigation -->
+    <nav class="module-nav">
+      <a href="09-ontology.html" class="prev">
+        <span class="nav-label">← Previous</span>
+        <span class="nav-title">Module 09: Ontology &amp; Knowledge Graph</span>
+      </a>
+      <a href="11-ci-cd.html" class="next">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Module 11: CI/CD &amp; Deployment</span>
+      </a>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

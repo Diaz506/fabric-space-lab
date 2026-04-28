@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 05 — Semantic Model (Direct Lake) — Fabric Space Lab</title>
+  <meta name="description" content="Build a Direct Lake semantic model with DAX measures, RLS, and OLS on top of the ZOSA Gold layer.">
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC -->
+  <nav class="mini-toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <a href="#top"><span class="toc-dot"></span>Mission Briefing</a>
+    <a href="#what-is-direct-lake"><span class="toc-dot"></span>What Is Direct Lake?</a>
+    <a href="#create-model"><span class="toc-dot"></span>Create the Semantic Model</a>
+    <a href="#relationships"><span class="toc-dot"></span>Define Relationships</a>
+    <a href="#dax-measures"><span class="toc-dot"></span>DAX Measures</a>
+    <a href="#rls"><span class="toc-dot"></span>Row-Level Security</a>
+    <a href="#ols"><span class="toc-dot"></span>Object-Level Security</a>
+    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 05 · ⏱️ 45 minutes</div>
+      <h1>Semantic Model (Direct Lake)</h1>
+      <p class="hero-desc">
+        The science directors burst into the data-engineering bullpen at 08:00 sharp.
+        <em>"We need dashboards — yesterday."</em> You lean back in your chair and smile.
+        <em>"Direct Lake gives us blazing-fast queries without importing a single byte of data."</em>
+        The directors exchange puzzled glances. Time to show them what Fabric can really do.
+      </p>
+      <div class="hero-actions">
+        <a href="#what-is-direct-lake" class="btn btn-primary">▶ Start Module</a>
+        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1: What Is Direct Lake? -->
+    <section class="chapter" id="what-is-direct-lake">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 1</span>
+        <h2>🔍 What Is Direct Lake?</h2>
+      </div>
+
+      <p>Direct Lake is Microsoft Fabric's <strong>third query mode</strong> — and it combines the best parts of Import and DirectQuery while dodging their biggest trade-offs.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Import</th>
+            <th>DirectQuery</th>
+            <th>Direct Lake</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Query speed</td>
+            <td>⚡ Fast (in-memory)</td>
+            <td>🐢 Depends on source</td>
+            <td>⚡ Fast (columnar read from Delta)</td>
+          </tr>
+          <tr>
+            <td>Data freshness</td>
+            <td>⏰ Stale until refresh</td>
+            <td>✅ Real-time</td>
+            <td>✅ Near-real-time (auto-sync)</td>
+          </tr>
+          <tr>
+            <td>Data duplication</td>
+            <td>❌ Full copy in model</td>
+            <td>✅ No copy</td>
+            <td>✅ No copy — reads parquet directly</td>
+          </tr>
+          <tr>
+            <td>Works with Delta tables</td>
+            <td>❌ Needs import</td>
+            <td>✅ Via SQL endpoint</td>
+            <td>✅ Native OneLake access</td>
+          </tr>
+          <tr>
+            <td>Memory footprint</td>
+            <td>🔴 High</td>
+            <td>🟢 Low</td>
+            <td>🟢 Low (on-demand columnar cache)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">How It Works Under the Hood</div>
+        <p>Direct Lake memory-maps the Delta/Parquet files in OneLake and loads column segments on demand — no ETL, no scheduled refresh, no V-Order shuffle. When you add new data to the Gold layer, the model picks it up automatically.</p>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Important</div>
+        <p>Direct Lake requires your data to live in a Fabric Lakehouse or Warehouse. External Delta tables (e.g., on ADLS Gen2 via shortcut) work only if a OneLake shortcut is configured first.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2: Create the Semantic Model -->
+    <section class="chapter" id="create-model">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 2</span>
+        <h2>🏗️ Create the Semantic Model</h2>
+      </div>
+
+      <p>You will now build the <strong>ZOSA Analytics Model</strong> on top of the Gold tables you created in Module 04.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Open your Lakehouse</div>
+        <div class="step-body">
+          <p>Open your <strong>ZOSA_Lakehouse</strong> in the Fabric portal.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create the model</div>
+        <div class="step-body">
+          <p>In the top command bar, click <strong>New</strong> → <strong>Semantic model</strong>.</p>
+          <p>Name the model: <code>ZOSA Analytics Model</code>.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Select Gold layer tables</div>
+        <div class="step-body">
+          <p>In the table picker, select the <strong>Gold layer</strong> tables:</p>
+          <ul>
+            <li><code>gold_asteroid_risk</code></li>
+            <li><code>gold_mission_summary</code></li>
+            <li><code>gold_solar_activity</code></li>
+            <li><code>gold_exoplanet_catalog</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-title">Add Silver layer tables</div>
+        <div class="step-body">
+          <p>Also add these <strong>Silver layer</strong> tables (you will need them for relationships):</p>
+          <ul>
+            <li><code>missions_silver</code></li>
+            <li><code>crew_silver</code></li>
+            <li><code>telemetry_silver</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">5</div>
+        <div class="step-title">Confirm</div>
+        <div class="step-body">
+          <p>Click <strong>Confirm</strong>. Fabric creates a Direct Lake semantic model and opens the <strong>Model view</strong>.</p>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Missing Tables?</div>
+        <p>If you don't see the Gold tables, make sure the notebooks from Module 04 ran successfully and that the tables are registered in the Lakehouse explorer.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 3: Define Relationships -->
+    <section class="chapter" id="relationships">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 3</span>
+        <h2>🔗 Define Relationships (Star Schema)</h2>
+      </div>
+
+      <p>A clean star schema means faster queries and simpler DAX. Your <strong>fact table</strong> is <code>gold_mission_summary</code>; the rest are dimensions.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Switch to Diagram Layout</div>
+        <div class="step-body">
+          <p>In the <strong>Model view</strong>, switch to <strong>Diagram layout</strong> (the icon that looks like connected boxes).</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create Relationships</div>
+        <div class="step-body">
+          <p>Create the following relationships by dragging columns between tables:</p>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>From (Fact / Table)</th>
+                <th>Column</th>
+                <th>To (Dimension)</th>
+                <th>Column</th>
+                <th>Cardinality</th>
+                <th>Cross-filter</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>gold_mission_summary</code></td>
+                <td><code>region</code></td>
+                <td><code>crew_silver</code></td>
+                <td><code>region</code></td>
+                <td>Many-to-many</td>
+                <td>Single</td>
+              </tr>
+              <tr>
+                <td><code>gold_mission_summary</code></td>
+                <td><code>ground_station_id</code></td>
+                <td><code>telemetry_silver</code></td>
+                <td><code>ground_station_id</code></td>
+                <td>Many-to-one</td>
+                <td>Single</td>
+              </tr>
+              <tr>
+                <td><code>gold_mission_summary</code></td>
+                <td><code>mission_id</code></td>
+                <td><code>missions_silver</code></td>
+                <td><code>mission_id</code></td>
+                <td>Many-to-one</td>
+                <td>Single</td>
+              </tr>
+              <tr>
+                <td><code>gold_asteroid_risk</code></td>
+                <td><code>discovery_date</code></td>
+                <td><code>gold_solar_activity</code></td>
+                <td><code>observation_date</code></td>
+                <td>Many-to-one</td>
+                <td>Single</td>
+              </tr>
+              <tr>
+                <td><code>gold_exoplanet_catalog</code></td>
+                <td><code>mission_id</code></td>
+                <td><code>gold_mission_summary</code></td>
+                <td><code>mission_id</code></td>
+                <td>Many-to-one</td>
+                <td>Single</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Verify the Star Schema</div>
+        <div class="step-body">
+          <p>After wiring the relationships, your diagram should look like a classic <strong>star</strong> with <code>gold_mission_summary</code> at the center.</p>
+        </div>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Star Schema Diagram</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-bash">                  crew_silver
+                       │ region
+                       │
+ gold_solar_activity ──┤ discovery_date
+                       │
+          gold_mission_summary  ◄── fact table
+               │             │
+   ground_station_id     mission_id
+               │             │
+     telemetry_silver   missions_silver
+                             │
+                    gold_exoplanet_catalog</code></pre>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Auto-detection Warning</div>
+        <p>If Fabric auto-detected relationships, review them carefully. Auto-detection sometimes creates incorrect cardinalities — always validate manually.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: DAX Measures -->
+    <section class="chapter" id="dax-measures">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 4</span>
+        <h2>📐 Create DAX Measures</h2>
+      </div>
+
+      <p>Switch to the <strong>Data view</strong> or <strong>Report view</strong> and add the following measures to <code>gold_mission_summary</code> (or create a dedicated <code>_Measures</code> table for organization).</p>
+
+      <h3>4.1 — Hazard Index</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Hazard Index</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Hazard Index =
+    AVERAGE(gold_asteroid_risk[hazard_score])</code></pre>
+      </div>
+
+      <p>This gives mission control a single number summarizing the current asteroid threat level.</p>
+
+      <h3>4.2 — Mission Success Rate</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Mission Success Rate</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Mission Success Rate =
+    DIVIDE(
+        CALCULATE(
+            COUNTROWS(gold_mission_summary),
+            gold_mission_summary[status] = "Completed"
+        ),
+        COUNTROWS(gold_mission_summary)
+    )</code></pre>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Why DIVIDE instead of /?</div>
+        <p><code>DIVIDE</code> handles division-by-zero gracefully — returning <code>BLANK()</code> instead of an error.</p>
+      </div>
+
+      <h3>4.3 — Critical Asteroids</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Critical Asteroids</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Critical Asteroids =
+    CALCULATE(
+        COUNTROWS(gold_asteroid_risk),
+        gold_asteroid_risk[risk_category] = "Critical"
+    )</code></pre>
+      </div>
+
+      <h3>4.4 — Habitable Candidates</h3>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">DAX — Habitable Candidates</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-javascript">Habitable Candidates =
+    CALCULATE(
+        COUNTROWS(gold_exoplanet_catalog),
+        gold_exoplanet_catalog[in_habitable_zone] = TRUE()
+    )</code></pre>
+      </div>
+
+      <h3>Validation</h3>
+
+      <p>After creating all four measures, click on each one in the <strong>Fields</strong> pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.</p>
+    </section>
+
+    <!-- CHAPTER 5: Row-Level Security -->
+    <section class="chapter" id="rls">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 5</span>
+        <h2>🔒 Implement Row-Level Security (RLS)</h2>
+      </div>
+
+      <p>Row-Level Security restricts which rows a user can see based on their identity. ZOSA's European analysts should see only missions from their region.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Open Manage Roles</div>
+        <div class="step-body">
+          <p>In the semantic model, switch to the <strong>Manage roles</strong> view (Model tab → Manage roles).</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create the Role</div>
+        <div class="step-body">
+          <p>Click <strong>New role</strong> and name it: <code>Europe_Analysts</code>.</p>
+          <p>Select the table <code>gold_mission_summary</code>.</p>
+          <p>In the DAX filter expression box, enter:</p>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">DAX — RLS Filter</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-javascript">[region] = "Europe"</code></pre>
+          </div>
+
+          <p>Click <strong>Save</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Test the Role</div>
+        <div class="step-body">
+          <ol>
+            <li>In the model toolbar, click <strong>View as</strong> → select <strong>Europe_Analysts</strong>.</li>
+            <li>Navigate to the Data view and verify that <code>gold_mission_summary</code> only shows rows where <code>region = "Europe"</code>.</li>
+            <li>Confirm that measures like <strong>Mission Success Rate</strong> recalculate using only the filtered rows.</li>
+            <li>Click <strong>Stop viewing as role</strong> when done.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍💼</div>
+        <div class="comms-body">
+          <div class="comms-name">Sofia Lindqvist</div>
+          <div class="comms-role">CISO</div>
+          <div class="comms-text">"Remember: In Module 02, you configured OneLake Security at the storage layer. RLS operates at the semantic model layer — a complementary defense. OneLake Security controls who can <em>access</em> the files; RLS controls who can <em>see which rows</em> once they have access."</div>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Important</div>
+        <p>RLS only applies when users query through the semantic model (e.g., Power BI reports). Direct Lakehouse SQL queries bypass RLS entirely — OneLake Security is your backstop there.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 6: Object-Level Security -->
+    <section class="chapter" id="ols">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 6</span>
+        <h2>🛡️ Configure Object-Level Security (OLS)</h2>
+      </div>
+
+      <p>Object-Level Security hides entire columns or tables from specific roles. ZOSA's <code>budget_usd</code> column in <code>gold_mission_summary</code> should be visible only to executives.</p>
+
+      <h3>Steps (via Tabular Editor)</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Connect Tabular Editor to Your Model</div>
+        <div class="step-body">
+          <ul>
+            <li>Open <strong>Tabular Editor</strong> (download from <a href="https://tabulareditor.com" target="_blank" rel="noopener">tabulareditor.com</a> if needed).</li>
+            <li>Connect using the <strong>XMLA endpoint</strong> of your Fabric workspace. Find it under <strong>Workspace settings → Premium → Workspace connection</strong>.</li>
+            <li>Select <code>ZOSA Analytics Model</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create an OLS Role</div>
+        <div class="step-body">
+          <ul>
+            <li>In the <strong>Roles</strong> node, create a new role called <code>Non_Executive</code>.</li>
+            <li>Under <strong>Table Permissions</strong>, set <code>gold_mission_summary</code> to <strong>Read</strong>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Hide the Column</div>
+        <div class="step-body">
+          <ul>
+            <li>Expand <code>gold_mission_summary</code> → <code>Columns</code> → right-click <code>budget_usd</code>.</li>
+            <li>Under <strong>Object-Level Security</strong>, set the <code>Non_Executive</code> role to <strong>None</strong> (no access).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-title">Save and Deploy</div>
+        <div class="step-body">
+          <p><strong>Save and deploy</strong> back to the Fabric service.</p>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">XMLA Endpoint Access</div>
+        <p>The XMLA read/write endpoint is available in Fabric capacities (F SKUs). Make sure your workspace is assigned to a capacity and that XMLA read/write is enabled in the <strong>Admin portal → Capacity settings</strong>.</p>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Important</div>
+        <p>OLS is configured through external tools (Tabular Editor, SSMS) because the Fabric portal does not yet have a native OLS editor. Always test OLS changes in a development workspace before promoting to production.</p>
+      </div>
+    </section>
+
+    <!-- CHECKPOINT -->
+    <section class="chapter" id="checkpoint">
+      <div class="checkpoint">
+        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 05 Complete</div>
+        <p>Before moving on, verify that everything is in place:</p>
+        <ul>
+          <li><strong>Semantic model</strong> <code>ZOSA Analytics Model</code> exists in your workspace and uses <strong>Direct Lake</strong> mode.</li>
+          <li><strong>Seven tables</strong> are loaded: four Gold, three Silver.</li>
+          <li><strong>Relationships</strong> form a star schema centered on <code>gold_mission_summary</code>.</li>
+          <li><strong>Four DAX measures</strong> return valid values:
+            <ul>
+              <li><code>Hazard Index</code> — a decimal number</li>
+              <li><code>Mission Success Rate</code> — a percentage (0–1 range)</li>
+              <li><code>Critical Asteroids</code> — an integer count</li>
+              <li><code>Habitable Candidates</code> — an integer count</li>
+            </ul>
+          </li>
+          <li><strong>RLS role</strong> <code>Europe_Analysts</code> filters correctly (verified with "View as").</li>
+          <li><strong>OLS</strong> hides <code>budget_usd</code> for <code>Non_Executive</code> role (verified in Tabular Editor).</li>
+        </ul>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"Your semantic model is ready. The science directors won't need to wait until tomorrow — they can start exploring data <em>right now</em>. But raw numbers aren't enough; they want beautiful, interactive visuals. That's exactly what you'll build in Module 06."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module Navigation -->
+    <nav class="module-nav">
+      <a href="04-medallion.html" class="prev">
+        <span class="nav-label">← Previous</span>
+        <span class="nav-title">Module 04: Medallion Lakehouse</span>
+      </a>
+      <a href="06-power-bi.html" class="next">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Module 06: Power BI Reports</span>
+      </a>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-javascript.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" width="800" height="350">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#060a1a"/>
+      <stop offset="50%" style="stop-color:#0f1538"/>
+      <stop offset="100%" style="stop-color:#1a1a4e"/>
+    </linearGradient>
+    <linearGradient id="glow1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.8"/>
+    </linearGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="2"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <!-- Background -->
+  <rect width="800" height="350" fill="url(#sky)"/>
+  <!-- Stars -->
+  <circle cx="50" cy="30" r="1" fill="white" opacity="0.6"/>
+  <circle cx="120" cy="80" r="0.8" fill="white" opacity="0.4"/>
+  <circle cx="200" cy="20" r="1.2" fill="white" opacity="0.5"/>
+  <circle cx="300" cy="60" r="0.7" fill="white" opacity="0.3"/>
+  <circle cx="450" cy="25" r="1" fill="white" opacity="0.5"/>
+  <circle cx="550" cy="70" r="0.8" fill="white" opacity="0.4"/>
+  <circle cx="650" cy="40" r="1.1" fill="white" opacity="0.6"/>
+  <circle cx="720" cy="90" r="0.9" fill="white" opacity="0.3"/>
+  <circle cx="100" cy="300" r="0.7" fill="white" opacity="0.4"/>
+  <circle cx="350" cy="310" r="1" fill="white" opacity="0.3"/>
+  <circle cx="600" cy="290" r="0.8" fill="white" opacity="0.5"/>
+  <circle cx="750" cy="320" r="0.6" fill="white" opacity="0.4"/>
+  <!-- Nebula glow -->
+  <ellipse cx="600" cy="150" rx="200" ry="120" fill="#8b5cf6" opacity="0.04" filter="url(#blur2)"/>
+  <ellipse cx="200" cy="200" rx="180" ry="100" fill="#00d4ff" opacity="0.03" filter="url(#blur2)"/>
+  <!-- Control room desk -->
+  <rect x="100" y="220" width="600" height="8" rx="2" fill="#1a1a4e" opacity="0.8"/>
+  <!-- Holographic screens -->
+  <rect x="140" y="120" width="120" height="90" rx="4" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.4"/>
+  <rect x="143" y="123" width="114" height="84" rx="2" fill="#00d4ff" opacity="0.05"/>
+  <!-- Chart bars -->
+  <rect x="155" y="170" width="12" height="25" fill="#00d4ff" opacity="0.5"/>
+  <rect x="172" y="155" width="12" height="40" fill="#00d4ff" opacity="0.6"/>
+  <rect x="189" y="163" width="12" height="32" fill="#00e676" opacity="0.5"/>
+  <rect x="206" y="148" width="12" height="47" fill="#8b5cf6" opacity="0.5"/>
+  <rect x="223" y="160" width="12" height="35" fill="#00d4ff" opacity="0.4"/>
+  <!-- Center main display -->
+  <rect x="300" y="100" width="200" height="115" rx="6" fill="none" stroke="url(#glow1)" stroke-width="1.5" opacity="0.6"/>
+  <rect x="304" y="104" width="192" height="107" rx="4" fill="#00d4ff" opacity="0.04"/>
+  <!-- Star map dots -->
+  <circle cx="340" cy="140" r="3" fill="#00d4ff" opacity="0.7"/>
+  <circle cx="380" cy="155" r="2" fill="#8b5cf6" opacity="0.6"/>
+  <circle cx="420" cy="135" r="2.5" fill="#00e676" opacity="0.5"/>
+  <circle cx="460" cy="160" r="1.8" fill="#ffb300" opacity="0.6"/>
+  <circle cx="400" cy="180" r="2" fill="#00d4ff" opacity="0.4"/>
+  <!-- Connection lines -->
+  <line x1="340" y1="140" x2="380" y2="155" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+  <line x1="380" y1="155" x2="420" y2="135" stroke="#8b5cf6" stroke-width="0.5" opacity="0.3"/>
+  <line x1="420" y1="135" x2="460" y2="160" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+  <!-- Right screen -->
+  <rect x="540" y="120" width="120" height="90" rx="4" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.4"/>
+  <rect x="543" y="123" width="114" height="84" rx="2" fill="#8b5cf6" opacity="0.05"/>
+  <!-- Sine wave -->
+  <path d="M555 165 Q570 145 585 165 Q600 185 615 165 Q630 145 645 165" fill="none" stroke="#00e676" stroke-width="1.5" opacity="0.5"/>
+  <!-- Horizontal line -->
+  <line x1="555" y1="180" x2="645" y2="180" stroke="#ffb300" stroke-width="0.8" opacity="0.4"/>
+  <!-- Silhouette figures -->
+  <ellipse cx="250" cy="240" rx="12" ry="6" fill="#0a0e27" opacity="0.8"/>
+  <rect x="244" y="210" width="12" height="30" rx="3" fill="#0f1538"/>
+  <circle cx="250" cy="205" r="7" fill="#0f1538"/>
+  <ellipse cx="400" cy="240" rx="12" ry="6" fill="#0a0e27" opacity="0.8"/>
+  <rect x="394" y="210" width="12" height="30" rx="3" fill="#0f1538"/>
+  <circle cx="400" cy="205" r="7" fill="#0f1538"/>
+  <ellipse cx="550" cy="240" rx="12" ry="6" fill="#0a0e27" opacity="0.8"/>
+  <rect x="544" y="210" width="12" height="30" rx="3" fill="#0f1538"/>
+  <circle cx="550" cy="205" r="7" fill="#0f1538"/>
+  <!-- Floor reflection -->
+  <rect x="100" y="228" width="600" height="120" fill="url(#sky)" opacity="0.6"/>
+  <line x1="100" y1="228" x2="700" y2="228" stroke="#00d4ff" stroke-width="0.5" opacity="0.15"/>
+</svg>

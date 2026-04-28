@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 01 — Capacity &amp; Workspace Setup — Fabric Space Lab</title>
+  <meta name="description" content="Choose your Fabric SKU, create workspaces, set up domains, and understand the OneLake hierarchy.">
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC -->
+  <nav class="mini-toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <a href="#top"><span class="toc-dot"></span>Capacity &amp; Workspace Setup</a>
+    <a href="#capacity"><span class="toc-dot"></span>Understanding Fabric Capacity</a>
+    <a href="#workspaces"><span class="toc-dot"></span>Creating Your Workspaces</a>
+    <a href="#domains"><span class="toc-dot"></span>Setting Up Domains</a>
+    <a href="#settings"><span class="toc-dot"></span>Workspace Settings Deep Dive</a>
+    <a href="#hierarchy"><span class="toc-dot"></span>OneLake Hierarchy</a>
+    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 01 · ⏱️ 30 minutes</div>
+      <h1>Capacity &amp; Workspace Setup</h1>
+      <p class="hero-desc">
+        Day 1 at ZOSA — choosing your SKU and building your analytics home.
+      </p>
+      <div class="hero-actions">
+        <a href="#capacity" class="btn btn-primary">▶ Start Building</a>
+        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
+      </div>
+      <div class="hero-image">
+        <div class="placeholder-text">🏗️ Hero image: ZOSA headquarters in Geneva with holographic workspace overview</div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1: Opening Briefing -->
+    <section class="chapter" id="briefing">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 1</span>
+        <h2>🚀 Day 1 at Zenith Orbital</h2>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"Welcome aboard. I've secured a Fabric capacity for us — your first job is to set up our analytics environment. We need separate spaces for development, testing, and production. And please — organize it properly. The last engineer named everything <code>test_final_v2_REAL</code>."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2: Understanding Fabric Capacity -->
+    <section class="chapter" id="capacity">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 2</span>
+        <h2>🏗️ Understanding Fabric Capacity</h2>
+      </div>
+
+      <p>Before you create anything, you need to understand the foundation everything else sits on: <strong>Fabric Capacity</strong>.</p>
+
+      <p>A Fabric capacity is a <strong>dedicated pool of compute resources</strong> measured in <strong>Capacity Units (CUs)</strong>. Think of it as the engine that powers all Fabric workloads — Lakehouses, Warehouses, Notebooks, Pipelines, Reports, and more. Without a capacity, your workspaces have no compute to run on.</p>
+
+      <h3>SKU Options</h3>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>SKU</th><th>Capacity Units (CUs)</th><th>Recommended Use Case</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>F2</code></td><td>2</td><td>Learning, prototyping, small personal projects</td></tr>
+          <tr><td><code>F4</code></td><td>4</td><td>Small team development, light analytics</td></tr>
+          <tr><td><code>F8</code></td><td>8</td><td>Department-level analytics, moderate Spark workloads</td></tr>
+          <tr><td><code>F16</code></td><td>16</td><td>Multi-team environments, concurrent notebook sessions</td></tr>
+          <tr><td><code>F32</code></td><td>32</td><td>Production workloads, large-scale data engineering</td></tr>
+          <tr><td><code>F64</code></td><td>64</td><td>Enterprise production, Real-Time Intelligence, heavy concurrency</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">SKU Note</div>
+        <p>For this lab, an <strong>F2 trial capacity</strong> is sufficient for Modules 00 through 06. However, if you plan to work through <strong>Module 07 (Real-Time Intelligence)</strong>, you will need an <strong>F64 or higher</strong> — KQL databases and Eventstreams require more compute headroom.</p>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Free Trial</div>
+        <p>Microsoft offers a free Fabric trial that provisions an F64 capacity for 60 days. If you haven't activated yours yet, go back to <a href="00-prerequisites.html">Module 00</a> and follow the trial activation steps.</p>
+      </div>
+
+      <h3>Capacity vs. Workspace</h3>
+
+      <p>These two concepts are frequently confused:</p>
+
+      <ul>
+        <li><strong>Capacity</strong> = the compute engine (how much horsepower you have)</li>
+        <li><strong>Workspace</strong> = a logical container for your items (where you organize your work)</li>
+      </ul>
+
+      <p>A single capacity can power many workspaces, and you assign each workspace to a capacity. Think of it like an office building (capacity) with multiple rooms (workspaces).</p>
+
+      <h3>OneLake: One Lake to Rule Them All</h3>
+
+      <p>Every Fabric tenant gets exactly <strong>one OneLake</strong>. There is no option to create additional ones. OneLake is the unified data lake that underpins all Fabric workloads:</p>
+
+      <ul>
+        <li>Workspaces are <strong>logical containers</strong> inside OneLake</li>
+        <li>Every item you create (Lakehouse, Warehouse, etc.) stores its data in OneLake</li>
+        <li>The data is physically stored in <strong>Delta Parquet</strong> format regardless of which engine wrote it</li>
+      </ul>
+
+      <p>This is a fundamental architectural decision by Microsoft — it means any engine (Spark, SQL, KQL, Power BI) can access the same data without copies or movement.</p>
+    </section>
+
+    <!-- CHAPTER 3: Creating Your Workspaces -->
+    <section class="chapter" id="workspaces">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 3</span>
+        <h2>🗂️ Creating Your Workspaces</h2>
+      </div>
+
+      <p>You will now create three workspaces following ZOSA's environment separation strategy: <strong>Development</strong>, <strong>Testing</strong>, and <strong>Production</strong>.</p>
+
+      <h3>2.1 — Create the Development Workspace (ZOSA-Dev)</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Navigate &amp; Create</div>
+        <div class="step-body">
+          <ol>
+            <li>Navigate to <a href="https://app.fabric.microsoft.com" target="_blank" rel="noopener">app.fabric.microsoft.com</a></li>
+            <li>In the left navigation pane, click <strong>Workspaces</strong></li>
+            <li>Click <strong>+ New Workspace</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Configure the Workspace</div>
+        <div class="step-body">
+          <ol>
+            <li>Enter the following details:
+              <ul>
+                <li><strong>Name:</strong> <code>ZOSA-Dev</code></li>
+                <li><strong>Description:</strong> <code>Zenith Orbital — Development environment for data engineering and analytics</code></li>
+              </ul>
+            </li>
+            <li>Expand the <strong>Advanced</strong> section</li>
+            <li>Under <strong>License mode</strong>, select your Fabric capacity (Trial or the capacity you provisioned)</li>
+            <li>Click <strong>Apply</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-title">✅ Quick Check</div>
+        <ul>
+          <li>You should now see the <code>ZOSA-Dev</code> workspace in your workspace list. It will be empty — that's expected.</li>
+        </ul>
+      </div>
+
+      <h3>2.2 — Create the Testing Workspace (ZOSA-Test)</h3>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">ZOSA-Test Workspace</div>
+        <div class="step-body">
+          <ol>
+            <li>Click <strong>Workspaces</strong> → <strong>+ New Workspace</strong></li>
+            <li>Enter the following details:
+              <ul>
+                <li><strong>Name:</strong> <code>ZOSA-Test</code></li>
+                <li><strong>Description:</strong> <code>Zenith Orbital — Testing and validation environment</code></li>
+              </ul>
+            </li>
+            <li>Expand <strong>Advanced</strong> → select the same Fabric capacity</li>
+            <li>Click <strong>Apply</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <h3>2.3 — Create the Production Workspace (ZOSA-Prod)</h3>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-title">ZOSA-Prod Workspace</div>
+        <div class="step-body">
+          <ol>
+            <li>Click <strong>Workspaces</strong> → <strong>+ New Workspace</strong></li>
+            <li>Enter the following details:
+              <ul>
+                <li><strong>Name:</strong> <code>ZOSA-Prod</code></li>
+                <li><strong>Description:</strong> <code>Zenith Orbital — Production analytics for mission operations</code></li>
+              </ul>
+            </li>
+            <li>Expand <strong>Advanced</strong> → select the same Fabric capacity</li>
+            <li>Click <strong>Apply</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Naming Conventions</div>
+        <p>Naming conventions matter at scale. ZOSA uses the <code>{Org}-{Environment}</code> pattern. In enterprise scenarios with multiple business domains, you might extend this to include the domain: <code>ZOSA-Defense-Dev</code>, <code>ZOSA-Science-Dev</code>, <code>ZOSA-Operations-Prod</code>. Pick a convention early and enforce it — your future self will thank you.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: Setting Up Domains -->
+    <section class="chapter" id="domains">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 4</span>
+        <h2>🌐 Setting Up Domains</h2>
+      </div>
+
+      <p>Fabric <strong>Domains</strong> provide a way to logically group workspaces by business area. They don't affect compute or storage — they're an organizational and governance layer that helps administrators manage permissions and policies at the domain level.</p>
+
+      <h3>3.1 — Create the Zenith Orbital Domain</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Open the Admin Portal</div>
+        <div class="step-body">
+          <ol>
+            <li>Click the <strong>Settings</strong> gear icon (⚙️) in the top-right corner of the Fabric portal</li>
+            <li>Select <strong>Admin portal</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Permissions Required</div>
+        <p>You need Fabric Admin or Domain Contributor permissions to create domains. If you're using a trial capacity, you are the tenant admin by default.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create the Domain</div>
+        <div class="step-body">
+          <ol>
+            <li>In the Admin portal, navigate to <strong>Domains</strong> in the left menu</li>
+            <li>Click <strong>+ New domain</strong></li>
+            <li>Enter the following:
+              <ul>
+                <li><strong>Name:</strong> <code>Zenith Orbital</code></li>
+                <li><strong>Description:</strong> <code>All workspaces for the Zenith Orbital Space Agency analytics platform</code></li>
+              </ul>
+            </li>
+            <li>Click <strong>Create</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <h3>3.2 — Assign Workspaces to the Domain</h3>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Assign Workspaces</div>
+        <div class="step-body">
+          <ol>
+            <li>Open the <strong>Zenith Orbital</strong> domain you just created</li>
+            <li>Click <strong>Assign workspaces</strong></li>
+            <li>Search for and select:
+              <ul>
+                <li><code>ZOSA-Dev</code></li>
+                <li><code>ZOSA-Test</code></li>
+                <li><code>ZOSA-Prod</code></li>
+              </ul>
+            </li>
+            <li>Click <strong>Assign</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Enterprise Scale</div>
+        <p>In a larger organization, ZOSA might have separate domains for each division — <strong>Defense</strong>, <strong>Science</strong>, <strong>Operations</strong> — each with their own Dev/Test/Prod workspaces and governance policies. Domains make it possible to delegate administration without giving blanket tenant-wide permissions.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 5: Workspace Settings Deep Dive -->
+    <section class="chapter" id="settings">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 5</span>
+        <h2>⚙️ Workspace Settings Deep Dive</h2>
+      </div>
+
+      <p>Now that your workspaces exist, let's configure the development workspace with the right defaults. Navigate to the <strong>ZOSA-Dev</strong> workspace.</p>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Open Workspace Settings</div>
+        <div class="step-body">
+          <p>Click the <strong>Workspace settings</strong> gear icon (⚙️) inside the <code>ZOSA-Dev</code> workspace.</p>
+        </div>
+      </div>
+
+      <h3>4.1 — OneLake Data Access</h3>
+
+      <p>Under <strong>OneLake</strong> settings, you'll find the <strong>"Users can access data stored in OneLake with apps external to Fabric"</strong> toggle.</p>
+
+      <ul>
+        <li><strong>Enabled:</strong> External tools (Azure Databricks, Azure Synapse, custom applications) can connect directly to OneLake via the OneLake API or Azure Data Lake Storage Gen2 endpoint</li>
+        <li><strong>Disabled:</strong> Only Fabric-native engines can access the data</li>
+      </ul>
+
+      <p>For this lab, <strong>leave it enabled</strong> — in Module 05, you'll see how external tools can connect to OneLake data.</p>
+
+      <h3>4.2 — Default Storage Format</h3>
+
+      <p>The default storage format should be <strong>Delta (Parquet)</strong>. This is the standard for Fabric and should almost never be changed. Here's why:</p>
+
+      <ul>
+        <li><strong>Delta</strong> adds ACID transactions, time travel, and schema enforcement on top of Parquet</li>
+        <li>All Fabric engines (Spark, SQL, KQL, Power BI) natively read Delta</li>
+        <li>It's the format that enables the "write once, read from anywhere" promise of OneLake</li>
+      </ul>
+
+      <h3>4.3 — Spark Settings</h3>
+
+      <p>Under Spark settings, you can configure:</p>
+
+      <ul>
+        <li><strong>Environment:</strong> Defines the default Spark runtime (libraries, configurations) for notebooks in this workspace. We'll create a custom environment in Module 03.</li>
+        <li><strong>Runtime version:</strong> Choose the Spark runtime version. Use the latest stable version available.</li>
+      </ul>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Coming Soon</div>
+        <p>Don't worry about configuring Spark settings in detail right now. These settings become important when you start running Spark notebooks in Module 03 (Data Ingestion). We'll revisit them then.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 6: OneLake Hierarchy -->
+    <section class="chapter" id="hierarchy">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 6</span>
+        <h2>🏛️ Understanding the OneLake Hierarchy</h2>
+      </div>
+
+      <p>Before you move on, take a moment to internalize the hierarchy you've just created:</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">OneLake Hierarchy</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-bash">Fabric Tenant (your organization)
+└── OneLake (one per tenant — the single unified data lake)
+    ├── ZOSA-Dev (workspace)
+    │   ├── Lakehouse items
+    │   ├── Warehouse items
+    │   ├── Notebook items
+    │   └── Other items...
+    ├── ZOSA-Test (workspace)
+    │   └── (empty for now)
+    └── ZOSA-Prod (workspace)
+        └── (empty for now)</code></pre>
+      </div>
+
+      <p>Key takeaways:</p>
+
+      <ul>
+        <li><strong>Every workspace automatically gets a folder in OneLake.</strong> You don't create this — it just happens.</li>
+        <li><strong>All data lives in OneLake</strong>, regardless of which engine created it. A Spark notebook writing to a Lakehouse and a SQL endpoint writing to a Warehouse both store data in OneLake.</li>
+        <li><strong>This is why cross-engine access works.</strong> You can create a table in a Spark notebook and immediately query it from a SQL endpoint or build a Power BI report on top of it — no ETL, no copies, no movement.</li>
+      </ul>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Key Concept</div>
+        <p>This architecture is the single most important concept in Fabric. Everything you build in the remaining modules leverages this unified storage model.</p>
+      </div>
+    </section>
+
+    <!-- CHECKPOINT -->
+    <section class="chapter" id="checkpoint">
+      <div class="checkpoint">
+        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 01 Complete</div>
+        <p>Before moving to Module 02, verify the following:</p>
+        <ul>
+          <li><strong>3 workspaces created:</strong> <code>ZOSA-Dev</code>, <code>ZOSA-Test</code>, <code>ZOSA-Prod</code></li>
+          <li><strong>All workspaces assigned to your Fabric capacity</strong> (check under Workspace Settings → Advanced → License mode)</li>
+          <li><strong>Domain "Zenith Orbital" created</strong> and all 3 workspaces assigned to it</li>
+          <li><strong>You can navigate to each workspace</strong> and confirm it is empty</li>
+        </ul>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"Clean, organized, separated environments — exactly what we needed. But don't get comfortable. Sofia from security wants to talk to you next. Something about who gets to see what..." She glances at her watch. "You have 10 minutes."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module Navigation -->
+    <nav class="module-nav">
+      <a href="00-prerequisites.html" class="prev">
+        <span class="nav-label">← Previous</span>
+        <span class="nav-title">Module 00: Prerequisites</span>
+      </a>
+      <a href="02-governance.html" class="next">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Module 02: Governance &amp; Security</span>
+      </a>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

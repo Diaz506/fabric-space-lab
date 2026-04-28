@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 02 — Governance &amp; Security — Fabric Space Lab</title>
+  <meta name="description" content="Lock down space data with OneLake Security, Purview, and defense-in-depth across workspace roles, sensitivity labels, RLS, CLS, OLS, and DDM.">
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC -->
+  <nav class="mini-toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <a href="#top"><span class="toc-dot"></span>Governance &amp; Security</a>
+    <a href="#defense-in-depth"><span class="toc-dot"></span>Defense-in-Depth Model</a>
+    <a href="#workspace-roles"><span class="toc-dot"></span>Workspace Roles &amp; Entra ID</a>
+    <a href="#sensitivity-labels"><span class="toc-dot"></span>Sensitivity Labels &amp; Purview</a>
+    <a href="#onelake-security"><span class="toc-dot"></span>OneLake Security</a>
+    <a href="#summary"><span class="toc-dot"></span>Putting It All Together</a>
+    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 02 · ⏱️ 45 minutes</div>
+      <h1>Governance &amp; Security</h1>
+      <p class="hero-desc">
+        Locking down space data with OneLake Security, Purview, and defense-in-depth.
+      </p>
+      <div class="hero-actions">
+        <a href="#defense-in-depth" class="btn btn-primary">▶ Start Securing</a>
+        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
+      </div>
+      <div class="hero-image">
+        <div class="placeholder-text">🛡️ Hero image: ZOSA security operations center with layered shield visualization</div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1: Opening Briefing -->
+    <section class="chapter" id="briefing">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 1</span>
+        <h2>🔒 Security Briefing</h2>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍💼</div>
+        <div class="comms-body">
+          <div class="comms-name">Sofia Lindqvist</div>
+          <div class="comms-role">Chief Information Security Officer</div>
+          <div class="comms-text">"Before a single byte of space data touches those workspaces, we need to lock them down. We handle asteroid threat data, crew personnel records, and classified mission details. I need defense-in-depth — not just one lock on the door, but locks on every drawer inside."</div>
+        </div>
+      </div>
+
+      <p>You have three empty workspaces from Module 01. Before any data lands, you need to configure security at every layer. Let's build Sofia's defense-in-depth.</p>
+    </section>
+
+    <!-- CHAPTER 2: Defense-in-Depth Model -->
+    <section class="chapter" id="defense-in-depth">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 2</span>
+        <h2>🛡️ The Defense-in-Depth Model</h2>
+      </div>
+
+      <p>Fabric security isn't a single gate — it's a series of concentric walls. Each layer is <strong>complementary</strong>, not an alternative. If one layer is misconfigured, the others still protect you.</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Security Layers</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-bash">┌─────────────────────────────────────────────┐
+│  TENANT                                     │
+│  Admin settings, Conditional Access, MFA    │
+│  ┌─────────────────────────────────────┐    │
+│  │  WORKSPACE                          │    │
+│  │  Roles: Admin, Member, Contributor, │    │
+│  │         Viewer                      │    │
+│  │  ┌─────────────────────────────┐    │    │
+│  │  │  ITEM                       │    │    │
+│  │  │  Per-item sharing &amp;         │    │    │
+│  │  │  permissions                │    │    │
+│  │  │  ┌─────────────────────┐    │    │    │
+│  │  │  │  DATA               │    │    │    │
+│  │  │  │  RLS, CLS, OLS,    │    │    │    │
+│  │  │  │  DDM (OneLake      │    │    │    │
+│  │  │  │  Security)         │    │    │    │
+│  │  │  └─────────────────────┘    │    │    │
+│  │  └─────────────────────────────┘    │    │
+│  └─────────────────────────────────────┘    │
+└─────────────────────────────────────────────┘</code></pre>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Layer</th><th>What It Controls</th><th>Configured Where</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Tenant</strong></td><td>Who can use Fabric at all, MFA, Conditional Access</td><td>Microsoft Entra admin center, Fabric Admin portal</td></tr>
+          <tr><td><strong>Workspace</strong></td><td>Who can access a workspace and what they can do</td><td>Workspace → Manage access</td></tr>
+          <tr><td><strong>Item</strong></td><td>Sharing individual reports, lakehouses, or pipelines</td><td>Item → Share / Manage permissions</td></tr>
+          <tr><td><strong>Data</strong></td><td>Row, column, object, and masking rules inside datasets</td><td>OneLake Security, T-SQL, Tabular Editor</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Analogy</div>
+        <p>Think of it like a building. Tenant security is the perimeter fence, workspace security is the building door, item security is the office door, and data security is the locked file cabinet inside the office.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 3: Workspace Roles & Entra ID -->
+    <section class="chapter" id="workspace-roles">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 3</span>
+        <h2>👥 Workspace Roles &amp; Entra ID Security Groups</h2>
+      </div>
+
+      <p>Instead of assigning permissions to individual users, you'll create <strong>Entra ID security groups</strong> and assign those groups to workspace roles. This is how real organizations manage access at scale.</p>
+
+      <h3>Step 1: Create Security Groups</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Navigate to Entra ID</div>
+        <div class="step-body">
+          <ol>
+            <li>Navigate to <a href="https://entra.microsoft.com" target="_blank" rel="noopener">entra.microsoft.com</a></li>
+            <li>Go to <strong>Identity</strong> → <strong>Groups</strong> → <strong>All groups</strong></li>
+            <li>Click <strong>New group</strong></li>
+            <li>Configure each group:
+              <ul>
+                <li><strong>Group type:</strong> Security</li>
+                <li><strong>Group name:</strong> (see table below)</li>
+                <li><strong>Membership type:</strong> Assigned</li>
+              </ul>
+            </li>
+            <li>Click <strong>Create</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <p>Create these four groups:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Group Name</th><th>Description</th><th>Members</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>ZOSA-Admins</code></td><td>Fabric administrators and platform owners</td><td>Your account (for this lab)</td></tr>
+          <tr><td><code>ZOSA-Engineers</code></td><td>Data engineers who build and maintain pipelines</td><td>Your account (for this lab)</td></tr>
+          <tr><td><code>ZOSA-Scientists</code></td><td>Data scientists and analysts who consume data</td><td>Your account (for this lab)</td></tr>
+          <tr><td><code>ZOSA-Executives</code></td><td>Executive stakeholders who view dashboards</td><td>Your account (for this lab)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Lab Shortcut</div>
+        <p>In a real environment, each user would be in only the group(s) matching their role. For this lab, add yourself to all four so you can test each perspective.</p>
+      </div>
+
+      <h3>Step 2: Assign Groups to Workspace Roles</h3>
+
+      <p>Open each workspace → click <strong>Manage access</strong> → <strong>Add people or groups</strong> → search for the Entra group → assign the role.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Group</th><th>ZOSA-Dev Role</th><th>ZOSA-Test Role</th><th>ZOSA-Prod Role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>ZOSA-Admins</code></td><td>Admin</td><td>Admin</td><td>Admin</td></tr>
+          <tr><td><code>ZOSA-Engineers</code></td><td>Member</td><td>Member</td><td>Contributor</td></tr>
+          <tr><td><code>ZOSA-Scientists</code></td><td>Contributor</td><td>Contributor</td><td>Viewer</td></tr>
+          <tr><td><code>ZOSA-Executives</code></td><td>Viewer</td><td>Viewer</td><td>Viewer</td></tr>
+        </tbody>
+      </table>
+
+      <p>Here's what each role can do:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Permission</th><th>Admin</th><th>Member</th><th>Contributor</th><th>Viewer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Manage workspace settings &amp; access</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>Add/remove people</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+          <tr><td>Create, edit, delete items</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+          <tr><td>Read and view items</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Share items &amp; grant access</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Least Privilege</div>
+        <p>Default to the <strong>Viewer</strong> role. Elevate only with justification. This is the principle of <strong>least privilege</strong> — give people the minimum access they need to do their job.</p>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Best Practice</div>
+        <p>Always assign roles via groups, never individuals. Groups scale, are auditable, and make offboarding instant — remove a user from the group and all their Fabric access disappears.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: Sensitivity Labels & Purview -->
+    <section class="chapter" id="sensitivity-labels">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 4</span>
+        <h2>🏷️ Sensitivity Labels &amp; Microsoft Purview</h2>
+      </div>
+
+      <p>Sensitivity labels classify your data and enforce protection policies automatically. They travel with the data — if someone exports a report to PDF, the label (and its restrictions) follow.</p>
+
+      <h3>Step 1: Enable Sensitivity Labels in Fabric</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Enable in Tenant Settings</div>
+        <div class="step-body">
+          <ol>
+            <li>Go to the <strong>Fabric Admin portal</strong> → <strong>Tenant settings</strong></li>
+            <li>Under <strong>Information protection</strong>, enable:
+              <ul>
+                <li>✅ <em>Allow users to apply sensitivity labels for content</em></li>
+                <li>✅ <em>Apply sensitivity labels from data sources to their data in Fabric</em></li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <h3>Step 2: Create Labels in Microsoft Purview</h3>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Create Labels</div>
+        <div class="step-body">
+          <ol>
+            <li>Navigate to <a href="https://compliance.microsoft.com" target="_blank" rel="noopener">compliance.microsoft.com</a> → <strong>Information protection</strong> → <strong>Labels</strong></li>
+            <li>Create the following labels (or verify they exist):</li>
+          </ol>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>Color</th><th>Description</th><th>Protection</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Public</strong></td><td>🟢 Green</td><td>Open data, no restrictions</td><td>None</td></tr>
+          <tr><td><strong>Internal</strong></td><td>🔵 Blue</td><td>Internal use only</td><td>Watermark on exports</td></tr>
+          <tr><td><strong>Confidential</strong></td><td>🟠 Orange</td><td>Sensitive business data</td><td>Encryption, no external sharing</td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>🔴 Red</td><td>Classified mission data</td><td>Encryption, no copy/paste/print, access audit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Publish &amp; Apply Labels</div>
+        <div class="step-body">
+          <ol>
+            <li><strong>Publish</strong> the labels by creating a label policy that targets your ZOSA security groups</li>
+            <li>Open <strong>ZOSA-Dev</strong> → <strong>Settings</strong> → <strong>Sensitivity label</strong> → Select <strong>Confidential</strong></li>
+            <li>Open <strong>ZOSA-Test</strong> → Apply <strong>Confidential</strong></li>
+            <li>Open <strong>ZOSA-Prod</strong> → Apply <strong>Confidential</strong> (individual items with classified data will get <strong>Top Secret</strong>)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Licensing Note</div>
+        <p>Sensitivity labels require Microsoft Purview licensing (included in E5 or as an add-on). In a trial tenant, some features may be limited.</p>
+      </div>
+
+      <h3>Step 4: Configure Endorsement</h3>
+
+      <p>Endorsement lets you mark trusted, validated datasets so users know which data to rely on:</p>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-title">Set Endorsement</div>
+        <div class="step-body">
+          <ol>
+            <li>Navigate to a dataset → <strong>…</strong> (more options) → <strong>Settings</strong> → <strong>Endorsement</strong></li>
+            <li>Options:
+              <ul>
+                <li><strong>Promoted</strong> — recommended by the data owner</li>
+                <li><strong>Certified</strong> — validated and approved by a designated certifier (set in Admin portal)</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Future Reference</div>
+        <p>In later modules, once you build your Gold-layer datasets, you'll mark them as <strong>Certified</strong>. This tells analysts: "This is the single source of truth."</p>
+      </div>
+
+      <h3>Step 5: Enable Microsoft Purview Data Catalog</h3>
+
+      <div class="step-card">
+        <div class="step-number">5</div>
+        <div class="step-title">Register &amp; Scan</div>
+        <div class="step-body">
+          <ol>
+            <li>In <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a>, go to <strong>Data Catalog</strong></li>
+            <li>Register your Fabric tenant as a data source</li>
+            <li>Run a scan to discover and catalog all Fabric items</li>
+          </ol>
+          <p>This gives your organization a searchable inventory of every dataset, report, and lakehouse — with lineage tracking.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 5: OneLake Security -->
+    <section class="chapter" id="onelake-security">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 5</span>
+        <h2>🔐 OneLake Security (GA)</h2>
+      </div>
+
+      <p>OneLake Security is the <strong>unified data access control layer</strong> for Microsoft Fabric. Once configured, permissions propagate to <strong>all engines</strong> — Spark notebooks, SQL analytics endpoints, Power BI semantic models, Dataflows, and even Copilot. You define rules once; they're enforced everywhere.</p>
+
+      <div class="mission-alert danger">
+        <div class="alert-title">Irreversible Setting</div>
+        <p>OneLake Security, once enabled on a lakehouse, <strong>cannot be turned off</strong>. Plan your roles and rules carefully before flipping the switch.</p>
+      </div>
+
+      <h3>Enabling OneLake Security</h3>
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Enable OneLake Security</div>
+        <div class="step-body">
+          <ol>
+            <li>Open <strong>ZOSA-Dev</strong> workspace</li>
+            <li>Navigate to your Lakehouse (you'll create one in Module 03 — for now, understand the process)</li>
+            <li>Click <strong>Manage OneLake Security</strong></li>
+            <li>Toggle <strong>Enable OneLake Security</strong> → Confirm</li>
+          </ol>
+          <p>Once enabled, you'll see the role management interface where you can create roles with specific data access rules.</p>
+        </div>
+      </div>
+
+      <h3>🔒 4a — Row-Level Security (RLS)</h3>
+
+      <p><strong>Scenario:</strong> ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from <strong>their region</strong>. A European analyst shouldn't browse Asian station data.</p>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Configure RLS</div>
+        <div class="step-body">
+          <ol>
+            <li>In the OneLake Security panel, click <strong>New Role</strong></li>
+            <li><strong>Role name:</strong> <code>Europe_Analysts</code></li>
+            <li>Under <strong>Table rules</strong>, select the <code>observations</code> table</li>
+            <li>Add a filter expression:</li>
+          </ol>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">DAX Filter</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-javascript">[region] = "Europe"</code></pre>
+          </div>
+
+          <ol start="5">
+            <li>Click <strong>Save</strong></li>
+            <li>Assign the <code>ZOSA-Scientists</code> group (or a subset) to this role</li>
+          </ol>
+        </div>
+      </div>
+
+      <p>Repeat for other regions:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Role Name</th><th>Filter Expression</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Europe_Analysts</code></td><td><code>[region] = "Europe"</code></td></tr>
+          <tr><td><code>NorthAmerica_Analysts</code></td><td><code>[region] = "North America"</code></td></tr>
+          <tr><td><code>Asia_Analysts</code></td><td><code>[region] = "Asia"</code></td></tr>
+          <tr><td><code>Global_Analysts</code></td><td><em>(no filter — sees all rows)</em></td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>How it works:</strong> When a European analyst queries the <code>observations</code> table, Fabric automatically appends the filter. They literally cannot see rows outside their region — not in SQL, not in Spark, not in Power BI.</p>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Behind the Scenes</div>
+        <p>For SQL analytics endpoints, the equivalent filter uses a <code>WHERE</code> clause injected at query time:</p>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">SQL — What Fabric does behind the scenes</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-sql">-- This is what Fabric does behind the scenes for Europe_Analysts
+SELECT * FROM observations WHERE region = 'Europe'</code></pre>
+      </div>
+
+      <h3>🔒 4b — Column-Level Security (CLS)</h3>
+
+      <p><strong>Scenario:</strong> Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should <strong>never see</strong> the <code>budget_usd</code> or <code>clearance_level</code> columns.</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">SQL — Column-Level Security</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-sql">-- Block scientists from seeing budget data
+DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Scientists];
+
+-- Block scientists from seeing clearance levels
+DENY SELECT ON dbo.crew(clearance_level) TO [ZOSA-Scientists];
+
+-- Block engineers from seeing budget data (only execs need this)
+DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];</code></pre>
+      </div>
+
+      <p><strong>What happens:</strong> If a scientist runs <code>SELECT * FROM missions</code>, the <code>budget_usd</code> column is simply <strong>not returned</strong>. No error — the column is invisible. If they explicitly reference it (<code>SELECT budget_usd FROM missions</code>), they get a permission error.</p>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Access Path</div>
+        <p>CLS works at the SQL analytics endpoint level. Ensure users are accessing data through the endpoint (or Power BI semantic model) rather than directly reading Parquet files via Spark with a storage account key.</p>
+      </div>
+
+      <h3>🔒 4c — Object-Level Security (OLS)</h3>
+
+      <p><strong>Scenario:</strong> ZOSA has a <code>classified_defense_missions</code> table containing data about planetary defense operations. This table should be <strong>completely invisible</strong> to anyone without defense clearance.</p>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Configure OLS via Tabular Editor</div>
+        <div class="step-body">
+          <ol>
+            <li>Download and install <a href="https://tabulareditor.com/" target="_blank" rel="noopener">Tabular Editor</a></li>
+            <li>Connect to your Fabric semantic model via the XMLA endpoint</li>
+            <li>Navigate to the <code>classified_defense_missions</code> table</li>
+            <li>Set the <strong>Object Level Security</strong> property:
+              <ul>
+                <li>For the <code>ZOSA-Scientists</code> role: <strong>None</strong> (table is hidden)</li>
+                <li>For the <code>ZOSA-Engineers</code> role: <strong>None</strong> (table is hidden)</li>
+                <li>For the <code>ZOSA-Admins</code> role: <strong>Read</strong> (table is visible)</li>
+              </ul>
+            </li>
+            <li>Save and publish the model</li>
+          </ol>
+        </div>
+      </div>
+
+      <p><strong>What happens:</strong> When a scientist opens the semantic model in Power BI, the <code>classified_defense_missions</code> table simply <strong>doesn't appear</strong> in the field list. They can't query it, they can't reference it, they don't even know it exists.</p>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Most Restrictive Layer</div>
+        <p>OLS is the most restrictive data security layer — it hides entire tables or columns from the model itself. Use it for truly classified data that certain roles should have zero awareness of.</p>
+      </div>
+
+      <h3>🔒 4d — Dynamic Data Masking (DDM)</h3>
+
+      <p><strong>Scenario:</strong> External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be <strong>partially masked</strong>.</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">SQL — Dynamic Data Masking</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-sql">-- Mask email addresses (shows first letter and domain: j***@zosa.org)
+ALTER TABLE crew
+ALTER COLUMN email ADD MASKED WITH (FUNCTION = 'email()');
+
+-- Partial mask on names (shows first and last character: S***a)
+ALTER TABLE crew
+ALTER COLUMN full_name ADD MASKED WITH (FUNCTION = 'partial(1,"***",1)');
+
+-- Default mask on crew IDs (shows XXXX)
+ALTER TABLE crew
+ALTER COLUMN crew_id ADD MASKED WITH (FUNCTION = 'default()');</code></pre>
+      </div>
+
+      <p><strong>What happens:</strong> Users with <code>UNMASK</code> permission see the real data. Everyone else sees the masked version. An external analyst querying crew data would see:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>crew_id</th><th>full_name</th><th>email</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>XXXX</td><td>S***a</td><td>s***@zosa.org</td></tr>
+          <tr><td>XXXX</td><td>M***l</td><td>m***@zosa.org</td></tr>
+        </tbody>
+      </table>
+
+      <p>To grant unmasking to specific users:</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">SQL — Grant Unmask</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-sql">-- Admins can see real data
+GRANT UNMASK TO [ZOSA-Admins];</code></pre>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">DDM vs Other Layers</div>
+        <p>DDM is different from the other layers. It doesn't block access — it <strong>obscures</strong> the actual values. Use it for PII that needs to be present but not readable.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 6: Putting It All Together -->
+    <section class="chapter" id="summary">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 6</span>
+        <h2>🧩 Putting It All Together</h2>
+      </div>
+
+      <p>Here's a summary of which security layer protects what at ZOSA:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Data to Protect</th><th>Who's Blocked</th><th>Security Layer</th><th>Where Configured</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Observation data by region</td><td>Scientists outside the region</td><td><strong>RLS</strong></td><td>OneLake Security roles</td></tr>
+          <tr><td>Budget amounts</td><td>Non-executive roles</td><td><strong>CLS</strong></td><td>T-SQL <code>DENY</code> on SQL endpoint</td></tr>
+          <tr><td>Classified missions table</td><td>Non-defense personnel</td><td><strong>OLS</strong></td><td>Tabular Editor / XMLA</td></tr>
+          <tr><td>Crew PII (email, name)</td><td>External analysts</td><td><strong>DDM</strong></td><td>T-SQL <code>ALTER COLUMN</code> masking</td></tr>
+          <tr><td>Workspace access</td><td>Unauthorized users</td><td><strong>Workspace Roles</strong></td><td>Workspace → Manage access</td></tr>
+          <tr><td>Data classification</td><td>Policy enforcement</td><td><strong>Sensitivity Labels</strong></td><td>Microsoft Purview</td></tr>
+          <tr><td>Data discovery &amp; lineage</td><td>Shadow data sprawl</td><td><strong>Purview Data Catalog</strong></td><td>purview.microsoft.com</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Key Takeaway</div>
+        <p>No single layer does it all. Sofia wants defense-in-depth because <strong>each layer covers a different threat vector</strong>. Workspace roles stop unauthorized users from opening the door. RLS/CLS/OLS/DDM stop authorized users from seeing data beyond their need-to-know.</p>
+      </div>
+    </section>
+
+    <!-- CHECKPOINT -->
+    <section class="chapter" id="checkpoint">
+      <div class="checkpoint">
+        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 02 Complete</div>
+        <p>Verify you've completed the following:</p>
+        <ul>
+          <li>Created 4 Entra ID security groups (<code>ZOSA-Admins</code>, <code>ZOSA-Engineers</code>, <code>ZOSA-Scientists</code>, <code>ZOSA-Executives</code>)</li>
+          <li>Assigned groups to appropriate workspace roles in ZOSA-Dev, ZOSA-Test, and ZOSA-Prod</li>
+          <li>Sensitivity labels configured and applied to workspaces (Confidential baseline)</li>
+          <li>Endorsement process understood (Promoted vs. Certified)</li>
+          <li>You understand the 4 data security layers: <strong>RLS</strong> (row filter), <strong>CLS</strong> (column deny), <strong>OLS</strong> (object hide), <strong>DDM</strong> (value mask)</li>
+          <li>OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded</li>
+        </ul>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Implementation Note</div>
+        <p>We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be <strong>implemented</strong> in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.</p>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍💼</div>
+        <div class="comms-body">
+          <div class="comms-name">Sofia Lindqvist</div>
+          <div class="comms-role">Chief Information Security Officer</div>
+          <div class="comms-text">"This is solid. Defense-in-depth, least privilege, everything auditable. I'll sign off on moving forward." She pauses at the door. "Oh, and one more thing — the first data drop from NASA arrives tomorrow. Don't let any of it land unencrypted."</div>
+        </div>
+      </div>
+
+      <p>You glance at your plan: data ingestion is next. Time to build the pipelines.</p>
+    </section>
+
+    <!-- Module Navigation -->
+    <nav class="module-nav">
+      <a href="01-capacity.html" class="prev">
+        <span class="nav-label">← Previous</span>
+        <span class="nav-title">Module 01: Capacity &amp; Workspace Setup</span>
+      </a>
+      <a href="03-ingestion.html" class="next">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Module 03: Data Ingestion</span>
+      </a>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-javascript.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>
