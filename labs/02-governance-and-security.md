@@ -174,7 +174,7 @@ Click **+ Create a label** — this opens the **New sensitivity label** wizard. 
 | **Description for users** | Classified mission data — maximum protection | Sensitive business data — restricted sharing | For internal ZOSA use only | Open data — no restrictions apply |
 | **Description for admins** | Full encryption, no copy/paste/print, access audit | Encryption, block external sharing | Watermark on exports | No protection applied |
 
-> **💡 About Priority:** The priority number you see is just the label's **position in the list** — it's not a fixed scale. After creating all 4 labels, you'll drag them into the correct order in Step 2E. The label at the **top of the list = highest sensitivity** (wins when multiple labels apply).
+> **💡 About Priority:** The priority number you see is just the label's **position in the list**. In Purview, **the label at the bottom of the list has the highest priority** (it wins when multiple labels apply). After creating all 4 labels, you'll reorder them in Step 2E.
 > 
 > **💡 Tip:** The **Name** field cannot contain spaces (use `TopSecret` not `Top Secret`). The **Display name** is what users see and can have spaces.
 
@@ -265,12 +265,14 @@ After creation, you'll see **"Your sensitivity label was created"** with two opt
 
 Click **Done**, then repeat the wizard for the next label until all 4 are created.
 
-After creating all 4 labels, **drag them into the correct order** in the labels list. The top of the list = highest sensitivity:
+After creating all 4 labels, **reorder them** in the labels list. In Purview, **bottom = highest priority** (the context menu confirms: "Move to bottom (highest priority)"). Arrange them so:
 
-1. 🔴 **Top Secret** (top — highest priority)
-2. 🟠 **Confidential**
-3. 🔵 **Internal**
-4. 🟢 **Public** (bottom — lowest priority)
+1. 🟢 **Public** (top — lowest priority)
+2. 🔵 **Internal**
+3. 🟠 **Confidential**
+4. 🔴 **Top Secret** (bottom — highest priority)
+
+> **💡 How to reorder:** Right-click a label → use **Move up / Move down** or **"Move to bottom (highest priority)"** to place Top Secret at the bottom.
 
 ---
 
