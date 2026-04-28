@@ -357,8 +357,22 @@
       </div>
 
       <div class="mission-alert warning">
-        <div class="alert-title">Licensing Note</div>
-        <p>Sensitivity labels require Microsoft Purview licensing (included in E5 or as an add-on). In a trial tenant, some features may be limited.</p>
+        <div class="alert-title">⚠️ Licensing Requirement — Read Before Proceeding</div>
+        <p>Sensitivity labels require specific Microsoft 365 licensing. Since January 2024, Microsoft <strong>strictly enforces</strong> these requirements — there is no grace period.</p>
+
+        <table class="data-table" style="margin: 1rem 0;">
+          <thead>
+            <tr><th>Feature</th><th>Minimum License Required</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Manual labeling</strong> (apply labels to items/workspaces)</td><td>Microsoft 365 <strong>E3</strong>, Business Premium, EMS E3/E5, or AIP <strong>P1</strong></td></tr>
+            <tr><td><strong>Auto-labeling</strong> (classify &amp; label automatically)</td><td>Microsoft 365 <strong>E5</strong>, E5 Compliance add-on, or E5 Information Protection &amp; Governance add-on</td></tr>
+          </tbody>
+        </table>
+
+        <p>For this lab, you need <strong>at least E3 or AIP P1</strong> to manually apply sensitivity labels. If your tenant only has F1/E1 licenses, you can <strong>skip this section</strong> and come back once you've upgraded — the rest of the lab does not depend on sensitivity labels.</p>
+
+        <p><strong>Trial tenants:</strong> If you're using a Microsoft 365 E5 trial, sensitivity labels are included. You can start a trial at <a href="https://admin.microsoft.com" target="_blank" rel="noopener">admin.microsoft.com</a> → <strong>Billing</strong> → <strong>Purchase services</strong> → search for "Microsoft 365 E5".</p>
       </div>
 
       <h3>Step 4: Configure Endorsement</h3>

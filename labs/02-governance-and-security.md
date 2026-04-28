@@ -171,7 +171,18 @@ Sensitivity labels classify your data and enforce protection policies automatica
 2. Open **ZOSA-Test** → Apply **Confidential**
 3. Open **ZOSA-Prod** → Apply **Confidential** (individual items with classified data will get **Top Secret**)
 
-**⚠️ Note:** Sensitivity labels require Microsoft Purview licensing (included in E5 or as an add-on). In a trial tenant, some features may be limited.
+**⚠️ Licensing Requirement — Read Before Proceeding:**
+
+Sensitivity labels require specific Microsoft 365 licensing. Since January 2024, Microsoft **strictly enforces** these requirements — there is no grace period.
+
+| Feature | Minimum License Required |
+|---------|--------------------------|
+| **Manual labeling** (apply labels to items/workspaces) | Microsoft 365 **E3**, Business Premium, EMS E3/E5, or AIP **P1** |
+| **Auto-labeling** (classify & label automatically) | Microsoft 365 **E5**, E5 Compliance add-on, or E5 Information Protection & Governance add-on |
+
+For this lab, you need **at least E3 or AIP P1** to manually apply sensitivity labels. If your tenant only has F1/E1 licenses, you can **skip this section** and come back once you've upgraded — the rest of the lab does not depend on sensitivity labels.
+
+> **Trial tenants:** If you're using a Microsoft 365 E5 trial, sensitivity labels are included. You can start a trial at [admin.microsoft.com](https://admin.microsoft.com) → **Billing** → **Purchase services** → search for "Microsoft 365 E5".
 
 ### Step 4: Configure Endorsement
 
