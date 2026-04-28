@@ -297,13 +297,28 @@ Labels exist but aren't usable until you publish them:
 
 > **⏳ Note:** Label policies can take **up to 24 hours** to propagate to all users. If labels don't appear immediately in Fabric, wait and check again later.
 
-### Step 4: Apply Labels to Workspaces
+### Step 4: Apply Labels to Fabric Items
 
-Once the policy has propagated:
+> **⚠️ Important:** Sensitivity labels in Fabric are applied to **individual items** (lakehouses, reports, datasets, notebooks, etc.) — not to workspaces. There is no workspace-level label setting in Fabric.
 
-1. Open **ZOSA-Dev** → **Settings** → **Sensitivity label** → Select **Confidential**
-2. Open **ZOSA-Test** → Apply **Confidential**
-3. Open **ZOSA-Prod** → Apply **Confidential** (individual items with classified data will get **Top Secret** later)
+Labels will be applied as you create items throughout the lab. Here's the plan:
+
+| Module | Item | Label to Apply |
+|--------|------|---------------|
+| **Module 03** | `zosa_lakehouse` (Lakehouse) | **Confidential** |
+| **Module 05** | `ZOSA Semantic Model` | **Confidential** |
+| **Module 06** | Power BI reports | **Confidential** |
+| **Module 08** | ML experiments & models | **Top Secret** |
+
+**How to apply a label to any Fabric item:**
+
+1. Navigate to the item in your workspace
+2. Click **… (More options)** next to the item name
+3. Select **Sensitivity label** (or find it in the item's **Settings**)
+4. Choose the appropriate label from the dropdown
+5. Click **Apply**
+
+> **💡 Tip:** If you set a default label in your publishing policy (we set `Internal`), new items will automatically get that label. You only need to manually change items that require a higher classification like **Confidential** or **Top Secret**.
 
 **⚠️ Licensing Requirement — Read Before Proceeding:**
 
@@ -311,7 +326,7 @@ Sensitivity labels require specific Microsoft 365 licensing. Since January 2024,
 
 | Feature | Minimum License Required |
 |---------|--------------------------|
-| **Manual labeling** (apply labels to items/workspaces) | Microsoft 365 **E3**, Business Premium, EMS E3/E5, or AIP **P1** |
+| **Manual labeling** (apply labels to items) | Microsoft 365 **E3**, Business Premium, EMS E3/E5, or AIP **P1** |
 | **Auto-labeling** (classify & label automatically) | Microsoft 365 **E5**, E5 Compliance add-on, or E5 Information Protection & Governance add-on |
 
 For this lab, you need **at least E3 or AIP P1** to manually apply sensitivity labels. If your tenant only has F1/E1 licenses, you can **skip this section** and come back once you've upgraded — the rest of the lab does not depend on sensitivity labels.

@@ -541,19 +541,43 @@
         <strong>⏳ Note:</strong> Label policies can take <strong>up to 24 hours</strong> to propagate to all users. If labels don't appear immediately in Fabric, wait and check again later.
       </div>
 
-      <h3>Step 4: Apply Labels to Workspaces</h3>
+      <h3>Step 4: Apply Labels to Fabric Items</h3>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">⚠️ Important</div>
+        <p>Sensitivity labels in Fabric are applied to <strong>individual items</strong> (lakehouses, reports, datasets, notebooks, etc.) — not to workspaces. There is no workspace-level label setting in Fabric.</p>
+      </div>
+
+      <p>Labels will be applied as you create items throughout the lab. Here's the plan:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Module</th><th>Item</th><th>Label to Apply</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Module 03</strong></td><td><code>zosa_lakehouse</code> (Lakehouse)</td><td><strong>Confidential</strong></td></tr>
+          <tr><td><strong>Module 05</strong></td><td><code>ZOSA Semantic Model</code></td><td><strong>Confidential</strong></td></tr>
+          <tr><td><strong>Module 06</strong></td><td>Power BI reports</td><td><strong>Confidential</strong></td></tr>
+          <tr><td><strong>Module 08</strong></td><td>ML experiments &amp; models</td><td><strong>Top Secret</strong></td></tr>
+        </tbody>
+      </table>
 
       <div class="step-card">
         <div class="step-number">4</div>
-        <div class="step-title">Apply to Workspaces</div>
+        <div class="step-title">How to Apply a Label to Any Fabric Item</div>
         <div class="step-body">
-          <p>Once the policy has propagated:</p>
           <ol>
-            <li>Open <strong>ZOSA-Dev</strong> → <strong>Settings</strong> → <strong>Sensitivity label</strong> → Select <strong>Confidential</strong></li>
-            <li>Open <strong>ZOSA-Test</strong> → Apply <strong>Confidential</strong></li>
-            <li>Open <strong>ZOSA-Prod</strong> → Apply <strong>Confidential</strong> (individual items with classified data will get <strong>Top Secret</strong> later)</li>
+            <li>Navigate to the item in your workspace</li>
+            <li>Click <strong>… (More options)</strong> next to the item name</li>
+            <li>Select <strong>Sensitivity label</strong> (or find it in the item's <strong>Settings</strong>)</li>
+            <li>Choose the appropriate label from the dropdown</li>
+            <li>Click <strong>Apply</strong></li>
           </ol>
         </div>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 Tip:</strong> If you set a default label in your publishing policy (we set <code>Internal</code>), new items will automatically get that label. You only need to manually change items that require a higher classification like <strong>Confidential</strong> or <strong>Top Secret</strong>.
       </div>
 
       <div class="mission-alert warning">
@@ -565,7 +589,7 @@
             <tr><th>Feature</th><th>Minimum License Required</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Manual labeling</strong> (apply labels to items/workspaces)</td><td>Microsoft 365 <strong>E3</strong>, Business Premium, EMS E3/E5, or AIP <strong>P1</strong></td></tr>
+            <tr><td><strong>Manual labeling</strong> (apply labels to items)</td><td>Microsoft 365 <strong>E3</strong>, Business Premium, EMS E3/E5, or AIP <strong>P1</strong></td></tr>
             <tr><td><strong>Auto-labeling</strong> (classify &amp; label automatically)</td><td>Microsoft 365 <strong>E5</strong>, E5 Compliance add-on, or E5 Information Protection &amp; Governance add-on</td></tr>
           </tbody>
         </table>
