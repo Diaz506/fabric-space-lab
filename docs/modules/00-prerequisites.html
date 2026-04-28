@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 00 — Prerequisites &amp; Mission Briefing — Fabric Space Lab</title>
+  <meta name="description" content="Set up your environment, meet the ZOSA team, and prepare for the Microsoft Fabric workshop.">
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC -->
+  <nav class="mini-toc" aria-label="Table of contents">
+    <div class="toc-title">Contents</div>
+    <a href="#top"><span class="toc-dot"></span>Mission Briefing</a>
+    <a href="#journey"><span class="toc-dot"></span>The Journey Ahead</a>
+    <a href="#prerequisites"><span class="toc-dot"></span>Prerequisites</a>
+    <a href="#setup"><span class="toc-dot"></span>Clone &amp; Setup</a>
+    <a href="#team"><span class="toc-dot"></span>Meet Your Team</a>
+    <a href="#stations"><span class="toc-dot"></span>Ground Stations</a>
+    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 00 · ⏱️ 30 minutes</div>
+      <h1>Prerequisites &amp; Mission Briefing</h1>
+      <p class="hero-desc">
+        Welcome aboard, Engineer. You've just been recruited by the Zenith Orbital Space Agency.
+        Your predecessor left suddenly — something about "too many Excel files." The CTO has one directive:
+        <em>migrate everything to Microsoft Fabric.</em>
+      </p>
+      <div class="hero-actions">
+        <a href="#prerequisites" class="btn btn-primary">▶ Start Setup</a>
+        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
+      </div>
+      <div class="hero-image">
+        <div class="placeholder-text">🚀 Hero image: ZOSA Mission Control center with holographic data displays</div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 1: Mission Briefing -->
+    <section class="chapter" id="briefing">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 1</span>
+        <h2>🚀 Your Mission Begins</h2>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"Welcome to ZOSA. We coordinate deep-space observation, asteroid defense monitoring,
+            and exoplanet research from 12 ground stations worldwide. Our legacy analytics stack — on-prem SQL Server
+            and Excel reports — can't keep up anymore. I need you to build our new analytics platform on Microsoft Fabric.
+            From scratch. You start now."</div>
+        </div>
+      </div>
+
+      <p>
+        <strong>Zenith Orbital Space Agency (ZOSA)</strong> is an international organization founded in 2020,
+        headquartered in Geneva. They process terabytes of telescope data, sensor telemetry, and partner
+        intelligence daily. The legacy stack is crumbling — and you're the engineer they've hired to fix it.
+      </p>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Transmission Received</div>
+        <p>Over the next 13 modules (~8 hours total), you'll go from an empty Fabric tenant to a fully operational,
+           AI-powered analytics platform for ZOSA. Each module builds on the last — and tells a story.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 2: The Journey -->
+    <section class="chapter" id="journey">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 2</span>
+        <h2>🗺️ The Journey Ahead</h2>
+      </div>
+
+      <p>Here's the full mission plan. Each module maps to a core Microsoft Fabric capability:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Title</th>
+            <th>What You'll Do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>00</code></td><td>Prerequisites</td><td>← You are here</td></tr>
+          <tr><td><code>01</code></td><td>Capacity &amp; Workspace Setup</td><td>Provision Fabric and configure workspaces</td></tr>
+          <tr><td><code>02</code></td><td>Governance &amp; Security</td><td>Implement defense-in-depth with OneLake Security</td></tr>
+          <tr><td><code>03</code></td><td>Data Ingestion</td><td>Ingest NASA APIs with Dataflows Gen2 &amp; Pipelines</td></tr>
+          <tr><td><code>04</code></td><td>Medallion Lakehouse</td><td>Build Bronze → Silver → Gold with PySpark</td></tr>
+          <tr><td><code>05</code></td><td>Semantic Model</td><td>Create Direct Lake model with DAX measures</td></tr>
+          <tr><td><code>06</code></td><td>Power BI Reports</td><td>Design Mission Control dashboard</td></tr>
+          <tr><td><code>07</code></td><td>Real-Time Intelligence</td><td>Stream telemetry with Eventhouse &amp; KQL</td></tr>
+          <tr><td><code>08</code></td><td>Data Science &amp; ML</td><td>Train asteroid risk classifiers with MLflow</td></tr>
+          <tr><td><code>09</code></td><td>Ontology &amp; Knowledge Graph</td><td>Map domain knowledge in Fabric IQ</td></tr>
+          <tr><td><code>10</code></td><td>AI Agents</td><td>Build Data &amp; Operations Agents</td></tr>
+          <tr><td><code>11</code></td><td>CI/CD &amp; Deployment</td><td>Git integration &amp; Deployment Pipelines</td></tr>
+          <tr><td><code>12</code></td><td>Monitoring &amp; Optimization</td><td>Capacity metrics &amp; graduation!</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CHAPTER 3: Prerequisites -->
+    <section class="chapter" id="prerequisites">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 3</span>
+        <h2>✅ Prerequisites Checklist</h2>
+      </div>
+
+      <!-- Step 1: Fabric Capacity -->
+      <div class="step-card" id="step-1">
+        <div class="step-number">1</div>
+        <div class="step-title">Microsoft Fabric Capacity</div>
+        <div class="step-body">
+          <p>You need access to a Fabric-enabled workspace. Two options:</p>
+          <p><strong>Option A — Free 60-day trial</strong> (recommended for learners):<br>
+             Sign up at <a href="https://learn.microsoft.com/fabric/get-started/fabric-trial" target="_blank" rel="noopener">Microsoft Fabric Trial</a>. No credit card required.</p>
+          <p><strong>Option B — Paid capacity:</strong><br>
+             F2 minimum, F64 recommended for the full experience (especially Real-Time and Data Science modules).</p>
+          <p><strong>How to verify:</strong></p>
+          <ol>
+            <li>Go to <a href="https://app.fabric.microsoft.com" target="_blank" rel="noopener">app.fabric.microsoft.com</a></li>
+            <li>Click <strong>Settings</strong> (⚙️) → <strong>Admin portal</strong> or <strong>Account</strong></li>
+            <li>Confirm you see <strong>Fabric</strong> enabled</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Access Warning</div>
+        <p>If your organization's admin has disabled Fabric, you'll need to request access or use a personal Microsoft account for the trial.</p>
+      </div>
+
+      <!-- Step 2: NASA API Key -->
+      <div class="step-card" id="step-2">
+        <div class="step-number">2</div>
+        <div class="step-title">NASA API Key</div>
+        <div class="step-body">
+          <p>We use real NASA data to populate the ZOSA universe.</p>
+          <ol>
+            <li>Register at <a href="https://api.nasa.gov/" target="_blank" rel="noopener">https://api.nasa.gov/</a> — it's free and instant</li>
+            <li>You'll receive an API key via email</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Mission Tip</div>
+        <p>You can use <code>DEMO_KEY</code> for low-rate testing (30 req/hour). Or skip API calls entirely — pre-generated sample data is included in <code>data/sample/</code>.</p>
+      </div>
+
+      <!-- Step 3: Python -->
+      <div class="step-card" id="step-3">
+        <div class="step-number">3</div>
+        <div class="step-title">Python 3.10+</div>
+        <div class="step-body">
+          <p>Required for running data generation and transformation scripts.</p>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">Bash</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-bash">python --version
+# Expected: Python 3.10.x or higher</code></pre>
+          </div>
+
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">Install Dependencies</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-bash">pip install -r requirements.txt</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-alert tip">
+        <div class="alert-title">Best Practice</div>
+        <p>Use a virtual environment to keep things clean:</p>
+        <div class="code-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots"><span></span><span></span><span></span></div>
+            <span class="terminal-title">Virtual Environment</span>
+            <button class="copy-btn">Copy</button>
+          </div>
+          <pre><code class="language-bash">python -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+.venv\Scripts\activate      # Windows
+pip install -r requirements.txt</code></pre>
+        </div>
+      </div>
+
+      <!-- Step 4: Power BI Desktop -->
+      <div class="step-card" id="step-4">
+        <div class="step-number">4</div>
+        <div class="step-title">Power BI Desktop</div>
+        <div class="step-body">
+          <p>Required for <strong>Module 06</strong> (Power BI Reports).</p>
+          <ul>
+            <li>Download from <a href="https://powerbi.microsoft.com/desktop/" target="_blank" rel="noopener">powerbi.microsoft.com/desktop</a></li>
+            <li>Or install via the <strong>Microsoft Store</strong> (auto-updates)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Platform Note</div>
+        <p>Power BI Desktop is Windows-only. On macOS/Linux, use the Power BI Service in your browser for most tasks.</p>
+      </div>
+
+      <!-- Step 5: Git -->
+      <div class="step-card" id="step-5">
+        <div class="step-number">5</div>
+        <div class="step-title">Git</div>
+        <div class="step-body">
+          <p>Required for <strong>Module 11</strong> (CI/CD &amp; Deployment).</p>
+          <div class="code-terminal">
+            <div class="terminal-header">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">Bash</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre><code class="language-bash">git --version
+# Expected: git version 2.x.x</code></pre>
+          </div>
+          <p>If not installed: <a href="https://git-scm.com/" target="_blank" rel="noopener">git-scm.com</a></p>
+        </div>
+      </div>
+
+      <!-- Step 6: Azure (Optional) -->
+      <div class="step-card" id="step-6">
+        <div class="step-number">6</div>
+        <div class="step-title">Azure Subscription <span class="status-badge preview">Optional</span></div>
+        <div class="step-body">
+          <p>Only needed for the <strong>ADLS Gen2 shortcut</strong> exercise in Module 03.</p>
+          <p>A <a href="https://azure.microsoft.com/free/" target="_blank" rel="noopener">free Azure account</a> works fine. You can skip this and still complete 95% of the lab.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 4: Clone & Setup -->
+    <section class="chapter" id="setup">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 4</span>
+        <h2>📦 Clone &amp; Setup</h2>
+      </div>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Clone Repository</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-bash">git clone https://github.com/Diaz506/fabric-space-lab.git
+cd fabric-space-lab
+pip install -r requirements.txt</code></pre>
+      </div>
+
+      <h3 style="margin-top: var(--space-xl);">Path A — Generate Fresh Data from NASA APIs</h3>
+      <p>Recommended for the most realistic experience:</p>
+
+      <div class="code-terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">Fetch &amp; Generate</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code class="language-bash">python data/fetch_nasa_apis.py --api-key YOUR_KEY
+python data/generate_synthetic.py</code></pre>
+      </div>
+
+      <p>This fetches real asteroid, exoplanet, and solar event data, then generates synthetic telemetry and mission records.</p>
+
+      <h3 style="margin-top: var(--space-xl);">Path B — Use Pre-generated Sample Data</h3>
+      <p>Sample data is included in <code>data/sample/</code>. No additional steps needed — lab notebooks detect and use it automatically.</p>
+
+      <div class="mission-alert info">
+        <div class="alert-title">Data Overview</div>
+        <p>Either path gives you: <strong>150 missions</strong>, <strong>200 crew members</strong>, <strong>4,000+ telemetry readings</strong>,
+           plus real NASA asteroid, exoplanet, and solar weather data.</p>
+      </div>
+    </section>
+
+    <!-- CHAPTER 5: Meet Your Team -->
+    <section class="chapter" id="team">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 5</span>
+        <h2>👥 Meet Your Team</h2>
+      </div>
+
+      <p>Throughout these labs, you'll work with key ZOSA personnel. Each has a role to play in your Fabric journey:</p>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"Astrophysicist turned executive. Recruited you personally. Demands data-driven decisions and has zero patience for 'it's in a spreadsheet somewhere.' Your direct boss."</div>
+        </div>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👨‍🚀</div>
+        <div class="comms-body">
+          <div class="comms-name">Major Kenji Nakamura</div>
+          <div class="comms-role">Director of Planetary Defense</div>
+          <div class="comms-text">"Former JAXA mission controller. Needs real-time asteroid tracking alerts with sub-minute latency. Sleeps with a pager. Your most demanding stakeholder."</div>
+        </div>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👨‍💻</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Kwame Osei</div>
+          <div class="comms-role">Lead Data Scientist</div>
+          <div class="comms-text">"Published 47 papers on orbital mechanics. Wants ML models for collision risk prediction and anomaly detection. Thinks in dataframes."</div>
+        </div>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍💼</div>
+        <div class="comms-body">
+          <div class="comms-name">Sofia Lindqvist</div>
+          <div class="comms-role">Chief Information Security Officer</div>
+          <div class="comms-text">"Security-first mindset. Her first question is always: 'Who sees what?' Will audit every workspace permission you set. Do not disappoint her."</div>
+        </div>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👨‍🔧</div>
+        <div class="comms-body">
+          <div class="comms-name">Marcus Chen</div>
+          <div class="comms-role">Chief Financial Officer</div>
+          <div class="comms-text">"Watches every capacity unit like a hawk. Will quiz you on cost optimization. If your pipeline wastes CUs, you'll hear about it."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 6: Ground Stations -->
+    <section class="chapter" id="stations">
+      <div class="chapter-heading">
+        <span class="chapter-label">Chapter 6</span>
+        <h2>🌍 Ground Stations Reference</h2>
+      </div>
+
+      <p>ZOSA operates 12 ground stations worldwide. This data is used throughout the lab as reference/dimension data — especially for Row-Level Security demos.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Station Name</th><th>Region</th><th>Location</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>GS-01</code></td><td>Geneva Prime</td><td>Europe</td><td>Geneva, Switzerland</td></tr>
+          <tr><td><code>GS-02</code></td><td>Atacama Deep</td><td>South America</td><td>Atacama Desert, Chile</td></tr>
+          <tr><td><code>GS-03</code></td><td>Mauna Kea Summit</td><td>North America</td><td>Hawaii, USA</td></tr>
+          <tr><td><code>GS-04</code></td><td>Karoo Array</td><td>Africa</td><td>Karoo, South Africa</td></tr>
+          <tr><td><code>GS-05</code></td><td>Svalbard Arctic</td><td>Europe</td><td>Svalbard, Norway</td></tr>
+          <tr><td><code>GS-06</code></td><td>Tanegashima</td><td>Asia Pacific</td><td>Tanegashima, Japan</td></tr>
+          <tr><td><code>GS-07</code></td><td>Parkes South</td><td>Oceania</td><td>Parkes, Australia</td></tr>
+          <tr><td><code>GS-08</code></td><td>Goldstone</td><td>North America</td><td>California, USA</td></tr>
+          <tr><td><code>GS-09</code></td><td>Jodrell Bank</td><td>Europe</td><td>Cheshire, UK</td></tr>
+          <tr><td><code>GS-10</code></td><td>Tidbinbilla</td><td>Oceania</td><td>Canberra, Australia</td></tr>
+          <tr><td><code>GS-11</code></td><td>Usuda Deep Space</td><td>Asia Pacific</td><td>Nagano, Japan</td></tr>
+          <tr><td><code>GS-12</code></td><td>Cebreros</td><td>Europe</td><td>Cebreros, Spain</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CHECKPOINT -->
+    <section class="chapter" id="checkpoint">
+      <div class="checkpoint">
+        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 00 Complete</div>
+        <p>Before moving on, verify you have:</p>
+        <ul>
+          <li>Fabric capacity enabled (trial or paid)</li>
+          <li>NASA API key saved (or using sample data)</li>
+          <li>Python 3.10+ with dependencies installed</li>
+          <li>Repository cloned and ready</li>
+          <li>Power BI Desktop installed <em>(can defer to Module 06)</em></li>
+          <li>Git installed <em>(can defer to Module 11)</em></li>
+        </ul>
+      </div>
+
+      <div class="comms-panel">
+        <div class="avatar">👩‍🔬</div>
+        <div class="comms-body">
+          <div class="comms-name">Dr. Elena Vasquez</div>
+          <div class="comms-role">Chief Technology Officer</div>
+          <div class="comms-text">"All set? Good. Let's provision your Fabric workspace. The sooner we move off these legacy systems, the better."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module Navigation -->
+    <nav class="module-nav">
+      <a href="../index.html" class="prev">
+        <span class="nav-label">← Back</span>
+        <span class="nav-title">Mission Hub</span>
+      </a>
+      <a href="01-capacity.html" class="next">
+        <span class="nav-label">Next →</span>
+        <span class="nav-title">Module 01: Capacity &amp; Workspace Setup</span>
+      </a>
+    </nav>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

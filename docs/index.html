@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fabric Space Lab — ZOSA Mission Control</title>
+  <meta name="description" content="End-to-end Microsoft Fabric workshop. Build a real analytics platform for the Zenith Orbital Space Agency using NASA data.">
+
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/storyboard.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    /* Landing-specific overrides */
+    .landing-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: var(--space-4xl) var(--space-xl);
+      position: relative;
+      z-index: 1;
+    }
+    .landing-hero .logo-large {
+      width: 120px;
+      height: 120px;
+      margin-bottom: var(--space-xl);
+      filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.3));
+    }
+    .landing-hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      margin-bottom: var(--space-md);
+      background: linear-gradient(135deg, #e8eaf6 0%, #00d4ff 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .landing-hero .subtitle {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--cyan);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-lg);
+    }
+    .landing-hero .desc {
+      max-width: 640px;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: var(--space-2xl);
+    }
+    .landing-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl) var(--space-4xl);
+      position: relative;
+      z-index: 1;
+    }
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      margin-bottom: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .section-title .accent {
+      color: var(--cyan);
+    }
+    .data-sources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-3xl);
+    }
+    .data-source-card {
+      padding: var(--space-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--border-radius);
+      text-align: center;
+    }
+    .data-source-card .ds-icon { font-size: 2rem; margin-bottom: var(--space-sm); }
+    .data-source-card .ds-name {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: var(--space-xs);
+    }
+    .data-source-card .ds-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-3xl);
+    }
+    .cast-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--border-radius);
+    }
+    .cast-card .cast-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--space-nebula);
+      border: 2px solid var(--purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .cast-card .cast-name {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .cast-card .cast-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- Starfield Background -->
+  <div class="starfield" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="header-logo">
+        <img src="assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <section class="landing-hero">
+      <img src="assets/svg/logo.svg" alt="ZOSA Logo" class="logo-large" width="120" height="120">
+      <p class="subtitle">Zenith Orbital Space Agency</p>
+      <h1>Fabric Space Lab</h1>
+      <p class="desc">
+        An end-to-end Microsoft Fabric workshop where you build a real analytics platform
+        for an international space agency — from raw NASA data to AI-powered mission intelligence.
+        13 hands-on modules. One epic story.
+      </p>
+      <div class="hero-actions">
+        <a href="modules/00-prerequisites.html" class="btn btn-primary">🚀 Begin Mission</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" class="btn btn-ghost" target="_blank" rel="noopener">⭐ Star on GitHub</a>
+      </div>
+    </section>
+
+    <!-- Mission Stats -->
+    <div class="landing-content">
+      <div class="mission-stats">
+        <div class="stat-card">
+          <div class="stat-value">13</div>
+          <div class="stat-label">Modules</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">4</div>
+          <div class="stat-label">Notebooks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">NASA APIs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">12</div>
+          <div class="stat-label">Ground Stations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">4K+</div>
+          <div class="stat-label">Data Rows</div>
+        </div>
+      </div>
+
+      <!-- Module Grid -->
+      <h2 class="section-title">📋 <span class="accent">Mission</span> Modules</h2>
+      <div class="module-grid" id="module-grid">
+        <!-- Populated by JS below -->
+      </div>
+
+      <!-- Data Sources -->
+      <h2 class="section-title">📡 <span class="accent">Data</span> Sources</h2>
+      <div class="data-sources">
+        <div class="data-source-card">
+          <div class="ds-icon">☄️</div>
+          <div class="ds-name">NASA NeoWs</div>
+          <div class="ds-desc">Near-Earth asteroid tracking data</div>
+        </div>
+        <div class="data-source-card">
+          <div class="ds-icon">☀️</div>
+          <div class="ds-name">NASA DONKI</div>
+          <div class="ds-desc">Solar flares, CMEs & space weather</div>
+        </div>
+        <div class="data-source-card">
+          <div class="ds-icon">🪐</div>
+          <div class="ds-name">Exoplanet Archive</div>
+          <div class="ds-desc">Confirmed exoplanet catalog</div>
+        </div>
+        <div class="data-source-card">
+          <div class="ds-icon">🛰️</div>
+          <div class="ds-name">ZOSA Synthetic</div>
+          <div class="ds-desc">Missions, crew & telemetry data</div>
+        </div>
+      </div>
+
+      <!-- Cast -->
+      <h2 class="section-title">👥 <span class="accent">Mission</span> Team</h2>
+      <div class="cast-grid">
+        <div class="cast-card">
+          <div class="cast-avatar">👩‍🔬</div>
+          <div>
+            <div class="cast-name">Dr. Elena Vasquez</div>
+            <div class="cast-role">Chief Data Officer</div>
+          </div>
+        </div>
+        <div class="cast-card">
+          <div class="cast-avatar">👨‍🚀</div>
+          <div>
+            <div class="cast-name">Major Kenji Nakamura</div>
+            <div class="cast-role">Mission Operations Director</div>
+          </div>
+        </div>
+        <div class="cast-card">
+          <div class="cast-avatar">👨‍💻</div>
+          <div>
+            <div class="cast-name">Dr. Kwame Osei</div>
+            <div class="cast-role">Lead Data Scientist</div>
+          </div>
+        </div>
+        <div class="cast-card">
+          <div class="cast-avatar">👩‍💼</div>
+          <div>
+            <div class="cast-name">Sofia Lindqvist</div>
+            <div class="cast-role">Security & Compliance Lead</div>
+          </div>
+        </div>
+        <div class="cast-card">
+          <div class="cast-avatar">👨‍🔧</div>
+          <div>
+            <div class="cast-name">Marcus Chen</div>
+            <div class="cast-role">Platform Engineer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Zenith Orbital Space Agency — Fabric Space Lab &copy; 2025. Built with 💙 for the Microsoft Fabric community.</p>
+    <p><a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a> · MIT License</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/nav.js"></script>
+  <script src="js/storyboard.js"></script>
+
+  <!-- Populate module grid from registry -->
+  <script>
+    (function() {
+      var grid = document.getElementById('module-grid');
+      if (!grid || !window.ZOSA_MODULES) return;
+
+      var descriptions = {
+        '00': 'Set up your environment, meet the team, and download mission data.',
+        '01': 'Choose the right Fabric SKU, create workspaces, and configure OneLake.',
+        '02': 'Implement defense-in-depth security with OneLake Security (RLS, CLS, OLS).',
+        '03': 'Ingest NASA APIs and synthetic data using Dataflows Gen2 and Pipelines.',
+        '04': 'Build a Bronze → Silver → Gold Lakehouse with PySpark and Delta tables.',
+        '05': 'Create a Direct Lake semantic model with DAX measures and row-level security.',
+        '06': 'Design a Mission Control dashboard and Exoplanet Explorer report.',
+        '07': 'Stream telemetry through Eventhouse, Eventstream, KQL, and Activator.',
+        '08': 'Train asteroid risk classifiers with MLflow experiment tracking.',
+        '09': 'Map ZOSA\'s domain knowledge into a Fabric IQ Ontology Project.',
+        '10': 'Build Data Agents and Operations Agents for natural-language analytics.',
+        '11': 'Set up Git integration, Variable Library, and Deployment Pipelines.',
+        '12': 'Monitor capacity metrics, optimize performance, and graduate!'
+      };
+
+      window.ZOSA_MODULES.forEach(function(m) {
+        var card = document.createElement('a');
+        card.className = 'module-card';
+        card.href = 'modules/' + m.file;
+
+        var tagsHtml = m.tags.map(function(t) {
+          return '<span class="tag">' + t + '</span>';
+        }).join('');
+
+        card.innerHTML =
+          '<div class="module-number">Module ' + m.id + '</div>' +
+          '<div class="module-title">' + m.icon + ' ' + m.title + '</div>' +
+          '<div class="module-desc">' + (descriptions[m.id] || '') + '</div>' +
+          '<div class="module-tags">' + tagsHtml + '</div>';
+
+        grid.appendChild(card);
+      });
+    })();
+  </script>
+</body>
+</html>
