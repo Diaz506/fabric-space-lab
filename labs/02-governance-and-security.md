@@ -156,7 +156,14 @@ Sensitivity labels classify your data and enforce protection policies automatica
 1. Navigate to [purview.microsoft.com](https://purview.microsoft.com) → **Information Protection** → **Sensitivity labels**
 2. Click **+ Create a label** — this opens the **New sensitivity label** wizard
 
-You'll create **4 labels** (start with Public, then repeat for each). The wizard has 5 steps:
+You'll create **4 labels in this exact order** (priority is number-based: **0 = most sensitive**). Create them from most to least sensitive so the numbering is correct:
+
+1. **Top Secret** → Priority **0** (most sensitive)
+2. **Confidential** → Priority **1**
+3. **Internal** → Priority **2**
+4. **Public** → Priority **3** (least sensitive)
+
+Click **+ Create a label** — this opens the **New sensitivity label** wizard. The wizard has 5 steps:
 
 ---
 
@@ -164,15 +171,17 @@ You'll create **4 labels** (start with Public, then repeat for each). The wizard
 
 **A) Label details** (first page of the wizard)
 
-| Field | Public | Internal | Confidential | Top Secret |
-|-------|--------|----------|--------------|------------|
-| **Name** | `Public` | `Internal` | `Confidential` | `TopSecret` |
-| **Display name** | `Public` | `Internal` | `Confidential` | `Top Secret` |
-| **Label priority** | Leave as assigned | Leave as assigned | Leave as assigned | Leave as assigned (Highest) |
-| **Description for users** | Open data — no restrictions apply | For internal ZOSA use only | Sensitive business data — restricted sharing | Classified mission data — maximum protection |
-| **Description for admins** | No protection applied | Watermark on exports | Encryption, block external sharing | Full encryption, no copy/paste/print, access audit |
+| Field | Top Secret | Confidential | Internal | Public |
+|-------|------------|--------------|----------|--------|
+| **Name** | `TopSecret` | `Confidential` | `Internal` | `Public` |
+| **Display name** | `Top Secret` | `Confidential` | `Internal` | `Public` |
+| **Label priority** | 0 (Highest) | 1 | 2 | 3 (Lowest) |
+| **Description for users** | Classified mission data — maximum protection | Sensitive business data — restricted sharing | For internal ZOSA use only | Open data — no restrictions apply |
+| **Description for admins** | Full encryption, no copy/paste/print, access audit | Encryption, block external sharing | Watermark on exports | No protection applied |
 
-> **💡 Tip:** The **Name** field cannot contain spaces (use `TopSecret` not `Top Secret`). The **Display name** is what users see and can contain spaces. **Label priority** determines which label wins when multiple apply — leave the defaults (the last label you create gets the highest priority, which is what we want for Top Secret).
+> **⚠️ Creation order matters!** Priority is number-based: **0 = most sensitive**. Create labels from most to least sensitive (Top Secret first, Public last) so the priority numbers align correctly. You can always reorder them after creation by dragging labels in the list.
+> 
+> **💡 Tip:** The **Name** field cannot contain spaces (use `TopSecret` not `Top Secret`). The **Display name** is what users see and can have spaces.
 
 **B) Scope** — Define where this label can be used:
 
@@ -202,7 +211,7 @@ You'll create **4 labels** (start with Public, then repeat for each). The wizard
 
 **E) Finish** — Review the summary and click **Create label**
 
-> **⚠️ Important:** After creating all 4 labels, verify the **priority order** in the labels list. Drag to reorder if needed so that: Public (lowest) < Internal < Confidential < Top Secret (highest).
+> **⚠️ Important:** After creating all 4 labels, verify the **priority order** in the labels list. The correct order should be: Top Secret (0) → Confidential (1) → Internal (2) → Public (3). Drag to reorder if needed.
 
 ---
 
