@@ -353,7 +353,6 @@ Before Purview can scan your Fabric tenant, you must enable API access:
 1. Go to [admin.powerbi.com](https://admin.powerbi.com) → **Tenant settings**
 2. Search for and enable these settings under **Admin API settings**:
    - ✅ **Allow service principals to use Power BI APIs** → Apply to `ZOSA-Admins` group
-   - ✅ **Allow service principals to access read-only admin APIs** → Apply to `ZOSA-Admins` group
    - ✅ **Enhance admin APIs responses with detailed metadata** → Enable for entire organization
 3. **Wait ~15 minutes** for the settings to propagate
 
