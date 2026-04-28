@@ -205,13 +205,18 @@ This page shows two checkboxes. Check them based on the label:
 | **Confidential** | ✅ **Configure encryption settings** → Select "Only people in your organization" → Leave default permissions |
 | **Top Secret** | ✅ **Configure encryption settings** → Select "Only people in your organization" → Under **Assign permissions**: remove Copy and Print rights |
 
-**If you checked "Apply content marking"** → the next page lets you add headers, footers, and watermarks:
+**If you checked "Apply content marking"** → the next page is **Content marking**:
 
-| Label | Header | Watermark | Footer |
-|-------|--------|-----------|--------|
-| **Internal** | — | ✅ Turn on → Text: `ZOSA Internal` | — |
-| **Confidential** | ✅ Turn on → Text: `ZOSA Confidential` | ✅ Turn on → Text: `Confidential` | — |
-| **Top Secret** | ✅ Turn on → Text: `🔴 TOP SECRET — ZOSA CLASSIFIED` | ✅ Turn on → Text: `TOP SECRET` | — |
+1. Toggle **Content marking** to **On**
+2. Check the boxes and click **Customize text** to configure each:
+
+| Label | ☐ Add a watermark | ☐ Add a header | ☐ Add a footer |
+|-------|-------------------|----------------|----------------|
+| **Internal** | ❌ | ❌ | ✅ Check → Customize text → `ZOSA Internal` |
+| **Confidential** | ✅ Check → Customize text → `Confidential` | ✅ Check → Customize text → `ZOSA Confidential` | ❌ |
+| **Top Secret** | ✅ Check → Customize text → `TOP SECRET` | ✅ Check → Customize text → `🔴 TOP SECRET — ZOSA CLASSIFIED` | ❌ |
+
+> **💡 Info:** All content markings apply to documents. Only headers and footers apply to emails and meeting invites — watermarks do not appear in emails.
 
 > **💡 Note:** For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
 

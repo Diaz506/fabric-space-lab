@@ -401,18 +401,27 @@
         </tbody>
       </table>
 
-      <p><strong>If you checked "Apply content marking"</strong> → the next page configures headers, footers, and watermarks:</p>
+      <p><strong>If you checked "Apply content marking"</strong> → the next page is <strong>Content marking</strong>:</p>
+
+      <ol>
+        <li>Toggle <strong>Content marking</strong> to <strong>On</strong></li>
+        <li>Check the boxes and click <strong>Customize text</strong> to configure each:</li>
+      </ol>
 
       <table class="data-table">
         <thead>
-          <tr><th>Label</th><th>Header</th><th>Watermark</th><th>Footer</th></tr>
+          <tr><th>Label</th><th>☐ Add a watermark</th><th>☐ Add a header</th><th>☐ Add a footer</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Internal</strong></td><td>—</td><td>✅ Turn on → Text: <code>ZOSA Internal</code></td><td>—</td></tr>
-          <tr><td><strong>Confidential</strong></td><td>✅ Turn on → Text: <code>ZOSA Confidential</code></td><td>✅ Turn on → Text: <code>Confidential</code></td><td>—</td></tr>
-          <tr><td><strong>Top Secret</strong></td><td>✅ Turn on → Text: <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code></td><td>✅ Turn on → Text: <code>TOP SECRET</code></td><td>—</td></tr>
+          <tr><td><strong>Internal</strong></td><td>❌</td><td>❌</td><td>✅ Check → Customize text → <code>ZOSA Internal</code></td></tr>
+          <tr><td><strong>Confidential</strong></td><td>✅ Check → Customize text → <code>Confidential</code></td><td>✅ Check → Customize text → <code>ZOSA Confidential</code></td><td>❌</td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>✅ Check → Customize text → <code>TOP SECRET</code></td><td>✅ Check → Customize text → <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code></td><td>❌</td></tr>
         </tbody>
       </table>
+
+      <div class="info-box">
+        <strong>💡 Info:</strong> All content markings apply to documents. Only headers and footers apply to emails and meeting invites — watermarks do not appear in emails.
+      </div>
 
       <div class="info-box">
         <strong>💡 Note:</strong> For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
