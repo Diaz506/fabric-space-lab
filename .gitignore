@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets
+.env
+*.key
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (keep sample/, ignore large generated files)
+data/raw/
+data/output/
+*.parquet
