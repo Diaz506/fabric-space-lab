@@ -2,12 +2,342 @@
 
 > Locking down space data with OneLake Security, Purview, and defense-in-depth
 
-🚧 **This module is under construction.** Content coming soon!
+---
+
+> **Sofia Lindqvist**, ZOSA's CISO, catches you in the hallway. *"Before a single byte of space data touches those workspaces, we need to lock them down. We handle asteroid threat data, crew personnel records, and classified mission details. I need defense-in-depth — not just one lock on the door, but locks on every drawer inside."*
+
+You have three empty workspaces from Module 01. Before any data lands, you need to configure security at every layer. Let's build Sofia's defense-in-depth.
 
 ---
 
-**Navigation:**
+## 🛡️ 1 — The Defense-in-Depth Model
+
+Fabric security isn't a single gate — it's a series of concentric walls. Each layer is **complementary**, not an alternative. If one layer is misconfigured, the others still protect you.
+
+```
+┌─────────────────────────────────────────────┐
+│  TENANT                                     │
+│  Admin settings, Conditional Access, MFA    │
+│  ┌─────────────────────────────────────┐    │
+│  │  WORKSPACE                          │    │
+│  │  Roles: Admin, Member, Contributor, │    │
+│  │         Viewer                      │    │
+│  │  ┌─────────────────────────────┐    │    │
+│  │  │  ITEM                       │    │    │
+│  │  │  Per-item sharing &         │    │    │
+│  │  │  permissions                │    │    │
+│  │  │  ┌─────────────────────┐    │    │    │
+│  │  │  │  DATA               │    │    │    │
+│  │  │  │  RLS, CLS, OLS,    │    │    │    │
+│  │  │  │  DDM (OneLake      │    │    │    │
+│  │  │  │  Security)         │    │    │    │
+│  │  │  └─────────────────────┘    │    │    │
+│  │  └─────────────────────────────┘    │    │
+│  └─────────────────────────────────────┘    │
+└─────────────────────────────────────────────┘
+```
+
+| Layer | What It Controls | Configured Where |
+|-------|-----------------|------------------|
+| **Tenant** | Who can use Fabric at all, MFA, Conditional Access | Microsoft Entra admin center, Fabric Admin portal |
+| **Workspace** | Who can access a workspace and what they can do | Workspace → Manage access |
+| **Item** | Sharing individual reports, lakehouses, or pipelines | Item → Share / Manage permissions |
+| **Data** | Row, column, object, and masking rules inside datasets | OneLake Security, T-SQL, Tabular Editor |
+
+**💡 Tip:** Think of it like a building. Tenant security is the perimeter fence, workspace security is the building door, item security is the office door, and data security is the locked file cabinet inside the office.
+
+---
+
+## 👥 2 — Workspace Roles & Entra ID Security Groups
+
+Instead of assigning permissions to individual users, you'll create **Entra ID security groups** and assign those groups to workspace roles. This is how real organizations manage access at scale.
+
+### Step 1: Create Security Groups
+
+1. Navigate to [entra.microsoft.com](https://entra.microsoft.com)
+2. Go to **Identity** → **Groups** → **All groups**
+3. Click **New group**
+4. Configure each group:
+   - **Group type:** Security
+   - **Group name:** (see table below)
+   - **Group description:** (describe the role)
+   - **Membership type:** Assigned
+5. Click **Create**
+
+Create these four groups:
+
+| Group Name | Description | Members |
+|------------|-------------|---------|
+| `ZOSA-Admins` | Fabric administrators and platform owners | Your account (for this lab) |
+| `ZOSA-Engineers` | Data engineers who build and maintain pipelines | Your account (for this lab) |
+| `ZOSA-Scientists` | Data scientists and analysts who consume data | Your account (for this lab) |
+| `ZOSA-Executives` | Executive stakeholders who view dashboards | Your account (for this lab) |
+
+**💡 Tip:** In a real environment, each user would be in only the group(s) matching their role. For this lab, add yourself to all four so you can test each perspective.
+
+### Step 2: Assign Groups to Workspace Roles
+
+Open each workspace → click **Manage access** → **Add people or groups** → search for the Entra group → assign the role.
+
+| Group | ZOSA-Dev Role | ZOSA-Test Role | ZOSA-Prod Role |
+|-------|---------------|----------------|----------------|
+| ZOSA-Admins | Admin | Admin | Admin |
+| ZOSA-Engineers | Member | Member | Contributor |
+| ZOSA-Scientists | Contributor | Contributor | Viewer |
+| ZOSA-Executives | Viewer | Viewer | Viewer |
+
+Here's what each role can do:
+
+| Permission | Admin | Member | Contributor | Viewer |
+|-----------|-------|--------|-------------|--------|
+| Manage workspace settings & access | ✅ | ❌ | ❌ | ❌ |
+| Add/remove people | ✅ | ✅ | ❌ | ❌ |
+| Create, edit, delete items | ✅ | ✅ | ✅ | ❌ |
+| Read and view items | ✅ | ✅ | ✅ | ✅ |
+| Share items & grant access | ✅ | ✅ | ❌ | ❌ |
+
+**⚠️ Note:** Default to the **Viewer** role. Elevate only with justification. This is the principle of **least privilege** — give people the minimum access they need to do their job.
+
+**💡 Tip:** Always assign roles via groups, never individuals. Groups scale, are auditable, and make offboarding instant — remove a user from the group and all their Fabric access disappears.
+
+---
+
+## 🏷️ 3 — Sensitivity Labels & Microsoft Purview
+
+Sensitivity labels classify your data and enforce protection policies automatically. They travel with the data — if someone exports a report to PDF, the label (and its restrictions) follow.
+
+### Step 1: Enable Sensitivity Labels in Fabric
+
+1. Go to the **Fabric Admin portal** → **Tenant settings**
+2. Under **Information protection**, enable:
+   - ✅ *Allow users to apply sensitivity labels for content*
+   - ✅ *Apply sensitivity labels from data sources to their data in Fabric*
+
+### Step 2: Create Labels in Microsoft Purview
+
+1. Navigate to [compliance.microsoft.com](https://compliance.microsoft.com) → **Information protection** → **Labels**
+2. Create the following labels (or verify they exist):
+
+| Label | Color | Description | Protection |
+|-------|-------|-------------|------------|
+| **Public** | 🟢 Green | Open data, no restrictions | None |
+| **Internal** | 🔵 Blue | Internal use only | Watermark on exports |
+| **Confidential** | 🟠 Orange | Sensitive business data | Encryption, no external sharing |
+| **Top Secret** | 🔴 Red | Classified mission data | Encryption, no copy/paste/print, access audit |
+
+3. **Publish** the labels by creating a label policy that targets your ZOSA security groups
+
+### Step 3: Apply Labels to Workspaces
+
+1. Open **ZOSA-Dev** → **Settings** → **Sensitivity label** → Select **Confidential**
+2. Open **ZOSA-Test** → Apply **Confidential**
+3. Open **ZOSA-Prod** → Apply **Confidential** (individual items with classified data will get **Top Secret**)
+
+**⚠️ Note:** Sensitivity labels require Microsoft Purview licensing (included in E5 or as an add-on). In a trial tenant, some features may be limited.
+
+### Step 4: Configure Endorsement
+
+Endorsement lets you mark trusted, validated datasets so users know which data to rely on:
+
+1. Navigate to a dataset → **…** (more options) → **Settings** → **Endorsement**
+2. Options:
+   - **Promoted** — recommended by the data owner
+   - **Certified** — validated and approved by a designated certifier (set in Admin portal)
+
+**💡 Tip:** In later modules, once you build your Gold-layer datasets, you'll mark them as **Certified**. This tells analysts: "This is the single source of truth."
+
+### Step 5: Enable Microsoft Purview Data Catalog
+
+1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Data Catalog**
+2. Register your Fabric tenant as a data source
+3. Run a scan to discover and catalog all Fabric items
+
+This gives your organization a searchable inventory of every dataset, report, and lakehouse — with lineage tracking.
+
+---
+
+## 🔐 4 — OneLake Security (GA)
+
+OneLake Security is the **unified data access control layer** for Microsoft Fabric. Once configured, permissions propagate to **all engines** — Spark notebooks, SQL analytics endpoints, Power BI semantic models, Dataflows, and even Copilot. You define rules once; they're enforced everywhere.
+
+**⚠️ Note: OneLake Security, once enabled on a lakehouse, cannot be turned off. Plan your roles and rules carefully before flipping the switch.**
+
+### Enabling OneLake Security
+
+1. Open **ZOSA-Dev** workspace
+2. Navigate to your Lakehouse (you'll create one in Module 03 — for now, understand the process)
+3. Click **Manage OneLake Security**
+4. Toggle **Enable OneLake Security** → Confirm
+
+Once enabled, you'll see the role management interface where you can create roles with specific data access rules.
+
+---
+
+### 🔒 4a — Row-Level Security (RLS)
+
+**Scenario:** ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from **their region**. A European analyst shouldn't browse Asian station data.
+
+#### How to Configure RLS
+
+1. In the OneLake Security panel, click **New Role**
+2. **Role name:** `Europe_Analysts`
+3. Under **Table rules**, select the `observations` table
+4. Add a filter expression:
+
+```dax
+[region] = "Europe"
+```
+
+5. Click **Save**
+6. Assign the `ZOSA-Scientists` group (or a subset) to this role
+
+Repeat for other regions:
+
+| Role Name | Filter Expression |
+|-----------|-------------------|
+| `Europe_Analysts` | `[region] = "Europe"` |
+| `NorthAmerica_Analysts` | `[region] = "North America"` |
+| `Asia_Analysts` | `[region] = "Asia"` |
+| `Global_Analysts` | *(no filter — sees all rows)* |
+
+**How it works:** When a European analyst queries the `observations` table, Fabric automatically appends the filter. They literally cannot see rows outside their region — not in SQL, not in Spark, not in Power BI.
+
+**💡 Tip:** For SQL analytics endpoints, the equivalent filter uses a `WHERE` clause injected at query time:
+
+```sql
+-- This is what Fabric does behind the scenes for Europe_Analysts
+SELECT * FROM observations WHERE region = 'Europe'
+```
+
+---
+
+### 🔒 4b — Column-Level Security (CLS)
+
+**Scenario:** Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should **never see** the `budget_usd` or `clearance_level` columns.
+
+#### How to Configure CLS
+
+Use the **SQL analytics endpoint** of your lakehouse and run T-SQL `DENY` statements:
+
+```sql
+-- Block scientists from seeing budget data
+DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Scientists];
+
+-- Block scientists from seeing clearance levels
+DENY SELECT ON dbo.crew(clearance_level) TO [ZOSA-Scientists];
+
+-- Block engineers from seeing budget data (only execs need this)
+DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];
+```
+
+**What happens:** If a scientist runs `SELECT * FROM missions`, the `budget_usd` column is simply **not returned**. No error — the column is invisible. If they explicitly reference it (`SELECT budget_usd FROM missions`), they get a permission error.
+
+**⚠️ Note:** CLS works at the SQL analytics endpoint level. Ensure users are accessing data through the endpoint (or Power BI semantic model) rather than directly reading Parquet files via Spark with a storage account key.
+
+---
+
+### 🔒 4c — Object-Level Security (OLS)
+
+**Scenario:** ZOSA has a `classified_defense_missions` table containing data about planetary defense operations. This table should be **completely invisible** to anyone without defense clearance.
+
+#### How to Configure OLS
+
+OLS is configured via the **Tabular Editor** (a free external tool) or the **XMLA endpoint**:
+
+1. Download and install [Tabular Editor](https://tabulareditor.com/)
+2. Connect to your Fabric semantic model via the XMLA endpoint
+3. Navigate to the `classified_defense_missions` table
+4. Set the **Object Level Security** property:
+   - For the `ZOSA-Scientists` role: **None** (table is hidden)
+   - For the `ZOSA-Engineers` role: **None** (table is hidden)
+   - For the `ZOSA-Admins` role: **Read** (table is visible)
+5. Save and publish the model
+
+**What happens:** When a scientist opens the semantic model in Power BI, the `classified_defense_missions` table simply **doesn't appear** in the field list. They can't query it, they can't reference it, they don't even know it exists.
+
+**💡 Tip:** OLS is the most restrictive data security layer — it hides entire tables or columns from the model itself. Use it for truly classified data that certain roles should have zero awareness of.
+
+---
+
+### 🔒 4d — Dynamic Data Masking (DDM)
+
+**Scenario:** External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be **partially masked**.
+
+#### How to Configure DDM
+
+Use T-SQL on the SQL analytics endpoint:
+
+```sql
+-- Mask email addresses (shows first letter and domain: j***@zosa.org)
+ALTER TABLE crew
+ALTER COLUMN email ADD MASKED WITH (FUNCTION = 'email()');
+
+-- Partial mask on names (shows first and last character: S***a)
+ALTER TABLE crew
+ALTER COLUMN full_name ADD MASKED WITH (FUNCTION = 'partial(1,"***",1)');
+
+-- Default mask on crew IDs (shows XXXX)
+ALTER TABLE crew
+ALTER COLUMN crew_id ADD MASKED WITH (FUNCTION = 'default()');
+```
+
+**What happens:** Users with `UNMASK` permission see the real data. Everyone else sees the masked version. An external analyst querying crew data would see:
+
+| crew_id | full_name | email |
+|---------|-----------|-------|
+| XXXX | S***a | s***@zosa.org |
+| XXXX | M***l | m***@zosa.org |
+
+To grant unmasking to specific users:
+
+```sql
+-- Admins can see real data
+GRANT UNMASK TO [ZOSA-Admins];
+```
+
+**💡 Tip:** DDM is different from the other layers. It doesn't block access — it **obscures** the actual values. Use it for PII that needs to be present but not readable.
+
+---
+
+## 🧩 5 — Putting It All Together
+
+Here's a summary of which security layer protects what at ZOSA:
+
+| Data to Protect | Who's Blocked | Security Layer | Where Configured |
+|----------------|---------------|----------------|------------------|
+| Observation data by region | Scientists outside the region | **RLS** | OneLake Security roles |
+| Budget amounts | Non-executive roles | **CLS** | T-SQL `DENY` on SQL endpoint |
+| Classified missions table | Non-defense personnel | **OLS** | Tabular Editor / XMLA |
+| Crew PII (email, name) | External analysts | **DDM** | T-SQL `ALTER COLUMN` masking |
+| Workspace access | Unauthorized users | **Workspace Roles** | Workspace → Manage access |
+| Data classification | Policy enforcement | **Sensitivity Labels** | Microsoft Purview |
+| Data discovery & lineage | Shadow data sprawl | **Purview Data Catalog** | purview.microsoft.com |
+
+**Key takeaway:** No single layer does it all. Sofia wants defense-in-depth because **each layer covers a different threat vector**. Workspace roles stop unauthorized users from opening the door. RLS/CLS/OLS/DDM stop authorized users from seeing data beyond their need-to-know.
+
+---
+
+## ✅ Checkpoint
+
+Verify you've completed the following:
+
+- [ ] Created 4 Entra ID security groups (`ZOSA-Admins`, `ZOSA-Engineers`, `ZOSA-Scientists`, `ZOSA-Executives`)
+- [ ] Assigned groups to appropriate workspace roles in ZOSA-Dev, ZOSA-Test, and ZOSA-Prod
+- [ ] Sensitivity labels configured and applied to workspaces (Confidential baseline)
+- [ ] Endorsement process understood (Promoted vs. Certified)
+- [ ] You understand the 4 data security layers: **RLS** (row filter), **CLS** (column deny), **OLS** (object hide), **DDM** (value mask)
+- [ ] OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded
+
+**⚠️ Note:** We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be **implemented** in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.
+
+---
+
+> Sofia reviews your security plan and nods slowly. *"This is solid. Defense-in-depth, least privilege, everything auditable. I'll sign off on moving forward."* She pauses at the door. *"Oh, and one more thing — the first data drop from NASA arrives tomorrow. Don't let any of it land unencrypted."*
+>
+> You glance at your plan: data ingestion is next. Time to build the pipelines.
+
+---
+
 [← Module 01 — Capacity & Workspace Setup](01-capacity-and-workspace.md) | [Module 03 — Data Ingestion →](03-data-ingestion.md)
 
 [← Back to README](../README.md)
-
