@@ -176,7 +176,7 @@
   flex-wrap: wrap;
 }
 
-/* Hero image placeholder */
+/* Hero image */
 .hero-image {
   margin-top: var(--space-2xl);
   border-radius: var(--border-radius);
@@ -185,16 +185,25 @@
   aspect-ratio: 16 / 7;
   background: linear-gradient(135deg, var(--space-navy) 0%, var(--space-nebula) 50%, var(--space-dust) 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
 }
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .hero-image .placeholder-text {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   text-align: center;
-  padding: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* --- Starfield Background (Landing Page) --- */
