@@ -627,16 +627,29 @@
       <h3>Step 6: Enable Microsoft Purview Unified Catalog</h3>
 
       <div class="step-card">
-        <div class="step-number">5</div>
-        <div class="step-title">Register &amp; Scan</div>
+        <div class="step-number">6</div>
+        <div class="step-title">Register &amp; Scan in Data Map</div>
         <div class="step-body">
           <ol>
-            <li>In <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a>, go to <strong>Unified Catalog</strong></li>
-            <li>Register your Fabric tenant as a data source</li>
-            <li>Run a scan to discover and catalog all Fabric items</li>
+            <li>In <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a>, go to <strong>Data Map</strong> (left sidebar)</li>
+            <li>Click <strong>Register</strong> (or <strong>+ Add Source</strong>) → Select <strong>Microsoft Fabric</strong></li>
+            <li>Configure the registration:
+              <ul>
+                <li><strong>Source name:</strong> <code>ZOSA Fabric Tenant</code></li>
+                <li><strong>Registration scope:</strong> Select <strong>Tenant</strong> (scans all workspaces)</li>
+                <li><strong>Tenant ID:</strong> Your Entra tenant GUID (find it in Entra ID → Overview)</li>
+              </ul>
+            </li>
+            <li>Grant Purview permission to read Fabric metadata when prompted</li>
+            <li>Click <strong>Save and Run</strong> to start the initial scan</li>
+            <li>Once the scan completes, go to <strong>Unified Catalog</strong> to browse your discovered Fabric assets</li>
           </ol>
           <p>This gives your organization a searchable inventory of every dataset, report, and lakehouse — with lineage tracking.</p>
         </div>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 Note:</strong> The scan may take a few minutes depending on the number of items in your workspaces. You can set up a recurring schedule for automatic discovery of new items.
       </div>
     </section>
 

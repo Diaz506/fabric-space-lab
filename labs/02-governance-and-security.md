@@ -346,11 +346,19 @@ Endorsement lets you mark trusted, validated datasets so users know which data t
 
 ### Step 6: Enable Microsoft Purview Unified Catalog
 
-1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Unified Catalog**
-2. Register your Fabric tenant as a data source
-3. Run a scan to discover and catalog all Fabric items
+1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Data Map** (left sidebar)
+2. Click **Register** (or **+ Add Source**) → Select **Microsoft Fabric**
+3. Configure the registration:
+   - **Source name**: `ZOSA Fabric Tenant`
+   - **Registration scope**: Select **Tenant** (scans all workspaces)
+   - **Tenant ID**: Your Entra tenant GUID (find it in Entra ID → Overview)
+4. Grant Purview permission to read Fabric metadata when prompted
+5. Click **Save and Run** to start the initial scan
+6. Once the scan completes, go to **Unified Catalog** to browse your discovered Fabric assets
 
 This gives your organization a searchable inventory of every dataset, report, and lakehouse — with lineage tracking.
+
+> **💡 Note:** The scan may take a few minutes depending on the number of items in your workspaces. You can set up a recurring schedule for automatic discovery of new items.
 
 ---
 
