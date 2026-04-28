@@ -9,11 +9,11 @@
 
 ## 🛸 The Story
 
-**Nova Horizon Space Agency (NHSA)** is an international space agency coordinating deep-space
+**Zenith Orbital Space Agency (ZOSA)** is an international space agency coordinating deep-space
 observation, asteroid defense monitoring, and exoplanet research across 12 ground stations worldwide.
 
 Their legacy analytics stack can no longer keep up. The CTO has greenlit a full migration to
-Microsoft Fabric. **You've just been hired as NHSA's Lead Data Engineer.** Your mission: build
+Microsoft Fabric. **You've just been hired as ZOSA's Lead Data Engineer.** Your mission: build
 the analytics platform from scratch.
 
 Each module advances the story — and your skills — as you progress from an empty Fabric tenant
@@ -26,7 +26,7 @@ to a fully operational, AI-enhanced analytics platform.
 | [NASA NeoWs API](https://api.nasa.gov/) | Real / Public | Near-Earth asteroid tracking |
 | [NASA DONKI API](https://api.nasa.gov/) | Real / Public | Solar flares & space weather events |
 | [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/) | Real / Public | Confirmed exoplanet catalog |
-| NHSA Missions & Crew | Synthetic | Generated via Python scripts in this repo |
+| ZOSA Missions & Crew | Synthetic | Generated via Python scripts in this repo |
 | Ground Station Telemetry | Synthetic | Simulated IoT sensor data |
 
 > **No API key?** Pre-generated sample datasets are included in [`data/sample/`](data/sample/)
@@ -127,3 +127,4 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 ---
 
 *Built with ❤️ and curiosity about the cosmos.*
+

@@ -1,11 +1,11 @@
-# 📊 Data Dictionary — Nova Horizon Space Agency
+# 📊 Data Dictionary — Zenith Orbital Space Agency
 
 This directory contains Python scripts to generate and fetch data for the lab, plus pre-generated sample datasets in `sample/`.
 
 ## Quick Start
 
 ```bash
-# Generate synthetic NHSA data (missions, crew, telemetry)
+# Generate synthetic ZOSA data (missions, crew, telemetry)
 python generate_synthetic.py
 
 # Fetch real NASA data (requires API key in .env or as argument)
@@ -65,15 +65,15 @@ Confirmed exoplanets from NASA Exoplanet Archive.
 | distance_parsecs | float | Distance from Earth in parsecs |
 | in_habitable_zone | boolean | Whether in the star's habitable zone (derived) |
 
-## Synthetic Data (NHSA Internal)
+## Synthetic Data (ZOSA Internal)
 
 ### missions.csv
 
-NHSA mission records (2020–2026).
+ZOSA mission records (2020–2026).
 
 | Column | Type | Description |
 |--------|------|-------------|
-| mission_id | string | NHSA mission identifier (e.g., "NHSA-2024-047") |
+| mission_id | string | ZOSA mission identifier (e.g., "ZOSA-2024-047") |
 | mission_name | string | Mission codename (e.g., "Operation Starfall") |
 | mission_type | string | Observation, Defense, Research, Survey |
 | status | string | Planned, Active, Completed, Aborted |
@@ -87,11 +87,11 @@ NHSA mission records (2020–2026).
 
 ### crew.csv
 
-NHSA personnel records.
+ZOSA personnel records.
 
 | Column | Type | Description |
 |--------|------|-------------|
-| crew_id | string | Personnel ID (e.g., "NHSA-P-0042") |
+| crew_id | string | Personnel ID (e.g., "ZOSA-P-0042") |
 | full_name | string | Full name |
 | role | string | Scientist, Engineer, Analyst, Commander, Technician |
 | specialty | string | Astrophysics, Orbital Mechanics, Data Science, Comms, etc. |
@@ -99,7 +99,7 @@ NHSA personnel records.
 | region | string | Ground station region (for RLS demo) |
 | hire_date | date | Date hired |
 | clearance_level | string | Public, Confidential, Secret, Top Secret |
-| email | string | NHSA email address |
+| email | string | ZOSA email address |
 
 ### telemetry.csv
 
@@ -137,3 +137,4 @@ Ground station sensor readings (simulated IoT data, 5-min intervals).
 | GS-10 | Tidbinbilla | Oceania | Canberra, Australia |
 | GS-11 | Usuda Deep Space | Asia Pacific | Nagano, Japan |
 | GS-12 | Cebreros | Europe | Cebreros, Spain |
+
