@@ -626,8 +626,36 @@
 
       <h3>Step 6: Enable Microsoft Purview Unified Catalog</h3>
 
+      <h4>6a) Enable Admin API Settings (required before scanning)</h4>
+
       <div class="step-card">
-        <div class="step-number">6</div>
+        <div class="step-number">6a</div>
+        <div class="step-title">Enable API Access</div>
+        <div class="step-body">
+          <p>Before Purview can scan your Fabric tenant, you must enable API access:</p>
+          <ol>
+            <li>Go to <a href="https://admin.powerbi.com" target="_blank" rel="noopener">admin.powerbi.com</a> → <strong>Tenant settings</strong></li>
+            <li>Search for and enable these settings under <strong>Admin API settings</strong>:
+              <ul>
+                <li>✅ <strong>Allow service principals to use Power BI APIs</strong> → Apply to <code>ZOSA-Admins</code> group</li>
+                <li>✅ <strong>Allow service principals to access read-only admin APIs</strong> → Apply to <code>ZOSA-Admins</code> group</li>
+                <li>✅ <strong>Enhance admin APIs responses with detailed metadata</strong> → Enable for entire organization</li>
+              </ul>
+            </li>
+            <li><strong>Wait ~15 minutes</strong> for the settings to propagate</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">⚠️ Common Error</div>
+        <p>Without these settings, the scan will fail with error <code>3871 UserErrorDataScanPowerBIBasicMetadataFailure</code>. This is the most common cause of Purview scan failures for Fabric tenants.</p>
+      </div>
+
+      <h4>6b) Register Fabric in Data Map</h4>
+
+      <div class="step-card">
+        <div class="step-number">6b</div>
         <div class="step-title">Register &amp; Scan in Data Map</div>
         <div class="step-body">
           <ol>

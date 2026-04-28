@@ -346,6 +346,21 @@ Endorsement lets you mark trusted, validated datasets so users know which data t
 
 ### Step 6: Enable Microsoft Purview Unified Catalog
 
+#### 6a) Enable Admin API Settings (required before scanning)
+
+Before Purview can scan your Fabric tenant, you must enable API access:
+
+1. Go to [admin.powerbi.com](https://admin.powerbi.com) → **Tenant settings**
+2. Search for and enable these settings under **Admin API settings**:
+   - ✅ **Allow service principals to use Power BI APIs** → Apply to `ZOSA-Admins` group
+   - ✅ **Allow service principals to access read-only admin APIs** → Apply to `ZOSA-Admins` group
+   - ✅ **Enhance admin APIs responses with detailed metadata** → Enable for entire organization
+3. **Wait ~15 minutes** for the settings to propagate
+
+> **⚠️ Without these settings**, the scan will fail with error `3871 UserErrorDataScanPowerBIBasicMetadataFailure`. This is a common gotcha.
+
+#### 6b) Register Fabric in Data Map
+
 1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Data Map** (left sidebar)
 2. Click **Register** (or **+ Add Source**) → Select **Microsoft Fabric**
 3. Configure the registration:
