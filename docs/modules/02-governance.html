@@ -624,14 +624,14 @@
         <p>In later modules, once you build your Gold-layer datasets, you'll mark them as <strong>Certified</strong>. This tells analysts: "This is the single source of truth."</p>
       </div>
 
-      <h3>Step 6: Enable Microsoft Purview Data Catalog</h3>
+      <h3>Step 6: Enable Microsoft Purview Unified Catalog</h3>
 
       <div class="step-card">
         <div class="step-number">5</div>
         <div class="step-title">Register &amp; Scan</div>
         <div class="step-body">
           <ol>
-            <li>In <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a>, go to <strong>Data Catalog</strong></li>
+            <li>In <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a>, go to <strong>Unified Catalog</strong></li>
             <li>Register your Fabric tenant as a data source</li>
             <li>Run a scan to discover and catalog all Fabric items</li>
           </ol>
@@ -863,7 +863,7 @@ GRANT UNMASK TO [ZOSA-Admins];</code></pre>
           <tr><td>Crew PII (email, name)</td><td>External analysts</td><td><strong>DDM</strong></td><td>T-SQL <code>ALTER COLUMN</code> masking</td></tr>
           <tr><td>Workspace access</td><td>Unauthorized users</td><td><strong>Workspace Roles</strong></td><td>Workspace → Manage access</td></tr>
           <tr><td>Data classification</td><td>Policy enforcement</td><td><strong>Sensitivity Labels</strong></td><td>Microsoft Purview</td></tr>
-          <tr><td>Data discovery &amp; lineage</td><td>Shadow data sprawl</td><td><strong>Purview Data Catalog</strong></td><td>purview.microsoft.com</td></tr>
+          <tr><td>Data discovery &amp; lineage</td><td>Shadow data sprawl</td><td><strong>Purview Unified Catalog</strong></td><td>purview.microsoft.com</td></tr>
         </tbody>
       </table>
 

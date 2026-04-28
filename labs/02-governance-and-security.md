@@ -344,9 +344,9 @@ Endorsement lets you mark trusted, validated datasets so users know which data t
 
 **💡 Tip:** In later modules, once you build your Gold-layer datasets, you'll mark them as **Certified**. This tells analysts: "This is the single source of truth."
 
-### Step 6: Enable Microsoft Purview Data Catalog
+### Step 6: Enable Microsoft Purview Unified Catalog
 
-1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Data Catalog**
+1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Unified Catalog**
 2. Register your Fabric tenant as a data source
 3. Run a scan to discover and catalog all Fabric items
 
@@ -511,7 +511,7 @@ Here's a summary of which security layer protects what at ZOSA:
 | Crew PII (email, name) | External analysts | **DDM** | T-SQL `ALTER COLUMN` masking |
 | Workspace access | Unauthorized users | **Workspace Roles** | Workspace → Manage access |
 | Data classification | Policy enforcement | **Sensitivity Labels** | Microsoft Purview |
-| Data discovery & lineage | Shadow data sprawl | **Purview Data Catalog** | purview.microsoft.com |
+| Data discovery & lineage | Shadow data sprawl | **Purview Unified Catalog** | purview.microsoft.com |
 
 **Key takeaway:** No single layer does it all. Sofia wants defense-in-depth because **each layer covers a different threat vector**. Workspace roles stop unauthorized users from opening the door. RLS/CLS/OLS/DDM stop authorized users from seeing data beyond their need-to-know.
 
