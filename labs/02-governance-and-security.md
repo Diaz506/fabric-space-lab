@@ -57,7 +57,7 @@ Instead of assigning permissions to individual users, you'll create **Entra ID s
 To properly validate security rules later, you need accounts that represent different personas. You'll create **2 test users** in addition to your admin account.
 
 1. Navigate to [entra.microsoft.com](https://entra.microsoft.com)
-2. Go to **Identity** → **Users** → **All users**
+2. Go to **Users** → **All users**
 3. Click **New user** → **Create new user**
 4. Create each user:
 
@@ -91,7 +91,7 @@ License assignments are managed in the **Microsoft 365 Admin Center**, not Entra
 
 ### Step 2: Create Security Groups
 
-1. In Entra, go to **Identity** → **Groups** → **All groups**
+1. In Entra, go to **Groups** → **All groups**
 2. Click **New group**
 3. Configure each group:
    - **Group type:** Security
