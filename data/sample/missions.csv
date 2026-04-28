@@ -1,0 +1,151 @@
+mission_id,mission_name,mission_type,status,priority,start_date,end_date,target_object,primary_ground_station_id,budget_usd,region
+ZOSA-2025-001,Operation Silent Orbit,Observation,Completed,Low,2021-07-25,2021-10-15,101955 Bennu,GS-11,1974962.36,Asia Pacific
+ZOSA-2021-002,Operation Thunder Aegis,Survey,Completed,High,2022-03-25,2023-03-22,LHS 1140b,GS-12,29668651.35,Europe
+ZOSA-2026-003,Operation Velvet Drift,Observation,Completed,Critical,2021-09-28,2022-02-15,TOI-700d,GS-06,5287460.65,Asia Pacific
+ZOSA-2026-004,Project Polar Orbit,Observation,Planned,Low,2025-02-24,,162173 Ryugu,GS-09,27826011.25,Europe
+ZOSA-2026-005,Mission Polar Pulsar,Defense,Active,Medium,2020-10-11,,162173 Ryugu,GS-01,42838227.19,Europe
+ZOSA-2026-006,Operation Solar Orbit,Research,Completed,High,2024-02-03,2024-05-26,Mars Orbit Corridor,GS-06,13715402.19,Asia Pacific
+ZOSA-2025-007,Mission Deep Aegis,Defense,Active,High,2025-12-27,,LHS 1140b,GS-12,19283044.37,Europe
+ZOSA-2025-008,Mission Quiet Comet,Observation,Active,Medium,2020-08-17,,TOI-700d,GS-04,13753173.36,Africa
+ZOSA-2021-009,Mission Bright Starfall,Survey,Active,High,2024-06-08,,Kepler-442b,GS-11,7411700.82,Asia Pacific
+ZOSA-2025-010,Mission Quiet Orbit,Survey,Planned,Medium,2024-10-20,,243 Ida,GS-10,49867626.01,Oceania
+ZOSA-2021-011,Mission Crystal Vanguard,Defense,Planned,Low,2021-03-25,,Kuiper Belt Object 2014 MU69,GS-03,3644621.45,North America
+ZOSA-2023-012,Mission Amber Meridian,Observation,Completed,Medium,2026-03-16,2026-04-20,Alpha Centauri Region,GS-11,17338685.92,Asia Pacific
+ZOSA-2022-013,Project Velvet Flare,Observation,Completed,Medium,2022-12-14,2023-09-26,Alpha Centauri Region,GS-03,25629312.66,North America
+ZOSA-2021-014,Operation Phantom Sentinel,Research,Active,Low,2025-12-12,,433 Eros,GS-01,6037452.4,Europe
+ZOSA-2022-015,Project Hollow Horizon,Survey,Completed,Critical,2026-05-12,2026-07-21,Lagrange Point L2,GS-02,38408804.25,South America
+ZOSA-2021-016,Mission Crystal Solstice,Defense,Completed,High,2025-12-01,2026-11-06,Lunar South Pole,GS-07,15929956.42,Oceania
+ZOSA-2025-017,Mission Phantom Flare,Defense,Planned,High,2025-01-23,,162173 Ryugu,GS-02,17235235.33,South America
+ZOSA-2024-018,Mission Hollow Tempest,Defense,Completed,Critical,2020-10-17,2021-10-05,101955 Bennu,GS-01,43051952.31,Europe
+ZOSA-2020-019,Mission Hollow Orbit,Defense,Active,Low,2022-05-27,,243 Ida,GS-09,39338661.5,Europe
+ZOSA-2026-020,Project Rapid Zenith,Survey,Completed,Low,2024-10-31,2025-05-30,Jupiter Trojans,GS-07,3181473.77,Oceania
+ZOSA-2025-021,Mission Frozen Horizon,Defense,Completed,High,2023-10-21,2024-01-14,Lagrange Point L2,GS-04,22706370.62,Africa
+ZOSA-2023-022,Operation Silver Flare,Observation,Completed,Critical,2020-11-04,2021-07-18,Alpha Centauri Region,GS-09,49964482.19,Europe
+ZOSA-2026-023,Operation Deep Comet,Survey,Completed,Critical,2025-06-12,2026-03-15,1 Ceres,GS-04,19259169.39,Africa
+ZOSA-2023-024,Project Amber Beacon,Defense,Completed,Medium,2026-03-26,2026-12-30,951 Gaspra,GS-03,48451113.57,North America
+ZOSA-2024-025,Mission Quiet Horizon,Survey,Planned,High,2020-08-22,,101955 Bennu,GS-01,48058555.71,Europe
+ZOSA-2020-026,Operation Deep Aegis,Defense,Completed,Critical,2022-08-21,2023-04-14,Kuiper Belt Object 2014 MU69,GS-02,4558178.57,South America
+ZOSA-2025-027,Mission Nova Meridian,Research,Completed,High,2022-12-04,2023-04-17,Kepler-442b,GS-11,20091399.42,Asia Pacific
+ZOSA-2025-028,Mission Dark Flare,Observation,Completed,Critical,2020-10-24,2020-11-27,Lagrange Point L2,GS-08,11051138.46,North America
+ZOSA-2022-029,Operation Phantom Vanguard,Defense,Planned,Low,2024-02-22,,Lagrange Point L2,GS-05,35325226.29,Europe
+ZOSA-2024-030,Mission Thunder Echo,Observation,Active,High,2026-03-21,,Kepler-442b,GS-05,6213719.19,Europe
+ZOSA-2020-031,Mission Quiet Apex,Research,Completed,Low,2022-05-12,2022-12-03,Kepler-442b,GS-04,45314156.31,Africa
+ZOSA-2026-032,Operation Deep Drift,Research,Planned,High,2020-06-29,,Alpha Centauri Region,GS-01,48999998.71,Europe
+ZOSA-2021-033,Mission Amber Solstice,Observation,Planned,Critical,2026-04-16,,Lunar South Pole,GS-01,45244464.29,Europe
+ZOSA-2024-034,Operation Phantom Tempest,Observation,Active,Medium,2024-10-26,,Proxima Centauri b,GS-03,44999583.69,North America
+ZOSA-2026-035,Operation Phantom Starfall,Survey,Active,High,2021-02-25,,243 Ida,GS-06,43297981.96,Asia Pacific
+ZOSA-2026-036,Operation Cosmic Echo,Defense,Completed,Medium,2023-09-22,2024-05-19,1 Ceres,GS-11,39475038.2,Asia Pacific
+ZOSA-2020-037,Project Crimson Vertex,Defense,Completed,High,2025-02-28,2025-09-25,433 Eros,GS-05,33171642.55,Europe
+ZOSA-2023-038,Project Silver Vanguard,Survey,Aborted,Medium,2023-02-17,2023-09-14,433 Eros,GS-11,6209416.72,Asia Pacific
+ZOSA-2022-039,Operation Nova Orbit,Research,Completed,Low,2024-11-14,2025-06-08,Kuiper Belt Object 2014 MU69,GS-12,49219674.54,Europe
+ZOSA-2020-040,Project Nova Starfall,Defense,Completed,Medium,2024-11-21,2024-12-21,K2-18b,GS-09,3963703.65,Europe
+ZOSA-2025-041,Project Polar Nomad,Research,Active,Medium,2021-05-25,,Mars Orbit Corridor,GS-12,20715448.98,Europe
+ZOSA-2023-042,Mission Dark Solstice,Defense,Completed,Medium,2024-09-18,2025-04-30,TOI-700d,GS-11,27622892.05,Asia Pacific
+ZOSA-2020-043,Project Dark Starfall,Survey,Completed,High,2023-08-12,2024-05-06,Sector 7G,GS-08,23922716.2,North America
+ZOSA-2026-044,Mission Velvet Vanguard,Research,Completed,High,2023-10-04,2023-12-20,951 Gaspra,GS-04,7794021.13,Africa
+ZOSA-2020-045,Operation Crystal Aegis,Survey,Planned,High,2020-10-25,,Lunar South Pole,GS-08,34969535.4,North America
+ZOSA-2023-046,Project Hollow Apex,Survey,Active,High,2020-01-23,,1 Ceres,GS-02,40303437.88,South America
+ZOSA-2025-047,Mission Amber Horizon,Defense,Active,Low,2021-05-12,,Mars Orbit Corridor,GS-08,26791028.35,North America
+ZOSA-2024-048,Mission Bright Flare,Survey,Active,High,2025-08-29,,Jupiter Trojans,GS-07,43143998.03,Oceania
+ZOSA-2023-049,Project Hollow Orbit,Defense,Planned,Medium,2025-11-05,,LHS 1140b,GS-08,4335426.02,North America
+ZOSA-2022-050,Operation Silver Nomad,Defense,Completed,High,2026-01-21,2026-04-02,TOI-700d,GS-03,34850515.71,North America
+ZOSA-2025-051,Project Bright Solstice,Survey,Completed,Critical,2020-09-12,2021-01-25,Oort Cloud Fringe,GS-07,19328860.93,Oceania
+ZOSA-2020-052,Project Dark Nebula,Defense,Planned,Low,2024-09-12,,243 Ida,GS-09,14010297.93,Europe
+ZOSA-2023-053,Operation Solar Nomad,Defense,Active,Low,2024-07-14,,4 Vesta,GS-12,49045737.89,Europe
+ZOSA-2024-054,Operation Solar Tempest,Survey,Active,High,2020-04-21,,LHS 1140b,GS-02,9495586.81,South America
+ZOSA-2022-055,Project Bright Starfall,Survey,Completed,Medium,2023-10-14,2024-05-25,162173 Ryugu,GS-05,23780188.39,Europe
+ZOSA-2025-056,Mission Crimson Pulsar,Observation,Completed,High,2020-10-08,2021-10-06,951 Gaspra,GS-01,42041827.89,Europe
+ZOSA-2024-057,Operation Hollow Apex,Survey,Completed,Medium,2021-04-13,2022-02-25,Proxima Centauri b,GS-04,8805562.6,Africa
+ZOSA-2024-058,Mission Frozen Sentinel,Research,Aborted,Low,2021-03-18,2022-02-07,TOI-700d,GS-01,47102794.63,Europe
+ZOSA-2021-059,Operation Nova Comet,Observation,Completed,Medium,2023-05-20,2024-04-21,Lagrange Point L2,GS-02,21704711.66,South America
+ZOSA-2022-060,Operation Thunder Nomad,Survey,Completed,Medium,2024-09-16,2025-06-23,Alpha Centauri Region,GS-02,44632963.23,South America
+ZOSA-2023-061,Mission Iron Drift,Survey,Completed,Low,2025-11-07,2026-11-05,K2-18b,GS-05,41373862.62,Europe
+ZOSA-2024-062,Project Bright Comet,Survey,Planned,High,2020-12-20,,LHS 1140b,GS-05,28707557.41,Europe
+ZOSA-2025-063,Project Bright Echo,Defense,Completed,Medium,2023-08-24,2023-12-25,Kepler-442b,GS-08,17346772.74,North America
+ZOSA-2024-064,Mission Silver Solstice,Survey,Completed,Low,2022-02-21,2022-05-05,Lagrange Point L2,GS-04,38029150.35,Africa
+ZOSA-2025-065,Project Crystal Flare,Defense,Planned,Low,2021-01-16,,Lunar South Pole,GS-05,12543605.61,Europe
+ZOSA-2025-066,Mission Phantom Vertex,Research,Active,Medium,2023-11-09,,Lunar South Pole,GS-07,22960390.51,Oceania
+ZOSA-2022-067,Project Hollow Zenith,Defense,Planned,High,2023-07-16,,951 Gaspra,GS-02,37060930.35,South America
+ZOSA-2022-068,Mission Dark Zenith,Research,Planned,High,2023-04-28,,Kepler-186f,GS-04,1200344.18,Africa
+ZOSA-2024-069,Operation Silver Horizon,Defense,Aborted,Low,2026-03-16,2026-09-11,25143 Itokawa,GS-12,43699626.88,Europe
+ZOSA-2024-070,Project Crystal Vertex,Survey,Completed,Critical,2022-01-25,2022-03-22,162173 Ryugu,GS-05,20335018.39,Europe
+ZOSA-2020-071,Mission Crimson Apex,Defense,Completed,Critical,2026-04-24,2026-10-26,Lagrange Point L2,GS-02,38339950.54,South America
+ZOSA-2024-072,Mission Polar Comet,Survey,Planned,Medium,2024-04-07,,Oort Cloud Fringe,GS-08,49506547.39,North America
+ZOSA-2022-073,Mission Polar Horizon,Defense,Active,Medium,2021-02-10,,Mars Orbit Corridor,GS-04,4518779.54,Africa
+ZOSA-2021-074,Operation Quiet Vanguard,Survey,Completed,Medium,2024-07-31,2025-04-17,101955 Bennu,GS-12,11958073.61,Europe
+ZOSA-2025-075,Project Amber Vanguard,Defense,Active,Low,2022-12-19,,25143 Itokawa,GS-11,27455837.75,Asia Pacific
+ZOSA-2025-076,Operation Silver Apex,Research,Completed,Low,2021-11-10,2022-05-16,25143 Itokawa,GS-10,23700549.53,Oceania
+ZOSA-2022-077,Mission Solar Orbit,Observation,Active,Critical,2025-07-15,,K2-18b,GS-08,36859429.2,North America
+ZOSA-2024-078,Project Silent Vanguard,Research,Completed,Critical,2026-06-14,2027-05-10,1 Ceres,GS-01,23789790.75,Europe
+ZOSA-2025-079,Project Silver Sentinel,Observation,Aborted,Low,2024-11-20,2025-11-10,Proxima Centauri b,GS-08,20713230.62,North America
+ZOSA-2022-080,Project Cosmic Vertex,Survey,Completed,Critical,2024-06-28,2025-05-05,TRAPPIST-1e,GS-01,12993743.12,Europe
+ZOSA-2020-081,Project Thunder Echo,Survey,Active,Critical,2026-01-31,,951 Gaspra,GS-08,26162749.93,North America
+ZOSA-2024-082,Project Amber Horizon,Survey,Completed,Low,2026-02-27,2026-06-04,25143 Itokawa,GS-05,1929037.4,Europe
+ZOSA-2025-083,Mission Hollow Sentinel,Observation,Completed,High,2020-02-26,2021-01-03,25143 Itokawa,GS-07,23341670.76,Oceania
+ZOSA-2020-084,Mission Iron Vertex,Research,Aborted,Low,2023-04-10,2024-01-25,HD 40307g,GS-12,49022109.31,Europe
+ZOSA-2021-085,Project Quiet Apex,Research,Completed,Low,2025-09-12,2025-12-20,TRAPPIST-1e,GS-02,46745295.49,South America
+ZOSA-2024-086,Project Silent Beacon,Survey,Planned,Low,2025-06-28,,Proxima Centauri b,GS-03,16955777.81,North America
+ZOSA-2026-087,Mission Solar Flare,Survey,Aborted,High,2022-02-11,2022-07-13,K2-18b,GS-10,2660541.31,Oceania
+ZOSA-2025-088,Project Solar Nebula,Defense,Aborted,Medium,2021-09-15,2022-06-25,25143 Itokawa,GS-01,43772423.52,Europe
+ZOSA-2023-089,Operation Thunder Flare,Defense,Completed,Critical,2021-08-13,2022-04-09,HD 40307g,GS-11,39185501.92,Asia Pacific
+ZOSA-2022-090,Project Polar Nebula,Survey,Active,Medium,2023-09-07,,Alpha Centauri Region,GS-11,36076512.55,Asia Pacific
+ZOSA-2026-091,Project Quiet Horizon,Research,Active,High,2022-08-19,,Jupiter Trojans,GS-11,4973776.87,Asia Pacific
+ZOSA-2020-092,Mission Frozen Flare,Research,Completed,Critical,2023-05-11,2023-06-24,Kepler-186f,GS-01,18243935.44,Europe
+ZOSA-2023-093,Operation Hollow Meridian,Observation,Completed,Low,2022-01-07,2022-05-04,Kuiper Belt Object 2014 MU69,GS-03,34315161.71,North America
+ZOSA-2023-094,Mission Iron Comet,Observation,Completed,Low,2022-11-06,2023-07-29,Kepler-186f,GS-05,34041738.84,Europe
+ZOSA-2021-095,Operation Amber Pulsar,Research,Aborted,Low,2023-05-10,2024-05-01,Kepler-186f,GS-07,10361241.46,Oceania
+ZOSA-2023-096,Project Frozen Comet,Research,Completed,Critical,2024-01-10,2024-11-29,Mars Orbit Corridor,GS-05,20092384.18,Europe
+ZOSA-2020-097,Mission Crimson Aegis,Research,Planned,High,2023-03-18,,Alpha Centauri Region,GS-04,9911533.47,Africa
+ZOSA-2022-098,Mission Iron Zenith,Observation,Aborted,Medium,2020-06-10,2020-12-15,Jupiter Trojans,GS-08,7004884.42,North America
+ZOSA-2022-099,Project Cosmic Sentinel,Research,Completed,High,2026-01-18,2026-08-23,Kepler-442b,GS-09,45745423.2,Europe
+ZOSA-2023-100,Project Bright Zenith,Survey,Completed,Medium,2020-11-04,2021-02-14,162173 Ryugu,GS-04,39638757.45,Africa
+ZOSA-2020-101,Project Quiet Zenith,Research,Completed,Critical,2022-12-09,2023-11-03,Mars Orbit Corridor,GS-07,12074184.16,Oceania
+ZOSA-2020-102,Mission Quiet Nomad,Survey,Aborted,Medium,2022-06-25,2023-06-21,Alpha Centauri Region,GS-02,20710644.86,South America
+ZOSA-2021-103,Operation Crimson Beacon,Defense,Aborted,Low,2021-04-20,2021-07-08,LHS 1140b,GS-04,18865070.02,Africa
+ZOSA-2025-104,Mission Quiet Drift,Observation,Active,Low,2021-09-24,,Kuiper Belt Object 2014 MU69,GS-07,20701736.34,Oceania
+ZOSA-2022-105,Project Amber Comet,Research,Planned,Medium,2021-02-10,,101955 Bennu,GS-11,20207912.32,Asia Pacific
+ZOSA-2021-106,Operation Amber Vanguard,Research,Active,High,2020-03-28,,4 Vesta,GS-01,39455415.95,Europe
+ZOSA-2021-107,Operation Quiet Starfall,Defense,Active,Critical,2022-08-12,,Kepler-442b,GS-06,42991103.26,Asia Pacific
+ZOSA-2021-108,Operation Quiet Orbit,Observation,Planned,High,2021-03-26,,433 Eros,GS-11,18232992.82,Asia Pacific
+ZOSA-2026-109,Operation Nova Nomad,Survey,Completed,Critical,2022-12-22,2023-02-16,Jupiter Trojans,GS-03,3646122.89,North America
+ZOSA-2023-110,Project Thunder Tempest,Observation,Completed,Medium,2025-08-25,2026-01-15,LHS 1140b,GS-10,32345363.87,Oceania
+ZOSA-2020-111,Operation Crystal Nebula,Survey,Completed,Critical,2021-03-18,2021-12-24,162173 Ryugu,GS-12,16444535.08,Europe
+ZOSA-2021-112,Operation Iron Orbit,Research,Active,Low,2026-02-24,,Kuiper Belt Object 2014 MU69,GS-12,26762563.45,Europe
+ZOSA-2023-113,Mission Polar Drift,Defense,Completed,Low,2021-04-13,2022-04-13,LHS 1140b,GS-11,44460505.59,Asia Pacific
+ZOSA-2023-114,Project Amber Nebula,Research,Completed,Medium,2021-01-24,2021-08-02,Proxima Centauri b,GS-07,47702829.62,Oceania
+ZOSA-2025-115,Project Deep Vanguard,Observation,Planned,Medium,2021-01-16,,4 Vesta,GS-07,28040351.41,Oceania
+ZOSA-2024-116,Mission Frozen Drift,Research,Completed,Medium,2024-09-28,2024-11-23,25143 Itokawa,GS-05,29106966.66,Europe
+ZOSA-2021-117,Operation Crystal Comet,Research,Planned,Critical,2023-12-05,,Kepler-442b,GS-09,28917950.21,Europe
+ZOSA-2026-118,Project Quiet Aegis,Research,Active,Critical,2026-03-30,,1 Ceres,GS-01,14026884.24,Europe
+ZOSA-2026-119,Project Bright Pulsar,Survey,Completed,Critical,2021-08-09,2022-06-24,4 Vesta,GS-11,37177968.43,Asia Pacific
+ZOSA-2020-120,Operation Thunder Starfall,Research,Completed,Medium,2025-02-01,2025-08-24,Jupiter Trojans,GS-03,16556953.16,North America
+ZOSA-2024-121,Mission Deep Horizon,Survey,Completed,Low,2020-07-22,2020-10-01,HD 40307g,GS-05,30550262.37,Europe
+ZOSA-2023-122,Project Rapid Meridian,Survey,Completed,Medium,2024-10-26,2025-01-20,101955 Bennu,GS-05,11415662.56,Europe
+ZOSA-2024-123,Operation Silent Starfall,Research,Completed,Medium,2022-05-15,2022-08-23,25143 Itokawa,GS-05,882630.38,Europe
+ZOSA-2025-124,Project Velvet Apex,Research,Completed,Critical,2022-07-31,2023-05-13,TOI-700d,GS-09,43157335.92,Europe
+ZOSA-2020-125,Project Silent Flare,Survey,Aborted,Low,2023-07-06,2024-05-25,Kepler-186f,GS-07,6201081.95,Oceania
+ZOSA-2020-126,Project Velvet Aegis,Observation,Completed,High,2024-01-22,2024-04-06,K2-18b,GS-07,29649128.77,Oceania
+ZOSA-2024-127,Operation Solar Beacon,Defense,Planned,Critical,2022-06-26,,Sector 7G,GS-06,31844621.01,Asia Pacific
+ZOSA-2024-128,Mission Rapid Pulsar,Defense,Completed,Medium,2021-08-27,2022-01-24,951 Gaspra,GS-02,9088201.61,South America
+ZOSA-2021-129,Mission Deep Sentinel,Survey,Aborted,Medium,2025-07-16,2026-04-09,Alpha Centauri Region,GS-10,16148875.28,Oceania
+ZOSA-2023-130,Operation Crystal Flare,Observation,Active,Medium,2023-01-30,,Sector 7G,GS-10,4172437.48,Oceania
+ZOSA-2023-131,Project Crimson Horizon,Observation,Completed,Low,2023-03-21,2023-05-29,LHS 1140b,GS-11,29226305.67,Asia Pacific
+ZOSA-2026-132,Mission Crimson Flare,Research,Aborted,Low,2026-05-30,2027-05-28,Sector 7G,GS-04,7967623.3,Africa
+ZOSA-2020-133,Project Frozen Nomad,Defense,Aborted,Critical,2020-12-11,2021-09-25,243 Ida,GS-11,35527274.36,Asia Pacific
+ZOSA-2023-134,Mission Thunder Aegis,Survey,Completed,Medium,2024-03-07,2024-08-28,Mars Orbit Corridor,GS-07,30095350.19,Oceania
+ZOSA-2026-135,Mission Bright Vanguard,Research,Completed,High,2026-04-04,2026-11-17,TRAPPIST-1e,GS-05,4534348.38,Europe
+ZOSA-2025-136,Operation Phantom Beacon,Observation,Aborted,Medium,2024-05-24,2024-08-28,Lagrange Point L2,GS-10,19145625.65,Oceania
+ZOSA-2026-137,Project Iron Meridian,Observation,Completed,Medium,2024-09-30,2025-07-17,Kepler-186f,GS-06,9423014.68,Asia Pacific
+ZOSA-2021-138,Project Crystal Starfall,Research,Completed,Critical,2021-07-17,2021-11-03,Sector 7G,GS-02,38658298.66,South America
+ZOSA-2026-139,Mission Thunder Horizon,Survey,Active,High,2021-06-20,,1 Ceres,GS-10,9451875.37,Oceania
+ZOSA-2025-140,Mission Velvet Flare,Research,Completed,Low,2024-02-01,2024-07-01,243 Ida,GS-08,26933551.91,North America
+ZOSA-2022-141,Project Rapid Pulsar,Survey,Active,Medium,2026-05-25,,TOI-700d,GS-08,25393881.23,North America
+ZOSA-2023-142,Operation Rapid Aegis,Survey,Completed,Medium,2022-10-21,2022-12-16,Lagrange Point L2,GS-11,46747530.92,Asia Pacific
+ZOSA-2025-143,Mission Frozen Beacon,Defense,Completed,Low,2021-10-18,2022-04-05,162173 Ryugu,GS-08,47347456.52,North America
+ZOSA-2021-144,Project Phantom Echo,Defense,Completed,Low,2024-06-11,2025-03-25,162173 Ryugu,GS-06,19058177.33,Asia Pacific
+ZOSA-2020-145,Operation Iron Horizon,Survey,Completed,Low,2025-04-19,2025-07-29,Kuiper Belt Object 2014 MU69,GS-12,759934.32,Europe
+ZOSA-2020-146,Operation Silver Starfall,Survey,Planned,Critical,2026-02-25,,Kepler-186f,GS-12,12263191.22,Europe
+ZOSA-2020-147,Operation Hollow Drift,Observation,Active,Low,2025-02-15,,Kuiper Belt Object 2014 MU69,GS-02,27034662.32,South America
+ZOSA-2025-148,Mission Nova Comet,Observation,Planned,Medium,2023-04-08,,243 Ida,GS-07,28747853.94,Oceania
+ZOSA-2021-149,Mission Deep Meridian,Observation,Aborted,Low,2020-10-04,2021-07-30,HD 40307g,GS-09,2654954.05,Europe
+ZOSA-2023-150,Project Silver Echo,Observation,Completed,Medium,2020-10-03,2021-04-27,4 Vesta,GS-04,2694616.57,Africa

@@ -1,0 +1,201 @@
+crew_id,full_name,role,specialty,ground_station_id,region,hire_date,clearance_level,email
+ZOSA-P-0001,Danielle Johnson,Analyst,Data Science,GS-09,Europe,2024-03-18,Top Secret,danielle.johnson@zenithorbital.org
+ZOSA-P-0002,Joshua Walker,Engineer,Data Science,GS-08,North America,2019-09-16,Secret,joshua.walker@zenithorbital.org
+ZOSA-P-0003,Jill Rhodes,Scientist,Propulsion,GS-08,North America,2021-04-05,Public,jill.rhodes@zenithorbital.org
+ZOSA-P-0004,Patricia Miller,Scientist,Optics,GS-04,Africa,2022-06-24,Confidential,patricia.miller@zenithorbital.org
+ZOSA-P-0005,Robert Johnson,Commander,Propulsion,GS-09,Europe,2019-05-30,Secret,robert.johnson@zenithorbital.org
+ZOSA-P-0006,Jeffery Wagner,Analyst,Optics,GS-04,Africa,2019-07-15,Secret,jeffery.wagner@zenithorbital.org
+ZOSA-P-0007,Anthony Gonzalez,Analyst,Orbital Mechanics,GS-06,Asia Pacific,2023-02-16,Confidential,anthony.gonzalez@zenithorbital.org
+ZOSA-P-0008,Debra Gardner,Commander,Astrobiology,GS-07,Oceania,2022-10-20,Top Secret,debra.gardner@zenithorbital.org
+ZOSA-P-0009,Jeffrey Lawrence,Commander,Optics,GS-08,North America,2024-10-27,Public,jeffrey.lawrence@zenithorbital.org
+ZOSA-P-0010,Lisa Smith,Commander,Orbital Mechanics,GS-02,South America,2023-10-30,Confidential,lisa.smith@zenithorbital.org
+ZOSA-P-0011,Linda Wolfe,Technician,Propulsion,GS-03,North America,2022-08-08,Public,linda.wolfe@zenithorbital.org
+ZOSA-P-0012,Matthew Moore,Analyst,Propulsion,GS-06,Asia Pacific,2024-01-01,Confidential,matthew.moore@zenithorbital.org
+ZOSA-P-0013,Susan Rogers,Engineer,Signal Processing,GS-07,Oceania,2022-12-10,Confidential,susan.rogers@zenithorbital.org
+ZOSA-P-0014,Christopher Davis,Analyst,Astrobiology,GS-12,Europe,2022-01-29,Confidential,christopher.davis@zenithorbital.org
+ZOSA-P-0015,Melanie Munoz,Scientist,Astrobiology,GS-01,Europe,2023-01-28,Confidential,melanie.munoz@zenithorbital.org
+ZOSA-P-0016,Lindsay Blair,Engineer,Astrophysics,GS-12,Europe,2020-08-07,Secret,lindsay.blair@zenithorbital.org
+ZOSA-P-0017,Amanda Dudley,Commander,Astrophysics,GS-11,Asia Pacific,2020-06-01,Public,amanda.dudley@zenithorbital.org
+ZOSA-P-0018,Nicholas Arnold,Analyst,Optics,GS-11,Asia Pacific,2023-04-18,Top Secret,nicholas.arnold@zenithorbital.org
+ZOSA-P-0019,Maria Montgomery,Technician,Data Science,GS-01,Europe,2024-01-17,Top Secret,maria.montgomery@zenithorbital.org
+ZOSA-P-0020,Michelle Ray,Commander,Orbital Mechanics,GS-06,Asia Pacific,2025-06-08,Public,michelle.ray@zenithorbital.org
+ZOSA-P-0021,Janet Williams,Commander,Optics,GS-06,Asia Pacific,2022-02-15,Public,janet.williams@zenithorbital.org
+ZOSA-P-0022,Jeremy Roberts,Scientist,Data Science,GS-02,South America,2024-08-06,Confidential,jeremy.roberts@zenithorbital.org
+ZOSA-P-0023,Christopher Hall,Scientist,Propulsion,GS-09,Europe,2021-12-02,Secret,christopher.hall@zenithorbital.org
+ZOSA-P-0024,Craig Ramirez,Technician,Propulsion,GS-04,Africa,2024-07-04,Public,craig.ramirez@zenithorbital.org
+ZOSA-P-0025,Cynthia Diaz,Scientist,Signal Processing,GS-03,North America,2020-12-08,Secret,cynthia.diaz@zenithorbital.org
+ZOSA-P-0026,Mitchell Clark,Scientist,Optics,GS-08,North America,2022-11-24,Secret,mitchell.clark@zenithorbital.org
+ZOSA-P-0027,Joseph Zuniga,Technician,Propulsion,GS-09,Europe,2022-05-13,Secret,joseph.zuniga@zenithorbital.org
+ZOSA-P-0028,Deborah Lynch,Engineer,Optics,GS-12,Europe,2024-09-14,Public,deborah.lynch@zenithorbital.org
+ZOSA-P-0029,George Daniel,Engineer,Communications,GS-04,Africa,2024-07-16,Public,george.daniel@zenithorbital.org
+ZOSA-P-0030,Frank Gray,Technician,Optics,GS-09,Europe,2024-03-29,Secret,frank.gray@zenithorbital.org
+ZOSA-P-0031,Veronica Bowman,Engineer,Orbital Mechanics,GS-09,Europe,2019-09-27,Public,veronica.bowman@zenithorbital.org
+ZOSA-P-0032,Angela Cohen,Commander,Astrobiology,GS-12,Europe,2023-08-05,Secret,angela.cohen@zenithorbital.org
+ZOSA-P-0033,Megan Parsons,Engineer,Optics,GS-02,South America,2019-10-31,Confidential,megan.parsons@zenithorbital.org
+ZOSA-P-0034,Jeremy Johnson,Technician,Optics,GS-11,Asia Pacific,2020-06-09,Secret,jeremy.johnson@zenithorbital.org
+ZOSA-P-0035,Leslie Adams,Technician,Data Science,GS-09,Europe,2020-06-12,Confidential,leslie.adams@zenithorbital.org
+ZOSA-P-0036,Jason Hahn,Scientist,Data Science,GS-01,Europe,2022-05-30,Public,jason.hahn@zenithorbital.org
+ZOSA-P-0037,Nancy Edwards,Engineer,Optics,GS-06,Asia Pacific,2024-10-26,Secret,nancy.edwards@zenithorbital.org
+ZOSA-P-0038,Diana Foster,Analyst,Communications,GS-02,South America,2026-02-14,Top Secret,diana.foster@zenithorbital.org
+ZOSA-P-0039,Robin Ellis,Engineer,Propulsion,GS-05,Europe,2025-11-21,Confidential,robin.ellis@zenithorbital.org
+ZOSA-P-0040,Joseph Wright,Engineer,Data Science,GS-09,Europe,2020-12-02,Confidential,joseph.wright@zenithorbital.org
+ZOSA-P-0041,Anna Baker,Technician,Optics,GS-12,Europe,2025-04-27,Public,anna.baker@zenithorbital.org
+ZOSA-P-0042,Brenda Hurst,Scientist,Astrophysics,GS-01,Europe,2025-06-20,Public,brenda.hurst@zenithorbital.org
+ZOSA-P-0043,Reginald Robinson,Technician,Astrobiology,GS-04,Africa,2025-12-06,Confidential,reginald.robinson@zenithorbital.org
+ZOSA-P-0044,Whitney Hicks,Technician,Propulsion,GS-08,North America,2022-05-22,Confidential,whitney.hicks@zenithorbital.org
+ZOSA-P-0045,Christopher Williams,Commander,Propulsion,GS-11,Asia Pacific,2024-02-01,Public,christopher.williams@zenithorbital.org
+ZOSA-P-0046,Daniel Burton,Engineer,Signal Processing,GS-01,Europe,2023-08-30,Confidential,daniel.burton@zenithorbital.org
+ZOSA-P-0047,Laura Henderson,Analyst,Data Science,GS-04,Africa,2022-07-04,Secret,laura.henderson@zenithorbital.org
+ZOSA-P-0048,Bryan James,Analyst,Astrobiology,GS-06,Asia Pacific,2020-06-19,Secret,bryan.james@zenithorbital.org
+ZOSA-P-0049,Wendy Rice,Technician,Orbital Mechanics,GS-09,Europe,2022-07-31,Public,wendy.rice@zenithorbital.org
+ZOSA-P-0050,Tasha Valencia,Analyst,Signal Processing,GS-02,South America,2021-10-12,Public,tasha.valencia@zenithorbital.org
+ZOSA-P-0051,Alexander Le,Analyst,Astrobiology,GS-01,Europe,2025-11-25,Confidential,alexander.le@zenithorbital.org
+ZOSA-P-0052,Erin Herrera,Analyst,Optics,GS-03,North America,2021-02-16,Secret,erin.herrera@zenithorbital.org
+ZOSA-P-0053,Joseph Davidson,Technician,Signal Processing,GS-08,North America,2024-08-04,Secret,joseph.davidson@zenithorbital.org
+ZOSA-P-0054,Daniel Graham,Scientist,Orbital Mechanics,GS-08,North America,2023-05-30,Confidential,daniel.graham@zenithorbital.org
+ZOSA-P-0055,Shawn Mckay,Engineer,Optics,GS-04,Africa,2019-07-19,Public,shawn.mckay@zenithorbital.org
+ZOSA-P-0056,Nancy Baker,Technician,Signal Processing,GS-08,North America,2022-03-16,Confidential,nancy.baker@zenithorbital.org
+ZOSA-P-0057,Vincent White,Commander,Data Science,GS-02,South America,2021-12-19,Secret,vincent.white@zenithorbital.org
+ZOSA-P-0058,Rita Harrell,Analyst,Astrophysics,GS-07,Oceania,2023-06-29,Public,rita.harrell@zenithorbital.org
+ZOSA-P-0059,Kenneth Fowler,Engineer,Optics,GS-09,Europe,2025-03-16,Public,kenneth.fowler@zenithorbital.org
+ZOSA-P-0060,Chelsea Hernandez,Technician,Signal Processing,GS-07,Oceania,2025-03-02,Public,chelsea.hernandez@zenithorbital.org
+ZOSA-P-0061,Kathryn Ryan,Technician,Orbital Mechanics,GS-10,Oceania,2020-06-11,Top Secret,kathryn.ryan@zenithorbital.org
+ZOSA-P-0062,Kimberly Moreno,Analyst,Optics,GS-07,Oceania,2025-04-03,Top Secret,kimberly.moreno@zenithorbital.org
+ZOSA-P-0063,Aaron Nguyen,Engineer,Astrobiology,GS-03,North America,2024-08-10,Public,aaron.nguyen@zenithorbital.org
+ZOSA-P-0064,Andrew Hickman,Engineer,Optics,GS-01,Europe,2024-04-24,Confidential,andrew.hickman@zenithorbital.org
+ZOSA-P-0065,Natasha Decker,Technician,Data Science,GS-03,North America,2022-09-05,Top Secret,natasha.decker@zenithorbital.org
+ZOSA-P-0066,Kyle Brown,Engineer,Astrobiology,GS-06,Asia Pacific,2025-11-30,Secret,kyle.brown@zenithorbital.org
+ZOSA-P-0067,Natalie Arroyo,Technician,Optics,GS-05,Europe,2024-09-08,Secret,natalie.arroyo@zenithorbital.org
+ZOSA-P-0068,Christopher Tucker,Commander,Propulsion,GS-09,Europe,2024-04-29,Secret,christopher.tucker@zenithorbital.org
+ZOSA-P-0069,Chad Hodges,Analyst,Orbital Mechanics,GS-06,Asia Pacific,2023-09-03,Confidential,chad.hodges@zenithorbital.org
+ZOSA-P-0070,Katie Anderson,Scientist,Signal Processing,GS-12,Europe,2021-12-23,Top Secret,katie.anderson@zenithorbital.org
+ZOSA-P-0071,Thomas Pierce,Technician,Communications,GS-10,Oceania,2019-07-30,Confidential,thomas.pierce@zenithorbital.org
+ZOSA-P-0072,Joseph Brennan,Technician,Astrobiology,GS-03,North America,2020-08-28,Secret,joseph.brennan@zenithorbital.org
+ZOSA-P-0073,Rodney Lewis,Scientist,Orbital Mechanics,GS-04,Africa,2021-02-20,Public,rodney.lewis@zenithorbital.org
+ZOSA-P-0074,Amber Blair,Commander,Data Science,GS-06,Asia Pacific,2023-08-19,Confidential,amber.blair@zenithorbital.org
+ZOSA-P-0075,James Collins,Technician,Signal Processing,GS-07,Oceania,2019-09-13,Secret,james.collins@zenithorbital.org
+ZOSA-P-0076,Wanda Santos,Engineer,Optics,GS-09,Europe,2024-05-13,Confidential,wanda.santos@zenithorbital.org
+ZOSA-P-0077,Samuel Holmes,Engineer,Signal Processing,GS-06,Asia Pacific,2024-12-23,Public,samuel.holmes@zenithorbital.org
+ZOSA-P-0078,David Walker,Analyst,Signal Processing,GS-06,Asia Pacific,2021-02-26,Top Secret,david.walker@zenithorbital.org
+ZOSA-P-0079,Matthew Chapman,Technician,Propulsion,GS-05,Europe,2021-07-10,Top Secret,matthew.chapman@zenithorbital.org
+ZOSA-P-0080,Jerry Robinson,Analyst,Communications,GS-05,Europe,2024-06-25,Public,jerry.robinson@zenithorbital.org
+ZOSA-P-0081,Chad Welch,Technician,Propulsion,GS-06,Asia Pacific,2022-03-24,Public,chad.welch@zenithorbital.org
+ZOSA-P-0082,Jeremy Whitehead,Technician,Astrobiology,GS-11,Asia Pacific,2023-06-05,Secret,jeremy.whitehead@zenithorbital.org
+ZOSA-P-0083,Michele Jones,Analyst,Astrophysics,GS-03,North America,2022-03-24,Top Secret,michele.jones@zenithorbital.org
+ZOSA-P-0084,John Caldwell,Analyst,Signal Processing,GS-02,South America,2021-11-16,Secret,john.caldwell@zenithorbital.org
+ZOSA-P-0085,Jason Anderson,Engineer,Propulsion,GS-04,Africa,2025-04-21,Confidential,jason.anderson@zenithorbital.org
+ZOSA-P-0086,Selena Duncan,Scientist,Communications,GS-03,North America,2021-09-20,Public,selena.duncan@zenithorbital.org
+ZOSA-P-0087,Thomas Mueller,Engineer,Communications,GS-09,Europe,2019-08-04,Public,thomas.mueller@zenithorbital.org
+ZOSA-P-0088,Lindsey Lee,Commander,Orbital Mechanics,GS-06,Asia Pacific,2020-07-17,Public,lindsey.lee@zenithorbital.org
+ZOSA-P-0089,Collin Jordan,Engineer,Astrobiology,GS-09,Europe,2024-05-02,Confidential,collin.jordan@zenithorbital.org
+ZOSA-P-0090,Rodney Owens,Analyst,Optics,GS-04,Africa,2022-03-15,Confidential,rodney.owens@zenithorbital.org
+ZOSA-P-0091,Jessica Nunez,Technician,Communications,GS-02,South America,2024-12-31,Secret,jessica.nunez@zenithorbital.org
+ZOSA-P-0092,Tracey Garcia,Engineer,Astrobiology,GS-01,Europe,2020-12-21,Top Secret,tracey.garcia@zenithorbital.org
+ZOSA-P-0093,Richard Morgan,Commander,Signal Processing,GS-01,Europe,2021-02-02,Top Secret,richard.morgan@zenithorbital.org
+ZOSA-P-0094,Michelle Wright,Scientist,Astrophysics,GS-05,Europe,2022-05-07,Confidential,michelle.wright@zenithorbital.org
+ZOSA-P-0095,James West,Analyst,Propulsion,GS-02,South America,2024-02-05,Top Secret,james.west@zenithorbital.org
+ZOSA-P-0096,Robert Ramirez,Technician,Signal Processing,GS-09,Europe,2020-07-03,Secret,robert.ramirez@zenithorbital.org
+ZOSA-P-0097,John Leblanc,Analyst,Communications,GS-08,North America,2020-04-06,Public,john.leblanc@zenithorbital.org
+ZOSA-P-0098,Scott Callahan,Commander,Propulsion,GS-12,Europe,2021-02-01,Public,scott.callahan@zenithorbital.org
+ZOSA-P-0099,Andrea Williams,Analyst,Communications,GS-06,Asia Pacific,2020-12-19,Confidential,andrea.williams@zenithorbital.org
+ZOSA-P-0100,Yvette Huff,Commander,Astrobiology,GS-11,Asia Pacific,2024-10-11,Public,yvette.huff@zenithorbital.org
+ZOSA-P-0101,Tanya House,Scientist,Data Science,GS-07,Oceania,2020-07-29,Confidential,tanya.house@zenithorbital.org
+ZOSA-P-0102,Melinda Martin,Scientist,Propulsion,GS-04,Africa,2023-04-21,Public,melinda.martin@zenithorbital.org
+ZOSA-P-0103,Todd Lewis,Analyst,Propulsion,GS-05,Europe,2025-07-13,Secret,todd.lewis@zenithorbital.org
+ZOSA-P-0104,Richard Brown,Analyst,Optics,GS-01,Europe,2021-08-25,Public,richard.brown@zenithorbital.org
+ZOSA-P-0105,Nicholas Galloway,Commander,Propulsion,GS-02,South America,2020-10-16,Confidential,nicholas.galloway@zenithorbital.org
+ZOSA-P-0106,Joseph Bowers,Analyst,Orbital Mechanics,GS-09,Europe,2026-03-01,Top Secret,joseph.bowers@zenithorbital.org
+ZOSA-P-0107,Spencer Henderson,Analyst,Communications,GS-05,Europe,2021-06-16,Top Secret,spencer.henderson@zenithorbital.org
+ZOSA-P-0108,Susan Cowan,Engineer,Signal Processing,GS-08,North America,2025-10-17,Public,susan.cowan@zenithorbital.org
+ZOSA-P-0109,Angela Higgins,Technician,Signal Processing,GS-12,Europe,2025-01-10,Secret,angela.higgins@zenithorbital.org
+ZOSA-P-0110,Eric Phillips,Engineer,Orbital Mechanics,GS-04,Africa,2024-11-22,Confidential,eric.phillips@zenithorbital.org
+ZOSA-P-0111,Tanya Riley,Analyst,Orbital Mechanics,GS-12,Europe,2025-04-29,Public,tanya.riley@zenithorbital.org
+ZOSA-P-0112,Amy Adkins,Technician,Communications,GS-09,Europe,2025-06-03,Confidential,amy.adkins@zenithorbital.org
+ZOSA-P-0113,Brian Silva,Analyst,Signal Processing,GS-03,North America,2020-04-21,Confidential,brian.silva@zenithorbital.org
+ZOSA-P-0114,Wesley Farrell,Technician,Signal Processing,GS-12,Europe,2020-01-08,Secret,wesley.farrell@zenithorbital.org
+ZOSA-P-0115,Eric Yu,Scientist,Signal Processing,GS-08,North America,2020-06-24,Confidential,eric.yu@zenithorbital.org
+ZOSA-P-0116,Christopher Lopez,Technician,Astrophysics,GS-08,North America,2025-04-07,Confidential,christopher.lopez@zenithorbital.org
+ZOSA-P-0117,Brooke Leonard,Scientist,Astrobiology,GS-05,Europe,2021-11-08,Secret,brooke.leonard@zenithorbital.org
+ZOSA-P-0118,Joe Wilson,Engineer,Orbital Mechanics,GS-12,Europe,2019-07-05,Confidential,joe.wilson@zenithorbital.org
+ZOSA-P-0119,Pamela Sanchez,Scientist,Astrophysics,GS-12,Europe,2019-10-10,Top Secret,pamela.sanchez@zenithorbital.org
+ZOSA-P-0120,Brooke Harvey,Scientist,Propulsion,GS-08,North America,2023-08-02,Public,brooke.harvey@zenithorbital.org
+ZOSA-P-0121,Robert Silva,Commander,Optics,GS-03,North America,2023-04-16,Confidential,robert.silva@zenithorbital.org
+ZOSA-P-0122,Alexandra Donovan,Commander,Orbital Mechanics,GS-07,Oceania,2025-01-17,Public,alexandra.donovan@zenithorbital.org
+ZOSA-P-0123,James Moran,Scientist,Data Science,GS-06,Asia Pacific,2025-01-09,Public,james.moran@zenithorbital.org
+ZOSA-P-0124,John Foster,Engineer,Astrophysics,GS-03,North America,2019-04-04,Top Secret,john.foster@zenithorbital.org
+ZOSA-P-0125,Emily Evans,Technician,Astrobiology,GS-08,North America,2024-12-18,Public,emily.evans@zenithorbital.org
+ZOSA-P-0126,Leslie Walton,Engineer,Signal Processing,GS-04,Africa,2022-11-18,Public,leslie.walton@zenithorbital.org
+ZOSA-P-0127,Charles Ellis,Scientist,Astrophysics,GS-04,Africa,2023-09-14,Confidential,charles.ellis@zenithorbital.org
+ZOSA-P-0128,Yolanda Ferrell,Engineer,Communications,GS-01,Europe,2019-10-03,Public,yolanda.ferrell@zenithorbital.org
+ZOSA-P-0129,Charles Lewis,Commander,Astrophysics,GS-01,Europe,2021-09-29,Secret,charles.lewis@zenithorbital.org
+ZOSA-P-0130,Joseph Mahoney,Commander,Communications,GS-07,Oceania,2025-01-19,Public,joseph.mahoney@zenithorbital.org
+ZOSA-P-0131,Nicole Suarez,Engineer,Propulsion,GS-01,Europe,2021-08-17,Secret,nicole.suarez@zenithorbital.org
+ZOSA-P-0132,Mike Moore,Technician,Optics,GS-12,Europe,2025-06-23,Confidential,mike.moore@zenithorbital.org
+ZOSA-P-0133,Martha Warner,Analyst,Communications,GS-11,Asia Pacific,2022-05-21,Secret,martha.warner@zenithorbital.org
+ZOSA-P-0134,Cheryl Archer,Technician,Communications,GS-11,Asia Pacific,2023-08-21,Public,cheryl.archer@zenithorbital.org
+ZOSA-P-0135,Destiny Smith,Technician,Data Science,GS-01,Europe,2026-01-08,Confidential,destiny.smith@zenithorbital.org
+ZOSA-P-0136,Lisa Evans,Commander,Astrophysics,GS-09,Europe,2022-11-11,Top Secret,lisa.evans@zenithorbital.org
+ZOSA-P-0137,Elizabeth Mcmillan,Commander,Optics,GS-11,Asia Pacific,2023-09-02,Confidential,elizabeth.mcmillan@zenithorbital.org
+ZOSA-P-0138,Dennis Wilson,Commander,Data Science,GS-05,Europe,2025-01-12,Confidential,dennis.wilson@zenithorbital.org
+ZOSA-P-0139,Daniel Tran,Analyst,Data Science,GS-04,Africa,2024-03-11,Top Secret,daniel.tran@zenithorbital.org
+ZOSA-P-0140,Joseph Jacobs,Commander,Astrobiology,GS-09,Europe,2025-04-01,Confidential,joseph.jacobs@zenithorbital.org
+ZOSA-P-0141,Jennifer Harris,Engineer,Propulsion,GS-07,Oceania,2021-04-12,Public,jennifer.harris@zenithorbital.org
+ZOSA-P-0142,Cynthia Baker,Commander,Optics,GS-02,South America,2020-01-14,Confidential,cynthia.baker@zenithorbital.org
+ZOSA-P-0143,Tracy Whitehead,Scientist,Propulsion,GS-04,Africa,2023-03-25,Confidential,tracy.whitehead@zenithorbital.org
+ZOSA-P-0144,Meghan Davis,Scientist,Orbital Mechanics,GS-10,Oceania,2021-02-09,Secret,meghan.davis@zenithorbital.org
+ZOSA-P-0145,Rodney Hill,Technician,Communications,GS-10,Oceania,2024-05-17,Public,rodney.hill@zenithorbital.org
+ZOSA-P-0146,Adam Wise,Analyst,Astrophysics,GS-06,Asia Pacific,2021-05-17,Top Secret,adam.wise@zenithorbital.org
+ZOSA-P-0147,Dana Green,Scientist,Signal Processing,GS-12,Europe,2021-09-20,Confidential,dana.green@zenithorbital.org
+ZOSA-P-0148,Joyce Arnold,Engineer,Astrobiology,GS-12,Europe,2021-09-07,Confidential,joyce.arnold@zenithorbital.org
+ZOSA-P-0149,Ronald Smith,Commander,Signal Processing,GS-05,Europe,2024-12-25,Confidential,ronald.smith@zenithorbital.org
+ZOSA-P-0150,Charles Ware,Analyst,Optics,GS-05,Europe,2024-10-01,Secret,charles.ware@zenithorbital.org
+ZOSA-P-0151,Rebecca Gardner,Scientist,Signal Processing,GS-08,North America,2022-08-04,Top Secret,rebecca.gardner@zenithorbital.org
+ZOSA-P-0152,Mary Aguilar,Analyst,Astrobiology,GS-06,Asia Pacific,2019-07-07,Confidential,mary.aguilar@zenithorbital.org
+ZOSA-P-0153,Earl Anderson,Engineer,Astrophysics,GS-04,Africa,2021-12-04,Confidential,earl.anderson@zenithorbital.org
+ZOSA-P-0154,Kyle Nolan,Technician,Astrobiology,GS-10,Oceania,2022-04-24,Public,kyle.nolan@zenithorbital.org
+ZOSA-P-0155,Laura Valencia,Engineer,Astrobiology,GS-06,Asia Pacific,2025-05-22,Secret,laura.valencia@zenithorbital.org
+ZOSA-P-0156,Rachel Clark,Technician,Optics,GS-08,North America,2021-11-20,Secret,rachel.clark@zenithorbital.org
+ZOSA-P-0157,John Garcia,Commander,Signal Processing,GS-08,North America,2020-11-20,Secret,john.garcia@zenithorbital.org
+ZOSA-P-0158,Kimberly Henson,Engineer,Data Science,GS-06,Asia Pacific,2025-02-16,Confidential,kimberly.henson@zenithorbital.org
+ZOSA-P-0159,Richard Oliver,Scientist,Astrophysics,GS-09,Europe,2019-11-01,Top Secret,richard.oliver@zenithorbital.org
+ZOSA-P-0160,Eric Spears,Scientist,Astrophysics,GS-11,Asia Pacific,2023-08-17,Public,eric.spears@zenithorbital.org
+ZOSA-P-0161,Michelle Cherry,Engineer,Orbital Mechanics,GS-11,Asia Pacific,2020-09-10,Public,michelle.cherry@zenithorbital.org
+ZOSA-P-0162,Lisa Keith,Commander,Optics,GS-09,Europe,2019-09-05,Confidential,lisa.keith@zenithorbital.org
+ZOSA-P-0163,Angel Doyle,Technician,Signal Processing,GS-11,Asia Pacific,2024-06-21,Public,angel.doyle@zenithorbital.org
+ZOSA-P-0164,Martin Galvan,Technician,Astrobiology,GS-09,Europe,2019-02-18,Public,martin.galvan@zenithorbital.org
+ZOSA-P-0165,Leah Shields,Analyst,Propulsion,GS-12,Europe,2019-03-12,Confidential,leah.shields@zenithorbital.org
+ZOSA-P-0166,Lisa Adams,Commander,Data Science,GS-12,Europe,2020-03-14,Top Secret,lisa.adams@zenithorbital.org
+ZOSA-P-0167,Kristin Rodriguez,Engineer,Communications,GS-09,Europe,2021-02-25,Confidential,kristin.rodriguez@zenithorbital.org
+ZOSA-P-0168,Monica Garrison,Analyst,Propulsion,GS-05,Europe,2023-06-14,Public,monica.garrison@zenithorbital.org
+ZOSA-P-0169,Jeffrey Velasquez,Commander,Communications,GS-07,Oceania,2021-07-14,Public,jeffrey.velasquez@zenithorbital.org
+ZOSA-P-0170,Steven Torres,Scientist,Orbital Mechanics,GS-02,South America,2023-07-19,Public,steven.torres@zenithorbital.org
+ZOSA-P-0171,Laura Perez,Commander,Astrophysics,GS-09,Europe,2026-02-21,Public,laura.perez@zenithorbital.org
+ZOSA-P-0172,Andrew Lee,Scientist,Signal Processing,GS-03,North America,2023-11-13,Confidential,andrew.lee@zenithorbital.org
+ZOSA-P-0173,Mark Lin,Technician,Orbital Mechanics,GS-06,Asia Pacific,2024-12-03,Top Secret,mark.lin@zenithorbital.org
+ZOSA-P-0174,Tammy Ramirez,Engineer,Signal Processing,GS-04,Africa,2022-01-15,Public,tammy.ramirez@zenithorbital.org
+ZOSA-P-0175,Darlene Ross,Analyst,Astrophysics,GS-02,South America,2021-01-04,Top Secret,darlene.ross@zenithorbital.org
+ZOSA-P-0176,Tina Herrera,Scientist,Communications,GS-06,Asia Pacific,2025-08-01,Public,tina.herrera@zenithorbital.org
+ZOSA-P-0177,Sheila Wilson,Commander,Orbital Mechanics,GS-12,Europe,2022-05-10,Public,sheila.wilson@zenithorbital.org
+ZOSA-P-0178,Tara White,Technician,Astrobiology,GS-04,Africa,2025-01-23,Public,tara.white@zenithorbital.org
+ZOSA-P-0179,Sydney Baker,Engineer,Orbital Mechanics,GS-12,Europe,2024-08-13,Secret,sydney.baker@zenithorbital.org
+ZOSA-P-0180,Daniel Hamilton,Scientist,Orbital Mechanics,GS-06,Asia Pacific,2023-11-26,Public,daniel.hamilton@zenithorbital.org
+ZOSA-P-0181,Jessica Edwards,Analyst,Astrobiology,GS-02,South America,2022-08-29,Public,jessica.edwards@zenithorbital.org
+ZOSA-P-0182,Catherine Dixon,Commander,Signal Processing,GS-05,Europe,2021-07-23,Public,catherine.dixon@zenithorbital.org
+ZOSA-P-0183,Paul Ray,Commander,Data Science,GS-07,Oceania,2025-07-27,Confidential,paul.ray@zenithorbital.org
+ZOSA-P-0184,Jonathan Fletcher,Technician,Propulsion,GS-02,South America,2021-10-06,Secret,jonathan.fletcher@zenithorbital.org
+ZOSA-P-0185,Aaron Frost,Analyst,Data Science,GS-02,South America,2023-04-06,Secret,aaron.frost@zenithorbital.org
+ZOSA-P-0186,Amanda Ball,Engineer,Astrobiology,GS-11,Asia Pacific,2022-07-21,Public,amanda.ball@zenithorbital.org
+ZOSA-P-0187,Judy Lambert,Scientist,Propulsion,GS-02,South America,2023-12-27,Public,judy.lambert@zenithorbital.org
+ZOSA-P-0188,Michael Jones,Scientist,Data Science,GS-05,Europe,2019-12-24,Public,michael.jones@zenithorbital.org
+ZOSA-P-0189,Elizabeth Rivera,Technician,Astrobiology,GS-08,North America,2020-02-28,Public,elizabeth.rivera@zenithorbital.org
+ZOSA-P-0190,Lee Charles,Technician,Orbital Mechanics,GS-06,Asia Pacific,2025-09-11,Confidential,lee.charles@zenithorbital.org
+ZOSA-P-0191,Jennifer Evans,Commander,Astrophysics,GS-06,Asia Pacific,2022-04-10,Confidential,jennifer.evans@zenithorbital.org
+ZOSA-P-0192,Kyle Ortiz,Technician,Communications,GS-02,South America,2025-05-31,Confidential,kyle.ortiz@zenithorbital.org
+ZOSA-P-0193,Richard Phillips,Commander,Data Science,GS-11,Asia Pacific,2020-07-22,Public,richard.phillips@zenithorbital.org
+ZOSA-P-0194,David Fisher,Commander,Data Science,GS-05,Europe,2019-09-17,Public,david.fisher@zenithorbital.org
+ZOSA-P-0195,Shelby Byrd,Commander,Propulsion,GS-05,Europe,2024-06-06,Secret,shelby.byrd@zenithorbital.org
+ZOSA-P-0196,Raven Gilbert,Analyst,Communications,GS-06,Asia Pacific,2026-01-04,Confidential,raven.gilbert@zenithorbital.org
+ZOSA-P-0197,Kevin Kelley,Engineer,Signal Processing,GS-10,Oceania,2020-03-14,Public,kevin.kelley@zenithorbital.org
+ZOSA-P-0198,Aaron Mitchell,Commander,Optics,GS-01,Europe,2025-12-15,Public,aaron.mitchell@zenithorbital.org
+ZOSA-P-0199,Russell Carpenter,Commander,Optics,GS-06,Asia Pacific,2023-10-30,Secret,russell.carpenter@zenithorbital.org
+ZOSA-P-0200,Diana Marshall,Technician,Data Science,GS-11,Asia Pacific,2022-05-15,Public,diana.marshall@zenithorbital.org
