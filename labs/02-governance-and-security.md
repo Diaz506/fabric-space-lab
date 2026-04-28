@@ -154,22 +154,86 @@ Sensitivity labels classify your data and enforce protection policies automatica
 ### Step 2: Create Labels in Microsoft Purview
 
 1. Navigate to [purview.microsoft.com](https://purview.microsoft.com) → **Information Protection** → **Sensitivity labels**
-2. Create the following labels (or verify they exist):
+2. Click **+ Create a label** — this opens the **New sensitivity label** wizard
 
-| Label | Color | Description | Protection |
-|-------|-------|-------------|------------|
-| **Public** | 🟢 Green | Open data, no restrictions | None |
-| **Internal** | 🔵 Blue | Internal use only | Watermark on exports |
-| **Confidential** | 🟠 Orange | Sensitive business data | Encryption, no external sharing |
-| **Top Secret** | 🔴 Red | Classified mission data | Encryption, no copy/paste/print, access audit |
+You'll create **4 labels** (start with Public, then repeat for each). The wizard has 5 steps:
 
-3. **Publish** the labels by creating a label policy that targets your ZOSA security groups
+---
 
-### Step 3: Apply Labels to Workspaces
+#### 🔁 Repeat the wizard for each label below:
+
+**A) Label details** (first page of the wizard)
+
+| Field | Public | Internal | Confidential | Top Secret |
+|-------|--------|----------|--------------|------------|
+| **Name** | `Public` | `Internal` | `Confidential` | `TopSecret` |
+| **Display name** | `Public` | `Internal` | `Confidential` | `Top Secret` |
+| **Label priority** | Leave as assigned | Leave as assigned | Leave as assigned | Leave as assigned (Highest) |
+| **Description for users** | Open data — no restrictions apply | For internal ZOSA use only | Sensitive business data — restricted sharing | Classified mission data — maximum protection |
+| **Description for admins** | No protection applied | Watermark on exports | Encryption, block external sharing | Full encryption, no copy/paste/print, access audit |
+
+> **💡 Tip:** The **Name** field cannot contain spaces (use `TopSecret` not `Top Secret`). The **Display name** is what users see and can contain spaces. **Label priority** determines which label wins when multiple apply — leave the defaults (the last label you create gets the highest priority, which is what we want for Top Secret).
+
+**B) Scope** — Define where this label can be used:
+
+| Label | Items (files, emails) | Groups & sites |
+|-------|-----------------------|----------------|
+| **Public** | ✅ Check | ✅ Check |
+| **Internal** | ✅ Check | ✅ Check |
+| **Confidential** | ✅ Check | ✅ Check |
+| **Top Secret** | ✅ Check | ❌ Uncheck (applied at item level, not container) |
+
+**C) Items** — Configure protection for files and emails:
+
+| Label | Encryption | Content Marking |
+|-------|-----------|-----------------|
+| **Public** | ❌ None | ❌ None |
+| **Internal** | ❌ None | ✅ Enable → **Watermark** → Text: `ZOSA Internal` |
+| **Confidential** | ✅ Enable → **Configure encryption settings** → "Only people in your organization" | ✅ Enable → **Header** → Text: `ZOSA Confidential` + **Watermark** → Text: `Confidential` |
+| **Top Secret** | ✅ Enable → **Configure encryption settings** → "Only people in your organization" → under **Assign permissions**: uncheck Copy, Print | ✅ Enable → **Header** → Text: `🔴 TOP SECRET — ZOSA CLASSIFIED` + **Watermark** → Text: `TOP SECRET` |
+
+**D) Groups & sites** — Container-level protection (only for labels with this scope enabled):
+
+| Label | External sharing | Privacy | Conditional Access |
+|-------|------------------|---------|--------------------|
+| **Public** | Allow external sharing | Public | No restriction |
+| **Internal** | Organization only | Private | No restriction |
+| **Confidential** | Organization only | Private | Require MFA (if available) |
+
+**E) Finish** — Review the summary and click **Create label**
+
+> **⚠️ Important:** After creating all 4 labels, verify the **priority order** in the labels list. Drag to reorder if needed so that: Public (lowest) < Internal < Confidential < Top Secret (highest).
+
+---
+
+### Step 3: Publish Labels with a Policy
+
+Labels exist but aren't usable until you publish them:
+
+1. In **Sensitivity labels**, click **Publish labels** (top toolbar)
+2. Click **Choose sensitivity labels to publish** → select all 4 labels (Public, Internal, Confidential, Top Secret)
+3. **Assign admin units** → Leave as default (Full directory)
+4. **Publish to users and groups** → Add your ZOSA security groups:
+   - `ZOSA-Admins`
+   - `ZOSA-Engineers`
+   - `ZOSA-Scientists`
+   - `ZOSA-Executives`
+5. **Policy settings**:
+   - ✅ *Users must provide a justification to remove a label or lower its classification*
+   - **Default label for documents**: `Internal`
+   - **Default label for emails**: `Internal`
+6. **Name your policy**: `ZOSA Sensitivity Policy`
+7. Click **Submit**
+
+> **⏳ Note:** Label policies can take **up to 24 hours** to propagate to all users. If labels don't appear immediately in Fabric, wait and check again later.
+
+### Step 4: Apply Labels to Workspaces
+
+Once the policy has propagated:
 
 1. Open **ZOSA-Dev** → **Settings** → **Sensitivity label** → Select **Confidential**
 2. Open **ZOSA-Test** → Apply **Confidential**
-3. Open **ZOSA-Prod** → Apply **Confidential** (individual items with classified data will get **Top Secret**)
+3. Open **ZOSA-Prod** → Apply **Confidential** (individual items with classified data will get **Top Secret** later)
 
 **⚠️ Licensing Requirement — Read Before Proceeding:**
 
@@ -184,7 +248,7 @@ For this lab, you need **at least E3 or AIP P1** to manually apply sensitivity l
 
 > **Trial tenants:** If you're using a Microsoft 365 E5 trial, sensitivity labels are included. You can start a trial at [admin.microsoft.com](https://admin.microsoft.com) → **Billing** → **Purchase services** → search for "Microsoft 365 E5".
 
-### Step 4: Configure Endorsement
+### Step 5: Configure Endorsement
 
 Endorsement lets you mark trusted, validated datasets so users know which data to rely on:
 
@@ -195,7 +259,7 @@ Endorsement lets you mark trusted, validated datasets so users know which data t
 
 **💡 Tip:** In later modules, once you build your Gold-layer datasets, you'll mark them as **Certified**. This tells analysts: "This is the single source of truth."
 
-### Step 5: Enable Microsoft Purview Data Catalog
+### Step 6: Enable Microsoft Purview Data Catalog
 
 1. In [purview.microsoft.com](https://purview.microsoft.com), go to **Data Catalog**
 2. Register your Fabric tenant as a data source

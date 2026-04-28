@@ -326,32 +326,129 @@
         <div class="step-body">
           <ol>
             <li>Navigate to <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a> → <strong>Information Protection</strong> → <strong>Sensitivity labels</strong></li>
-            <li>Create the following labels (or verify they exist):</li>
+            <li>Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard</li>
+          </ol>
+          <p>You'll create <strong>4 labels</strong> (start with Public, then repeat for each). The wizard has 5 steps:</p>
+        </div>
+      </div>
+
+      <h4>🔁 Repeat the wizard for each label:</h4>
+
+      <h5>A) Label details (first page)</h5>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Field</th><th>Public</th><th>Internal</th><th>Confidential</th><th>Top Secret</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Name</strong></td><td><code>Public</code></td><td><code>Internal</code></td><td><code>Confidential</code></td><td><code>TopSecret</code></td></tr>
+          <tr><td><strong>Display name</strong></td><td><code>Public</code></td><td><code>Internal</code></td><td><code>Confidential</code></td><td><code>Top Secret</code></td></tr>
+          <tr><td><strong>Label priority</strong></td><td>Leave default</td><td>Leave default</td><td>Leave default</td><td>Leave default (Highest)</td></tr>
+          <tr><td><strong>Description for users</strong></td><td>Open data — no restrictions apply</td><td>For internal ZOSA use only</td><td>Sensitive business data — restricted sharing</td><td>Classified mission data — maximum protection</td></tr>
+          <tr><td><strong>Description for admins</strong></td><td>No protection applied</td><td>Watermark on exports</td><td>Encryption, block external sharing</td><td>Full encryption, no copy/paste/print, access audit</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <strong>💡 Tip:</strong> The <strong>Name</strong> field cannot contain spaces (use <code>TopSecret</code> not <code>Top Secret</code>). The <strong>Display name</strong> is what users see and can contain spaces. <strong>Label priority</strong> determines which label wins when multiple apply — leave the defaults (the last label you create gets the highest priority, which is what we want for Top Secret).
+      </div>
+
+      <h5>B) Scope — Where this label can be used</h5>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>Items (files, emails)</th><th>Groups &amp; sites</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Public</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
+          <tr><td><strong>Internal</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
+          <tr><td><strong>Confidential</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>✅ Check</td><td>❌ Uncheck (item level only)</td></tr>
+        </tbody>
+      </table>
+
+      <h5>C) Items — Protection for files and emails</h5>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>Encryption</th><th>Content Marking</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Public</strong></td><td>❌ None</td><td>❌ None</td></tr>
+          <tr><td><strong>Internal</strong></td><td>❌ None</td><td>✅ Watermark → <code>ZOSA Internal</code></td></tr>
+          <tr><td><strong>Confidential</strong></td><td>✅ Enable → "Only people in your organization"</td><td>✅ Header: <code>ZOSA Confidential</code> + Watermark: <code>Confidential</code></td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>✅ Enable → "Only people in your organization" → uncheck Copy, Print</td><td>✅ Header: <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code> + Watermark: <code>TOP SECRET</code></td></tr>
+        </tbody>
+      </table>
+
+      <h5>D) Groups &amp; sites — Container-level protection</h5>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>External sharing</th><th>Privacy</th><th>Conditional Access</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Public</strong></td><td>Allow external sharing</td><td>Public</td><td>No restriction</td></tr>
+          <tr><td><strong>Internal</strong></td><td>Organization only</td><td>Private</td><td>No restriction</td></tr>
+          <tr><td><strong>Confidential</strong></td><td>Organization only</td><td>Private</td><td>Require MFA (if available)</td></tr>
+        </tbody>
+      </table>
+
+      <h5>E) Finish</h5>
+      <p>Review the summary and click <strong>Create label</strong>.</p>
+
+      <div class="mission-alert warning">
+        <div class="alert-title">Priority Order</div>
+        <p>After creating all 4 labels, verify the <strong>priority order</strong> in the labels list. Drag to reorder if needed: Public (lowest) &lt; Internal &lt; Confidential &lt; Top Secret (highest).</p>
+      </div>
+
+      <h3>Step 3: Publish Labels with a Policy</h3>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Publish Labels</div>
+        <div class="step-body">
+          <p>Labels exist but aren't usable until you publish them:</p>
+          <ol>
+            <li>In <strong>Sensitivity labels</strong>, click <strong>Publish labels</strong> (top toolbar)</li>
+            <li>Click <strong>Choose sensitivity labels to publish</strong> → select all 4 labels (Public, Internal, Confidential, Top Secret)</li>
+            <li><strong>Assign admin units</strong> → Leave as default (Full directory)</li>
+            <li><strong>Publish to users and groups</strong> → Add your ZOSA security groups:
+              <ul>
+                <li><code>ZOSA-Admins</code></li>
+                <li><code>ZOSA-Engineers</code></li>
+                <li><code>ZOSA-Scientists</code></li>
+                <li><code>ZOSA-Executives</code></li>
+              </ul>
+            </li>
+            <li><strong>Policy settings</strong>:
+              <ul>
+                <li>✅ <em>Users must provide a justification to remove a label or lower its classification</em></li>
+                <li><strong>Default label for documents:</strong> <code>Internal</code></li>
+                <li><strong>Default label for emails:</strong> <code>Internal</code></li>
+              </ul>
+            </li>
+            <li><strong>Name your policy:</strong> <code>ZOSA Sensitivity Policy</code></li>
+            <li>Click <strong>Submit</strong></li>
           </ol>
         </div>
       </div>
 
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>Color</th><th>Description</th><th>Protection</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Public</strong></td><td>🟢 Green</td><td>Open data, no restrictions</td><td>None</td></tr>
-          <tr><td><strong>Internal</strong></td><td>🔵 Blue</td><td>Internal use only</td><td>Watermark on exports</td></tr>
-          <tr><td><strong>Confidential</strong></td><td>🟠 Orange</td><td>Sensitive business data</td><td>Encryption, no external sharing</td></tr>
-          <tr><td><strong>Top Secret</strong></td><td>🔴 Red</td><td>Classified mission data</td><td>Encryption, no copy/paste/print, access audit</td></tr>
-        </tbody>
-      </table>
+      <div class="info-box">
+        <strong>⏳ Note:</strong> Label policies can take <strong>up to 24 hours</strong> to propagate to all users. If labels don't appear immediately in Fabric, wait and check again later.
+      </div>
+
+      <h3>Step 4: Apply Labels to Workspaces</h3>
 
       <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">Publish &amp; Apply Labels</div>
+        <div class="step-number">4</div>
+        <div class="step-title">Apply to Workspaces</div>
         <div class="step-body">
+          <p>Once the policy has propagated:</p>
           <ol>
-            <li><strong>Publish</strong> the labels by creating a label policy that targets your ZOSA security groups</li>
             <li>Open <strong>ZOSA-Dev</strong> → <strong>Settings</strong> → <strong>Sensitivity label</strong> → Select <strong>Confidential</strong></li>
             <li>Open <strong>ZOSA-Test</strong> → Apply <strong>Confidential</strong></li>
-            <li>Open <strong>ZOSA-Prod</strong> → Apply <strong>Confidential</strong> (individual items with classified data will get <strong>Top Secret</strong>)</li>
+            <li>Open <strong>ZOSA-Prod</strong> → Apply <strong>Confidential</strong> (individual items with classified data will get <strong>Top Secret</strong> later)</li>
           </ol>
         </div>
       </div>
@@ -375,7 +472,7 @@
         <p><strong>Trial tenants:</strong> If you're using a Microsoft 365 E5 trial, sensitivity labels are included. You can start a trial at <a href="https://admin.microsoft.com" target="_blank" rel="noopener">admin.microsoft.com</a> → <strong>Billing</strong> → <strong>Purchase services</strong> → search for "Microsoft 365 E5".</p>
       </div>
 
-      <h3>Step 4: Configure Endorsement</h3>
+      <h3>Step 5: Configure Endorsement</h3>
 
       <p>Endorsement lets you mark trusted, validated datasets so users know which data to rely on:</p>
 
@@ -400,7 +497,7 @@
         <p>In later modules, once you build your Gold-layer datasets, you'll mark them as <strong>Certified</strong>. This tells analysts: "This is the single source of truth."</p>
       </div>
 
-      <h3>Step 5: Enable Microsoft Purview Data Catalog</h3>
+      <h3>Step 6: Enable Microsoft Purview Data Catalog</h3>
 
       <div class="step-card">
         <div class="step-number">5</div>
