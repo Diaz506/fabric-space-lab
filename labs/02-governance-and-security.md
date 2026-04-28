@@ -66,8 +66,24 @@ To properly validate security rules later, you need accounts that represent diff
 | **ZOSA Scientist** | `zosa.scientist@{your-tenant}.onmicrosoft.com` | Set a temporary password | Tests restricted data views |
 | **ZOSA Executive** | `zosa.executive@{your-tenant}.onmicrosoft.com` | Set a temporary password | Tests executive-level access |
 
-5. For each user, under **Assignments**, assign a **Microsoft Fabric (Free)** license
-6. **Sign in once** as each test user (in an InPrivate/Incognito browser window) to accept the terms and change the temporary password
+5. Click **Create** for each user
+
+### Step 1b: Assign Fabric Licenses (M365 Admin Center)
+
+License assignments are managed in the **Microsoft 365 Admin Center**, not Entra ID.
+
+1. Go to [admin.microsoft.com](https://admin.microsoft.com)
+2. Navigate to **Users** → **Active users**
+3. Select each test user → click **Licenses and apps**
+4. Assign a **Microsoft Fabric (Free)** license (or your trial license)
+5. Click **Save changes**
+
+### Step 1c: First Sign-In
+
+1. Open an **InPrivate / Incognito** browser window
+2. Go to [app.fabric.microsoft.com](https://app.fabric.microsoft.com)
+3. Sign in as the test user and change the temporary password
+4. Repeat for the second test user
 
 > **💡 Tip:** Use separate browser profiles or InPrivate windows to test as different users. This avoids cached-auth confusion that can make security appear broken.
 

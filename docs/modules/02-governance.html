@@ -158,8 +158,7 @@
             <li>Go to <strong>Identity</strong> → <strong>Users</strong> → <strong>All users</strong></li>
             <li>Click <strong>New user</strong> → <strong>Create new user</strong></li>
             <li>Create each user per the table below</li>
-            <li>Assign a <strong>Microsoft Fabric (Free)</strong> license under Assignments</li>
-            <li><strong>Sign in once</strong> as each user (InPrivate browser) to accept terms and change password</li>
+            <li>Click <strong>Create</strong> for each user</li>
           </ol>
         </div>
       </div>
@@ -173,6 +172,34 @@
           <tr><td><strong>ZOSA Executive</strong></td><td><code>zosa.executive@{tenant}.onmicrosoft.com</code></td><td>Tests executive-level access</td></tr>
         </tbody>
       </table>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Assign Fabric Licenses (M365 Admin Center)</div>
+        <div class="step-body">
+          <p>License assignments are managed in the <strong>Microsoft 365 Admin Center</strong>, not Entra ID.</p>
+          <ol>
+            <li>Go to <a href="https://admin.microsoft.com" target="_blank" rel="noopener">admin.microsoft.com</a></li>
+            <li>Navigate to <strong>Users</strong> → <strong>Active users</strong></li>
+            <li>Select each test user → click <strong>Licenses and apps</strong></li>
+            <li>Assign a <strong>Microsoft Fabric (Free)</strong> license (or your trial license)</li>
+            <li>Click <strong>Save changes</strong></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">First Sign-In for Each Test User</div>
+        <div class="step-body">
+          <ol>
+            <li>Open an <strong>InPrivate / Incognito</strong> browser window</li>
+            <li>Go to <a href="https://app.fabric.microsoft.com" target="_blank" rel="noopener">app.fabric.microsoft.com</a></li>
+            <li>Sign in as the test user and change the temporary password</li>
+            <li>Repeat for the second test user</li>
+          </ol>
+        </div>
+      </div>
 
       <div class="mission-alert tip">
         <div class="alert-title">Browser Tip</div>
