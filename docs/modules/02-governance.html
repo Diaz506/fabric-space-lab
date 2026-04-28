@@ -373,19 +373,50 @@
         </tbody>
       </table>
 
-      <h5>C) Items — Protection for files and emails</h5>
+      <h5>C) Items — "Choose protection settings for the types of items you selected"</h5>
+
+      <p>This page shows two checkboxes. Check them based on the label:</p>
 
       <table class="data-table">
         <thead>
-          <tr><th>Label</th><th>Encryption</th><th>Content Marking</th></tr>
+          <tr><th>Label</th><th>☐ Control access</th><th>☐ Apply content marking</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Public</strong></td><td>❌ None</td><td>❌ None</td></tr>
-          <tr><td><strong>Internal</strong></td><td>❌ None</td><td>✅ Watermark → <code>ZOSA Internal</code></td></tr>
-          <tr><td><strong>Confidential</strong></td><td>✅ Enable → "Only people in your organization"</td><td>✅ Header: <code>ZOSA Confidential</code> + Watermark: <code>Confidential</code></td></tr>
-          <tr><td><strong>Top Secret</strong></td><td>✅ Enable → "Only people in your organization" → uncheck Copy, Print</td><td>✅ Header: <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code> + Watermark: <code>TOP SECRET</code></td></tr>
+          <tr><td><strong>Public</strong></td><td>❌ Leave unchecked</td><td>❌ Leave unchecked</td></tr>
+          <tr><td><strong>Internal</strong></td><td>❌ Leave unchecked</td><td>✅ Check</td></tr>
+          <tr><td><strong>Confidential</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
         </tbody>
       </table>
+
+      <p><strong>If you checked "Control access"</strong> → the next page configures encryption:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>Encryption settings</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Confidential</strong></td><td>✅ <strong>Configure encryption settings</strong> → Select "Only people in your organization" → Leave default permissions</td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>✅ <strong>Configure encryption settings</strong> → Select "Only people in your organization" → Under <strong>Assign permissions</strong>: remove Copy and Print rights</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>If you checked "Apply content marking"</strong> → the next page configures headers, footers, and watermarks:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Label</th><th>Header</th><th>Watermark</th><th>Footer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Internal</strong></td><td>—</td><td>✅ Turn on → Text: <code>ZOSA Internal</code></td><td>—</td></tr>
+          <tr><td><strong>Confidential</strong></td><td>✅ Turn on → Text: <code>ZOSA Confidential</code></td><td>✅ Turn on → Text: <code>Confidential</code></td><td>—</td></tr>
+          <tr><td><strong>Top Secret</strong></td><td>✅ Turn on → Text: <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code></td><td>✅ Turn on → Text: <code>TOP SECRET</code></td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <strong>💡 Note:</strong> For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
+      </div>
 
       <h5>D) Groups &amp; sites — Container-level protection</h5>
 

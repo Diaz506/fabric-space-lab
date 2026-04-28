@@ -187,14 +187,33 @@ Click **+ Create a label** — this opens the **New sensitivity label** wizard. 
 | **Confidential** | ✅ Check | ✅ Check |
 | **Top Secret** | ✅ Check | ❌ Uncheck (applied at item level, not container) |
 
-**C) Items** — Configure protection for files and emails:
+**C) Items** — "Choose protection settings for the types of items you selected":
 
-| Label | Encryption | Content Marking |
-|-------|-----------|-----------------|
-| **Public** | ❌ None | ❌ None |
-| **Internal** | ❌ None | ✅ Enable → **Watermark** → Text: `ZOSA Internal` |
-| **Confidential** | ✅ Enable → **Configure encryption settings** → "Only people in your organization" | ✅ Enable → **Header** → Text: `ZOSA Confidential` + **Watermark** → Text: `Confidential` |
-| **Top Secret** | ✅ Enable → **Configure encryption settings** → "Only people in your organization" → under **Assign permissions**: uncheck Copy, Print | ✅ Enable → **Header** → Text: `🔴 TOP SECRET — ZOSA CLASSIFIED` + **Watermark** → Text: `TOP SECRET` |
+This page shows two checkboxes. Check them based on the label:
+
+| Label | ☐ Control access | ☐ Apply content marking |
+|-------|-------------------|------------------------|
+| **Public** | ❌ Leave unchecked | ❌ Leave unchecked |
+| **Internal** | ❌ Leave unchecked | ✅ Check |
+| **Confidential** | ✅ Check | ✅ Check |
+| **Top Secret** | ✅ Check | ✅ Check |
+
+**If you checked "Control access"** → the next page lets you configure encryption:
+
+| Label | Encryption settings |
+|-------|---------------------|
+| **Confidential** | ✅ **Configure encryption settings** → Select "Only people in your organization" → Leave default permissions |
+| **Top Secret** | ✅ **Configure encryption settings** → Select "Only people in your organization" → Under **Assign permissions**: remove Copy and Print rights |
+
+**If you checked "Apply content marking"** → the next page lets you add headers, footers, and watermarks:
+
+| Label | Header | Watermark | Footer |
+|-------|--------|-----------|--------|
+| **Internal** | — | ✅ Turn on → Text: `ZOSA Internal` | — |
+| **Confidential** | ✅ Turn on → Text: `ZOSA Confidential` | ✅ Turn on → Text: `Confidential` | — |
+| **Top Secret** | ✅ Turn on → Text: `🔴 TOP SECRET — ZOSA CLASSIFIED` | ✅ Turn on → Text: `TOP SECRET` | — |
+
+> **💡 Note:** For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
 
 **D) Groups & sites** — Container-level protection (only for labels with this scope enabled):
 
