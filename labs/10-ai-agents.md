@@ -286,15 +286,15 @@ Simulate a critical asteroid detection to verify the full workflow.
    from datetime import datetime, timedelta
 
    test_asteroid = Row(
-       asteroid_id="TEST-2029-XR7",
-       asteroid_name="2029 XR7",
+       neo_reference_id="TEST-2029-XR7",
+       name="2029 XR7",
        hazard_score=187.4,
-       miss_distance_au=0.0023,
+       min_miss_distance_au=0.0023,
        risk_category="Critical",
-       estimated_close_approach=(datetime.now() + timedelta(days=45)).strftime("%Y-%m-%d"),
-       velocity_km_s=28.7,
-       diameter_m=340,
-       detection_timestamp=datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+       max_relative_velocity_kmps=28.7,
+       avg_diameter_km=0.34,
+       close_approach_count=1,
+       is_potentially_hazardous=True
    )
 
    df = spark.createDataFrame([test_asteroid])
@@ -310,7 +310,7 @@ Simulate a critical asteroid detection to verify the full workflow.
 
 > ⚠️ **Cleanup:** After testing, remove the test row to avoid confusion:
 > ```python
-> spark.sql("DELETE FROM zosa_lakehouse.gold_asteroid_risk WHERE asteroid_id = 'TEST-2029-XR7'")
+> spark.sql("DELETE FROM zosa_lakehouse.gold_asteroid_risk WHERE neo_reference_id = 'TEST-2029-XR7'")
 > ```
 
 ---

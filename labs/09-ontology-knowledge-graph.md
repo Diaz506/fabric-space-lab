@@ -43,8 +43,8 @@ Before you touch Fabric, grab a whiteboard (or a Mermaid diagram). Good ontology
 |---|---|---|
 | **Asteroid** | `neo_id`, `name`, `diameter`, `is_hazardous`, `risk_category` | `gold_asteroid_risk` |
 | **Mission** | `mission_id`, `name`, `type`, `status`, `budget` | `gold_mission_summary` |
-| **Crew Member** | `crew_id`, `name`, `role`, `specialty`, `clearance` | `silver_crew` |
-| **Ground Station** | `station_id`, `name`, `region`, `location` | `silver_ground_stations` |
+| **Crew Member** | `crew_id`, `name`, `role`, `specialty`, `clearance` | `crew_silver` |
+| **Ground Station** | `station_id`, `name`, `region`, `location` | `telemetry_silver` |
 | **Solar Event** | `event_id`, `type`, `severity`, `timestamp` | `gold_solar_activity` |
 | **Exoplanet** | `planet_name`, `host_star`, `discovery_method`, `habitable` | `gold_exoplanet_catalog` |
 
@@ -150,8 +150,8 @@ Repeat for all six entity types:
 |---|---|---|---|
 | Asteroid | `gold_asteroid_risk` | `neo_id` | `name` |
 | Mission | `gold_mission_summary` | `mission_id` | `name` |
-| Crew Member | `silver_crew` | `crew_id` | `name` |
-| Ground Station | `silver_ground_stations` | `station_id` | `name` |
+| Crew Member | `crew_silver` | `crew_id` | `name` |
+| Ground Station | `telemetry_silver` | `station_id` | `name` |
 | Solar Event | `gold_solar_activity` | `event_id` | `type` |
 | Exoplanet | `gold_exoplanet_catalog` | `planet_name` | `planet_name` |
 
