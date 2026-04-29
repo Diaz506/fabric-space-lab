@@ -712,6 +712,11 @@
 
       <h3>🔒 4a — Row-Level Security (RLS)</h3>
 
+      <div class="mission-alert">
+        <div class="alert-title">📋 Plan now, implement in Module 04</div>
+        <p>The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 04.</p>
+      </div>
+
       <p><strong>Scenario:</strong> ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from <strong>their region</strong>. A European analyst shouldn't browse Asian station data.</p>
 
       <div class="step-card">
@@ -774,6 +779,11 @@ SELECT * FROM observations WHERE region = 'Europe'</code></pre>
 
       <h3>🔒 4b — Column-Level Security (CLS)</h3>
 
+      <div class="mission-alert">
+        <div class="alert-title">📋 Plan now, implement in Module 04</div>
+        <p>CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.</p>
+      </div>
+
       <p><strong>Scenario:</strong> Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should <strong>never see</strong> the <code>budget_usd</code> or <code>clearance_level</code> columns.</p>
 
       <div class="code-terminal">
@@ -800,6 +810,11 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];</code></pre>
       </div>
 
       <h3>🔒 4c — Object-Level Security (OLS)</h3>
+
+      <div class="mission-alert">
+        <div class="alert-title">📋 Plan now, implement in Module 04</div>
+        <p>OLS is configured via Tabular Editor on the semantic model, which is created in Module 05. Review the concept now and implement later.</p>
+      </div>
 
       <p><strong>Scenario:</strong> ZOSA has a <code>classified_defense_missions</code> table containing data about planetary defense operations. This table should be <strong>completely invisible</strong> to anyone without defense clearance.</p>
 
@@ -831,6 +846,11 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];</code></pre>
       </div>
 
       <h3>🔒 4d — Dynamic Data Masking (DDM)</h3>
+
+      <div class="mission-alert">
+        <div class="alert-title">📋 Plan now, implement in Module 04</div>
+        <p>DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.</p>
+      </div>
 
       <p><strong>Scenario:</strong> External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be <strong>partially masked</strong>.</p>
 

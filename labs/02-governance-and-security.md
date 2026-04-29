@@ -395,9 +395,11 @@ Once enabled, you'll see the role management interface where you can create role
 
 ### 🔒 4a — Row-Level Security (RLS)
 
+> 📋 **Plan now, implement in Module 04** — The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 04.
+
 **Scenario:** ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from **their region**. A European analyst shouldn't browse Asian station data.
 
-#### How to Configure RLS
+#### How to Configure RLS (after data ingestion)
 
 1. In the OneLake Security panel, click **New Role**
 2. **Role name:** `Europe_Analysts`
@@ -433,9 +435,11 @@ SELECT * FROM observations WHERE region = 'Europe'
 
 ### 🔒 4b — Column-Level Security (CLS)
 
+> 📋 **Plan now, implement in Module 04** — CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.
+
 **Scenario:** Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should **never see** the `budget_usd` or `clearance_level` columns.
 
-#### How to Configure CLS
+#### How to Configure CLS (after data ingestion)
 
 Use the **SQL analytics endpoint** of your lakehouse and run T-SQL `DENY` statements:
 
@@ -458,9 +462,11 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];
 
 ### 🔒 4c — Object-Level Security (OLS)
 
+> 📋 **Plan now, implement in Module 04** — OLS is configured via Tabular Editor on the semantic model, which is created in Module 05. Review the concept now and implement later.
+
 **Scenario:** ZOSA has a `classified_defense_missions` table containing data about planetary defense operations. This table should be **completely invisible** to anyone without defense clearance.
 
-#### How to Configure OLS
+#### How to Configure OLS (after semantic model creation)
 
 OLS is configured via the **Tabular Editor** (a free external tool) or the **XMLA endpoint**:
 
@@ -481,9 +487,11 @@ OLS is configured via the **Tabular Editor** (a free external tool) or the **XML
 
 ### 🔒 4d — Dynamic Data Masking (DDM)
 
+> 📋 **Plan now, implement in Module 04** — DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.
+
 **Scenario:** External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be **partially masked**.
 
-#### How to Configure DDM
+#### How to Configure DDM (after data ingestion)
 
 Use T-SQL on the SQL analytics endpoint:
 
