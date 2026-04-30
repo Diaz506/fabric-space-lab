@@ -396,9 +396,13 @@ OneLake Security is the **unified data access control layer** for Microsoft Fabr
 
 ### Enabling OneLake Security
 
+> ⚠️ **Prerequisite:** You need a lakehouse with tables before you can enable OneLake Security. The option **Manage OneLake Security** appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 04 — then come back here to enable security.
+
+**When you're ready (after Module 04):**
+
 1. Open **ZOSA-Dev** workspace
-2. Navigate to your Lakehouse (you'll create one in Module 03 — for now, understand the process)
-3. Click **Manage OneLake Security**
+2. Open your **Lakehouse** item
+3. In the lakehouse toolbar, click **Manage OneLake Security**
 4. Toggle **Enable OneLake Security** → Confirm
 
 Once enabled, you'll see the role management interface where you can create roles with specific data access rules.
