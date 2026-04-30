@@ -96,10 +96,11 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
 4. In the **General** tab of the Web activity, configure:
    - **Name:** `Get NASA NEO Data`
    - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
-5. In the **Settings** tab, configure the connection first:
-   - **Connection:** Click **+ New** → set Connection type to **Web/HTTP** → URL: `https://api.nasa.gov` → Authentication: **Anonymous** → click **Create**
+5. In the **Settings** tab, configure:
+   - **Connection:** Open the dropdown → click **+ New** → set Connection type to **Web** → Base URL: `https://api.nasa.gov` → Authentication kind: **Anonymous** → click **Create**
    - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
-   - **Method:** GET
+   - **Method:** `GET`
+   - **Headers:** *(leave empty)*
 6. Add a **Set Variable** activity (wired after the Web activity):
    - **General** tab — Name: `Store API Response`
    - Create a pipeline variable `api_response` (type: String)
