@@ -313,7 +313,7 @@ Labels will be applied as you create items throughout the lab. Here's the plan:
 
 | Module | Item | Label to Apply |
 |--------|------|---------------|
-| **Module 03** | `zosa_lakehouse` (Lakehouse) | **Confidential** |
+| **Module 03** | `lh_zosa` (Lakehouse) | **Confidential** |
 | **Module 05** | `ZOSA Semantic Model` | **Confidential** |
 | **Module 06** | Power BI reports | **Confidential** |
 | **Module 08** | ML experiments & models | **Top Secret** |

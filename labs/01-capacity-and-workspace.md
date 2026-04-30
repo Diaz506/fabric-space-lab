@@ -100,6 +100,25 @@ You will now create three workspaces following ZOSA's environment separation str
 
 💡 **Tip:** Naming conventions matter at scale. ZOSA uses the `{Org}-{Environment}` pattern. In enterprise scenarios with multiple business domains, you might extend this to include the domain: `ZOSA-Defense-Dev`, `ZOSA-Science-Dev`, `ZOSA-Operations-Prod`. Pick a convention early and enforce it — your future self will thank you.
 
+### ZOSA Naming Conventions
+
+Throughout this lab, we follow a consistent naming standard for all Fabric items:
+
+| Item Type | Prefix | Example | Notes |
+|-----------|--------|---------|-------|
+| Workspace | — | `ZOSA-Dev` | `{Org}-{Environment}` |
+| Lakehouse | `lh_` | `lh_zosa` | Same name in Dev/Test/Prod (workspace provides context) |
+| Notebook | `nb_` | `nb_bronze_ingestion` | Describes the transformation stage |
+| Pipeline | `pl_` | `pl_ingest_all_sources` | Describes the orchestration purpose |
+| Dataflow | `df_` | `df_crew_import` | Describes the data source |
+| Semantic Model | `sm_` | `sm_space_analytics` | Describes the business domain |
+| Report | `rpt_` | `rpt_mission_overview` | Describes the report topic |
+| Eventhouse | `eh_` | `eh_telemetry` | Describes the streaming domain |
+| KQL Database | `kql_` | `kql_telemetry` | Matches the eventhouse |
+| Eventstream | `es_` | `es_ground_stations` | Describes the source |
+
+**Key principle:** Keep item names **identical across workspaces** (Dev/Test/Prod). The workspace already carries the environment context, and Deployment Pipelines (Module 11) work best when items share the same name — pipeline rules handle connection swaps automatically.
+
 > 📚 **Official Documentation:**
 > - [Workspaces in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/get-started/workspaces)
 

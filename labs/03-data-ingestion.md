@@ -12,7 +12,7 @@ Your first job is standing up the central storage layer — a **Lakehouse** in y
 
 1. Navigate to the **ZOSA-Dev** workspace.
 2. Click **+ New** → **Lakehouse**.
-3. Name it `zosa_lakehouse` and click **Create**.
+3. Name it `lh_zosa` and click **Create**.
 
 You now have a Lakehouse with two areas:
 
@@ -31,7 +31,7 @@ You now have a Lakehouse with two areas:
 
 If you're using the pre-generated sample data from the cloned repo, this is the fastest way to get files into your Lakehouse.
 
-1. Open `zosa_lakehouse` and click **Files** in the left Explorer panel.
+1. Open `lh_zosa` and click **Files** in the left Explorer panel.
 2. Click **Upload** → **Upload folder**.
 3. Browse to the `data/sample/` folder from your cloned repository and upload its contents.
 4. Once the upload finishes, expand the **Files** section — you should see your CSV files listed.
@@ -57,7 +57,7 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
    - Click the dropdown on `crew_id` → **Remove empty** to filter out any rows with null crew IDs.
    - In the **Query Settings** panel on the right, rename the query to `crew_ingestion`.
 6. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
-7. Select `zosa_lakehouse` → **Tables** → enter the table name `crew_bronze`.
+7. Select `lh_zosa` → **Tables** → enter the table name `crew_bronze`.
 8. Click **Publish**.
 9. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
 
@@ -103,7 +103,7 @@ If you have an **Azure subscription**, you can experience one of Fabric's most p
 
 1. In the Azure portal, create an **Azure Data Lake Storage Gen2** storage account (or use an existing one).
 2. Create a container (e.g., `zosa-external`) and upload one dataset — say, `exoplanets.csv` — into it.
-3. Back in Fabric, open `zosa_lakehouse`.
+3. Back in Fabric, open `lh_zosa`.
 4. In the Explorer panel, right-click **Tables** (or **Files**) and select **New shortcut**.
 5. Choose **Azure Data Lake Storage Gen2**.
 6. Provide the **storage account URL** (e.g., `https://<account>.dfs.core.windows.net`) and authenticate with your Azure credentials.
@@ -122,7 +122,7 @@ If you have an **Azure subscription**, you can experience one of Fabric's most p
 
 Time to confirm everything landed correctly.
 
-1. Open `zosa_lakehouse` → expand the **Tables** section in the Explorer panel.
+1. Open `lh_zosa` → expand the **Tables** section in the Explorer panel.
 2. You should see **six tables**:
    - `asteroids_bronze`
    - `solar_events_bronze`
@@ -156,7 +156,7 @@ You should see a result set with six rows — one per dataset — each showing a
 
 Verify that you've completed the following before moving on:
 
-- [ ] Lakehouse `zosa_lakehouse` created in ZOSA-Dev workspace
+- [ ] Lakehouse `lh_zosa` created in ZOSA-Dev workspace
 - [ ] 6 Bronze-layer tables loaded with data (`asteroids_bronze`, `solar_events_bronze`, `exoplanets_bronze`, `missions_bronze`, `crew_bronze`, `telemetry_bronze`)
 - [ ] You can query all tables via the SQL Analytics Endpoint
 - [ ] You understand the difference between **Dataflows Gen2** (low-code, Power Query-based) and **Data Pipelines** (orchestration engine with Copy Activity)

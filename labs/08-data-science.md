@@ -62,7 +62,7 @@ Great models start with great features. You'll transform the raw gold table into
 
 1. In **ZOSA-Dev**, click **+ New** → **Notebook**
 2. Rename it to `03-asteroid-features`
-3. Attach it to your **zosa_lakehouse**
+3. Attach it to your **lh_zosa**
 
 ### Load the Gold Table
 
@@ -70,7 +70,7 @@ In the first cell, load your gold asteroid risk data:
 
 ```python
 # Cell 1 — Load gold asteroid risk data
-df = spark.sql("SELECT * FROM zosa_lakehouse.gold_asteroid_risk")
+df = spark.sql("SELECT * FROM lh_zosa.gold_asteroid_risk")
 print(f"Total records: {df.count()}")
 df.printSchema()
 df.show(5)
@@ -313,7 +313,7 @@ results_pdf["prediction_timestamp"] = pd.Timestamp.now()
 # Save back to lakehouse as a Gold prediction table
 predictions_df = spark.createDataFrame(results_pdf)
 predictions_df.write.mode("overwrite").format("delta").saveAsTable(
-    "zosa_lakehouse.gold_asteroid_predictions"
+    "lh_zosa.gold_asteroid_predictions"
 )
 
 print(f"✅ Saved {predictions_df.count()} predictions to gold_asteroid_predictions")
@@ -381,19 +381,19 @@ Verify everything is in place before moving on:
 | 1 | Experiment has 3 runs | Open `asteroid_risk_prediction` experiment → see LogisticRegression, RandomForest, GradientBoosting |
 | 2 | Metrics logged for all runs | Click any run → verify accuracy, precision, recall, f1, roc_auc are present |
 | 3 | Best model registered | Check workspace items → find `asteroid_hazard_classifier` model, Version 1 |
-| 4 | Predictions in Gold table | Run `SELECT COUNT(*) FROM zosa_lakehouse.gold_asteroid_predictions` → returns non-zero count |
+| 4 | Predictions in Gold table | Run `SELECT COUNT(*) FROM lh_zosa.gold_asteroid_predictions` → returns non-zero count |
 | 5 | Feature importance chart | Check the MLflow run artifacts for `feature_importance.png` |
 
 ```python
 # Quick verification cell
 print("=== Module 08 Checkpoint ===\n")
 
-pred_count = spark.sql("SELECT COUNT(*) as cnt FROM zosa_lakehouse.gold_asteroid_predictions").collect()[0]["cnt"]
+pred_count = spark.sql("SELECT COUNT(*) as cnt FROM lh_zosa.gold_asteroid_predictions").collect()[0]["cnt"]
 print(f"✅ gold_asteroid_predictions: {pred_count} rows")
 
 hazard_count = spark.sql("""
     SELECT predicted_hazardous, COUNT(*) as cnt
-    FROM zosa_lakehouse.gold_asteroid_predictions
+    FROM lh_zosa.gold_asteroid_predictions
     GROUP BY predicted_hazardous
 """).show()
 

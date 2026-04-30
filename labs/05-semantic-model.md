@@ -35,7 +35,7 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
 
 ### Steps
 
-1. Open your **zosa_lakehouse** in the Fabric portal.
+1. Open your **lh_zosa** in the Fabric portal.
 2. In the top command bar, click **+ New item** → **Semantic model**.
 3. Name the model: `ZOSA Analytics Model`.
 4. In the table picker, select the **Gold layer** tables:

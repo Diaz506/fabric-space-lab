@@ -186,7 +186,7 @@
           <ol>
             <li>In <strong>ZOSA-Dev</strong>, click <strong>+ New</strong> → <strong>Notebook</strong></li>
             <li>Rename it to <code>03-asteroid-features</code></li>
-            <li>Attach it to your <strong>zosa_lakehouse</strong></li>
+            <li>Attach it to your <strong>lh_zosa</strong></li>
           </ol>
         </div>
       </div>
@@ -201,7 +201,7 @@
           <button class="copy-btn">Copy</button>
         </div>
         <pre><code class="language-python"># Cell 1 — Load gold asteroid risk data
-df = spark.sql("SELECT * FROM zosa_lakehouse.gold_asteroid_risk")
+df = spark.sql("SELECT * FROM lh_zosa.gold_asteroid_risk")
 print(f"Total records: {df.count()}")
 df.printSchema()
 df.show(5)</code></pre>
@@ -499,7 +499,7 @@ results_pdf["prediction_timestamp"] = pd.Timestamp.now()
 # Save back to lakehouse as a Gold prediction table
 predictions_df = spark.createDataFrame(results_pdf)
 predictions_df.write.mode("overwrite").format("delta").saveAsTable(
-    "zosa_lakehouse.gold_asteroid_predictions"
+    "lh_zosa.gold_asteroid_predictions"
 )
 
 print(f"✅ Saved {predictions_df.count()} predictions to gold_asteroid_predictions")
@@ -579,7 +579,7 @@ with mlflow.start_run(run_name=f"{best_model_name}_feature_importance"):
           <li>Experiment has 3 runs — open <code>asteroid_risk_prediction</code> → see LogisticRegression, RandomForest, GradientBoosting</li>
           <li>Metrics logged for all runs — click any run → verify accuracy, precision, recall, f1, roc_auc are present</li>
           <li>Best model registered — check workspace items → find <code>asteroid_hazard_classifier</code> model, Version 1</li>
-          <li>Predictions in Gold table — run <code>SELECT COUNT(*) FROM zosa_lakehouse.gold_asteroid_predictions</code> → returns non-zero count</li>
+          <li>Predictions in Gold table — run <code>SELECT COUNT(*) FROM lh_zosa.gold_asteroid_predictions</code> → returns non-zero count</li>
           <li>Feature importance chart — check the MLflow run artifacts for <code>feature_importance.png</code></li>
         </ul>
       </div>
@@ -593,12 +593,12 @@ with mlflow.start_run(run_name=f"{best_model_name}_feature_importance"):
         <pre><code class="language-python"># Quick verification cell
 print("=== Module 08 Checkpoint ===\n")
 
-pred_count = spark.sql("SELECT COUNT(*) as cnt FROM zosa_lakehouse.gold_asteroid_predictions").collect()[0]["cnt"]
+pred_count = spark.sql("SELECT COUNT(*) as cnt FROM lh_zosa.gold_asteroid_predictions").collect()[0]["cnt"]
 print(f"✅ gold_asteroid_predictions: {pred_count} rows")
 
 hazard_count = spark.sql("""
     SELECT predicted_hazardous, COUNT(*) as cnt
-    FROM zosa_lakehouse.gold_asteroid_predictions
+    FROM lh_zosa.gold_asteroid_predictions
     GROUP BY predicted_hazardous
 """).show()
 
