@@ -93,15 +93,20 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
 1. Navigate to **ZOSA-Dev** workspace.
 2. Click **+ New** → **Data Pipeline**.
 3. Name it `pl_api_asteroid_ingestion`.
-4. Add a **Web** activity:
+4. In the **General** tab of the Web activity, configure:
+   - **Name:** `Get NASA NEO Data`
+   - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
+5. In the **Settings** tab, configure:
    - **URL:** `https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
    - **Method:** GET
    - **Headers:** None required
-5. Add a **Set Variable** activity (wired after the Web activity):
+6. Add a **Set Variable** activity (wired after the Web activity):
+   - **General** tab — Name: `Store API Response`
    - Create a pipeline variable `api_response` (type: String)
-   - Set its value to `@activity('Web1').output.Response`
-6. Add a **Notebook** activity (wired after Set Variable):
-   - Select `nb_api_ingestion` (the notebook from Option A)
+   - Set its value to `@activity('Get NASA NEO Data').output.Response`
+7. Add a **Notebook** activity (wired after Set Variable):
+   - **General** tab — Name: `Transform and Load Asteroids`
+   - **Settings** tab — Select `nb_api_ingestion` (the notebook from Option A)
    - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
 
 **💡 Tip:** In production, you'd parameterize the date range and schedule the pipeline to run daily — pulling only the latest NEO data each time. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."
