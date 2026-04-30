@@ -27,22 +27,122 @@ You now have a Lakehouse with two areas:
 
 ---
 
-## 📂 Section 2: Upload Sample Data (Quick Path)
+## 🌐 Section 2: Ingest Data from a Public API
 
-If you're using the pre-generated sample data from the cloned repo, this is the fastest way to get files into your Lakehouse.
+In real-world scenarios, data doesn't arrive as CSV files on your desktop — it comes from **REST APIs, databases, and streaming sources**. Let's ingest asteroid data directly from NASA's Near-Earth Object (NeoWs) API **inside Fabric**, no local tools required.
+
+You have two approaches: a **Notebook** (code-first) or a **Data Pipeline** (low-code). Both achieve the same result — a `asteroids_bronze` table in your lakehouse.
+
+---
+
+### Option A: Notebook — Code-First API Ingestion
+
+This is the most flexible approach. You write PySpark code that calls the API, parses JSON, and writes directly to a Delta table.
+
+1. Navigate to **ZOSA-Dev** workspace.
+2. Click **+ New** → **Notebook**.
+3. Name it `nb_api_ingestion`.
+4. In the first cell, attach the notebook to your lakehouse: click **Add lakehouse** in the left Explorer → select `lh_zosa`.
+5. Paste this code into a cell and run it:
+
+```python
+import requests
+from pyspark.sql import Row
+from pyspark.sql.types import StructType, StructField, StringType, FloatType, BooleanType, DateType
+
+# NASA NeoWs API — Near-Earth Objects for the past 7 days
+API_KEY = "YOUR_NASA_API_KEY"  # Replace with your key from api.nasa.gov
+url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key={API_KEY}"
+
+response = requests.get(url)
+data = response.json()
+
+# Flatten the nested JSON into rows
+rows = []
+for date, neos in data["near_earth_objects"].items():
+    for neo in neos:
+        rows.append(Row(
+            neo_id=neo["id"],
+            name=neo["name"],
+            absolute_magnitude=float(neo.get("absolute_magnitude_h", 0)),
+            is_hazardous=neo["is_potentially_hazardous_asteroid"],
+            close_approach_date=date,
+            miss_distance_km=float(neo["close_approach_data"][0]["miss_distance"]["kilometers"]),
+            relative_velocity_kph=float(neo["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"]),
+            estimated_diameter_min_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_min"]),
+            estimated_diameter_max_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_max"])
+        ))
+
+# Create DataFrame and write as Delta table
+df = spark.createDataFrame(rows)
+df.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_bronze")
+
+print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")
+```
+
+6. Run the cell — you should see the success message with the row count.
+
+**What just happened?** You called a live REST API from a Fabric notebook, transformed nested JSON into a flat structure using PySpark, and persisted it directly as a Delta table. No CSV files, no local downloads, no uploads.
+
+---
+
+### Option B: Data Pipeline — Low-Code API Ingestion
+
+If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web Activity** to call the API and a **Copy Activity** to load the response.
+
+1. Navigate to **ZOSA-Dev** workspace.
+2. Click **+ New** → **Data Pipeline**.
+3. Name it `pl_api_asteroid_ingestion`.
+4. Add a **Web** activity:
+   - **URL:** `https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
+   - **Method:** GET
+   - **Headers:** None required
+5. Add a **Set Variable** activity (wired after the Web activity):
+   - Create a pipeline variable `api_response` (type: String)
+   - Set its value to `@activity('Web1').output.Response`
+6. Add a **Notebook** activity (wired after Set Variable):
+   - Select `nb_api_ingestion` (the notebook from Option A)
+   - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
+
+**💡 Tip:** In production, you'd parameterize the date range and schedule the pipeline to run daily — pulling only the latest NEO data each time. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."
+
+---
+
+### Which approach should you use?
+
+| Factor | Notebook | Data Pipeline |
+|--------|----------|---------------|
+| **Flexibility** | Full Python/PySpark — any API shape | Limited to built-in activities |
+| **Scheduling** | Needs pipeline wrapper or manual trigger | Built-in scheduler with retries |
+| **Error handling** | Try/except in code | Visual retry policies, alerts |
+| **Best for** | Complex transformations, nested JSON | Simple REST → table patterns |
+| **ZOSA recommendation** | ✅ Use for initial development | ✅ Use for production orchestration |
+
+**Best practice:** Develop in a notebook, then wrap it in a pipeline for production scheduling.
+
+> 📚 **Official Documentation:**
+> - [Notebooks in Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook)
+> - [REST API ingestion with Pipelines](https://learn.microsoft.com/en-us/fabric/data-factory/connector-rest-overview)
+> - [Web Activity in Pipelines](https://learn.microsoft.com/en-us/fabric/data-factory/web-activity)
+
+---
+
+## 📂 Section 3: Upload Remaining Data (Internal Sources)
+
+The asteroids came from a live API, but ZOSA's remaining datasets come from **internal database exports** — the IT team delivered them as CSVs. This is common in enterprises: some data is API-driven, some arrives as file drops.
 
 1. Open `lh_zosa` and click **Files** in the left Explorer panel.
 2. Click **Upload** → **Upload folder**.
-3. Browse to the `data/sample/` folder from your cloned repository and upload its contents.
+3. Browse to the `data/sample/` folder from your cloned repository and upload its contents (crew, missions, telemetry, solar events, exoplanets CSVs).
 4. Once the upload finishes, expand the **Files** section — you should see your CSV files listed.
 
 These are **raw CSVs** sitting in the Files area. They are *not* yet queryable as tables — think of this as your staging area.
 
-**💡 Tip:** If you want to pull live data from NASA APIs instead, run `python data/fetch_nasa_apis.py --api-key YOUR_KEY` locally first, then upload those generated CSVs alongside (or instead of) the sample files.
+**💡 Tip:** If you also want to pull solar events and exoplanets from NASA APIs (DONKI and Exoplanet Archive), you can extend the notebook from Section 2 with additional cells. The sample CSVs are a shortcut for the remaining datasets.
 
 ---
 
-## 🔄 Section 3: Dataflows Gen2 — Low-Code Ingestion
+## 🔄 Section 4: Dataflows Gen2 — Low-Code Ingestion
 
 Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to ingest `crew.csv` with some light transformations — promoting headers, fixing data types, and filtering bad rows.
 
@@ -69,25 +169,25 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
 
 ---
 
-## 🔧 Section 4: Data Pipeline — Orchestrated Ingestion
+## 🔧 Section 5: Data Pipeline — Orchestrated Ingestion
 
-One table down, five to go. Instead of creating five more dataflows, you'll build a **Data Pipeline** that ingests all six CSVs in parallel.
+One table down, five to go. Instead of creating five more dataflows, you'll build a **Data Pipeline** that ingests the remaining CSVs in parallel.
 
 1. Navigate to the **ZOSA-Dev** workspace.
 2. Click **+ New** → **Data Pipeline**.
-3. Name it `ingest_all_sources` and click **Create**.
-4. For each of your six CSV files (`asteroids.csv`, `solar_events.csv`, `exoplanets.csv`, `missions.csv`, `crew.csv`, `telemetry.csv`), add a **Copy Data** activity:
+3. Name it `pl_ingest_all_sources` and click **Create**.
+4. For each of your remaining CSV files (`solar_events.csv`, `exoplanets.csv`, `missions.csv`, `crew.csv`, `telemetry.csv`), add a **Copy Data** activity:
    - Drag a **Copy Data** activity onto the canvas.
    - **Source** tab: set the source to your **Lakehouse Files** (browse to the specific CSV).
    - **Destination** tab: set the destination to your **Lakehouse Tables**, with a table name following the pattern `<dataset>_bronze` (e.g., `asteroids_bronze`).
    - Under **Mapping**, verify column mappings and set the file format to **DelimitedText** (CSV) with header row enabled.
-5. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all six Copy Data activities directly.
+5. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all five Copy Data activities directly.
 6. Add a **pipeline parameter** for reusability:
    - Click on the pipeline canvas background → **Parameters** tab → **+ New**.
    - Name: `source_folder`, Type: **String**, Default value: `sample`.
    - Update each Copy Data activity's source path to reference `@pipeline().parameters.source_folder` so you can point the pipeline at different folders later.
 7. Click **Run** (▷) to execute the pipeline.
-8. Monitor the **Output** tab at the bottom — you should see all six activities running simultaneously and completing within a few minutes.
+8. Monitor the **Output** tab at the bottom — you should see all five activities running simultaneously and completing within a few minutes.
 
 **What just happened?** Data Pipelines are Fabric's **orchestration engine**. The **Copy Activity** handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
 
@@ -97,7 +197,7 @@ One table down, five to go. Instead of creating five more dataflows, you'll buil
 
 ---
 
-## 🔗 Section 5: OneLake Shortcuts (Optional Advanced)
+## 🔗 Section 6: OneLake Shortcuts (Optional Advanced)
 
 If you have an **Azure subscription**, you can experience one of Fabric's most powerful features: **shortcuts** — zero-copy references to external data.
 
@@ -118,7 +218,7 @@ If you have an **Azure subscription**, you can experience one of Fabric's most p
 
 ---
 
-## ✅ Section 6: Verify Your Ingestion
+## ✅ Section 7: Verify Your Ingestion
 
 Time to confirm everything landed correctly.
 
