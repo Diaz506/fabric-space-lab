@@ -97,7 +97,11 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
    - **Name:** `Get NASA NEO Data`
    - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
 5. In the **Settings** tab, configure:
-   - **Connection:** Open the dropdown → click **+ New** → set Connection type to **Web** → Base URL: `https://api.nasa.gov` → Authentication kind: **Anonymous** → click **Create**
+   - **Connection:** Open the dropdown → select an existing Web connection, or click **Browse all** to find/create one. If you don't have one yet, the connection creation dialog will ask for:
+     - **Connection name:** `NASA API`
+     - **Base URL:** `https://api.nasa.gov`
+     - **Authentication kind:** **Anonymous**
+     - Click **Create**
    - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
    - **Method:** `GET`
    - **Headers:** *(leave empty)*
