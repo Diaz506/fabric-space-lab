@@ -48,6 +48,11 @@ Every Fabric tenant gets exactly **one OneLake**. There is no option to create a
 
 This is a fundamental architectural decision by Microsoft — it means any engine (Spark, SQL, KQL, Power BI) can access the same data without copies or movement.
 
+> 📚 **Official Documentation:**
+> - [Fabric Capacity Licenses & SKUs](https://learn.microsoft.com/en-us/fabric/enterprise/licenses)
+> - [OneLake Overview & Architecture](https://learn.microsoft.com/en-us/fabric/onelake/onelake-overview)
+> - [Microsoft Fabric Trial](https://learn.microsoft.com/en-us/fabric/get-started/fabric-trial)
+
 ---
 
 ## 🗂️ Section 2: Creating Your Workspaces
@@ -95,6 +100,9 @@ You will now create three workspaces following ZOSA's environment separation str
 
 💡 **Tip:** Naming conventions matter at scale. ZOSA uses the `{Org}-{Environment}` pattern. In enterprise scenarios with multiple business domains, you might extend this to include the domain: `ZOSA-Defense-Dev`, `ZOSA-Science-Dev`, `ZOSA-Operations-Prod`. Pick a convention early and enforce it — your future self will thank you.
 
+> 📚 **Official Documentation:**
+> - [Workspaces in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/get-started/workspaces)
+
 ---
 
 ## 🌐 Section 3: Setting Up Domains
@@ -131,6 +139,9 @@ Fabric **Domains** provide a way to logically group workspaces by business area.
 ![Assign workspaces to domain](../assets/screenshots/01/assign-workspaces-domain.png)
 
 💡 **Tip:** In a larger organization, ZOSA might have separate domains for each division — **Defense**, **Science**, **Operations** — each with their own Dev/Test/Prod workspaces and governance policies. Domains make it possible to delegate administration without giving blanket tenant-wide permissions.
+
+> 📚 **Official Documentation:**
+> - [Domains in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/governance/domains)
 
 ---
 
@@ -176,6 +187,10 @@ Under **Data Engineering/Science** in the workspace settings sidebar, you can co
 - **Runtime version:** Choose the Spark runtime version. Use the latest stable version (Runtime 1.3+ recommended; Runtime 2.0 with Spark 4.x is in preview).
 
 **⚠️ Note:** Don't worry about configuring these in detail right now. These settings become important when you start running Spark notebooks in Module 03 (Data Ingestion). We'll revisit them then.
+
+> 📚 **Official Documentation:**
+> - [Delta Lake & Parquet in OneLake](https://learn.microsoft.com/en-us/fabric/onelake/onelake-overview)
+> - [Spark Compute Settings](https://learn.microsoft.com/en-us/fabric/data-engineering/spark-compute)
 
 ---
 

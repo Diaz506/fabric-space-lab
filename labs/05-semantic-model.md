@@ -23,6 +23,10 @@ Direct Lake is Microsoft Fabric's **third query mode** — and it combines the b
 
 > ⚠️ **Important:** Direct Lake requires your data to live in a Fabric Lakehouse or Warehouse. External Delta tables (e.g., on ADLS Gen2 via shortcut) work only if a OneLake shortcut is configured first.
 
+> 📚 **Official Documentation:**
+> - [Direct Lake Overview](https://learn.microsoft.com/en-us/power-bi/enterprise/directlake-overview)
+> - [Direct Lake vs Import vs DirectQuery](https://learn.microsoft.com/en-us/power-bi/connect-data/service-dataset-modes-understand)
+
 ---
 
 ## 🏗️ 2 — Create the Semantic Model
@@ -46,6 +50,8 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
 6. Click **Confirm**. Fabric creates a Direct Lake semantic model and opens the **Model view**.
 
 > 💡 **Tip:** If you don't see the Gold tables, make sure the notebooks from Module 04 ran successfully and that the tables are registered in the Lakehouse explorer.
+
+> 📚 **Learn more:** [Create Semantic Models in Fabric](https://learn.microsoft.com/en-us/fabric/data-warehouse/semantic-models)
 
 ---
 
@@ -84,6 +90,10 @@ A clean star schema means faster queries and simpler DAX. Your **fact table** is
                              │
                     gold_exoplanet_catalog
 ```
+
+> 📚 **Official Documentation:**
+> - [Star Schema Design Guidance](https://learn.microsoft.com/en-us/power-bi/guidance/star-schema)
+> - [Understand Model Relationships](https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand)
 
 ---
 
@@ -177,6 +187,8 @@ Near-Earth Objects =
 
 After creating all nine measures, click on each one in the **Fields** pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.
 
+> 📚 **Learn more:** [DAX Reference](https://learn.microsoft.com/en-us/dax/dax-overview)
+
 ---
 
 ## 🔒 5 — Implement Row-Level Security (RLS)
@@ -207,6 +219,8 @@ Row-Level Security restricts which rows a user can see based on their identity. 
 
 > ⚠️ **Important:** RLS only applies when users query through the semantic model (e.g., Power BI reports). Direct Lakehouse SQL queries bypass RLS entirely — OneLake Security is your backstop there.
 
+> 📚 **Learn more:** [Row-Level Security in Semantic Models](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security)
+
 ---
 
 ## 🛡️ 6 — Configure Object-Level Security (OLS)
@@ -233,6 +247,10 @@ Object-Level Security hides entire columns or tables from specific roles. ZOSA's
 > 💡 **XMLA Endpoint Access:** The XMLA read/write endpoint is available in Fabric capacities (F SKUs). Make sure your workspace is assigned to a capacity and that XMLA read/write is enabled in the **Admin portal → Capacity settings**.
 
 > ⚠️ **Important:** OLS is configured through external tools (Tabular Editor, SSMS) because the Fabric portal does not yet have a native OLS editor. Always test OLS changes in a development workspace before promoting to production.
+
+> 📚 **Official Documentation:**
+> - [XMLA Endpoint Connectivity](https://learn.microsoft.com/en-us/power-bi/enterprise/service-premium-connect-tools)
+> - [External Tools (Tabular Editor)](https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-external-tools)
 
 ---
 

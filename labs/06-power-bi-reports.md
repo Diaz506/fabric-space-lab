@@ -24,6 +24,8 @@ By the end of this module, you will:
 
 > 💡 **Tip:** You'll connect Power BI Desktop to the *semantic model* in your Fabric workspace — not directly to the lakehouse. This is the Direct Lake advantage: one model, many reports.
 
+> 📚 **Learn more:** [Report Design Best Practices](https://learn.microsoft.com/en-us/power-bi/guidance/power-bi-optimization)
+
 ---
 
 ## 1️⃣ Report 1: Mission Control Dashboard
@@ -91,6 +93,11 @@ This is the "at-a-glance" page — KPIs across the top, charts below.
 
 > ⚠️ **Important:** Place slicers consistently at the top of every page. Users expect filters in the same location across pages.
 
+> 📚 **Official Documentation:**
+> - [Visualizations Overview](https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-report-visualizations)
+> - [Card Visuals](https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-card)
+> - [Slicers](https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers)
+
 ### Page 2: Asteroid Threat Monitor
 
 This is the page that keeps Major Nakamura up at night.
@@ -139,6 +146,8 @@ This is the page that keeps Major Nakamura up at night.
    - If value > 50 → Orange
    - Otherwise → Green
 
+> 📚 **Learn more:** [Conditional Formatting](https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting)
+
 ### Page 3: Solar Activity Timeline
 
 Space weather data for the science team.
@@ -184,6 +193,8 @@ Space weather data for the science team.
    - Right-click any mission in the donut chart → **Drillthrough** → Mission Detail.
 
 > 💡 **Tip:** Custom tooltip pages are a great way to show contextual detail without cluttering the main visuals. Major Nakamura loves hovering over a dot and seeing the asteroid's full profile.
+
+> 📚 **Learn more:** [Tooltips & Drill-through](https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-tooltips)
 
 ---
 
@@ -255,6 +266,8 @@ Create two bookmarks so users can jump to curated views:
 
 > 💡 **Tip:** Bookmarks capture the state of all slicers, filters, and visual selections. They're like "saved searches" that let users explore without getting lost.
 
+> 📚 **Learn more:** [Bookmarks](https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks)
+
 ---
 
 ## 3️⃣ Design Tips — The ZOSA Look
@@ -294,6 +307,8 @@ Both reports should feel like they belong in a space agency. Here's the ZOSA des
 
 2. In Power BI Desktop: **View → Themes → Browse for themes** → select your JSON file.
 
+> 📚 **Learn more:** [Report Themes](https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-themes)
+
 ### Typography
 
 - **Titles:** Segoe UI Semibold, 14pt, White
@@ -312,6 +327,8 @@ Field scientists need data on their tablets in remote locations.
 3. Resize visuals to fit the portrait aspect ratio.
 
 > 💡 **Tip:** Mobile layouts are separate from the desktop layout — you can choose which visuals to show on mobile without affecting the desktop experience. Prioritize the "need-to-know" visuals for field use.
+
+> 📚 **Learn more:** [Mobile-Optimized Reports](https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-create-mobile-optimized-report-about)
 
 ---
 
@@ -336,6 +353,8 @@ Time to get these reports off your machine and into the hands of the team.
 
 > ⚠️ **Important:** Because you connected to the *published semantic model*, no new dataset is created when you publish. Both reports share the same Direct Lake model — exactly as designed.
 
+> 📚 **Learn more:** [Publishing Reports](https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-upload-desktop-files)
+
 ### Pin to a Shared Dashboard
 
 1. Open the **Mission Control Dashboard** report in the service.
@@ -349,6 +368,8 @@ Time to get these reports off your machine and into the hands of the team.
 5. Arrange tiles on the dashboard by dragging and resizing.
 
 > 💡 **Tip:** Dashboards are a *Power BI service* concept — they combine pinned visuals from multiple reports onto a single canvas. Think of them as a curated "highlights reel."
+
+> 📚 **Learn more:** [Dashboards in Power BI](https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboards)
 
 ---
 
@@ -380,6 +401,8 @@ Time to verify everything works end-to-end.
 5. Check that KPI values reflect the filtered data.
 
 > ⚠️ **Important:** If RLS isn't filtering, go back to Module 05 and verify your role definitions and DAX expressions on the ZOSA Analytics Model.
+
+> 📚 **Learn more:** [RLS Testing in the Service](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security)
 
 ---
 

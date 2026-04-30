@@ -29,6 +29,11 @@ You've built every data layer — Bronze through Gold — stood up reports, real
 
 > 💡 **Why it matters:** Without an ontology, every team writes its own filters, every AI agent hallucinates its own joins, and every report defines "hazardous" differently. The ontology is the **single source of truth** for meaning.
 
+> 📚 **Official Documentation:**
+> - [GraphQL in Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/api-graphql-overview)
+> - [Knowledge Graph Concepts (Domains)](https://learn.microsoft.com/en-us/fabric/governance/use-domains)
+> - [Fabric Copilot Overview](https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview)
+
 > ⚠️ **Preview Reminder:** Fabric IQ Ontology Projects are in **Public Preview**. The steps below reflect the current UI — expect minor changes as the feature evolves toward GA.
 
 ---
@@ -183,6 +188,10 @@ This is the step that ends the vocabulary wars. For each concept that different 
 
 > 🎯 **Why this matters:** When an analyst types *"show me all NEOs near Earth"* into a Fabric search bar or an AI agent prompt, the ontology resolves **NEO → Asteroid** automatically. No more guesswork, no more mismatched filters.
 
+> 📚 **Official Documentation:**
+> - [Business Glossary / Purview](https://learn.microsoft.com/en-us/purview/concept-business-glossary)
+> - [Metadata Scanning](https://learn.microsoft.com/en-us/fabric/admin/metadata-scanning-overview)
+
 ---
 
 ## 6️⃣ Add Computed Properties
@@ -278,6 +287,11 @@ Fabric IQ Ontology Projects maintain a **version history**. Use it to:
 Fabric IQ ontologies can be exposed to **third-party AI agents** via MCP endpoints. This means external tools and custom agents can query your ontology for entity definitions, relationships, and business terms — ensuring consistent language even outside the Fabric ecosystem.
 
 > 💡 **Future-Proofing:** As MCP support matures, your ontology becomes the **universal contract** between ZOSA's internal dashboards and external partner systems.
+
+> 📚 **Official Documentation:**
+> - [Lineage](https://learn.microsoft.com/en-us/fabric/governance/lineage)
+> - [Impact Analysis](https://learn.microsoft.com/en-us/fabric/governance/impact-analysis)
+> - [Endorsement](https://learn.microsoft.com/en-us/fabric/governance/endorsement-overview)
 
 ---
 

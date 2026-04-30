@@ -46,6 +46,9 @@ Fabric security isn't a single gate — it's a series of concentric walls. Each 
 
 **💡 Tip:** Think of it like a building. Tenant security is the perimeter fence, workspace security is the building door, item security is the office door, and data security is the locked file cabinet inside the office.
 
+> 📚 **Official Documentation:**
+> - [OneLake Security — Get Started](https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-security)
+
 ---
 
 ## 👥 2 — Workspace Roles & Entra ID Security Groups
@@ -137,6 +140,11 @@ Here's what each role can do:
 **⚠️ Note:** Default to the **Viewer** role. Elevate only with justification. This is the principle of **least privilege** — give people the minimum access they need to do their job.
 
 **💡 Tip:** Always assign roles via groups, never individuals. Groups scale, are auditable, and make offboarding instant — remove a user from the group and all their Fabric access disappears.
+
+> 📚 **Official Documentation:**
+> - [Workspace Roles in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/get-started/roles-workspaces)
+> - [Manage Entra ID Security Groups](https://learn.microsoft.com/en-us/entra/fundamentals/how-to-manage-groups)
+> - [Fabric Admin Portal](https://learn.microsoft.com/en-us/fabric/admin/admin-center)
 
 ---
 
@@ -374,6 +382,10 @@ This gives your organization a searchable inventory of every dataset, report, an
 
 > **💡 Note:** The scan may take a few minutes depending on the number of items in your workspaces. You can set up a recurring schedule for automatic discovery of new items.
 
+> 📚 **Official Documentation:**
+> - [Sensitivity Labels & Information Protection](https://learn.microsoft.com/en-us/fabric/governance/information-protection)
+> - [Microsoft Purview with Fabric](https://learn.microsoft.com/en-us/purview/register-scan-fabric-tenant)
+
 ---
 
 ## 🔐 4 — OneLake Security (GA)
@@ -526,6 +538,13 @@ GRANT UNMASK TO [ZOSA-Admins];
 **🧪 How to verify:** Sign in as `zosa.scientist` in an InPrivate browser → open the SQL analytics endpoint → run `SELECT TOP 5 * FROM crew` → emails should appear as `s***@zosa.org`. Then sign in as your admin account → same query → real data appears.
 
 **💡 Tip:** DDM is different from the other layers. It doesn't block access — it **obscures** the actual values. Use it for PII that needs to be present but not readable.
+
+> 📚 **Official Documentation:**
+> - [Row-Level Security in Fabric](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security)
+> - [Column-Level Security](https://learn.microsoft.com/en-us/fabric/data-warehouse/column-level-security)
+> - [Object-Level Security](https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-ols)
+> - [Dynamic Data Masking](https://learn.microsoft.com/en-us/fabric/data-warehouse/dynamic-data-masking)
+> - [OneLake Security — Get Started](https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-security)
 
 ---
 

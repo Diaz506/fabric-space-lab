@@ -21,6 +21,10 @@ You now have a Lakehouse with two areas:
 
 **💡 Tip:** Notice that Fabric automatically created a **SQL Analytics Endpoint** alongside your Lakehouse. This is a read-only SQL interface that lets you query your Delta tables using T-SQL — no Spark cluster required. You'll use it at the end of this module to verify your ingestion.
 
+> 📚 **Official Documentation:**
+> - [Lakehouse Overview](https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-overview)
+> - [Create a Lakehouse](https://learn.microsoft.com/en-us/fabric/data-engineering/create-lakehouse)
+
 ---
 
 ## 📂 Section 2: Upload Sample Data (Quick Path)
@@ -59,6 +63,10 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
 
 **What just happened?** Dataflows Gen2 is a **Power Query-based**, low-code ingestion tool. It supports **150+ connectors**, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.
 
+> 📚 **Official Documentation:**
+> - [Dataflows Gen2](https://learn.microsoft.com/en-us/fabric/data-factory/create-first-dataflow-gen2)
+> - [Power Query in Dataflows](https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-overview)
+
 ---
 
 ## 🔧 Section 4: Data Pipeline — Orchestrated Ingestion
@@ -83,6 +91,10 @@ One table down, five to go. Instead of creating five more dataflows, you'll buil
 
 **What just happened?** Data Pipelines are Fabric's **orchestration engine**. The **Copy Activity** handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
 
+> 📚 **Official Documentation:**
+> - [Data Pipelines](https://learn.microsoft.com/en-us/fabric/data-factory/create-first-pipeline-with-sample-data)
+> - [Copy Activity](https://learn.microsoft.com/en-us/fabric/data-factory/copy-data-activity)
+
 ---
 
 ## 🔗 Section 5: OneLake Shortcuts (Optional Advanced)
@@ -101,6 +113,8 @@ If you have an **Azure subscription**, you can experience one of Fabric's most p
 **Why this matters:** Shortcuts reference external data without duplicating it. The data stays in its original location but becomes queryable through OneLake, just like any native table. This is perfect for **cross-domain data sharing**, **multi-cloud scenarios**, and keeping storage costs down.
 
 **⚠️ Note:** Shortcuts are **read-only** references. You can query the data but you cannot modify the source through a shortcut. Any writes need to happen at the original storage location.
+
+> 📚 **Learn more:** [OneLake Shortcuts](https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts)
 
 ---
 

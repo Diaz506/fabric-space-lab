@@ -31,6 +31,10 @@ Microsoft Fabric ships a full data science toolkit — no extra provisioning, no
 
 > 💡 **Why this matters:** In traditional setups, you'd spend days configuring MLflow servers, connecting storage backends, and wiring up model registries. In Fabric, you open a notebook and start training. The infrastructure is invisible.
 
+> 📚 **Official Documentation:**
+> - [Data Science in Fabric Overview](https://learn.microsoft.com/en-us/fabric/data-science/data-science-overview)
+> - [Notebooks for Data Science](https://learn.microsoft.com/en-us/fabric/data-science/notebooks-overview)
+
 ---
 
 ## 2️⃣ Create ML Experiment
@@ -45,6 +49,8 @@ Before you write any code, create an experiment to organize your runs.
 You now have a dedicated experiment container. Every MLflow run you log from a notebook will appear here — with metrics, parameters, and model artifacts organized automatically.
 
 > 📋 **What you should see:** A new ML Experiment item in your workspace with zero runs. It will populate once you execute the training code below.
+
+> 📚 **Learn more:** [ML Experiments in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/machine-learning-experiment)
 
 ---
 
@@ -174,6 +180,10 @@ print(f"\nTest label distribution:\n{y_test.value_counts(normalize=True)}")
 
 > ⚠️ **Important:** The `stratify=y` parameter ensures your train and test sets have the same proportion of hazardous vs. non-hazardous asteroids. Without this, you might accidentally train on an unbalanced split and get misleading metrics.
 
+> 📚 **Official Documentation:**
+> - [Scikit-learn in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/train-models-scikit-learn)
+> - [SynapseML](https://learn.microsoft.com/en-us/fabric/data-science/synapseml-overview)
+
 ---
 
 ## 4️⃣ Train Classification Models
@@ -232,6 +242,8 @@ for name, model in models.items():
 
 > 💡 **What's happening under the hood:** Each `mlflow.start_run()` creates a tracked experiment run. Parameters, metrics, and the serialized model artifact all get stored automatically — no extra storage configuration needed. You'll see all three runs appear in the Fabric experiment UI within seconds.
 
+> 📚 **Learn more:** [MLflow Autologging in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/mlflow-autologging)
+
 ---
 
 ## 5️⃣ Compare & Select Best Model
@@ -270,6 +282,8 @@ To register in the Fabric UI:
 5. Click **Register**
 
 Your model is now a first-class citizen in the workspace — versioned, trackable, and ready for downstream use.
+
+> 📚 **Learn more:** [ML Models / Model Registry](https://learn.microsoft.com/en-us/fabric/data-science/machine-learning-model)
 
 ---
 
@@ -310,6 +324,8 @@ predictions_df.show(10)
 ```
 
 > 💡 **Why save predictions as a Gold table?** Downstream consumers — Power BI reports, real-time dashboards, and the ontology layer you'll build in Module 09 — can query this table directly. The model's output becomes a reusable data product, not a one-off notebook result.
+
+> 📚 **Learn more:** [PREDICT Function](https://learn.microsoft.com/en-us/fabric/data-science/model-scoring-predict)
 
 ---
 

@@ -31,6 +31,10 @@ Microsoft Fabric supports multiple deployment patterns. Choosing the right one d
 
 > 💡 **Our recommendation:** Start with **Git + Deployment Pipelines**. It gives you version control, change tracking, and governed promotion without the overhead of full CI/CD automation. Graduate to GitHub Actions or `fabric-cicd` when your team is ready.
 
+> 📚 **Official Documentation:**
+> - [Lifecycle Management Best Practices](https://learn.microsoft.com/en-us/fabric/cicd/best-practices-cicd)
+> - [Fabric CI/CD with APIs](https://learn.microsoft.com/en-us/fabric/cicd/manage-deployment-using-rest-api)
+
 ---
 
 ## 11.2 — Enable Git Integration
@@ -90,6 +94,10 @@ Once committed, your Fabric items appear as JSON and code files in the repo:
 ```
 
 > 💡 **Key benefit:** Every change to a Fabric item now creates a Git commit. You get full history, diffs, and the ability to roll back.
+
+> 📚 **Official Documentation:**
+> - [Introduction to Git Integration](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/intro-to-git-integration)
+> - [Get Started: Connect to GitHub](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/git-get-started)
 
 ---
 
@@ -162,6 +170,9 @@ Because Git integration is enabled, the Variable Library is stored as JSON in yo
 - You can **diff** variable changes across commits
 - Rollback is as simple as reverting a Git commit
 
+> 📚 **Learn more:**
+> - [Manage Spark Configuration (Environment Variables)](https://learn.microsoft.com/en-us/fabric/data-engineering/environment-manage-spark-conf)
+
 ---
 
 ## 11.4 — Create a Deployment Pipeline
@@ -201,6 +212,10 @@ Deployment rules control how items change when promoted between stages. Configur
 2. Under **Deployment rules**, set:
    - Lakehouse connections → use Variable Library value set for the target stage
    - Data source connections → use Variable Library value set for the target stage
+
+> 📚 **Official Documentation:**
+> - [Introduction to Deployment Pipelines](https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/intro-to-deployment-pipelines)
+> - [Create Deployment Pipeline Rules](https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/create-rules)
 
 ---
 
@@ -322,6 +337,9 @@ Pull Requests add governance:
 - **Diff visibility** — see exactly what changed in Fabric item definitions
 - **Audit trail** — every change is linked to a PR with discussion history
 
+> 📚 **Learn more:**
+> - [Manage Branches in Git Integration](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/manage-branches)
+
 ---
 
 ## 11.8 — Code-First CI/CD with fabric-cicd
@@ -385,6 +403,10 @@ jobs:
 ```
 
 > 💡 **When to use `fabric-cicd`:** When you need automated testing gates, multi-workspace orchestration, or integration with existing CI/CD systems. For most teams, Git + Deployment Pipelines is sufficient.
+
+> 📚 **Official Documentation:**
+> - [Automation with Service Principals](https://learn.microsoft.com/en-us/fabric/admin/service-admin-portal-developer)
+> - [Fabric REST APIs](https://learn.microsoft.com/en-us/rest/api/fabric/core/items)
 
 ---
 

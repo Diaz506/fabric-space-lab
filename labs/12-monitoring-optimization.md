@@ -51,6 +51,11 @@ The Fabric portal also has a built-in **Monitoring hub**:
 2. View active and recent operations across all workspaces
 3. Filter by workspace, item type, status, and time range
 
+> 📚 **Official Documentation:**
+> - [Capacity Metrics App](https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app)
+> - [Monitoring Hub](https://learn.microsoft.com/en-us/fabric/admin/monitoring-hub)
+> - [Fabric Capacities & Licensing](https://learn.microsoft.com/en-us/fabric/enterprise/licenses)
+
 ---
 
 ## 12.2 — Analyze CU Consumption
@@ -98,6 +103,10 @@ Fabric categorizes consumption into two buckets:
 
 > 💡 **Key insight:** Background operations can be **deferred** during peak hours, while interactive operations get immediate CUs. Understanding this split is crucial for optimization.
 
+> 📚 **Official Documentation:**
+> - [Workload Management](https://learn.microsoft.com/en-us/fabric/enterprise/fabric-operations)
+> - [Azure Billing for Fabric](https://learn.microsoft.com/en-us/fabric/enterprise/azure-billing)
+
 ---
 
 ## 12.3 — Identify Throttling
@@ -127,6 +136,8 @@ For ZOSA, you discover:
 - **Tuesday mornings** see throttling during ML model retraining
 - **Occasional spikes** when Dr. Osei runs ad-hoc Spark analysis during peak hours
 - **No rejections** — we're close to the edge but not over
+
+> 📚 **Learn more:** [Throttling & Smoothing in Fabric](https://learn.microsoft.com/en-us/fabric/enterprise/throttling)
 
 ---
 
@@ -238,6 +249,15 @@ After 30 days of monitoring:
 
 For ZOSA: After optimizations, if average consumption drops from 85% to 45% of F64, consider moving to **F32** and pocketing the savings.
 
+> 📚 **Official Documentation:**
+> - [Pause/Resume Capacity](https://learn.microsoft.com/en-us/fabric/enterprise/pause-resume)
+> - [Spark Job Concurrency & Optimization](https://learn.microsoft.com/en-us/fabric/data-engineering/spark-job-concurrency-and-queueing)
+> - [Notebook Optimization](https://learn.microsoft.com/en-us/fabric/data-engineering/author-execute-notebook)
+> - [Direct Lake Overview](https://learn.microsoft.com/en-us/power-bi/enterprise/directlake-overview)
+> - [Performance Best Practices (Data Warehouse)](https://learn.microsoft.com/en-us/fabric/data-warehouse/performance-guidelines)
+> - [Query Insights](https://learn.microsoft.com/en-us/fabric/data-warehouse/query-insights)
+> - [Capacity Settings](https://learn.microsoft.com/en-us/fabric/admin/service-admin-portal-capacity-settings)
+
 ---
 
 ## 12.5 — Set Up Alerts
@@ -271,6 +291,10 @@ For enterprise alerting, integrate Fabric capacity metrics with Azure Monitor:
 1. In the Azure portal, navigate to your Fabric capacity resource
 2. Go to **Metrics** → configure alert rules on capacity utilization
 3. Connect to **Action Groups** for email, SMS, webhook, or PagerDuty notifications
+
+> 📚 **Official Documentation:**
+> - [Azure Monitor Integration (Metrics App Install)](https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app-install)
+> - [Cost Management & Azure Billing](https://learn.microsoft.com/en-us/fabric/enterprise/azure-billing)
 
 ---
 

@@ -32,6 +32,11 @@ The Medallion Architecture organizes your data into three progressive layers of 
 - **Separation of concerns** — Data engineers own Bronze→Silver; analysts own Silver→Gold.
 - **Incremental complexity** — Each layer adds value without coupling to the others.
 
+> 📚 **Official Documentation:**
+> - [Medallion Architecture](https://learn.microsoft.com/en-us/fabric/onelake/onelake-medallion-lakehouse-architecture)
+> - [Lakehouse & Delta Tables](https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-overview)
+> - [Delta Lake Format](https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-and-delta-tables)
+
 ---
 
 ## 🗒️ Section 2 — Create Your First Notebook
@@ -54,6 +59,10 @@ Time to write your first Spark notebook. This is where the real data engineering
 | **Table access** | `spark.read.table("zosa_lakehouse.<table>")` |
 | **File access** | `Files/` folder in the Lakehouse |
 | **Cell execution** | `Shift+Enter` to run current cell |
+
+> 📚 **Official Documentation:**
+> - [Notebooks in Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook)
+> - [Spark in Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/spark-compute)
 
 ---
 
@@ -221,6 +230,8 @@ print(f"✅ telemetry_silver: {silver_telemetry.count()} rows")
 ```
 
 > ⚠️ **Important:** Run each cell sequentially (`Shift+Enter`). The first cell will take 30–60 seconds as the Spark session starts up. Subsequent cells run much faster.
+
+> 📚 **Learn more:** [Data Wrangler](https://learn.microsoft.com/en-us/fabric/data-science/data-wrangler) — for visual, no-code data exploration and transformation in notebooks.
 
 ---
 
@@ -429,6 +440,8 @@ silver.write.mode("append").format("delta").saveAsTable("zosa_lakehouse.asteroid
 
 > ⚠️ **For this lab**, stick with `mode("overwrite")`. The incremental pattern is shown here for reference — you'll use it when you operationalize your pipelines in a real project.
 
+> 📚 **Learn more:** [Incremental Refresh & Load Patterns](https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-notebook-load-data)
+
 ---
 
 ## ✅ Section 6 — Validate Your Medallion Lakehouse
@@ -463,6 +476,8 @@ You should see:
 - **No empty tables** — every layer should have data
 
 > 💡 **Pro tip:** You can also browse tables visually in the Lakehouse explorer. Click any table to preview its data and schema.
+
+> 📚 **Learn more:** [SQL Analytics Endpoint](https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-sql-analytics-endpoint)
 
 ---
 

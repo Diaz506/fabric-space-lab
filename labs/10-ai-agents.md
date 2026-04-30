@@ -33,6 +33,11 @@ What makes Data Agents special:
 
 > 💡 **Key distinction:** Data Agents are the GA product name. You may see older references to "AI Skills" in documentation — they refer to the same capability, but **always use "Data Agent"** going forward.
 
+> 📚 **Official Documentation:**
+> - [AI Skills Overview](https://learn.microsoft.com/en-us/fabric/data-science/concept-ai-skill)
+> - [Create an AI Skill](https://learn.microsoft.com/en-us/fabric/data-science/how-to-create-ai-skill)
+> - [Fabric Copilot Overview](https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview)
+
 ---
 
 ### 🛠️ Step 1 — Create a Data Agent
@@ -160,6 +165,8 @@ You can improve accuracy by adding custom instructions and example Q&A pairs.
    - **Include confidence score:** ✅ Yes
    - **Max results per query:** 50
 
+> 📚 **Learn more:** [AI Skill Instructions](https://learn.microsoft.com/en-us/fabric/data-science/ai-skill-instructions)
+
 ---
 
 ### 🔗 Step 5 — Share the Agent
@@ -178,6 +185,11 @@ You can improve accuracy by adding custom instructions and example Q&A pairs.
 
 > 💡 **Tip:** Share the agent URL with Major Nakamura's team. They can access it directly from the Fabric portal or embed it in a Power BI report for inline Q&A.
 
+> 📚 **Official Documentation:**
+> - [Copilot for Data Warehouse](https://learn.microsoft.com/en-us/fabric/data-warehouse/copilot)
+> - [Copilot for Data Engineering](https://learn.microsoft.com/en-us/fabric/data-engineering/copilot-notebooks-overview)
+> - [Copilot for Power BI](https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-introduction)
+
 ---
 
 ## ⚡ Part B — Operations Agent (Preview)
@@ -193,6 +205,10 @@ Think of the difference this way:
 - **Operations Agent:** A new dangerous asteroid is detected → *automatically* generates a threat brief, notifies the Defense team, and creates a mission proposal
 
 Operations Agents are powered by the ontology and can chain multiple actions together in response to data events.
+
+> 📚 **Official Documentation:**
+> - [Data Activator / Reflex](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction)
+> - [Azure OpenAI in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/ai-services/how-to-use-openai-sdk-synapse)
 
 ---
 
@@ -368,6 +384,9 @@ Data Agents respect **all security layers** configured in your Fabric estate:
 - Workspace roles and permissions
 
 > 🔑 **This is critical for ZOSA:** When Major Nakamura queries the Data Agent, he sees defense-relevant data. When a scientist queries the same agent, they see science-relevant data. Same agent, same ontology, different views — all enforced automatically.
+
+> 📚 **Official Documentation:**
+> - [Semantic Link](https://learn.microsoft.com/en-us/fabric/data-science/semantic-link-overview)
 
 ---
 

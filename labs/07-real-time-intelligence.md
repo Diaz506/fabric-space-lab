@@ -18,6 +18,10 @@ The **Real-Time Hub** is Fabric's centralized management surface for all streami
 
 > 💡 **Tip:** As you build artifacts in this module, return to the Real-Time Hub to see them appear automatically. It is the single pane of glass for everything real-time.
 
+> 📚 **Official Documentation:**
+> - [Real-Time Hub Overview](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/real-time-hub-overview)
+> - [Real-Time Intelligence Overview](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview)
+
 ---
 
 ## 🏠 2 — Create an Eventhouse
@@ -33,6 +37,8 @@ An **Eventhouse** is Fabric's real-time analytics engine, optimized for time-ser
 5. Confirm the database appears under your Eventhouse in the workspace list.
 
 > 📖 **Why Eventhouse?** Traditional Lakehouse queries run in seconds to minutes. Eventhouse returns results in *milliseconds* — essential when Major Nakamura wants to know about a close approach *now*, not after the next Spark job finishes.
+
+> 📚 **Learn more:** [Create an Eventhouse](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-eventhouse)
 
 ---
 
@@ -88,6 +94,10 @@ while True:
 
 > ⚠️ **Important:** Replace `YOUR_EVENTSTREAM_ENDPOINT` with the actual endpoint URL copied from step 4. Keep the script running in a terminal for the remainder of this module.
 
+> 📚 **Official Documentation:**
+> - [Create and manage an Eventstream](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-manage-an-eventstream)
+> - [Add Custom App source](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/add-source-custom-app)
+
 ---
 
 ## 🔗 4 — Direct Ingestion to Eventhouse
@@ -119,6 +129,8 @@ With **direct ingestion**, the Eventstream routes raw events straight into your 
 6. Click **Publish**. Within seconds, events from the simulator start landing in the Eventhouse.
 
 > 💡 **Tip:** Click **Data preview** on the destination node to confirm rows are arriving.
+
+> 📚 **Learn more:** [Ingest data from Eventstream](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/get-data-eventstream)
 
 ---
 
@@ -171,6 +183,10 @@ asteroid_detections
 
 > 📖 **Note:** KQL is purpose-built for time-series analytics. Queries that would take minutes in SQL run in milliseconds here because the Eventhouse indexes data by time automatically.
 
+> 📚 **Official Documentation:**
+> - [KQL Query Language reference](https://learn.microsoft.com/en-us/kusto/query/)
+> - [Create a KQL Queryset](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-query-set)
+
 ---
 
 ## 📊 6 — Materialized Views
@@ -202,6 +218,8 @@ HourlyDetectionSummary
 
 > 💡 **Tip:** Materialized views update incrementally as new data arrives — you do not need to refresh them manually. They are ideal for dashboard tiles that display hourly or daily summaries.
 
+> 📚 **Learn more:** [Materialized views overview](https://learn.microsoft.com/en-us/kusto/management/materialized-views/materialized-view-overview)
+
 ---
 
 ## 📈 7 — Real-Time Dashboard
@@ -228,6 +246,8 @@ Create a live dashboard that Mission Control can display on the big screen.
 5. Click **Save** and optionally pin the dashboard to the workspace home.
 
 > 🎯 **Pro tip:** Drag and resize tiles to create a Mission Control layout. Put the closest-approach gauge front and center — that is the number Major Nakamura cares about most.
+
+> 📚 **Learn more:** [Create a Real-Time Dashboard](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/dashboard-real-time-create)
 
 ---
 
@@ -258,6 +278,8 @@ Create a live dashboard that Mission Control can display on the big screen.
 > 📖 **How it works:** Activator evaluates the condition on the schedule you set. When the condition is true, it executes *all* configured actions and passes event context (object name, distance, velocity) as dynamic parameters. You can view the alert history and manage all Activator items from the **Real-Time Hub → Alerts** tab.
 
 > ⚠️ **Important:** In this lab, use your own email to test. You should receive an alert within a few minutes because the simulator generates close approaches (< 0.05 AU) roughly 10% of the time.
+
+> 📚 **Learn more:** [Data Activator introduction](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction)
 
 ---
 
@@ -309,6 +331,8 @@ Real-time and batch analytics work best together. Here is the architecture ZOSA 
 ```
 
 > 💡 **Tip:** In a production scenario, you would also configure a **data export rule** or use the Eventstream's second destination to write simultaneously to both the Eventhouse and the Lakehouse. This gives you real-time *and* historical coverage from a single stream.
+
+> 📚 **Learn more:** [Retention policies](https://learn.microsoft.com/en-us/kusto/management/retention-policy)
 
 ---
 

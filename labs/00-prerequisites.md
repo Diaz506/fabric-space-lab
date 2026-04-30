@@ -64,6 +64,9 @@ You need access to a Fabric-enabled workspace. Two options:
 
 > **⚠️ Note:** If your organization's admin has disabled Fabric, you'll need to request access or use a personal Microsoft account for the trial.
 
+> 📚 **Learn more:**
+> - [Fabric Trial Setup](https://learn.microsoft.com/en-us/fabric/get-started/fabric-trial)
+
 ---
 
 ### 2. NASA API Key
@@ -104,6 +107,9 @@ pip install -r requirements.txt
 > pip install -r requirements.txt
 > ```
 
+> 📚 **Learn more:**
+> - [Python in Fabric Notebooks](https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook)
+
 ---
 
 ### 4. Power BI Desktop
@@ -114,6 +120,9 @@ Required for **Module 06** (Semantic Model & Power BI).
 - Or install via the **Microsoft Store** (auto-updates)
 
 > **⚠️ Note:** Power BI Desktop is Windows-only. If you're on macOS/Linux, you can use the Power BI Service in your browser for most tasks, but the Desktop experience is richer.
+
+> 📚 **Learn more:**
+> - [Power BI Desktop Download](https://learn.microsoft.com/en-us/power-bi/fundamentals/desktop-get-the-desktop)
 
 ---
 
@@ -129,6 +138,9 @@ git --version
 ```
 
 If not installed, download from [https://git-scm.com/](https://git-scm.com/).
+
+> 📚 **Learn more:**
+> - [Git Integration in Fabric (Azure DevOps / GitHub)](https://learn.microsoft.com/en-us/fabric/cicd/git-integration/intro-to-git-integration)
 
 ---
 
