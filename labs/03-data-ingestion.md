@@ -45,7 +45,9 @@ This is your development environment. You write PySpark code that calls the API,
 1. Navigate to **ZOSA-Dev** workspace.
 2. Click **+ New** → **Notebook**.
 3. Name it `nb_api_ingestion`.
-4. In the first cell, attach the notebook to your lakehouse: click **Add lakehouse** in the left Explorer → select `lh_zosa`.
+4. Attach the notebook to your lakehouse: in the left panel, click **+ Add data items** → select **Existing Lakehouse** → choose `lh_zosa`. You should see **Tables** and **Files** folders appear under `lh_zosa`.
+
+   > ⚠️ **Common mistake:** Make sure you add a **Lakehouse**, not a Warehouse. A Lakehouse shows **Tables** and **Files** folders. A Warehouse shows **Schemas** and **Security** folders — if you see those, remove it and add the Lakehouse instead.
 5. Paste this code into a cell and run it:
 
 ```python
