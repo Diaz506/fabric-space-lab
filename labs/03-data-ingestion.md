@@ -97,15 +97,19 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
 5. In the **General** tab of the Web activity, configure:
    - **Name:** `Get NASA NEO Data`
    - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
-6. In the **Settings** tab, configure:
-   - **Connection:** Open the dropdown → select an existing Web connection, or click **+ New** to create one. If you don't have one yet, the connection creation dialog will ask for:
-     - **Connection name:** `NASA API`
-     - **Base URL:** `https://api.nasa.gov`
+6. In the **Settings** tab, configure the connection:
+   - **Connection:** Select **Create new connection** from the dropdown. The **"Connect data source"** wizard opens (labeled **Web v2**):
+     - **Base Url:** `https://api.nasa.gov`
+     - **Token Audience Uri:** *(leave empty)*
+     - **Connection name:** auto-fills as `https://api.nasa.gov` (you can rename it, e.g., `NASA API`)
+     - **Data gateway:** `(none)`
      - **Authentication kind:** **Anonymous**
-     - Click **Create**
-   - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
-   - **Method:** `GET`
-   - **Headers:** *(leave empty)*
+     - **Privacy Level:** `None`
+     - Click **Connect**
+   - Back on the Settings tab, configure:
+     - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
+     - **Method:** `GET`
+     - **Headers:** *(leave empty)*
 7. Add a **Set Variable** activity (wired after the Web activity):
    - **General** tab — Name: `Store API Response`
    - Create a pipeline variable `api_response` (type: String)
