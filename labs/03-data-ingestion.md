@@ -110,10 +110,12 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
      - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
      - **Method:** `GET`
      - **Headers:** *(leave empty)*
-7. Add a **Set Variable** activity (wired after the Web activity):
+7. From the **Activities** ribbon, add a **Set Variable** activity. Connect it to the Web activity using the **On success** connector (green arrow):
    - **General** tab — Name: `Store API Response`
-   - Create a pipeline variable `api_response` (type: String)
-   - Set its value to `@string(activity('Get NASA NEO Data').output)`
+   - **Settings** tab:
+     - **Variable type:** select **Pipeline variable**
+     - **Name:** click **+ New** to create a variable called `api_response` (type: String)
+     - **Value:** `@string(activity('Get NASA NEO Data').output)`
 
    > ⚠️ **Note:** The Web activity output **is** the parsed response body directly (there is no `.Response` sub-property). The output payload is limited to **4 MB**, so this pattern works well for small API responses like the NeoWs weekly feed.
 
