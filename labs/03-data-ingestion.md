@@ -170,6 +170,10 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
      - **Advanced settings:** *(leave defaults)*
    - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
 
+10. Click **Run** (▷) in the toolbar to execute the pipeline. Monitor the **Output** tab at the bottom of the canvas — you should see all three activities (Web → Set Variable → Notebook) complete with green checkmarks. The notebook activity may take 1–2 minutes as it starts a Spark session.
+
+11. Once the pipeline succeeds, navigate to `lh_zosa` → **Tables** and verify that `asteroids_bronze` appears with data.
+
 **💡 Tip:** In production, you'd parameterize the date range and schedule the pipeline to run daily — pulling only the latest NEO data each time. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."
 
 ---
