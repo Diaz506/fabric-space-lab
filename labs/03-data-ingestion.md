@@ -119,13 +119,55 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
 
    > ⚠️ **Note:** The Web activity output **is** the parsed response body directly (there is no `.Response` sub-property). The output payload is limited to **4 MB**, so this pattern works well for small API responses like the NeoWs weekly feed.
 
-8. From the **Activities** ribbon, add a **Notebook** activity. Connect it to the Set Variable activity using the **On success** connector:
+8. Before wiring the Notebook activity, you need a notebook that receives the API response as a parameter and loads it into a Delta table. Navigate to **ZOSA-Dev** workspace and create a new notebook:
+   - Click **+ New** → **Notebook**.
+   - Name it `nb_pipeline_load_asteroids`.
+   - Paste this code into the first cell:
+
+   ```python
+   # This notebook receives the NASA API JSON response from the pipeline
+   # and writes it as a Delta table in the lakehouse.
+   import json
+   from pyspark.sql import Row
+
+   # Read the pipeline parameter (passed from the Set Variable activity)
+   api_response_json = notebookutils.notebook.exit(None)  # placeholder — see base parameters below
+   api_response_json = spark.conf.get("spark.synapse.notebook.pipeline.param.api_response", "{}")
+
+   data = json.loads(api_response_json)
+
+   # Flatten the nested JSON into rows
+   rows = []
+   for date, neos in data.get("near_earth_objects", {}).items():
+       for neo in neos:
+           rows.append(Row(
+               neo_id=neo["id"],
+               name=neo["name"],
+               absolute_magnitude=float(neo.get("absolute_magnitude_h", 0)),
+               is_hazardous=neo["is_potentially_hazardous_asteroid"],
+               close_approach_date=date,
+               miss_distance_km=float(neo["close_approach_data"][0]["miss_distance"]["kilometers"]),
+               relative_velocity_kph=float(neo["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"]),
+               estimated_diameter_min_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_min"]),
+               estimated_diameter_max_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_max"])
+           ))
+
+   df = spark.createDataFrame(rows)
+   df.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_bronze")
+   print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")
+   ```
+
+   - Save the notebook.
+
+9. Back in your pipeline, from the **Activities** ribbon add a **Notebook** activity. Connect it to the Set Variable activity using the **On success** connector:
    - **General** tab — Name: `Transform and Load Asteroids`
    - **Settings** tab:
      - **Connection:** *(leave as default or select your workspace connection)*
      - **Workspace:** `ZOSA-Dev`
-     - **Notebook:** select `nb_api_ingestion` from the dropdown (the notebook from Option A)
-     - **Base parameters / Advanced settings:** *(leave defaults for now)*
+     - **Notebook:** select `nb_pipeline_load_asteroids` from the dropdown
+     - **Base parameters:** expand this section and add a parameter:
+       - **Name:** `api_response` | **Type:** String | **Value:** `@variables('api_response')`
+     - **Advanced settings:** *(leave defaults)*
    - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
 
 **💡 Tip:** In production, you'd parameterize the date range and schedule the pipeline to run daily — pulling only the latest NEO data each time. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."
