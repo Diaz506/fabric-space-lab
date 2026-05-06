@@ -31,13 +31,16 @@ You now have a Lakehouse with two areas:
 
 In real-world scenarios, data doesn't arrive as CSV files on your desktop — it comes from **REST APIs, databases, and streaming sources**. Let's ingest asteroid data directly from NASA's Near-Earth Object (NeoWs) API **inside Fabric**, no local tools required.
 
-You have two approaches: a **Notebook** (code-first) or a **Data Pipeline** (low-code). Both achieve the same result — a `asteroids_bronze` table in your lakehouse.
+You'll follow a two-step approach that mirrors how production teams work:
+
+1. **Develop** the ingestion logic in a Notebook (flexible, debuggable)
+2. **Productionize** by wrapping it in a Data Pipeline (scheduling, retries, monitoring)
 
 ---
 
-### Option A: Notebook — Code-First API Ingestion
+### Step 1: Create the Ingestion Notebook
 
-This is the most flexible approach. You write PySpark code that calls the API, parses JSON, and writes directly to a Delta table.
+This is your development environment. You write PySpark code that calls the API, parses JSON, and writes directly to a Delta table.
 
 1. Navigate to **ZOSA-Dev** workspace.
 2. Click **+ New** → **Notebook**.
@@ -86,112 +89,54 @@ print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")
 
 ---
 
-### Option B: Data Pipeline — Low-Code API Ingestion
+### Step 2: Wrap in a Data Pipeline (Production Orchestration)
 
-If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web Activity** to call the API and a **Notebook Activity** to transform and load the response.
+Your notebook works — but in production you can't rely on someone clicking "Run" every morning. You need **scheduling, automatic retries, failure alerts, and run history**. That's what a Data Pipeline provides.
+
+The pipeline doesn't duplicate the notebook's logic. It simply **calls** the notebook on a schedule and adds operational guardrails around it.
 
 1. Navigate to **ZOSA-Dev** workspace.
 2. Click **+ New** → **Data Pipeline**.
 3. Name it `pl_api_asteroid_ingestion` and click **Create**.
-4. On the landing page, click **Pipeline activity** (under "Start with a blank canvas"). An activity picker appears — type `Web` in the **Search** box and select **Web** to add it to the canvas.
-5. In the **General** tab of the Web activity, configure:
-   - **Name:** `Get NASA NEO Data`
-   - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
-6. In the **Settings** tab, configure the connection:
-   - **Connection:** Select **Create new connection** from the dropdown. The **"Connect data source"** wizard opens (labeled **Web v2**):
-     - **Base Url:** `https://api.nasa.gov`
-     - **Token Audience Uri:** *(leave empty)*
-     - **Connection name:** auto-fills as `https://api.nasa.gov` (you can rename it, e.g., `NASA API`)
-     - **Data gateway:** `(none)`
-     - **Authentication kind:** **Anonymous**
-     - **Privacy Level:** `None`
-     - Click **Connect**
-   - Back on the Settings tab, configure:
-     - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
-     - **Method:** `GET`
-     - **Headers:** *(leave empty)*
-7. From the **Activities** ribbon, add a **Set Variable** activity. Connect it to the Web activity using the **On success** connector (green arrow):
-   - **General** tab — Name: `Store API Response`
-   - **Settings** tab:
-     - **Variable type:** select **Pipeline variable**
-     - **Name:** click **+ New** to create a variable called `api_response` (type: String)
-     - **Value:** `@string(activity('Get NASA NEO Data').output)`
+4. On the landing page, click **Pipeline activity** (under "Start with a blank canvas"). An activity picker appears — type `Notebook` in the **Search** box and select **Notebook** to add it to the canvas.
+5. In the **General** tab, configure:
+   - **Name:** `Ingest Asteroids from NASA`
+6. In the **Settings** tab, configure:
+   - **Connection:** *(leave as default or select your workspace connection)*
+   - **Workspace:** `ZOSA-Dev`
+   - **Notebook:** select `nb_api_ingestion` from the dropdown
+   - **Base parameters:** *(leave empty for now — the API key is hardcoded in the notebook)*
+   - **Advanced settings:** *(leave defaults)*
+7. Click **Run** (▷) in the toolbar to execute the pipeline. Monitor the **Output** tab at the bottom — the Notebook activity should complete with a green checkmark. It may take 1–2 minutes as it starts a Spark session.
+8. Once the pipeline succeeds, navigate to `lh_zosa` → **Tables** and verify that `asteroids_bronze` has been refreshed with data.
 
-   > ⚠️ **Note:** The Web activity output **is** the parsed response body directly (there is no `.Response` sub-property). The output payload is limited to **4 MB**, so this pattern works well for small API responses like the NeoWs weekly feed.
+**What you gained:** The pipeline wraps your notebook with production capabilities:
 
-8. Before wiring the Notebook activity, you need a notebook that receives the API response as a parameter and loads it into a Delta table. Navigate to **ZOSA-Dev** workspace and create a new notebook:
-   - Click **+ New** → **Notebook**.
-   - Name it `nb_pipeline_load_asteroids`.
-   - Paste this code into the first cell:
+| Capability | How to enable |
+|-----------|---------------|
+| **Run daily at 6 AM** | Click **Schedule** in the toolbar → set a recurrence trigger |
+| **Retry on failure** | Select the Notebook activity → **General** tab → set Retry count to 3 |
+| **Email on failure** | Click **Trigger** → **Add trigger** → configure alerts |
+| **Run history** | Click **View run history** to see all past executions |
+| **Parameterize dates** | Add pipeline parameters and pass them to the notebook via Base parameters |
 
-   ```python
-   # This notebook receives the NASA API JSON response from the pipeline
-   # and writes it as a Delta table in the lakehouse.
-   import json
-   from pyspark.sql import Row
-
-   # Read the pipeline parameter (passed from the Set Variable activity)
-   api_response_json = notebookutils.notebook.get_arg("api_response")
-
-   data = json.loads(api_response_json)
-
-   # Flatten the nested JSON into rows
-   rows = []
-   for date, neos in data.get("near_earth_objects", {}).items():
-       for neo in neos:
-           rows.append(Row(
-               neo_id=neo["id"],
-               name=neo["name"],
-               absolute_magnitude=float(neo.get("absolute_magnitude_h", 0)),
-               is_hazardous=neo["is_potentially_hazardous_asteroid"],
-               close_approach_date=date,
-               miss_distance_km=float(neo["close_approach_data"][0]["miss_distance"]["kilometers"]),
-               relative_velocity_kph=float(neo["close_approach_data"][0]["relative_velocity"]["kilometers_per_hour"]),
-               estimated_diameter_min_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_min"]),
-               estimated_diameter_max_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_max"])
-           ))
-
-   df = spark.createDataFrame(rows)
-   df.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_bronze")
-   print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")
-   ```
-
-   - Save the notebook.
-
-9. Back in your pipeline, from the **Activities** ribbon add a **Notebook** activity. Connect it to the Set Variable activity using the **On success** connector:
-   - **General** tab — Name: `Transform and Load Asteroids`
-   - **Settings** tab:
-     - **Connection:** *(leave as default or select your workspace connection)*
-     - **Workspace:** `ZOSA-Dev`
-     - **Notebook:** select `nb_pipeline_load_asteroids` from the dropdown
-     - **Base parameters:** expand this section and add a parameter:
-       - **Name:** `api_response` | **Type:** String | **Value:** `@variables('api_response')`
-     - **Advanced settings:** *(leave defaults)*
-   - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
-
-10. Click **Run** (▷) in the toolbar to execute the pipeline. Monitor the **Output** tab at the bottom of the canvas — you should see all three activities (Web → Set Variable → Notebook) complete with green checkmarks. The notebook activity may take 1–2 minutes as it starts a Spark session.
-
-11. Once the pipeline succeeds, navigate to `lh_zosa` → **Tables** and verify that `asteroids_bronze` appears with data.
-
-**💡 Tip:** In production, you'd parameterize the date range and schedule the pipeline to run daily — pulling only the latest NEO data each time. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."
+**💡 Tip:** To parameterize the date range, add `start_date` and `end_date` pipeline parameters, pass them to the notebook via **Base parameters**, and read them in the notebook with `notebookutils.notebook.get_arg("start_date")`. This lets you backfill historical data or schedule incremental daily pulls.
 
 ---
 
-### Which approach should you use?
+### 💡 When to use Web Activity in pipelines
 
-| Factor | Notebook | Data Pipeline |
-|--------|----------|---------------|
-| **Flexibility** | Full Python/PySpark — any API shape | Limited to built-in activities |
-| **Scheduling** | Needs pipeline wrapper or manual trigger | Built-in scheduler with retries |
-| **Error handling** | Try/except in code | Visual retry policies, alerts |
-| **Best for** | Complex transformations, nested JSON | Simple REST → table patterns |
-| **ZOSA recommendation** | ✅ Use for initial development | ✅ Use for production orchestration |
+The **Web Activity** is useful in pipelines when you need to:
+- Check an API health endpoint before proceeding (with an **If Condition** activity)
+- Fetch a short-lived auth token for downstream activities
+- Trigger an external webhook or notify another system
+- Call a simple REST endpoint where the response drives pipeline control flow
 
-**Best practice:** Develop in a notebook, then wrap it in a pipeline for production scheduling.
+It's **not** the right tool for ingesting large API responses into a lakehouse — that's what notebooks excel at.
 
 > 📚 **Official Documentation:**
 > - [Notebooks in Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook)
-> - [REST API ingestion with Pipelines](https://learn.microsoft.com/en-us/fabric/data-factory/connector-rest-overview)
+> - [Data Pipelines](https://learn.microsoft.com/en-us/fabric/data-factory/create-first-pipeline-with-sample-data)
 > - [Web Activity in Pipelines](https://learn.microsoft.com/en-us/fabric/data-factory/web-activity)
 
 ---

@@ -122,80 +122,25 @@
         <h2>🌐 Ingest Data from a Public API</h2>
       </div>
 
-      <p>In real-world scenarios, data arrives from <strong>REST APIs, databases, and streaming sources</strong>. Let's ingest asteroid data directly from NASA's NeoWs API inside Fabric. You have two approaches:</p>
+      <p>In real-world scenarios, data arrives from <strong>REST APIs, databases, and streaming sources</strong>. You'll follow a two-step approach that mirrors how production teams work:</p>
+      <ol>
+        <li><strong>Develop</strong> the ingestion logic in a Notebook (flexible, debuggable)</li>
+        <li><strong>Productionize</strong> by wrapping it in a Data Pipeline (scheduling, retries, monitoring)</li>
+      </ol>
 
-      <!-- Option B: Data Pipeline -->
-      <h3 id="api-pipeline">Option B: Data Pipeline — Low-Code API Ingestion</h3>
-      <p>Use a Data Pipeline with a <strong>Web Activity</strong> to call the API and a <strong>Notebook Activity</strong> to transform and load the response.</p>
+      <!-- Step 1: Notebook -->
+      <h3>Step 1: Create the Ingestion Notebook</h3>
 
       <div class="step-card">
         <div class="step-number">1</div>
-        <div class="step-title">Create the Pipeline</div>
+        <div class="step-title">Create &amp; Run the Notebook</div>
         <div class="step-body">
           <ol>
             <li>Navigate to <strong>ZOSA-Dev</strong> workspace</li>
-            <li>Click <strong>+ New</strong> → <strong>Data Pipeline</strong></li>
-            <li>Name it <code>pl_api_asteroid_ingestion</code> and click <strong>Create</strong></li>
-            <li>On the landing page, click <strong>Pipeline activity</strong> (under "Start with a blank canvas"). An activity picker appears — type <code>Web</code> in the <strong>Search</strong> box and select <strong>Web</strong> to add it to the canvas.</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Configure the Web Activity</div>
-        <div class="step-body">
-          <ol>
-            <li><strong>General</strong> tab — Name: <code>Get NASA NEO Data</code></li>
-            <li><strong>Settings</strong> tab — Connection: select <strong>Create new connection</strong>. The <strong>"Connect data source"</strong> wizard opens (labeled <strong>Web v2</strong>):
-              <ul>
-                <li><strong>Base Url:</strong> <code>https://api.nasa.gov</code></li>
-                <li><strong>Token Audience Uri:</strong> <em>(leave empty)</em></li>
-                <li><strong>Connection name:</strong> auto-fills (rename to <code>NASA API</code> if desired)</li>
-                <li><strong>Data gateway:</strong> <code>(none)</code></li>
-                <li><strong>Authentication kind:</strong> <strong>Anonymous</strong></li>
-                <li><strong>Privacy Level:</strong> <code>None</code></li>
-                <li>Click <strong>Connect</strong></li>
-              </ul>
-            </li>
-            <li>Back on Settings: <strong>Relative URL:</strong> <code>/neo/rest/v1/feed?start_date=2024-01-01&amp;end_date=2024-01-07&amp;api_key=YOUR_NASA_API_KEY</code></li>
-            <li><strong>Method:</strong> <code>GET</code></li>
-            <li><strong>Headers:</strong> <em>(leave empty)</em></li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">Add Set Variable Activity</div>
-        <div class="step-body">
-          <ol>
-            <li>From the <strong>Activities</strong> ribbon, add a <strong>Set Variable</strong> activity. Connect it to the Web activity using the <strong>On success</strong> connector (green arrow).</li>
-            <li><strong>General</strong> tab — Name: <code>Store API Response</code></li>
-            <li><strong>Settings</strong> tab:
-              <ul>
-                <li><strong>Variable type:</strong> select <strong>Pipeline variable</strong></li>
-                <li><strong>Name:</strong> click <strong>+ New</strong> to create a variable called <code>api_response</code> (type: String)</li>
-                <li><strong>Value:</strong> <code>@string(activity('Get NASA NEO Data').output)</code></li>
-              </ul>
-            </li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Output Limit</div>
-        <p>The Web activity output <strong>is</strong> the parsed response body directly (there is no <code>.Response</code> sub-property). The output payload is limited to <strong>4 MB</strong>, so this pattern works well for small API responses like the NeoWs weekly feed.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <div class="step-title">Create the Transform Notebook</div>
-        <div class="step-body">
-          <ol>
-            <li>Navigate to <strong>ZOSA-Dev</strong> workspace → <strong>+ New</strong> → <strong>Notebook</strong></li>
-            <li>Name it <code>nb_pipeline_load_asteroids</code></li>
-            <li>Paste the following code and save:</li>
+            <li>Click <strong>+ New</strong> → <strong>Notebook</strong></li>
+            <li>Name it <code>nb_api_ingestion</code></li>
+            <li>Attach the notebook to your lakehouse: click <strong>Add lakehouse</strong> in the left Explorer → select <code>lh_zosa</code></li>
+            <li>Paste the code below into a cell and run it</li>
           </ol>
         </div>
       </div>
@@ -203,19 +148,22 @@
       <div class="code-terminal">
         <div class="terminal-header">
           <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">Python — nb_pipeline_load_asteroids</span>
+          <span class="terminal-title">Python — nb_api_ingestion</span>
           <button class="copy-btn">Copy</button>
         </div>
-        <pre><code class="language-python">import json
+        <pre><code class="language-python">import requests
 from pyspark.sql import Row
 
-# Read the pipeline parameter passed via Base parameters
-api_response_json = notebookutils.notebook.get_arg("api_response")
-data = json.loads(api_response_json)
+# NASA NeoWs API — Near-Earth Objects for the past 7 days
+API_KEY = "YOUR_NASA_API_KEY"  # Replace with your key from api.nasa.gov
+url = f"https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-01-01&amp;end_date=2024-01-07&amp;api_key={API_KEY}"
+
+response = requests.get(url)
+data = response.json()
 
 # Flatten the nested JSON into rows
 rows = []
-for date, neos in data.get("near_earth_objects", {}).items():
+for date, neos in data["near_earth_objects"].items():
     for neo in neos:
         rows.append(Row(
             neo_id=neo["id"],
@@ -229,34 +177,61 @@ for date, neos in data.get("near_earth_objects", {}).items():
             estimated_diameter_max_m=float(neo["estimated_diameter"]["meters"]["estimated_diameter_max"])
         ))
 
+# Create DataFrame and write as Delta table
 df = spark.createDataFrame(rows)
 df.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_bronze")
 print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")</code></pre>
       </div>
 
+      <div class="mission-alert info">
+        <div class="alert-title">What Just Happened?</div>
+        <p>You called a live REST API from a Fabric notebook, transformed nested JSON into a flat structure using PySpark, and persisted it directly as a Delta table. No CSV files, no local downloads, no uploads.</p>
+      </div>
+
+      <!-- Step 2: Pipeline -->
+      <h3>Step 2: Wrap in a Data Pipeline (Production Orchestration)</h3>
+      <p>Your notebook works — but in production you can't rely on someone clicking "Run" every morning. A <strong>Data Pipeline</strong> adds scheduling, automatic retries, failure alerts, and run history.</p>
+
       <div class="step-card">
-        <div class="step-number">5</div>
-        <div class="step-title">Add Notebook Activity &amp; Run</div>
+        <div class="step-number">2</div>
+        <div class="step-title">Create the Pipeline</div>
         <div class="step-body">
           <ol>
-            <li>Back in your pipeline, from the <strong>Activities</strong> ribbon add a <strong>Notebook</strong> activity. Connect it to the Set Variable activity using the <strong>On success</strong> connector.</li>
-            <li><strong>General</strong> tab — Name: <code>Transform and Load Asteroids</code></li>
+            <li>Navigate to <strong>ZOSA-Dev</strong> workspace</li>
+            <li>Click <strong>+ New</strong> → <strong>Data Pipeline</strong></li>
+            <li>Name it <code>pl_api_asteroid_ingestion</code> and click <strong>Create</strong></li>
+            <li>On the landing page, click <strong>Pipeline activity</strong> (under "Start with a blank canvas"). An activity picker appears — type <code>Notebook</code> in the <strong>Search</strong> box and select <strong>Notebook</strong>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Configure &amp; Run</div>
+        <div class="step-body">
+          <ol>
+            <li><strong>General</strong> tab — Name: <code>Ingest Asteroids from NASA</code></li>
             <li><strong>Settings</strong> tab:
               <ul>
                 <li><strong>Workspace:</strong> <code>ZOSA-Dev</code></li>
-                <li><strong>Notebook:</strong> select <code>nb_pipeline_load_asteroids</code></li>
-                <li><strong>Base parameters:</strong> expand and add: Name: <code>api_response</code> | Type: String | Value: <code>@variables('api_response')</code></li>
+                <li><strong>Notebook:</strong> select <code>nb_api_ingestion</code></li>
+                <li><strong>Base parameters:</strong> <em>(leave empty for now)</em></li>
               </ul>
             </li>
-            <li>Click <strong>Run</strong> (▷) in the toolbar. Monitor the <strong>Output</strong> tab — all three activities should complete with green checkmarks.</li>
-            <li>Navigate to <code>lh_zosa</code> → <strong>Tables</strong> and verify <code>asteroids_bronze</code> appears with data.</li>
+            <li>Click <strong>Run</strong> (▷) in the toolbar. The Notebook activity should complete with a green checkmark (1–2 min for Spark startup).</li>
+            <li>Navigate to <code>lh_zosa</code> → <strong>Tables</strong> and verify <code>asteroids_bronze</code> has been refreshed.</li>
           </ol>
         </div>
       </div>
 
       <div class="mission-alert tip">
-        <div class="alert-title">Production Pattern</div>
-        <p>In production, you'd parameterize the date range and schedule the pipeline to run daily. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."</p>
+        <div class="alert-title">What You Gained</div>
+        <p>The pipeline wraps your notebook with production capabilities: <strong>Schedule</strong> (run daily), <strong>Retry</strong> (automatic on failure), <strong>Alerts</strong> (email/Teams notifications), <strong>Run history</strong> (audit trail), and <strong>Parameterization</strong> (pass date ranges via Base parameters using <code>notebookutils.notebook.get_arg()</code>).</p>
+      </div>
+
+      <div class="mission-alert info">
+        <div class="alert-title">When to Use Web Activity</div>
+        <p>The <strong>Web Activity</strong> is useful for checking API health before proceeding, fetching short-lived auth tokens, or triggering external webhooks. It's not the right tool for ingesting large API responses into a lakehouse — that's what notebooks excel at.</p>
       </div>
     </section>
 
