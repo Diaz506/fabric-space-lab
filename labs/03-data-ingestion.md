@@ -131,8 +131,7 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
    from pyspark.sql import Row
 
    # Read the pipeline parameter (passed from the Set Variable activity)
-   api_response_json = notebookutils.notebook.exit(None)  # placeholder — see base parameters below
-   api_response_json = spark.conf.get("spark.synapse.notebook.pipeline.param.api_response", "{}")
+   api_response_json = notebookutils.notebook.get_arg("api_response")
 
    data = json.loads(api_response_json)
 
