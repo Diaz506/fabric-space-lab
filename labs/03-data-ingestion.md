@@ -88,15 +88,17 @@ print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")
 
 ### Option B: Data Pipeline — Low-Code API Ingestion
 
-If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web Activity** to call the API and a **Copy Activity** to load the response.
+If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web Activity** to call the API and a **Notebook Activity** to transform and load the response.
 
 1. Navigate to **ZOSA-Dev** workspace.
 2. Click **+ New** → **Data Pipeline**.
-3. Name it `pl_api_asteroid_ingestion`.
-4. In the **General** tab of the Web activity, configure:
+3. Name it `pl_api_asteroid_ingestion` and click **Create**.
+4. On the landing page, click **Pipeline activity** (under "Start with a blank canvas") to open the empty pipeline canvas.
+5. In the top ribbon, click the **Activities** tab → select **Web** to add a Web activity to the canvas.
+6. In the **General** tab of the Web activity, configure:
    - **Name:** `Get NASA NEO Data`
    - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
-5. In the **Settings** tab, configure:
+7. In the **Settings** tab, configure:
    - **Connection:** Open the dropdown → select an existing Web connection, or click **+ New** to create one. If you don't have one yet, the connection creation dialog will ask for:
      - **Connection name:** `NASA API`
      - **Base URL:** `https://api.nasa.gov`
@@ -105,14 +107,14 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
    - **Relative URL:** `/neo/rest/v1/feed?start_date=2024-01-01&end_date=2024-01-07&api_key=YOUR_NASA_API_KEY`
    - **Method:** `GET`
    - **Headers:** *(leave empty)*
-6. Add a **Set Variable** activity (wired after the Web activity):
+8. Add a **Set Variable** activity (wired after the Web activity):
    - **General** tab — Name: `Store API Response`
    - Create a pipeline variable `api_response` (type: String)
    - Set its value to `@string(activity('Get NASA NEO Data').output)`
 
    > ⚠️ **Note:** The Web activity output **is** the parsed response body directly (there is no `.Response` sub-property). The output payload is limited to **4 MB**, so this pattern works well for small API responses like the NeoWs weekly feed.
 
-7. Add a **Notebook** activity (wired after Set Variable):
+9. Add a **Notebook** activity (wired after Set Variable):
    - **General** tab — Name: `Transform and Load Asteroids`
    - **Settings** tab — Select `nb_api_ingestion` (the notebook from Option A)
    - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
