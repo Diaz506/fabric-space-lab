@@ -97,7 +97,7 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
    - **Name:** `Get NASA NEO Data`
    - **Description:** `Fetches near-Earth objects from NASA NeoWs API for the specified date range`
 5. In the **Settings** tab, configure:
-   - **Connection:** Open the dropdown → select an existing Web connection, or click **Browse all** to find/create one. If you don't have one yet, the connection creation dialog will ask for:
+   - **Connection:** Open the dropdown → select an existing Web connection, or click **+ New** to create one. If you don't have one yet, the connection creation dialog will ask for:
      - **Connection name:** `NASA API`
      - **Base URL:** `https://api.nasa.gov`
      - **Authentication kind:** **Anonymous**
@@ -108,7 +108,10 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
 6. Add a **Set Variable** activity (wired after the Web activity):
    - **General** tab — Name: `Store API Response`
    - Create a pipeline variable `api_response` (type: String)
-   - Set its value to `@activity('Get NASA NEO Data').output.Response`
+   - Set its value to `@string(activity('Get NASA NEO Data').output)`
+
+   > ⚠️ **Note:** The Web activity output **is** the parsed response body directly (there is no `.Response` sub-property). The output payload is limited to **4 MB**, so this pattern works well for small API responses like the NeoWs weekly feed.
+
 7. Add a **Notebook** activity (wired after Set Variable):
    - **General** tab — Name: `Transform and Load Asteroids`
    - **Settings** tab — Select `nb_api_ingestion` (the notebook from Option A)
