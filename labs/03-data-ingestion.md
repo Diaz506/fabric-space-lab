@@ -119,9 +119,13 @@ If you prefer a **no-code approach**, you can use a Data Pipeline with a **Web A
 
    > ⚠️ **Note:** The Web activity output **is** the parsed response body directly (there is no `.Response` sub-property). The output payload is limited to **4 MB**, so this pattern works well for small API responses like the NeoWs weekly feed.
 
-8. Add a **Notebook** activity (wired after Set Variable):
+8. From the **Activities** ribbon, add a **Notebook** activity. Connect it to the Set Variable activity using the **On success** connector:
    - **General** tab — Name: `Transform and Load Asteroids`
-   - **Settings** tab — Select `nb_api_ingestion` (the notebook from Option A)
+   - **Settings** tab:
+     - **Connection:** *(leave as default or select your workspace connection)*
+     - **Workspace:** `ZOSA-Dev`
+     - **Notebook:** select `nb_api_ingestion` from the dropdown (the notebook from Option A)
+     - **Base parameters / Advanced settings:** *(leave defaults for now)*
    - This pattern is common: the pipeline **orchestrates** (handles scheduling, retries, alerts) while the notebook **transforms**.
 
 **💡 Tip:** In production, you'd parameterize the date range and schedule the pipeline to run daily — pulling only the latest NEO data each time. The notebook handles the JSON parsing; the pipeline handles the "when" and "what if it fails."
