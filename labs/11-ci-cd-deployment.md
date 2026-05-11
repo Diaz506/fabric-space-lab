@@ -43,6 +43,8 @@ Git integration in Fabric supports both **GitHub** and **Azure DevOps**. We'll u
 
 ### Step-by-Step: Connect ZOSA-Dev to GitHub
 
+> ⚠️ **Prerequisite:** Your tenant admin must enable **Git integration** in the Fabric admin portal under *Tenant settings*. Without this, the Git integration tab will not appear in workspace settings.
+
 1. **Open ZOSA-Dev workspace** in the Fabric portal
 
 2. **Navigate to Workspace settings:**
@@ -109,12 +111,12 @@ The **Variable Library** lets you define workspace-level variables that change a
 
 ### Create a Variable Library
 
-1. In the **ZOSA-Dev workspace**, click **+ New item** → **Variable Library**
+1. In the **ZOSA-Dev workspace**, click **+ New Item** → search for **Variable Library** → select it.
 2. Name it: `ZOSA_Environment_Config`
 
 ### Define Variables
 
-Add the following variables to the library:
+Add variables to the library using the **+ New variable** button. Enter each variable one at a time:
 
 | Variable Name | Description |
 |---|---|
@@ -126,40 +128,47 @@ Add the following variables to the library:
 
 ### Configure Value Sets
 
-Value sets let you define different values for each environment:
+Value sets let you define different values for each environment. Add value sets (e.g., "Dev", "Test", "Prod") and populate the variable values for each:
 
 **Dev Value Set:**
-```json
-{
-  "lakehouse_name": "ZOSA_Lakehouse_Dev",
-  "connection_string": "jdbc:sqlserver://zosa-dev-endpoint.datawarehouse.fabric.microsoft.com",
-  "capacity_id": "/subscriptions/.../capacities/zosa-dev-f64",
-  "alert_email": "dev-team@zosa.space",
-  "refresh_schedule": "0 */2 * * *"
-}
-```
+
+| Variable | Value |
+|---|---|
+| `lakehouse_name` | `ZOSA_Lakehouse_Dev` |
+| `connection_string` | `jdbc:sqlserver://zosa-dev-endpoint.datawarehouse.fabric.microsoft.com` |
+| `capacity_id` | `/subscriptions/.../capacities/zosa-dev-f64` |
+| `alert_email` | `dev-team@zosa.space` |
+| `refresh_schedule` | `0 */2 * * *` |
 
 **Test Value Set:**
-```json
-{
-  "lakehouse_name": "ZOSA_Lakehouse_Test",
-  "connection_string": "jdbc:sqlserver://zosa-test-endpoint.datawarehouse.fabric.microsoft.com",
-  "capacity_id": "/subscriptions/.../capacities/zosa-test-f32",
-  "alert_email": "qa-team@zosa.space",
-  "refresh_schedule": "0 6 * * *"
-}
-```
+
+| Variable | Value |
+|---|---|
+| `lakehouse_name` | `ZOSA_Lakehouse_Test` |
+| `connection_string` | `jdbc:sqlserver://zosa-test-endpoint.datawarehouse.fabric.microsoft.com` |
+| `capacity_id` | `/subscriptions/.../capacities/zosa-test-f32` |
+| `alert_email` | `qa-team@zosa.space` |
+| `refresh_schedule` | `0 6 * * *` |
 
 **Prod Value Set:**
-```json
-{
-  "lakehouse_name": "ZOSA_Lakehouse_Prod",
-  "connection_string": "jdbc:sqlserver://zosa-prod-endpoint.datawarehouse.fabric.microsoft.com",
-  "capacity_id": "/subscriptions/.../capacities/zosa-prod-f64",
-  "alert_email": "ops-team@zosa.space",
-  "refresh_schedule": "0 */1 * * *"
-}
-```
+
+| Variable | Value |
+|---|---|
+| `lakehouse_name` | `ZOSA_Lakehouse_Prod` |
+| `connection_string` | `jdbc:sqlserver://zosa-prod-endpoint.datawarehouse.fabric.microsoft.com` |
+| `capacity_id` | `/subscriptions/.../capacities/zosa-prod-f64` |
+| `alert_email` | `ops-team@zosa.space` |
+| `refresh_schedule` | `0 */1 * * *` |
+
+### Set the Active Value Set
+
+Each workspace uses one active value set at a time. For each stage of your deployment pipeline:
+
+1. Open the Variable Library in the corresponding workspace.
+2. Select the appropriate value set (e.g., "Dev" for the ZOSA-Dev workspace).
+3. Click **Set as active** to make it the active value set for that workspace.
+
+> 💡 **Tip:** You can have a different active value set for each stage of a deployment pipeline. The active value set determines which values are used at runtime.
 
 ### Version Control
 
@@ -185,10 +194,11 @@ Fabric **Deployment Pipelines** provide a governed way to promote items from Dev
 2. Click **Deployment pipelines** → **+ New pipeline**
 3. Name it: `ZOSA Analytics Pipeline`
 4. Add a description: `Promotes ZOSA space analytics items from Dev through Test to Production`
+5. **Customize stages:** The pipeline defaults to three stages (Development, Test, Production), but you can configure **2 to 10 stages**. Add, remove, or rename stages to fit your process.
+
+> ⚠️ **Important:** The number of pipeline stages is **permanent after creation** — you cannot add or remove stages later. Plan your stages carefully before creating the pipeline.
 
 ### Configure Pipeline Stages
-
-The pipeline has three stages by default: **Development**, **Test**, **Production**.
 
 1. **Assign workspaces to stages:**
 
@@ -274,21 +284,20 @@ Before deploying to Prod, verify:
 
 ### Approval Gates
 
-> 💡 **Best practice:** Configure approval gates so deployments to Production require human review.
+> 💡 **Best practice:** Establish a manual approval checklist so deployments to Production require human review. While Fabric Deployment Pipelines do not have built-in pre-deployment approval gates (unlike Azure DevOps), you can enforce governance through your team's process.
 
-In the deployment pipeline settings:
+Recommended approach:
 
-1. Click the **⚙️** icon on the **Production** stage
-2. Enable **Pre-deployment approval**
-3. Add approvers: Dr. Vasquez (data lead), Major Nakamura (ops lead)
-4. Deployment to Prod will now pause and notify approvers before executing
+1. Use your **branching strategy** (Section 11.7) — require Pull Request approvals before merging to `main`
+2. Maintain a **pre-deployment checklist** (see above) that must be signed off before anyone clicks "Deploy"
+3. Restrict the **Production workspace** to a small set of admins who control deployments
+4. For automated approval gates, consider the **full CI/CD approach** with GitHub Actions (Section 11.8), which supports programmatic validation steps
 
 ### Execute the Production Deployment
 
 1. In the pipeline, click **Deploy to next stage** (Test → Production)
-2. Approvers receive a notification
-3. After approval, the deployment proceeds automatically
-4. Variable Library values swap to the **Prod** value set
+2. Verify all pre-deployment checklist items are complete
+3. After deploying, Variable Library values swap to the **Prod** value set
 
 ### Post-Deployment Verification
 
@@ -422,7 +431,7 @@ Verify your deployment pipeline is operational:
 | Deployment Pipeline configured: Dev → Test → Prod | ⬜ |
 | Successful deployment from Dev → Test | ⬜ |
 | Test workspace items verified | ⬜ |
-| Production deployment with approval gates | ⬜ |
+| Production deployment with governance controls | ⬜ |
 | Branching strategy documented and team-aligned | ⬜ |
 
 ### What You Built
@@ -430,7 +439,7 @@ Verify your deployment pipeline is operational:
 - ✅ Git-backed version control for all Fabric items
 - ✅ Environment-aware Variable Library with Dev/Test/Prod configs
 - ✅ Governed Deployment Pipeline with three stages
-- ✅ Approval gates for production deployments
+- ✅ Governance controls for production deployments (PR approvals, restricted access)
 - ✅ Branching strategy for ongoing development
 
 ---

@@ -2,7 +2,7 @@
 
 > One language for the whole agency — Fabric IQ Ontology
 
-> ⚠️ **Public Preview Notice:** Fabric IQ and Ontology Projects are in **Public Preview** as of April 2026. Features, APIs, and UI may change before General Availability. Use in production at your own discretion.
+> ⚠️ **Public Preview Notice:** Fabric IQ and Ontology are in **Public Preview** as of April 2026. Features, APIs, and UI may change before General Availability. Use in production at your own discretion.
 
 ---
 
@@ -22,10 +22,10 @@ You've built every data layer — Bronze through Gold — stood up reports, real
 
 | Concept | What It Does |
 |---|---|
-| **Ontology Project** | A container that holds entity types, relationships, business terms, and computed properties — all linked to your Delta tables. |
+| **Ontology** | A container that holds entity types, relationships, and business terms — all linked to your Delta tables. |
 | **Entity Type** | A first-class business object (e.g., *Asteroid*, *Mission*, *Crew Member*). |
 | **Business Term / Synonym** | Aliases that ensure "NEO," "threat object," and "celestial target" all resolve to the same entity. |
-| **Computed Property** | A derived column defined once in the ontology and available everywhere — dashboards, notebooks, AI agents. |
+| **Derived Property** | A derived column defined once in the ontology and available everywhere — dashboards, notebooks, AI agents. |
 
 > 💡 **Why it matters:** Without an ontology, every team writes its own filters, every AI agent hallucinates its own joins, and every report defines "hazardous" differently. The ontology is the **single source of truth** for meaning.
 
@@ -34,7 +34,7 @@ You've built every data layer — Bronze through Gold — stood up reports, real
 > - [Knowledge Graph Concepts (Domains)](https://learn.microsoft.com/en-us/fabric/governance/use-domains)
 > - [Fabric Copilot Overview](https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview)
 
-> ⚠️ **Preview Reminder:** Fabric IQ Ontology Projects are in **Public Preview**. The steps below reflect the current UI — expect minor changes as the feature evolves toward GA.
+> ⚠️ **Preview Reminder:** Fabric IQ Ontology is in **Public Preview**. The steps below reflect the current UI — expect minor changes as the feature evolves toward GA.
 
 ---
 
@@ -118,19 +118,22 @@ erDiagram
 
 ---
 
-## 3️⃣ Create an Ontology Project
+## 3️⃣ Create an Ontology
 
 Now translate the whiteboard design into Fabric.
 
 1. Open the **ZOSA-Dev** workspace in the Fabric portal.
-2. Click **+ New** → scroll to the **Fabric IQ** section → select **Ontology Project**.
-3. Name the project: **`ZOSA Knowledge Model`**.
+2. Click **+ New Item** → search for **"Ontology"** (listed under the IQ preview category) → select **Ontology**.
+3. Name the ontology: **`ZOSA Knowledge Model`**.
 4. Add an optional description: *"Unified ontology for ZOSA asteroid-defense operations."*
-5. Click **Create**. Fabric opens the ontology designer canvas.
+5. Choose the creation method:
+   - **Generate from semantic model** — if your Gold layer already feeds a Power BI semantic model with trusted measures and dimensions, start here to accelerate ontology mapping.
+   - **Build from OneLake** — if you want to map directly to Delta tables in your Lakehouse.
+6. Click **Create**. Fabric opens the ontology designer canvas.
 
-> ⚠️ **Preview Note:** If you don't see the *Fabric IQ* section under **+ New**, ensure your tenant admin has enabled the **Fabric IQ (Preview)** feature in the admin portal under *Tenant settings → Fabric IQ*.
+> ⚠️ **Preview Note:** If you don't see *Ontology* under **+ New Item**, ensure your tenant admin has enabled the **Fabric IQ (Preview)** feature in the admin portal under *Tenant settings → Fabric IQ*. You may also need to enable **Microsoft Copilot and Azure OpenAI** tenant settings.
 
-> 💡 **Pro Tip:** If your Gold layer already feeds a **Power BI semantic model**, start there — it already contains trusted measures and dimension hierarchies that accelerate ontology mapping.
+> 💡 **Pro Tip:** If your Gold layer already feeds a **Power BI semantic model**, choose "Generate from semantic model" — it already contains trusted measures and dimension hierarchies that accelerate ontology mapping.
 
 ---
 
@@ -142,16 +145,18 @@ For each entity type in your design, connect it to the underlying Delta table.
 
 1. In the ontology designer, click **+ Add Entity Type**.
 2. Name it (e.g., `Asteroid`).
-3. Under **Data Source**, select the Lakehouse → **Tables** → choose the corresponding Gold table (e.g., `gold_asteroids`).
+3. Under the **Bindings** tab, bind the entity to your data:
+   - Select the Lakehouse → **Tables** → choose the corresponding Gold table (e.g., `gold_asteroids`).
 4. **Map columns to entity properties:**
-   - `neo_id` → Primary Key ✅
+   - Click **Add entity type key** to designate the key field (e.g., `neo_id`) ✅
    - `name` → Display Name ✅
    - Map remaining columns: `diameter`, `is_hazardous`, `risk_category`.
-5. Click **Save Entity**.
+5. After mapping all entities, **Save** the ontology (changes are saved at the ontology level, not per entity).
+6. Click **Refresh the graph model** to sync data bindings with the underlying tables.
 
 Repeat for all six entity types:
 
-| Entity | Delta Table | Primary Key | Display Name |
+| Entity | Delta Table | Entity Type Key | Display Name |
 |---|---|---|---|
 | Asteroid | `gold_asteroid_risk` | `neo_id` | `name` |
 | Mission | `gold_mission_summary` | `mission_id` | `name` |
@@ -181,10 +186,9 @@ This is the step that ends the vocabulary wars. For each concept that different 
 ### Steps
 
 1. Select an entity type (e.g., `Asteroid`).
-2. Open the **Business Terms** tab.
-3. Click **+ Add Synonym** and enter each alias.
-4. For property-level synonyms (e.g., `risk_category` = "Hazard Score" = "Threat Level"), select the property and add synonyms there.
-5. **Save** after each entity.
+2. Add synonyms for the entity by entering each alias (e.g., "Near-Earth Object," "NEO," "Threat").
+3. For property-level synonyms (e.g., `risk_category` = "Hazard Score" = "Threat Level"), select the property and add synonyms there.
+4. **Save** the ontology after updating synonyms.
 
 > 🎯 **Why this matters:** When an analyst types *"show me all NEOs near Earth"* into a Fabric search bar or an AI agent prompt, the ontology resolves **NEO → Asteroid** automatically. No more guesswork, no more mismatched filters.
 
@@ -194,13 +198,13 @@ This is the step that ends the vocabulary wars. For each concept that different 
 
 ---
 
-## 6️⃣ Add Computed Properties
+## 6️⃣ Add Derived Properties
 
-Computed properties are derived values defined once in the ontology and usable everywhere — reports, notebooks, Copilot answers.
+Derived properties are calculated values defined once in the ontology and usable everywhere — reports, notebooks, Copilot answers.
 
 ### Properties to Define
 
-| Entity | Computed Property | Logic |
+| Entity | Derived Property | Logic |
 |---|---|---|
 | **Asteroid** | `threat_level` | Derived from `velocity`, `diameter`, and `close_approach_distance`. Example: `CASE WHEN velocity > 20 AND diameter > 0.5 AND close_approach_distance < 0.05 THEN 'Critical' WHEN is_hazardous = true THEN 'High' ELSE 'Normal' END` |
 | **Mission** | `duration_days` | `DATEDIFF(day, start_date, end_date)` |
@@ -209,13 +213,13 @@ Computed properties are derived values defined once in the ontology and usable e
 ### Steps
 
 1. Select the entity (e.g., `Asteroid`).
-2. Click **+ Add Property** → choose **Computed**.
+2. Click **+ Add Property**.
 3. Enter the property name: `threat_level`.
 4. Write the expression using the ontology expression editor.
 5. Set the return type (`String` for threat_level, `Integer` for duration_days, etc.).
-6. **Save**.
+6. **Save** the ontology.
 
-> ⚠️ **Preview Limitation:** Computed property expressions currently support a subset of SQL functions. Complex expressions may need to be pre-computed in your Gold layer notebook and exposed as regular mapped properties instead.
+> ⚠️ **Preview Limitation:** Expression support is limited in preview. Complex expressions may need to be pre-computed in your Gold layer notebook and exposed as regular mapped properties instead.
 
 ---
 
@@ -225,9 +229,9 @@ Before handing the ontology to the rest of the agency, verify it works as expect
 
 ### Browse Entities
 
-1. In the ontology designer, click **Browse** (top-right).
+1. In the ontology designer, open the **Preview experience** to launch the graph visualization.
 2. Select **Asteroid** — you should see a paginated list of all asteroid entities with their properties.
-3. Click any asteroid (e.g., *Apophis*) to view its **detail card**: properties, relationships, computed values.
+3. Click any asteroid (e.g., *Apophis*) to view its **detail card**: properties, relationships, and derived values.
 
 ### Search
 
@@ -241,10 +245,10 @@ Before handing the ontology to the rest of the agency, verify it works as expect
 2. Verify you can navigate: Asteroid → targeted by → Mission → assigned to → Crew Members.
 3. Confirm the relationship chain resolves correctly across all entity types.
 
-### Validate Computed Properties
+### Validate Derived Properties
 
 1. Open the **Asteroid** entity list.
-2. Confirm the `threat_level` column shows computed values (Critical / High / Normal).
+2. Confirm the `threat_level` column shows derived values (Critical / High / Normal).
 3. Spot-check a few records against the Gold table to ensure the logic is correct.
 
 > ✅ If all of the above works, your ontology is ready for production use.
@@ -268,13 +272,13 @@ An ontology is only as good as its governance. Establish clear ownership and cha
 
 1. **Propose** — Submit a change request (new entity, synonym, or relationship) via your team's governance channel.
 2. **Review** — The Ontology Owner and affected Domain Stewards review the proposal.
-3. **Approve & Implement** — Changes are made in the ontology project.
+3. **Approve & Implement** — Changes are made in the ontology.
 4. **Validate** — Run the test steps from Section 7 to confirm nothing breaks.
 5. **Publish** — The updated ontology is available to all consumers.
 
 ### Version History
 
-Fabric IQ Ontology Projects maintain a **version history**. Use it to:
+Fabric IQ Ontology maintains a **version history**. Use it to:
 
 - Track who changed what and when.
 - Roll back if a synonym causes unintended query behavior.
@@ -299,11 +303,11 @@ Fabric IQ ontologies can be exposed to **third-party AI agents** via MCP endpoin
 
 Verify you've completed each milestone before proceeding:
 
-- [ ] Ontology Project **`ZOSA Knowledge Model`** created in the ZOSA-Dev workspace
+- [ ] Ontology **`ZOSA Knowledge Model`** created in the ZOSA-Dev workspace
 - [ ] **6 entity types** (Asteroid, Mission, Crew Member, Ground Station, Solar Event, Exoplanet) mapped to Gold Delta tables
 - [ ] **5 relationships** defined and resolvable (targets, assigned_to, operates_from, monitors, stationed_at)
 - [ ] **Business terms and synonyms** documented for at least 5 canonical terms
-- [ ] **3 computed properties** defined (threat_level, duration_days, years_of_service)
+- [ ] **3 derived properties** defined (threat_level, duration_days, years_of_service)
 - [ ] **Ontology browsing and search** returns expected results
 - [ ] **Governance roles** and change-management process documented
 

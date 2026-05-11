@@ -44,32 +44,26 @@ What makes Data Agents special:
 
 1. Open your **ZOSA-Dev** workspace in the Fabric portal.
 
-2. Click **+ New** → **Data Agent**.
+2. Click **+ New Item** → search for **"Fabric data agent"** → select it.
 
-3. Configure the agent:
+3. Name the agent: **`ZOSA Mission Intelligence`**.
 
-   | Setting | Value |
-   |---|---|
-   | **Name** | `ZOSA Mission Intelligence` |
-   | **Description** | Natural language Q&A for ZOSA mission data, asteroid risk, and exoplanet catalog |
+4. After creation, the **OneLake catalog** opens automatically. Add your data sources (up to **5 total** — lakehouses, warehouses, semantic models, KQL databases, or ontologies in any combination):
+   - Select **ZOSA Knowledge Model** (the ontology from Module 09) → click **Add**
+   - Select the **Gold Lakehouse** → click **Add**
+   - Optionally add the **ZOSA semantic model** → click **Add**
 
-4. On the **Grounding** tab, connect the agent to your data sources:
-   - Select **ZOSA Knowledge Model** (the ontology from Module 09)
-   - Add grounding sources:
-     - ✅ Gold Lakehouse tables
-     - ✅ ZOSA semantic model
-
-5. Click **Create**.
+> 📝 **Note:** Fabric data agents use a **Microsoft-managed Azure OpenAI** instance — you do not need to create or supply your own Azure OpenAI key or access token. Authentication is handled automatically under your Microsoft Entra ID identity.
 
 > 📝 **Note:** Connecting the ontology is the critical step. Without it, the agent would rely on column names and basic metadata to interpret queries. With it, the agent has full context: business definitions, relationships, hierarchies, and validated business rules.
 
 ---
 
-### 🎯 Step 2 — Configure Grounding Sources
+### 🎯 Step 2 — Configure Data Sources
 
 Select which entities and tables the agent can query. You're giving it a "lens" into your data estate.
 
-1. In the agent configuration, go to **Grounding → Select Tables**.
+1. In the **Explorer** pane on the left side of the agent page, you'll see the data sources you added. Use the **checkboxes** next to each table to make tables available or unavailable to the AI.
 
 2. Enable the following Gold lakehouse tables:
 
@@ -80,7 +74,9 @@ Select which entities and tables the agent can query. You're giving it a "lens" 
    | `gold_exoplanet_catalog` | Exoplanet discoveries with habitability scores |
    | `gold_solar_activity` | Solar flare events, intensity, and impact assessments |
 
-3. Review the **ontology mappings** — the agent should show which ontology entities map to which tables. Confirm the mappings look correct.
+3. To add more data sources later, click **+ Data source** in the Explorer pane — the OneLake catalog will reopen.
+
+4. Review the **ontology mappings** — the agent should show which ontology entities map to which tables. Confirm the mappings look correct.
 
 > 🔑 **Why this matters:** The ontology provides the semantic layer. When a user asks about "dangerous asteroids," the agent resolves this through the ontology:
 > - "dangerous" → `risk_category IN ('Critical', 'High')` (from the ontology's business rule)
@@ -92,7 +88,7 @@ Select which entities and tables the agent can query. You're giving it a "lens" 
 
 ### 🧪 Step 3 — Test Natural Language Queries
 
-Time to put the agent through its paces. Open the **Test** panel and try these queries:
+Time to put the agent through its paces. The chat interface is **built directly into the agent page** — type your questions in the chat box and review the results.
 
 #### Basic Lookups
 
@@ -137,7 +133,7 @@ For each query, review:
 
 You can improve accuracy by adding custom instructions and example Q&A pairs.
 
-1. Go to **Agent Settings → Instructions**.
+1. In the agent page, select the **Instructions** section (in the agent configuration area).
 
 2. Add custom instructions:
 
@@ -160,30 +156,25 @@ You can improve accuracy by adding custom instructions and example Q&A pairs.
    | "Any solar storms?" | Query `gold_solar_activity` for flares with `intensity_class IN ('X', 'M')` in the past 7 days |
    | "Station status" | Query `gold_mission_summary` grouped by `ground_station` showing active mission count |
 
-4. Under **Response Settings**, configure:
-   - **Show generated SQL/KQL:** ✅ Yes (transparency for technical users)
-   - **Include confidence score:** ✅ Yes
-   - **Max results per query:** 50
-
 > 📚 **Learn more:** [AI Skill Instructions](https://learn.microsoft.com/en-us/fabric/data-science/ai-skill-instructions)
 
 ---
 
 ### 🔗 Step 5 — Share the Agent
 
-1. Go to **Manage Access** on the Data Agent.
+Data Agents are shared through **workspace permissions**. Users with access to the workspace can use the agent.
 
-2. Assign permissions:
+1. Ensure the appropriate teams have workspace roles:
 
    | Role | Access |
    |---|---|
-   | ZOSA-Science team | Can use the agent (query) |
-   | ZOSA-Defense team | Can use the agent (query) |
-   | ZOSA-Admin team | Can use and configure the agent |
+   | ZOSA-Science team | Viewer or Contributor (can query the agent) |
+   | ZOSA-Defense team | Viewer or Contributor (can query the agent) |
+   | ZOSA-Admin team | Admin or Member (can configure the agent) |
 
-3. The Data Agent **inherits all security layers** — RLS, CLS, and OLS rules apply automatically. You don't need to configure security separately for the agent.
+2. The Data Agent **inherits all security layers** — RLS, CLS, and OLS rules apply automatically. You don't need to configure security separately for the agent.
 
-> 💡 **Tip:** Share the agent URL with Major Nakamura's team. They can access it directly from the Fabric portal or embed it in a Power BI report for inline Q&A.
+> 💡 **Tip:** Share the agent URL with Major Nakamura's team. They can access it directly from the Fabric portal.
 
 > 📚 **Official Documentation:**
 > - [Copilot for Data Warehouse](https://learn.microsoft.com/en-us/fabric/data-warehouse/copilot)
@@ -207,8 +198,8 @@ Think of the difference this way:
 Operations Agents are powered by the ontology and can chain multiple actions together in response to data events.
 
 > 📚 **Official Documentation:**
+> - [Operations Agent](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/operations-agent)
 > - [Data Activator / Reflex](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction)
-> - [Azure OpenAI in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/ai-services/how-to-use-openai-sdk-synapse)
 
 ---
 
@@ -239,53 +230,64 @@ Before building, plan the workflow. When the ML model (Module 08) scores a new a
 
 ### 🛠️ Step 7 — Create the Operations Agent
 
-1. Open your **ZOSA-Dev** workspace.
+> ⚠️ **Tenant Admin Requirement:** Before creating an Operations Agent, ensure your Fabric admin has enabled the **Operations Agent (Preview)** feature, along with **Microsoft Copilot and Azure OpenAI** settings in the admin portal. Cross-geo processing and storage for AI may also need to be enabled if your capacity is outside US/EU regions.
 
-2. Click **+ New** → **Operations Agent**.
+1. On the Fabric home page, select the ellipsis (**...**) icon, then select **Create**.
 
-3. Configure:
+2. In the **Create** pane, go to the **Real-Time Intelligence** section and select **Operations agent**.
 
-   | Setting | Value |
-   |---|---|
-   | **Name** | `ZOSA Threat Response` |
-   | **Description** | Automated threat response for critical asteroid detections |
+3. Enter the name: **`ZOSA Threat Response`** and select the ZOSA-Dev workspace.
 
-4. **Configure the Trigger:**
-   - Trigger type: **Data change**
-   - Source table: `gold_asteroid_risk`
-   - Condition: `risk_category = 'Critical'`
-   - Evaluation: On new rows
+4. Click **Create**.
 
-5. **Define Action 1 — Generate Report:**
-   - Action type: **Generate content**
-   - Template: Threat assessment brief (markdown format)
-   - Parameters (dynamically bound to the triggering event):
-     - `{{asteroid_name}}` — from the new row
-     - `{{hazard_score}}` — from the new row
-     - `{{miss_distance_au}}` — from the new row
-     - `{{estimated_close_approach}}` — from the new row
-     - `{{risk_category}}` — from the new row
+5. On the **Agent Setup** page, configure the following sections:
 
-6. **Define Action 2 — Send Teams Notification:**
-   - Action type: **Send notification**
-   - Channel: `ZOSA-Defense`
-   - Message: Include the generated threat brief
-   - Priority: **Urgent**
+   **Business Goals:**
+   ```text
+   Monitor asteroid threat data in real-time. When a new critical-risk asteroid 
+   is detected, generate a threat assessment, notify the Defense team, and 
+   propose a mission response.
+   ```
 
-7. **Define Action 3 — Create Mission Proposal:**
-   - Action type: **Insert data**
-   - Target table: `mission_proposals`
-   - Row values:
-     - `proposal_name`: `"Threat Response: {{asteroid_name}}"`
-     - `source_asteroid_id`: `{{asteroid_id}}`
-     - `priority`: `Critical`
-     - `status`: `Pending Review`
-     - `created_by`: `ZOSA Threat Response Agent`
-     - `created_at`: `{{current_timestamp}}`
+   **Instructions:**
+   ```text
+   Focus on rows in the asteroid risk data where risk_category = 'Critical'.
+   When a critical asteroid is detected, recommend sending a threat brief to 
+   the Defense team and creating a mission proposal.
+   Always include asteroid name, hazard score, miss distance, and estimated 
+   close approach date in threat assessments.
+   ```
 
-8. Click **Save and Activate**.
+   **Knowledge Source:**
+   - Select your **Eventhouse** (or **Ontology** if available) as the data source for the agent to monitor.
 
-> 📝 **Note:** Actions pass parameters dynamically using the event context. Each `{{placeholder}}` is resolved at runtime from the triggering data change. This is what makes Operations Agents powerful — they chain context-aware actions without hardcoded values.
+   **Actions:**
+   Define the actions the agent can take. Each action has a name, description, and optional parameters:
+
+   | Action Name | Description | Parameters |
+   |---|---|---|
+   | `Send Threat Brief` | Notify ZOSA-Defense channel with a threat assessment | `asteroid_name`, `hazard_score`, `miss_distance_au` |
+   | `Create Mission Proposal` | Insert a mission proposal for review | `asteroid_name`, `priority`, `source_asteroid_id` |
+
+6. **Configure each action** by selecting it and connecting it to an **Activator** item:
+   - Select the workspace and Activator item
+   - Click **Copy** to copy the connection string
+   - Click **Open flow builder** to create a **Power Automate flow** that gets triggered by the action
+   - Paste the connection string in the flow's **Connection string** field
+   - Use **dynamic content** to pass action parameters into the flow (e.g., send a Teams message, insert a row)
+
+7. Click **Save** to generate the agent's playbook. Review the playbook — it outlines the goals, instructions, data, and actions you defined.
+
+8. When satisfied with the configuration, click **Start** in the toolbar to activate the agent.
+
+### 📱 Step 7b — Install the Teams App
+
+To receive proactive messages from the Operations Agent:
+
+1. Open **Microsoft Teams** → go to the **Apps** store.
+2. Search for **"Fabric Operations Agent"** and install the app.
+3. Once installed, the agent can send messages in Teams when it identifies data matching your defined rules.
+4. Messages include a summary of insights and recommended actions. Select **Yes** to approve or **No** to reject each recommendation directly in Teams.
 
 ---
 
@@ -317,10 +319,10 @@ Simulate a critical asteroid detection to verify the full workflow.
    df.write.mode("append").saveAsTable("lh_zosa.gold_asteroid_risk")
    ```
 
-3. **Watch the Operations Agent trigger.** Within a few minutes:
-   - ✅ A threat assessment brief should be generated
-   - ✅ A Teams notification should appear in the ZOSA-Defense channel
-   - ✅ A new row should appear in `mission_proposals`
+3. **Watch the Operations Agent respond.** When the agent detects the new critical data:
+   - ✅ You should receive a **Teams message** from the Fabric Operations Agent app with a threat assessment and recommended actions
+   - ✅ Select **Yes** to approve the recommended action (e.g., sending a notification or creating a mission proposal)
+   - ✅ The approved action triggers the connected Power Automate flow
 
 4. Verify each step completed successfully in the agent's **Execution History**.
 
@@ -357,23 +359,21 @@ Every interaction is logged:
 
 ### Approval Workflows
 
-Operations Agents can be configured to require **human approval** before executing critical actions:
+Operations Agents use a **Teams-based approval model**. When the agent makes a recommendation, recipients receive a Teams message with context and suggested actions:
 
-| Risk Level | Approval Behavior |
-|---|---|
-| **Low** (informational) | Fully automatic — no approval needed |
-| **Medium** (notifications) | Automatic with post-action review |
-| **High** (data writes) | Requires approval before executing |
-| **Critical** (external actions) | Requires multi-person approval |
+- Select **Yes** to approve the recommendation — the agent executes the action using the **creator's permissions** (delegated identity).
+- Select **No** to reject the recommendation.
+- You can adjust parameters before giving final approval.
 
-For ZOSA, you might configure Action 3 (creating mission proposals) to require approval from a Defense team lead before the row is inserted.
+> ⚠️ **Important:** The agent operates using the delegated identity and permissions of its creator. When a recipient approves a recommendation, the agent executes the action on behalf of the creator.
 
 ### Human-in-the-Loop Patterns
 
-Configure when and how humans are involved:
-- **Pre-action approval:** Agent pauses and waits for human sign-off
-- **Post-action review:** Agent acts immediately but flags the action for review
-- **Escalation:** If the agent can't resolve ambiguity, it escalates to a human operator
+The Teams-based approval model provides human oversight:
+- **Pre-action approval:** The agent sends a recommendation in Teams and waits for Yes/No before executing
+- **Parameter review:** Recipients can adjust action parameters before approving
+- **Escalation:** If the agent can't resolve ambiguity, it surfaces the issue for human review
+- **Recipient management:** Update who receives agent messages via the **Agent behavior** settings
 
 ### Security Inheritance
 

@@ -43,13 +43,16 @@ CU consumption is measured in **CU-seconds**. A query that uses 4 CUs for 10 sec
 4. After installation, open the app and connect it to your capacity
 5. The app will begin populating with data — historical data goes back **14 days**
 
+> 📝 **Note:** You must be a **capacity admin** to access the Capacity Metrics app. Users also need a **Pro or PPU license** (or an F64+ capacity) to view the app.
+
 ### Navigate the Monitoring Hub
 
-The Fabric portal also has a built-in **Monitoring hub**:
+The Fabric portal also has a built-in monitoring hub:
 
-1. Click **Monitoring hub** in the left navigation
-2. View active and recent operations across all workspaces
+1. Click **Monitor** in the left navigation pane
+2. The **Activities** page displays up to **100 Fabric activities from the past 30 days**, ordered by start time
 3. Filter by workspace, item type, status, and time range
+4. Use **Historical runs** on any activity to see its full 30-day execution history
 
 > 📚 **Official Documentation:**
 > - [Capacity Metrics App](https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app)
@@ -154,17 +157,15 @@ ZOSA's capacity runs 24/7 but is only busy 10 hours/day.
 ```powershell
 # Schedule this to run at 22:00 UTC (pause) and 06:00 UTC (resume)
 
-# Pause capacity
-Update-AzFabricCapacity `
+# Pause (suspend) capacity
+Suspend-AzFabricCapacity `
   -ResourceGroupName "zosa-rg" `
-  -CapacityName "zosa-prod-f64" `
-  -State "Paused"
+  -CapacityName "zosa-prod-f64"
 
 # Resume capacity
-Update-AzFabricCapacity `
+Resume-AzFabricCapacity `
   -ResourceGroupName "zosa-rg" `
-  -CapacityName "zosa-prod-f64" `
-  -State "Active"
+  -CapacityName "zosa-prod-f64"
 ```
 
 **Option B — Azure Logic App** with a recurrence trigger and Azure Resource Manager actions.
@@ -264,33 +265,47 @@ For ZOSA: After optimizations, if average consumption drops from 85% to 45% of F
 
 Don't wait for Marcus Chen to tell you there's a problem. Set up proactive alerts.
 
-### Configure Alerts in the Capacity Metrics App
+### Configure Capacity Alerts via Azure Monitor
+
+Capacity-level alerts (CU usage, throttling, rejection) are configured through **Azure Monitor**, not the Capacity Metrics app itself. The app is for visualization and analysis only.
+
+1. In the **Azure portal**, navigate to your Fabric capacity resource
+2. Go to **Alerts** → **+ New alert rule**
+3. Configure alert conditions:
 
 | Alert | Condition | Action |
 |---|---|---|
 | **High CU Usage** | CU usage > 80% sustained for 30+ minutes | Email ops-team@zosa.space |
 | **Throttling Detected** | Any throttling event | Email ops-team@zosa.space + Teams notification |
 | **Rejection Event** | Any rejection event | Email ops-team@zosa.space + page on-call engineer |
-| **Pipeline Failure** | Any data pipeline fails | Email dev-team@zosa.space |
-| **Refresh Failure** | Semantic model refresh fails | Email dev-team@zosa.space |
 
-### Configure Data Pipeline Alerts
+4. Connect to **Action Groups** for email, SMS, webhook, or PagerDuty notifications
 
-For pipeline-specific alerts:
+### Configure Pipeline & Refresh Failure Notifications
 
-1. Open the **ZOSA-Prod** workspace
-2. Navigate to each critical pipeline
-3. Click **Settings** → **Notifications**
-4. Enable alerts for: **Failed**, **Cancelled**, **Succeeded** (optional)
-5. Set recipients
+For pipeline and refresh failure alerts, use the **Schedule failures** page in the monitoring hub:
+
+1. Open **Monitor** from the left navigation pane
+2. Select the **Schedule failures** tab
+3. Click **+ Configure notifications**
+4. Select the scheduled item (pipeline, semantic model refresh, etc.)
+5. Enter the recipients who should receive failure emails
+6. Click **Save**
+
+You can also configure failure notifications per item:
+1. Open the specific pipeline or semantic model
+2. Go to the **job scheduler** settings
+3. Enable failure notifications and set recipients
 
 ### Azure Monitor Integration
 
 For enterprise alerting, integrate Fabric capacity metrics with Azure Monitor:
 
+For additional Azure Monitor integration beyond the capacity alerts configured above:
+
 1. In the Azure portal, navigate to your Fabric capacity resource
-2. Go to **Metrics** → configure alert rules on capacity utilization
-3. Connect to **Action Groups** for email, SMS, webhook, or PagerDuty notifications
+2. Go to **Metrics** → configure dashboards for long-term capacity utilization trends
+3. Set up **diagnostic settings** to export capacity metrics to a Log Analytics workspace for advanced querying
 
 > 📚 **Official Documentation:**
 > - [Azure Monitor Integration (Metrics App Install)](https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app-install)
@@ -361,8 +376,8 @@ The complete ZOSA Space Analytics Platform:
 | 6 | Real-time with Eventstream & KQL | ⬜ |
 | 7 | Semantic model & Power BI reports | ⬜ |
 | 8 | Security, governance & compliance | ⬜ |
-| 9 | Activator alerts & automation | ⬜ |
-| 10 | AI Agents with Fabric | ⬜ |
+| 9 | Ontology & Knowledge Graph | ⬜ |
+| 10 | AI Agents (Data Agent & Operations Agent) | ⬜ |
 | 11 | CI/CD & Deployment Pipelines | ⬜ |
 | 12 | Monitoring & Optimization | ⬜ |
 
