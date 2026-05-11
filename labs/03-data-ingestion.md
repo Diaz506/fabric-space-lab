@@ -170,7 +170,8 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
 
 1. Navigate to the **ZOSA-Dev** workspace.
 2. Click **+ New** → **Dataflow Gen2**.
-3. In the Dataflow editor, click **Get Data** → **Text/CSV**.
+3. Name it `df_crew_ingestion` by clicking on the default name at the top-left of the editor.
+4. Click **Get Data** → **Text/CSV**.
 4. Browse to the uploaded `crew.csv` file in your Lakehouse's Files section via the **OneLake** connector and click **Next**.
 5. In the **Power Query** editor, apply these transforms:
    - Click **Use first row as headers** (on the Home ribbon) to promote the header row.
