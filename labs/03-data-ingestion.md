@@ -148,8 +148,8 @@ It's **not** the right tool for ingesting large API responses into a lakehouse �
 The asteroids came from a live API, but ZOSA's remaining datasets come from **internal database exports** — the IT team delivered them as CSVs. This is common in enterprises: some data is API-driven, some arrives as file drops.
 
 1. Open `lh_zosa` and click **Files** in the left Explorer panel.
-2. Click **Upload** → **Upload folder**.
-3. Browse to the `data/sample/` folder from your cloned repository and upload all CSV files:
+2. Click **Get data** → **Upload files**.
+3. Browse to the `data/sample/` folder from your cloned repository and select all CSV files to upload:
    - `crew.csv` — astronaut roster
    - `missions.csv` — mission manifest
    - `telemetry.csv` — spacecraft sensor readings
