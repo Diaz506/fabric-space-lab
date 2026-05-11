@@ -44,9 +44,9 @@ The Medallion Architecture organizes your data into three progressive layers of 
 Time to write your first Spark notebook. This is where the real data engineering happens.
 
 1. Open the **ZOSA-Dev** workspace in Fabric
-2. Click **+ New** → **Notebook**
+2. Click **+ New item** → **Notebook**
 3. Name it: `01-bronze-to-silver`
-4. In the notebook toolbar, click **Add Lakehouse** → select `lh_zosa`
+4. In the notebook toolbar, click **+ Add data items** → **Existing Lakehouse** → select `lh_zosa`
 
 > 💡 **What just happened?** You now have a PySpark notebook connected to your Lakehouse. Fabric provides a managed Spark pool — no cluster configuration needed. The `spark` session object is pre-initialized, and all Lakehouse tables are accessible via `spark.read.table("lh_zosa.<table_name>")`.
 
@@ -87,11 +87,11 @@ df = spark.read.table("lh_zosa.asteroids_bronze")
 silver_asteroids = (df
     .dropDuplicates(["neo_id", "close_approach_date"])
     .withColumn("close_approach_date", to_date(col("close_approach_date")))
-    .withColumn("miss_distance_au", col("miss_distance_au").cast("double"))
     .withColumn("miss_distance_km", col("miss_distance_km").cast("double"))
-    .withColumn("relative_velocity_kmps", col("relative_velocity_kmps").cast("double"))
-    .withColumn("estimated_diameter_min_km", col("estimated_diameter_min_km").cast("double"))
-    .withColumn("estimated_diameter_max_km", col("estimated_diameter_max_km").cast("double"))
+    .withColumn("relative_velocity_kph", col("relative_velocity_kph").cast("double"))
+    .withColumn("estimated_diameter_min_m", col("estimated_diameter_min_m").cast("double"))
+    .withColumn("estimated_diameter_max_m", col("estimated_diameter_max_m").cast("double"))
+    .withColumn("absolute_magnitude", col("absolute_magnitude").cast("double"))
     .withColumn("name", trim(col("name")))
     .filter(col("neo_id").isNotNull())
 )
@@ -110,13 +110,12 @@ df = spark.read.table("lh_zosa.solar_events_bronze")
 
 silver_solar = (df
     .dropDuplicates(["event_id"])
-    .withColumn("event_timestamp", to_timestamp(col("event_timestamp")))
-    .withColumn("peak_timestamp", to_timestamp(col("peak_timestamp")))
-    .withColumn("end_timestamp", to_timestamp(col("end_timestamp")))
-    .withColumn("severity", col("severity").cast("int"))
+    .withColumn("start_time", to_timestamp(col("start_time")))
+    .withColumn("end_time", to_timestamp(col("end_time")))
     .withColumn("event_type", trim(upper(col("event_type"))))
-    .withColumn("latitude", col("latitude").cast("double"))
-    .withColumn("longitude", col("longitude").cast("double"))
+    .withColumn("class_type", trim(col("class_type")))
+    .withColumn("source_location", trim(col("source_location")))
+    .withColumn("note", trim(col("note")))
     .filter(col("event_id").isNotNull())
 )
 
@@ -140,7 +139,8 @@ silver_exoplanets = (df
     .withColumn("planet_radius_earth", col("planet_radius_earth").cast("double"))
     .withColumn("planet_mass_earth", col("planet_mass_earth").cast("double"))
     .withColumn("equilibrium_temp_k", col("equilibrium_temp_k").cast("double"))
-    .withColumn("distance_ly", col("distance_ly").cast("double"))
+    .withColumn("distance_parsecs", col("distance_parsecs").cast("double"))
+    .withColumn("distance_ly", col("distance_parsecs") * 3.26156)
     .filter(col("planet_name").isNotNull())
 )
 
@@ -161,14 +161,15 @@ valid_statuses = ["Planned", "Active", "Completed", "Cancelled", "On Hold"]
 silver_missions = (df
     .dropDuplicates(["mission_id"])
     .withColumn("mission_name", trim(col("mission_name")))
-    .withColumn("launch_date", to_date(col("launch_date")))
+    .withColumn("launch_date", to_date(col("start_date")))
     .withColumn("end_date", to_date(col("end_date")))
     .withColumn("budget_usd", col("budget_usd").cast("double"))
-    .withColumn("crew_size", col("crew_size").cast("int"))
+    .withColumn("target_object", trim(col("target_object")))
     .withColumn("status",
         when(col("status").isin(valid_statuses), col("status"))
         .otherwise("Unknown"))
     .filter(col("mission_id").isNotNull())
+    .drop("start_date")
 )
 
 silver_missions.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.missions_silver")
@@ -179,17 +180,20 @@ print(f"✅ missions_silver: {silver_missions.count()} rows")
 
 ```python
 # Cell 5: Crew Bronze → Silver
-from pyspark.sql.functions import col, to_date, trim, regexp_extract
+from pyspark.sql.functions import col, to_date, trim, split as spark_split
 
 df = spark.read.table("lh_zosa.crew_bronze")
 
 silver_crew = (df
     .dropDuplicates(["crew_id"])
-    .withColumn("first_name", trim(col("first_name")))
-    .withColumn("last_name", trim(col("last_name")))
+    .withColumn("full_name", trim(col("full_name")))
+    .withColumn("first_name", trim(spark_split(col("full_name"), " ").getItem(0)))
+    .withColumn("last_name", trim(spark_split(col("full_name"), " ").getItem(1)))
+    .withColumn("role", trim(col("role")))
+    .withColumn("specialty", trim(col("specialty")))
     .withColumn("hire_date", to_date(col("hire_date")))
     .withColumn("email", trim(col("email")))
-    .withColumn("years_experience", col("years_experience").cast("int"))
+    .withColumn("clearance_level", col("clearance_level").cast("int"))
     .filter(col("crew_id").isNotNull())
     .filter(col("email").rlike("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
 )
@@ -212,12 +216,15 @@ silver_telemetry = (df
     .dropDuplicates(["timestamp", "ground_station_id"])
     .withColumn("timestamp", to_timestamp(col("timestamp")))
     .withColumn("signal_strength_dbm", col("signal_strength_dbm").cast("double"))
-    .withColumn("noise_floor_dbm", col("noise_floor_dbm").cast("double"))
-    .withColumn("temperature_c", col("temperature_c").cast("double"))
-    .withColumn("humidity_pct", col("humidity_pct").cast("double"))
-    .withColumn("wind_speed_kmh", col("wind_speed_kmh").cast("double"))
-    .withColumn("elevation_angle_deg", col("elevation_angle_deg").cast("double"))
+    .withColumn("antenna_azimuth_deg", col("antenna_azimuth_deg").cast("double"))
+    .withColumn("antenna_elevation_deg", col("antenna_elevation_deg").cast("double"))
+    .withColumn("data_rate_mbps", col("data_rate_mbps").cast("double"))
+    .withColumn("cpu_usage_pct", col("cpu_usage_pct").cast("double"))
+    .withColumn("memory_usage_pct", col("memory_usage_pct").cast("double"))
+    .withColumn("disk_io_mbps", col("disk_io_mbps").cast("double"))
+    .withColumn("temperature_celsius", col("temperature_celsius").cast("double"))
     .withColumn("ground_station_id", trim(col("ground_station_id")))
+    .withColumn("ground_station_name", trim(col("ground_station_name")))
     .withColumn("status",
         when(col("status").isin(valid_statuses), col("status"))
         .otherwise("Unknown"))
@@ -237,7 +244,7 @@ print(f"✅ telemetry_silver: {silver_telemetry.count()} rows")
 
 ## 🥇 Section 4 — Silver → Gold Aggregations
 
-Create a new notebook: **+ New** → **Notebook** → name it `02-silver-to-gold`. Attach to `lh_zosa` the same way.
+Create a new notebook: **+ New item** → **Notebook** → name it `02-silver-to-gold`. Click **+ Add data items** → **Existing Lakehouse** → select `lh_zosa`.
 
 Gold tables are purpose-built for reporting and analytics. They answer specific business questions.
 
@@ -252,21 +259,21 @@ from pyspark.sql.functions import col, when, round as spark_round
 silver = spark.read.table("lh_zosa.asteroids_silver")
 
 gold_asteroid_risk = (silver
-    .withColumn("avg_diameter_km",
-        (col("estimated_diameter_min_km") + col("estimated_diameter_max_km")) / 2)
+    .withColumn("avg_diameter_m",
+        (col("estimated_diameter_min_m") + col("estimated_diameter_max_m")) / 2)
     .withColumn("hazard_score",
         spark_round(
-            (1 / (col("miss_distance_au") + 0.001)) *
-            col("relative_velocity_kmps") *
-            col("avg_diameter_km") * 100, 2
+            (1 / (col("miss_distance_km") + 1)) *
+            col("relative_velocity_kph") *
+            col("avg_diameter_m") * 10, 2
         ))
     .withColumn("risk_category",
         when(col("hazard_score") > 1000, "Critical")
         .when(col("hazard_score") > 100, "High")
         .when(col("hazard_score") > 10, "Medium")
         .otherwise("Low"))
-    .select("neo_id", "name", "close_approach_date", "miss_distance_au",
-            "relative_velocity_kmps", "avg_diameter_km", "is_potentially_hazardous",
+    .select("neo_id", "name", "close_approach_date", "miss_distance_km",
+            "relative_velocity_kph", "avg_diameter_m", "is_hazardous",
             "hazard_score", "risk_category")
     .orderBy(col("hazard_score").desc())
 )
@@ -285,6 +292,7 @@ from pyspark.sql.functions import (
     col, year, count, sum as spark_sum,
     round as spark_round, avg as spark_avg
 )
+from pyspark.sql.window import Window
 
 silver = spark.read.table("lh_zosa.missions_silver")
 
@@ -294,15 +302,13 @@ gold_mission_summary = (silver
     .agg(
         count("*").alias("mission_count"),
         spark_round(spark_sum("budget_usd"), 2).alias("total_budget_usd"),
-        spark_round(spark_avg("budget_usd"), 2).alias("avg_budget_usd"),
-        spark_sum(col("crew_size")).alias("total_crew")
+        spark_round(spark_avg("budget_usd"), 2).alias("avg_budget_usd")
     )
     .withColumn("success_rate",
         spark_round(
             (col("mission_count") /
              spark_sum("mission_count").over(
-                 __import__('pyspark.sql', fromlist=['Window']).Window
-                 .partitionBy("launch_year", "mission_type", "region")
+                 Window.partitionBy("launch_year", "mission_type", "region")
              )) * 100, 1
         ))
     .orderBy("launch_year", "mission_type")
@@ -328,8 +334,16 @@ from pyspark.sql.functions import (
 
 silver = spark.read.table("lh_zosa.solar_events_silver")
 
+# Derive a severity score from the solar flare class_type (X=5, M=4, C=3, B=2, A=1)
 gold_solar_activity = (silver
-    .withColumn("event_month", date_trunc("month", col("event_timestamp")))
+    .withColumn("severity",
+        when(col("class_type").startswith("X"), 5)
+        .when(col("class_type").startswith("M"), 4)
+        .when(col("class_type").startswith("C"), 3)
+        .when(col("class_type").startswith("B"), 2)
+        .when(col("class_type").startswith("A"), 1)
+        .otherwise(0))
+    .withColumn("event_month", date_trunc("month", col("start_time")))
     .groupBy("event_month", "event_type")
     .agg(
         count("*").alias("event_count"),
