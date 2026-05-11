@@ -149,12 +149,18 @@ The asteroids came from a live API, but ZOSA's remaining datasets come from **in
 
 1. Open `lh_zosa` and click **Files** in the left Explorer panel.
 2. Click **Upload** → **Upload folder**.
-3. Browse to the `data/sample/` folder from your cloned repository and upload its contents (crew, missions, telemetry, solar events, exoplanets CSVs).
-4. Once the upload finishes, expand the **Files** section — you should see your CSV files listed.
+3. Browse to the `data/sample/` folder from your cloned repository and upload all CSV files:
+   - `crew.csv` — astronaut roster
+   - `missions.csv` — mission manifest
+   - `telemetry.csv` — spacecraft sensor readings
+   - `solar_events.csv` — geomagnetic storm events
+   - `exoplanets.csv` — confirmed exoplanet catalog
+
+   > ℹ️ You'll also see `asteroids.csv` in the folder — you can skip it since we already ingested asteroids from the live API in Section 2. Uploading it won't cause problems; it just won't be used.
+
+4. Once the upload finishes, expand the **Files** section — you should see your five CSV files listed.
 
 These are **raw CSVs** sitting in the Files area. They are *not* yet queryable as tables — think of this as your staging area.
-
-**💡 Tip:** If you also want to pull solar events and exoplanets from NASA APIs (DONKI and Exoplanet Archive), you can extend the notebook from Section 2 with additional cells. The sample CSVs are a shortcut for the remaining datasets.
 
 ---
 
@@ -187,23 +193,23 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
 
 ## 🔧 Section 5: Data Pipeline — Orchestrated Ingestion
 
-One table down, five to go. Instead of creating five more dataflows, you'll build a **Data Pipeline** that ingests the remaining CSVs in parallel.
+One table down, four to go. Instead of creating more dataflows, you'll build a **Data Pipeline** that ingests the remaining CSVs in parallel.
 
 1. Navigate to the **ZOSA-Dev** workspace.
 2. Click **+ New** → **Data Pipeline**.
 3. Name it `pl_ingest_all_sources` and click **Create**.
-4. For each of your remaining CSV files (`solar_events.csv`, `exoplanets.csv`, `missions.csv`, `crew.csv`, `telemetry.csv`), add a **Copy Data** activity:
+4. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), add a **Copy Data** activity:
    - Drag a **Copy Data** activity onto the canvas.
    - **Source** tab: set the source to your **Lakehouse Files** (browse to the specific CSV).
    - **Destination** tab: set the destination to your **Lakehouse Tables**, with a table name following the pattern `<dataset>_bronze` (e.g., `asteroids_bronze`).
    - Under **Mapping**, verify column mappings and set the file format to **DelimitedText** (CSV) with header row enabled.
-5. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all five Copy Data activities directly.
+5. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all four Copy Data activities directly.
 6. Add a **pipeline parameter** for reusability:
    - Click on the pipeline canvas background → **Parameters** tab → **+ New**.
    - Name: `source_folder`, Type: **String**, Default value: `sample`.
    - Update each Copy Data activity's source path to reference `@pipeline().parameters.source_folder` so you can point the pipeline at different folders later.
 7. Click **Run** (▷) to execute the pipeline.
-8. Monitor the **Output** tab at the bottom — you should see all five activities running simultaneously and completing within a few minutes.
+8. Monitor the **Output** tab at the bottom — you should see all four activities running simultaneously and completing within a few minutes.
 
 **What just happened?** Data Pipelines are Fabric's **orchestration engine**. The **Copy Activity** handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
 
