@@ -72,9 +72,9 @@ You will now create three workspaces following ZOSA's environment separation str
    - **Description:** `Zenith Orbital — Development environment for data engineering and analytics`
 
 5. Expand the **Advanced** section
-6. Under **License mode**, select your Fabric capacity (Trial or the capacity you provisioned)
+6. Under **Workspace type**, select your Fabric capacity (Trial or the capacity you provisioned)
 
-![Workspace license mode](../assets/screenshots/01/workspace-license-mode.png)
+![Workspace type](../assets/screenshots/01/workspace-license-mode.png)
 
 7. Click **Apply**
 
@@ -245,7 +245,7 @@ This architecture is the single most important concept in Fabric. Everything you
 Before moving to Module 02, verify the following:
 
 - [ ] **3 workspaces created:** `ZOSA-Dev`, `ZOSA-Test`, `ZOSA-Prod`
-- [ ] **All workspaces assigned to your Fabric capacity** (check under Workspace Settings → Advanced → License mode)
+- [ ] **All workspaces assigned to your Fabric capacity** (check under Workspace Settings → Advanced → Workspace type)
 - [ ] **Domain "Zenith Orbital" created** and all 3 workspaces assigned to it
 - [ ] **You can navigate to each workspace** and confirm it is empty
 

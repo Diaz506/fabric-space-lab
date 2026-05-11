@@ -578,7 +578,7 @@ Verify you've completed the following:
 - [ ] Created 4 Entra ID security groups (`ZOSA-Admins`, `ZOSA-Engineers`, `ZOSA-Scientists`, `ZOSA-Executives`)
 - [ ] Assigned your admin account to `ZOSA-Admins` + `ZOSA-Engineers`, test users to `ZOSA-Scientists` + `ZOSA-Executives`
 - [ ] Assigned groups to appropriate workspace roles in ZOSA-Dev, ZOSA-Test, and ZOSA-Prod
-- [ ] Sensitivity labels configured and applied to workspaces (Confidential baseline)
+- [ ] Sensitivity labels configured and published via policy (Internal default baseline)
 - [ ] Endorsement process understood (Promoted vs. Certified)
 - [ ] You understand the 4 data security layers: **RLS** (row filter), **CLS** (column deny), **OLS** (object hide), **DDM** (value mask)
 - [ ] OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded

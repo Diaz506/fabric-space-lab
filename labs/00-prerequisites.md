@@ -28,17 +28,17 @@ Over the next 13 modules (~8 hours total), you'll go from an empty Fabric tenant
 |--------|-------|----------------|
 | **00** | Prerequisites | ← You are here |
 | **01** | Capacity & Workspace Setup | Provision Fabric capacity and configure workspaces |
-| **02** | Lakehouse & Bronze Layer | Create your first Lakehouse and ingest raw data |
-| **03** | Shortcuts & OneLake | Connect external sources with shortcuts |
-| **04** | Silver Layer — Notebooks | Clean and transform data with PySpark notebooks |
-| **05** | Gold Layer — Data Warehouse | Build a star schema in the Fabric warehouse |
-| **06** | Semantic Model & Power BI | Create reports and a semantic model |
+| **02** | Governance & Security | Lock down workspaces with roles, labels, and data security |
+| **03** | Data Ingestion | Ingest raw data into lakehouses and connect external sources |
+| **04** | Medallion Lakehouse | Build Bronze, Silver, and Gold layers with PySpark |
+| **05** | Semantic Model | Create a star schema semantic model for analytics |
+| **06** | Power BI Reports | Build interactive reports and dashboards |
 | **07** | Real-Time Intelligence | Stream telemetry with Eventhouse and KQL |
-| **08** | Data Activator | Set up alerts and automated triggers |
-| **09** | Data Science & ML | Train and deploy ML models in Fabric |
-| **10** | Data Factory Pipelines | Orchestrate end-to-end ETL pipelines |
-| **11** | CI/CD & Deployment Pipelines | Version control and automated deployments |
-| **12** | Governance & Administration | Security, lineage, and capacity management |
+| **08** | Data Science | Train and deploy ML models in Fabric |
+| **09** | Ontology & Knowledge Graph | Model domain knowledge and entity relationships |
+| **10** | AI Agents | Build AI-powered agents for data interaction |
+| **11** | CI/CD & Deployment | Version control and automated deployments |
+| **12** | Monitoring & Optimization | Capacity management, lineage, and performance tuning |
 
 ---
 
