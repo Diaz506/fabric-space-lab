@@ -169,20 +169,20 @@ These are **raw CSVs** sitting in the Files area. They are *not* yet queryable a
 Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to ingest `crew.csv` with some light transformations — promoting headers, fixing data types, and filtering bad rows.
 
 1. Navigate to the **ZOSA-Dev** workspace.
-2. Click **+ New** → **Dataflow Gen2**.
+2. Click **+ New item** → **Dataflow Gen2**.
 3. Name it `df_crew_ingestion` by clicking on the default name at the top-left of the editor.
 4. Click **Get Data** → **Text/CSV**.
-4. Browse to the uploaded `crew.csv` file in your Lakehouse's Files section via the **OneLake** connector and click **Next**.
-5. In the **Power Query** editor, apply these transforms:
+5. Browse to the uploaded `crew.csv` file in your Lakehouse's Files section via the **OneLake** connector and click **Next**.
+6. In the **Power Query** editor, apply these transforms:
    - Click **Use first row as headers** (on the Home ribbon) to promote the header row.
    - Select the `hire_date` column → change its data type to **Date**.
    - Verify other columns have correct types (text for names, integer for IDs).
    - Click the dropdown on `crew_id` → **Remove empty** to filter out any rows with null crew IDs.
    - In the **Query Settings** panel on the right, rename the query to `crew_ingestion`.
-6. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
-7. Select `lh_zosa` → **Tables** → enter the table name `crew_bronze`.
-8. Click **Publish**.
-9. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
+7. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
+8. Select `lh_zosa` → **Tables** → enter the table name `crew_bronze`.
+9. Click **Publish**.
+10. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
 
 **What just happened?** Dataflows Gen2 is a **Power Query-based**, low-code ingestion tool. It supports **150+ connectors**, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.
 
@@ -197,20 +197,21 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
 One table down, four to go. Instead of creating more dataflows, you'll build a **Data Pipeline** that ingests the remaining CSVs in parallel.
 
 1. Navigate to the **ZOSA-Dev** workspace.
-2. Click **+ New** → **Data Pipeline**.
+2. Click **+ New item** → **Data Pipeline**.
 3. Name it `pl_ingest_all_sources` and click **Create**.
-4. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), add a **Copy Data** activity:
-   - Drag a **Copy Data** activity onto the canvas.
+4. On the pipeline landing page, click **Pipeline activity** under "Start with a blank canvas."
+5. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), add a **Copy Data** activity:
+   - Search for **Copy Data** in the activity picker and add it to the canvas.
    - **Source** tab: set the source to your **Lakehouse Files** (browse to the specific CSV).
-   - **Destination** tab: set the destination to your **Lakehouse Tables**, with a table name following the pattern `<dataset>_bronze` (e.g., `asteroids_bronze`).
+   - **Destination** tab: set the destination to your **Lakehouse Tables**, with a table name following the pattern `<dataset>_bronze` (e.g., `missions_bronze`).
    - Under **Mapping**, verify column mappings and set the file format to **DelimitedText** (CSV) with header row enabled.
-5. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all four Copy Data activities directly.
-6. Add a **pipeline parameter** for reusability:
+6. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all four Copy Data activities directly.
+7. Add a **pipeline parameter** for reusability:
    - Click on the pipeline canvas background → **Parameters** tab → **+ New**.
    - Name: `source_folder`, Type: **String**, Default value: `sample`.
    - Update each Copy Data activity's source path to reference `@pipeline().parameters.source_folder` so you can point the pipeline at different folders later.
-7. Click **Run** (▷) to execute the pipeline.
-8. Monitor the **Output** tab at the bottom — you should see all four activities running simultaneously and completing within a few minutes.
+8. Click **Run** (▷) to execute the pipeline.
+9. Monitor the **Output** tab at the bottom — you should see all four activities running simultaneously and completing within a few minutes.
 
 **What just happened?** Data Pipelines are Fabric's **orchestration engine**. The **Copy Activity** handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
 
