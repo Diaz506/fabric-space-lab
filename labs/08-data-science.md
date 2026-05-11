@@ -37,18 +37,18 @@ Microsoft Fabric ships a full data science toolkit — no extra provisioning, no
 
 ---
 
-## 2️⃣ Create ML Experiment
+## 2️⃣ Create Experiment
 
 Before you write any code, create an experiment to organize your runs.
 
 1. Navigate to your **ZOSA-Dev** workspace
-2. Click **+ New** → **ML Experiment**
+2. Click **+ New item** → **Experiment**
 3. Name it: `asteroid_risk_prediction`
 4. Click **Create**
 
 You now have a dedicated experiment container. Every MLflow run you log from a notebook will appear here — with metrics, parameters, and model artifacts organized automatically.
 
-> 📋 **What you should see:** A new ML Experiment item in your workspace with zero runs. It will populate once you execute the training code below.
+> 📋 **What you should see:** A new Experiment item in your workspace with zero runs. It will populate once you execute the training code below.
 
 > 📚 **Learn more:** [ML Experiments in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/machine-learning-experiment)
 
@@ -60,9 +60,9 @@ Great models start with great features. You'll transform the raw gold table into
 
 ### Create the Notebook
 
-1. In **ZOSA-Dev**, click **+ New** → **Notebook**
+1. In **ZOSA-Dev**, click **+ New item** → **Notebook**
 2. Rename it to `03-asteroid-features`
-3. Attach it to your **lh_zosa**
+3. In the notebook toolbar, click **+ Add data items** → **Existing Lakehouse** → select **lh_zosa**
 
 ### Load the Gold Table
 

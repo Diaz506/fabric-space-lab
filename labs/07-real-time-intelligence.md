@@ -44,59 +44,67 @@ An **Eventhouse** is Fabric's real-time analytics engine, optimized for time-ser
 
 ## 📡 3 — Create an Eventstream
 
-An **Eventstream** is a no-code streaming pipeline that captures, transforms, and routes real-time events. For this lab you will simulate live asteroid detections using a Custom App source.
+An **Eventstream** is a no-code streaming pipeline that captures, transforms, and routes real-time events. For this lab you will simulate live asteroid detections using a **Custom endpoint** source.
 
 ### Steps
 
 1. In your workspace, click **+ New item** → select **Eventstream**.
 2. Name it: `asteroid_feed` → click **Create**.
-3. In the Eventstream canvas, click **New source** → **Custom App**.
-4. Copy the **connection string / endpoint URL** shown — you will need it for the simulator script below.
+3. In the Eventstream canvas, click **New source** → **Custom endpoint**.
+4. **Publish** the Eventstream (click **Publish** in the toolbar) — connection strings are only available after publishing.
+5. Open the Custom endpoint source node and copy the **Event Hub-compatible connection string** — you will need it for the simulator script below.
 
 ### Simulator Script
 
-Create a Python file `simulate_detections.py` on your local machine and run it while you work through the rest of this module:
+> ⚠️ **Prerequisites:** Install the Azure Event Hubs SDK first:
+> ```bash
+> pip install azure-eventhub
+> ```
+
+Custom endpoints in Fabric use the **Event Hubs / Kafka protocol** (not HTTP POST). Create a Python file `simulate_detections.py` on your local machine and run it while you work through the rest of this module:
 
 ```python
-import requests
-import json
-import time
-import random
-from datetime import datetime
+from azure.eventhub import EventHubProducerClient, EventData
+import json, time, random
 
-# Paste the connection string from Eventstream Custom App source
-ENDPOINT = "YOUR_EVENTSTREAM_ENDPOINT"
+# Paste the Event Hub-compatible connection string from your Custom endpoint source
+CONNECTION_STR = "<your-custom-endpoint-connection-string>"
+
+producer = EventHubProducerClient.from_connection_string(CONNECTION_STR)
 
 OBJECTS = ["2024 XR1", "2025 AB3", "2024 QZ7", "2025 KN9", "2024 VT2"]
 STATIONS = ["GS-01", "GS-03", "GS-06", "GS-11"]
 
 print("🚀 Asteroid detection simulator started — Ctrl+C to stop")
 
-while True:
-    event = {
-        "detection_id": f"DET-{random.randint(10000, 99999)}",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-        "object_name": random.choice(OBJECTS),
-        "miss_distance_au": round(random.uniform(0.01, 0.5), 4),
-        "velocity_kmps": round(random.uniform(5.0, 35.0), 2),
-        "estimated_diameter_km": round(random.uniform(0.01, 2.0), 3),
-        "ground_station_id": random.choice(STATIONS),
-        "is_potentially_hazardous": random.random() < 0.3,
-    }
-    try:
-        resp = requests.post(ENDPOINT, json=event)
-        status = "✅" if resp.status_code < 300 else f"⚠️ {resp.status_code}"
-        print(f"{status} Sent {event['detection_id']} — {event['object_name']} at {event['miss_distance_au']} AU")
-    except Exception as e:
-        print(f"❌ Error: {e}")
-    time.sleep(5)
+try:
+    while True:
+        reading = {
+            "detection_id": f"DET-{random.randint(10000, 99999)}",
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "object_name": random.choice(OBJECTS),
+            "miss_distance_au": round(random.uniform(0.01, 0.5), 4),
+            "velocity_kmps": round(random.uniform(5.0, 35.0), 2),
+            "estimated_diameter_km": round(random.uniform(0.01, 2.0), 3),
+            "ground_station_id": random.choice(STATIONS),
+            "is_potentially_hazardous": random.random() < 0.3,
+        }
+        batch = producer.create_batch()
+        batch.add(EventData(json.dumps(reading)))
+        producer.send_batch(batch)
+        print(f"✅ Sent {reading['detection_id']} — {reading['object_name']} at {reading['miss_distance_au']} AU")
+        time.sleep(5)
+except KeyboardInterrupt:
+    print("\n🛑 Simulator stopped.")
+finally:
+    producer.close()
 ```
 
-> ⚠️ **Important:** Replace `YOUR_EVENTSTREAM_ENDPOINT` with the actual endpoint URL copied from step 4. Keep the script running in a terminal for the remainder of this module.
+> ⚠️ **Important:** Replace `<your-custom-endpoint-connection-string>` with the actual connection string copied from step 5. The connection string is only available **after publishing** the Eventstream. Keep the script running in a terminal for the remainder of this module.
 
 > 📚 **Official Documentation:**
 > - [Create and manage an Eventstream](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-manage-an-eventstream)
-> - [Add Custom App source](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/add-source-custom-app)
+> - [Add Custom endpoint source](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/add-source-custom-endpoint)
 
 ---
 

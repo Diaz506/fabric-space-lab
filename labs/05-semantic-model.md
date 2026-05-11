@@ -36,7 +36,7 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
 ### Steps
 
 1. Open your **lh_zosa** in the Fabric portal.
-2. In the top command bar, click **+ New item** → **Semantic model**.
+2. In the Lakehouse ribbon, click **New Power BI semantic model**.
 3. Name the model: `ZOSA Analytics Model`.
 4. In the table picker, select the **Gold layer** tables:
    - `gold_asteroid_risk`
@@ -99,7 +99,7 @@ A clean star schema means faster queries and simpler DAX. Your **fact table** is
 
 ## 📐 4 — Create DAX Measures
 
-Switch to the **Data view** or **Report view** and add the following measures to `gold_mission_summary` (or create a dedicated `_Measures` table for organization).
+In the **Model view**, select a table in the **Data** pane and use the formula bar to add the following measures to `gold_mission_summary` (or create a dedicated `_Measures` table for organization).
 
 ### 4.1 Hazard Index
 
