@@ -78,6 +78,14 @@ Each Bronze table gets its own cell in the notebook. The pattern is consistent:
 
 ### 3.1 — Asteroids
 
+> ⚠️ **Note:** This code assumes `asteroids_bronze` was created by the **API notebook** (Lab 03, Section 2), which writes columns named `is_hazardous`, `relative_velocity_kph`, `estimated_diameter_min_m`, and `estimated_diameter_max_m`. If you used the **CSV sample file** instead (via pipeline), the column names differ (`is_potentially_hazardous`, `relative_velocity_kmps`, `estimated_diameter_min_km`, `estimated_diameter_max_km`). In that case, rename columns before applying the transforms below:
+> ```python
+> df = df.withColumnRenamed("is_potentially_hazardous", "is_hazardous") \
+>        .withColumnRenamed("relative_velocity_kmps", "relative_velocity_kph") \
+>        .withColumnRenamed("estimated_diameter_min_km", "estimated_diameter_min_m") \
+>        .withColumnRenamed("estimated_diameter_max_km", "estimated_diameter_max_m")
+> ```
+
 ```python
 # Cell 1: Asteroids Bronze → Silver
 from pyspark.sql.functions import col, to_date, trim
@@ -193,7 +201,7 @@ silver_crew = (df
     .withColumn("specialty", trim(col("specialty")))
     .withColumn("hire_date", to_date(col("hire_date")))
     .withColumn("email", trim(col("email")))
-    .withColumn("clearance_level", col("clearance_level").cast("int"))
+    .withColumn("clearance_level", trim(col("clearance_level")))
     .filter(col("crew_id").isNotNull())
     .filter(col("email").rlike("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
 )
@@ -210,7 +218,7 @@ from pyspark.sql.functions import col, to_timestamp, trim, when
 
 df = spark.read.table("lh_zosa.telemetry_bronze")
 
-valid_statuses = ["Nominal", "Warning", "Critical", "Offline", "Maintenance"]
+valid_statuses = ["Nominal", "Warning", "Critical", "Offline", "Maintenance", "Online"]
 
 silver_telemetry = (df
     .dropDuplicates(["timestamp", "ground_station_id"])
