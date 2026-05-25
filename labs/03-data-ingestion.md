@@ -182,6 +182,7 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
    - Click **Use first row as headers** (on the Home ribbon) to promote the header row.
    - Select the `hire_date` column → change its data type to **Date**.
    - Verify other columns have correct types (text for names, integer for IDs).
+   > 💡 **Note:** If the **Applied steps** panel already shows "Promoted headers" and "Changed column types", Fabric auto-applied these from the preview screen — you can skip the steps above and just verify the results look correct.
    - Click the dropdown on `crew_id` → **Remove empty** to filter out any rows with null crew IDs.
    - In the **Query Settings** panel on the right, rename the query to `crew_ingestion`.
 8. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
