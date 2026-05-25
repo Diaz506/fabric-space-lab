@@ -193,7 +193,7 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
    - In the left panel, scroll (or use the Search box) to find the **ZOSA-Dev** workspace → expand it → select `lh_zosa`.
    - Click **Next** to confirm.
    - On the **Choose destination settings** screen, verify the column mapping looks correct (all columns mapped 1:1, `hire_date` as Date). Leave **Use automatic settings** toggled on and click **Save settings**.
-9. Click **Publish**.
+9. Click **Save & run** (top-left in the Home ribbon) to publish the dataflow and trigger a refresh.
 10. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
 
 **What just happened?** Dataflows Gen2 is a **Power Query-based**, low-code ingestion tool. It supports **150+ connectors**, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.
