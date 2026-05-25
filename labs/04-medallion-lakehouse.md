@@ -112,14 +112,24 @@ print(f"✅ asteroids_silver: {silver_asteroids.count()} rows")
 
 ```python
 # Cell 2: Solar Events Bronze → Silver
-from pyspark.sql.functions import col, to_timestamp, trim, upper
+from pyspark.sql.functions import col, to_timestamp, trim, upper, coalesce, lit
 
 df = spark.read.table("solar_events_bronze")
 
 silver_solar = (df
     .dropDuplicates(["event_id"])
-    .withColumn("start_time", to_timestamp(col("start_time")))
-    .withColumn("end_time", to_timestamp(col("end_time")))
+    .withColumn("start_time",
+        coalesce(
+            to_timestamp(col("start_time"), "yyyy-MM-dd'T'HH:mm'Z'"),
+            to_timestamp(col("start_time"), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            to_timestamp(col("start_time"))
+        ))
+    .withColumn("end_time",
+        coalesce(
+            to_timestamp(col("end_time"), "yyyy-MM-dd'T'HH:mm'Z'"),
+            to_timestamp(col("end_time"), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            to_timestamp(col("end_time"))
+        ))
     .withColumn("event_type", trim(upper(col("event_type"))))
     .withColumn("class_type", trim(col("class_type")))
     .withColumn("source_location", trim(col("source_location")))
@@ -353,15 +363,21 @@ from pyspark.sql.functions import (
 
 silver = spark.read.table("solar_events_silver")
 
-# Derive a severity score from the solar flare class_type (X=5, M=4, C=3, B=2, A=1)
+# Derive severity from class_type if available, otherwise from event_type
+# NASA DONKI data: Geomagnetic Storms don't have flare classes
 gold_solar_activity = (silver
+    .filter(col("start_time").isNotNull())
     .withColumn("severity",
         when(col("class_type").startswith("X"), 5)
         .when(col("class_type").startswith("M"), 4)
         .when(col("class_type").startswith("C"), 3)
         .when(col("class_type").startswith("B"), 2)
         .when(col("class_type").startswith("A"), 1)
-        .otherwise(0))
+        .when(col("event_type").contains("STORM"), 4)
+        .when(col("event_type").contains("FLARE"), 3)
+        .when(col("event_type").contains("CME"), 3)
+        .when(col("event_type").contains("RADIATION"), 4)
+        .otherwise(2))
     .withColumn("event_month", date_trunc("month", col("start_time")))
     .groupBy("event_month", "event_type")
     .agg(
@@ -374,7 +390,7 @@ gold_solar_activity = (silver
     .orderBy("event_month", "event_type")
 )
 
-gold_solar_activity.write.mode("overwrite").format("delta").saveAsTable("gold_solar_activity")
+gold_solar_activity.write.mode("overwrite").option("overwriteSchema", "true").format("delta").saveAsTable("gold_solar_activity")
 print(f"✅ gold_solar_activity: {gold_solar_activity.count()} rows")
 ```
 
