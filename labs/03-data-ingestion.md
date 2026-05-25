@@ -214,39 +214,50 @@ One table down, four to go. Instead of creating more dataflows, you'll build a *
 2. Click **+ New item** → **Data Pipeline**.
 3. Name it `pl_ingest_all_sources` and click **Create**.
 4. On the pipeline landing page ("Build a pipeline to organize and move your data"), click the **Pipeline activity** card under "Start with a blank canvas." A popup appears with an activity list — select **Copy data** (under "Move and transform") to add your first Copy Data activity to the canvas.
-5. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), configure a **Copy Data** activity:
-   - **General** tab: Rename the activity to something descriptive (e.g., `Copy_missions`).
+
+   > 💡 **Alternative approach:** You could create 4 separate Copy Data activities (one per file) on the canvas — that works fine for a small number of files. However, we'll use a **metadata-driven approach** with a ForEach loop, which is more scalable and realistic for production pipelines.
+
+5. Delete the Copy Data activity you just added (we'll place it inside a ForEach instead). First, set up a pipeline parameter with the file list:
+   - Click on the pipeline **canvas background** (deselect any activity) → in the bottom panel, click the **Parameters** tab → **+ New**.
+   - Name: `files`, Type: **Array**, Default value:
+     ```json
+     [
+       {"source": "missions.csv", "destination": "missions_bronze"},
+       {"source": "telemetry.csv", "destination": "telemetry_bronze"},
+       {"source": "solar_events.csv", "destination": "solar_events_bronze"},
+       {"source": "exoplanets.csv", "destination": "exoplanets_bronze"}
+     ]
+     ```
+6. Add a **ForEach** activity:
+   - From the **Activities** tab in the ribbon → under "Control flow" → select **ForEach** and add it to the canvas.
+   - **General** tab: Rename it to `ForEach_Ingest_CSVs`.
+   - **Settings** tab:
+     - Check **Sequential** if you want one-at-a-time execution, or leave it **unchecked** for parallel execution (recommended — all 4 run simultaneously).
+     - **Items**: Click the text field → select **Pipeline expression** (or click "Add dynamic content") → enter: `@pipeline().parameters.files`
+7. Add a **Copy Data** activity **inside** the ForEach:
+   - Double-click the ForEach activity (or click the ✏️ pencil icon) to open its inner canvas.
+   - Add a **Copy data** activity from the Activities ribbon.
    - **Source** tab:
      - **Connection**: Lakehouse admin (Preview)
      - **Lakehouse**: `lh_zosa`
      - **Root folder**: Select **Files**
-     - **File path**: Leave Directory empty, enter the file name (e.g., `missions.csv`). You can also click **Browse** to navigate.
+     - **File path**: Leave Directory empty. For File name, click the text field → **Add dynamic content** → enter: `@item().source`
      - **File format**: Change from Binary to **DelimitedText** → click **Settings** and verify **First row as header** is checked.
    - **Destination** tab:
      - **Connection**: Lakehouse admin (Preview)
      - **Lakehouse**: `lh_zosa`
      - **Root folder**: Select **Tables**
-     - Click **+ New** → leave Schema empty → enter the table name (e.g., `missions_bronze`) → click **Create**.
+     - Check **Enter manually** → in the Table name field, click → **Add dynamic content** → enter: `@item().destination`
      - **Table action**: Select **Overwrite**.
+
    > 💡 **Table action options:**
    > - **Append** — adds rows to the existing table (use for incremental loads)
    > - **Overwrite** — replaces the entire table on each run (use for full refreshes)
    > - **Upsert** — inserts new rows and updates existing ones by matching a key column (use for change-data-capture scenarios)
-   
-   To add the next Copy Data activity, use the **Activities** tab in the ribbon → **Copy data**. Repeat for all four CSVs:
-   | Source file | Destination table |
-   |-------------|------------------|
-   | `missions.csv` | `missions_bronze` |
-   | `telemetry.csv` | `telemetry_bronze` |
-   | `solar_events.csv` | `solar_events_bronze` |
-   | `exoplanets.csv` | `exoplanets_bronze` |
-6. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all four Copy Data activities directly.
-7. Add a **pipeline parameter** for reusability:
-   - Click on the pipeline canvas background → **Parameters** tab → **+ New**.
-   - Name: `source_folder`, Type: **String**, Default value: `sample`.
-   - Update each Copy Data activity's source path to reference `@pipeline().parameters.source_folder` so you can point the pipeline at different folders later.
-8. Click **Run** (▷) to execute the pipeline.
-9. Monitor the **Output** tab at the bottom — you should see all four activities running simultaneously and completing within a few minutes.
+
+8. Navigate back to the main pipeline canvas (click the pipeline name in the breadcrumb at the top).
+9. Click **Run** (▷) to execute the pipeline.
+10. Monitor the **Output** tab at the bottom — you should see the ForEach activity running and completing all four copies within a few minutes. Click on the ForEach run to see individual activity statuses.
 
 **What just happened?** Data Pipelines are Fabric's **orchestration engine**. The **Copy Activity** handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
 
