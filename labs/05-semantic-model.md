@@ -94,6 +94,66 @@ A clean star schema means faster queries and simpler DAX. Your **fact table** is
 
 3. After wiring the relationships, your diagram should show a star with `gold_mission_summary` as the fact table at the center, connected to `gold_dim_crew` and `gold_dim_ground_stations` as dimensions. The remaining Gold tables (`gold_asteroid_risk`, `gold_solar_activity`, `gold_exoplanet_catalog`) are independent fact tables — they answer separate business questions and will be used on their own report pages.
 
+```mermaid
+erDiagram
+    gold_mission_summary ||--o{ gold_dim_crew : "region"
+    gold_mission_summary }o--|| gold_dim_ground_stations : "primary_ground_station_id"
+    gold_dim_crew }o--|| gold_dim_ground_stations : "ground_station_id"
+
+    gold_mission_summary {
+        string mission_id PK
+        string mission_name
+        string mission_type
+        string status
+        date launch_date
+        int launch_year
+        int duration_days
+        string primary_ground_station_id FK
+        double budget_usd
+        string budget_category
+        string region FK
+    }
+
+    gold_dim_crew {
+        string crew_id PK
+        string full_name
+        string role
+        string specialty
+        string ground_station_id FK
+        string region
+        string clearance_level
+    }
+
+    gold_dim_ground_stations {
+        string ground_station_id PK
+        string ground_station_name
+        string region
+    }
+
+    gold_asteroid_risk {
+        string neo_id PK
+        string name
+        date close_approach_date
+        double hazard_score
+        string risk_category
+    }
+
+    gold_solar_activity {
+        date event_month PK
+        string event_type
+        int event_count
+        double avg_severity
+    }
+
+    gold_exoplanet_catalog {
+        int rank PK
+        string planet_name
+        string host_star
+        double earth_similarity_index
+        string habitability_zone
+    }
+```
+
 > 💡 **Tip:** If Fabric auto-detected relationships, review them carefully. Auto-detection sometimes creates incorrect cardinalities — always validate manually.
 
 > 📚 **Official Documentation:**
