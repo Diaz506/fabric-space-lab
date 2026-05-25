@@ -19,10 +19,9 @@ By the end of this module, you will:
 | Requirement | Details |
 |---|---|
 | **Module 05 complete** | ZOSA Analytics Model published with Direct Lake, measures, and RLS |
-| **Power BI Desktop** | Latest version installed (June 2024 or later recommended) |
 | **Workspace access** | Contributor or higher on **ZOSA-Dev** |
 
-> 💡 **Tip:** You'll connect Power BI Desktop to the *semantic model* in your Fabric workspace — not directly to the lakehouse. This is the Direct Lake advantage: one model, many reports.
+> 💡 **Tip:** You can build reports directly in the Fabric portal (from the semantic model → **Create report**) or use **Power BI Desktop** connected to the semantic model. This lab uses the web experience by default — no Desktop install required.
 
 > 📚 **Learn more:** [Report Design Best Practices](https://learn.microsoft.com/en-us/power-bi/guidance/power-bi-optimization)
 
@@ -34,12 +33,13 @@ This is Major Nakamura's operational dashboard — the one going up on the big s
 
 ### Connect to the Semantic Model
 
-1. Open **Power BI Desktop**.
-2. Click **Home → Get data → Power BI semantic models**.
-3. Select your workspace (**ZOSA-Dev**) and choose **ZOSA Analytics Model**.
-4. Click **Connect**. You should see all your tables and measures in the Fields pane.
+1. In the **Fabric portal**, navigate to your **ZOSA-Dev** workspace.
+2. Find **ZOSA Analytics Model** → click the **ellipsis (...)** → select **Create report**.
+3. A blank report canvas opens, connected to the semantic model. You should see all your Gold tables and measures in the **Data** pane on the right.
 
-> 💡 **Tip:** Because you're connecting to a published semantic model, the Direct Lake connection, relationships, and measures are already configured. No data import needed.
+> 💡 **Tip:** Because you're connected to the published semantic model, the Direct Lake connection, relationships, and measures are already configured. No data import needed.
+>
+> **Alternatively**, if you prefer Power BI Desktop: open Desktop → **Home → Get data → Power BI semantic models** → select your workspace → choose **ZOSA Analytics Model** → **Connect**.
 
 ### Page 1: Executive Overview
 
@@ -106,11 +106,11 @@ This is the page that keeps Major Nakamura up at night.
 
 1. Add a **Scatter chart** as the main visual (top half of the page).
 2. Configure:
-   - **X-axis:** `gold_asteroid_risk[min_miss_distance_au]`
-   - **Y-axis:** `gold_asteroid_risk[max_relative_velocity_kmps]`
-   - **Size:** `gold_asteroid_risk[avg_diameter_km]`
+   - **X-axis:** `gold_asteroid_risk[miss_distance_km]`
+   - **Y-axis:** `gold_asteroid_risk[relative_velocity_kph]`
+   - **Size:** `gold_asteroid_risk[avg_diameter_m]`
    - **Legend (color):** `gold_asteroid_risk[risk_category]`
-   - **Tooltips:** Add `gold_asteroid_risk[name]`, `[Hazard Score]`
+   - **Tooltips:** Add `gold_asteroid_risk[name]`, `gold_asteroid_risk[hazard_score]`
 3. Apply conditional formatting on the legend:
    - Critical → Red (`#FF4444`)
    - High → Orange (`#FF9800`)
@@ -124,13 +124,13 @@ This is the page that keeps Major Nakamura up at night.
 1. Add a **Table** visual (bottom-left).
 2. Add columns:
    - `gold_asteroid_risk[name]`
-   - `gold_asteroid_risk[avg_diameter_km]`
-   - `gold_asteroid_risk[min_miss_distance_au]`
-   - `gold_asteroid_risk[max_relative_velocity_kmps]`
-   - `[Hazard Score]`
+   - `gold_asteroid_risk[avg_diameter_m]`
+   - `gold_asteroid_risk[miss_distance_km]`
+   - `gold_asteroid_risk[relative_velocity_kph]`
+   - `gold_asteroid_risk[hazard_score]`
    - `gold_asteroid_risk[risk_category]`
 3. Apply a **Top N filter** on the visual:
-   - Filter on `[Hazard Score]` → Top **10** → By value: `[Hazard Score]`
+   - Filter on `hazard_score` → Top **10** → By value: `hazard_score`
 4. Add **conditional formatting** on the `risk_category` column:
    - **Background color** → Rules:
      - If value is "Critical" → Red background, white text
@@ -142,8 +142,8 @@ This is the page that keeps Major Nakamura up at night.
 
 1. Add a **Card** visual (bottom-right) showing `[Max Hazard Score]`.
 2. Add conditional formatting:
-   - If value > 80 → Red
-   - If value > 50 → Orange
+   - If value > 20 → Red
+   - If value > 10 → Orange
    - Otherwise → Green
 
 > 📚 **Learn more:** [Conditional Formatting](https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting)
@@ -166,19 +166,18 @@ Space weather data for the science team.
 1. Add a **Stacked column chart** (bottom-left).
 2. Configure:
    - **X-axis:** `gold_solar_activity[event_type]`
-   - **Y-axis:** `gold_solar_activity[event_count]`
-   - **Legend:** `gold_solar_activity[avg_severity]`
-3. Color the severity levels:
-   - Extreme → Red
-   - Severe → Orange
-   - Moderate → Yellow
-   - Minor → Green
+   - **Y-axis:** `gold_solar_activity[high_severity_count]`
+   - Add `gold_solar_activity[low_severity_count]` as a second Y-axis value
+3. Color the series:
+   - high_severity_count → Red/Orange
+   - low_severity_count → Green
 
 #### Latest Events Table
 
 1. Add a **Table** visual (bottom-right).
-2. Columns: `event_month`, `event_type`, `avg_severity`, `max_severity`
-3. Apply a **Top N** filter: Top 15 by `event_month` (most recent).
+2. Columns: `event_month`, `event_type`, `event_count`, `avg_severity`, `max_severity`
+3. Sort by `event_month` descending to show most recent first.
+4. Optionally apply a **Top N** filter: Top 15 by `event_month`.
 
 ### Add Tooltips and Interactivity
 
@@ -204,8 +203,11 @@ This is the public-facing report — designed for curiosity, not crisis. The pub
 
 ### Create a New Report
 
-1. In Power BI Desktop, go to **File → New** (or open a new instance).
-2. Connect to the **ZOSA Analytics Model** the same way as before.
+1. Go back to the **ZOSA-Dev** workspace.
+2. Find **ZOSA Analytics Model** → click the **ellipsis (...)** → select **Create report**.
+3. A new blank report canvas opens, connected to the same model.
+
+> 💡 **Alternatively in Power BI Desktop:** File → New → Get data → Power BI semantic models → select ZOSA Analytics Model.
 
 ### Exoplanet Scatter Plot
 
@@ -237,7 +239,7 @@ Add the following slicers in a vertical panel on the left side:
 2. Include fields:
    - `planet_name`, `host_star`, `discovery_method`, `discovery_year`
    - `planet_mass_earth`, `orbital_period_days`, `distance_ly`
-   - `habitability_zone`, `planet_radius_earth`
+   - `habitability_zone`, `planet_radius_earth`, `earth_similarity_index`
 3. This card updates dynamically when you click a dot on the scatter plot.
 
 ### Bookmarks for Preset Views
@@ -332,16 +334,21 @@ Field scientists need data on their tablets in remote locations.
 
 ---
 
-## 4️⃣ Publish to Workspace
+## 4️⃣ Publish and Save
 
-Time to get these reports off your machine and into the hands of the team.
+Since you built the reports directly in the Fabric portal, they're already saved in your workspace. If you used Power BI Desktop instead, publish here.
 
-### Publish from Power BI Desktop
+### If using Power BI Desktop
 
 1. For each report, go to **File → Publish → Publish to Power BI**.
 2. Select the **ZOSA-Dev** workspace.
 3. Click **Select**. Wait for the upload to complete.
-4. You'll see a success message with a link to open the report in the service.
+
+### Save in the Fabric Portal
+
+1. Click the **Save** icon (💾) in the top-left corner.
+2. Name the report (e.g., **Mission Control Dashboard** or **Exoplanet Explorer**).
+3. Select the **ZOSA-Dev** workspace as the destination → **Save**.
 
 ### Verify in the Service
 
@@ -388,19 +395,17 @@ Time to verify everything works end-to-end.
 | 5 | Cross-filtering works | Click a segment in the donut chart | Other visuals filter to that status |
 | 6 | Conditional formatting | Look at the asteroid table | Critical rows highlighted in red |
 | 7 | Bookmarks work | Click "🌍 Habitable Candidates" button | Filters reset to habitable zone = Yes |
-| 8 | RLS filters data | View report as a different role | Data scoped to that role's region/permissions |
+| 8 | RLS filters data | Test as role from Security page (or log in as role member) | Data scoped to that role's region |
 | 9 | Mobile layout | Preview mobile layout in Desktop | KPI cards and key visuals visible |
 | 10 | Dashboard pins | Open ZOSA Mission Control dashboard | Pinned tiles show live data |
 
 ### Test RLS in the Service
 
-1. Open the **Mission Control Dashboard** report in the Fabric portal.
-2. Click **⋯ (More options)** → **Security** → **View as role**.
-3. Select a role (e.g., "Regional Analyst — Americas").
-4. Confirm that only missions from the Americas region appear.
-5. Check that KPI values reflect the filtered data.
+1. Navigate to the semantic model → **ellipsis (...)** → **Security**.
+2. Click the **ellipsis (...)** next to a role → **Test as role**.
+3. Confirm that only the expected region's data appears.
 
-> ⚠️ **Important:** If RLS isn't filtering, go back to Module 05 and verify your role definitions and DAX expressions on the ZOSA Analytics Model.
+> ⚠️ **Note:** "Test as role" does not work with Direct Lake models using SSO. If you see this error, verify the role definition is correct in **Manage roles** and test by logging in as the assigned user in a private browser window.
 
 > 📚 **Learn more:** [RLS Testing in the Service](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security)
 
