@@ -258,6 +258,13 @@ One table down, four to go. Instead of creating more dataflows, you'll build a *
 8. Navigate back to the main pipeline canvas (click the pipeline name in the breadcrumb at the top).
 9. Click **Run** (▷) to execute the pipeline.
 10. Monitor the **Output** tab at the bottom — you should see the ForEach activity running and completing all four copies within a few minutes. Click on the ForEach run to see individual activity statuses.
+11. **Verify the results:** Navigate to `lh_zosa` → expand **Tables**. You should now see all four new tables:
+    - `missions_bronze`
+    - `telemetry_bronze`
+    - `solar_events_bronze`
+    - `exoplanets_bronze`
+    
+    Click on any table to preview its data and confirm rows were loaded successfully.
 
 **What just happened?** Data Pipelines are Fabric's **orchestration engine**. The **Copy Activity** handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
 
