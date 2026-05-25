@@ -289,9 +289,9 @@ gold_asteroid_risk = (silver
             col("avg_diameter_m") * 10, 2
         ))
     .withColumn("risk_category",
-        when(col("hazard_score") > 1000, "Critical")
-        .when(col("hazard_score") > 100, "High")
-        .when(col("hazard_score") > 10, "Medium")
+        when(col("hazard_score") > 50, "Critical")
+        .when(col("hazard_score") > 10, "High")
+        .when(col("hazard_score") > 1, "Medium")
         .otherwise("Low"))
     .select("neo_id", "name", "close_approach_date", "miss_distance_km",
             "relative_velocity_kph", "avg_diameter_m", "is_hazardous",
