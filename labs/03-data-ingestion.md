@@ -185,10 +185,15 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
    > 💡 **Note:** If the **Applied steps** panel already shows "Promoted headers" and "Changed column types", Fabric auto-applied these from the preview screen — you can skip the steps above and just verify the results look correct.
    - Click the dropdown on `crew_id` → **Remove empty** to filter out any rows with null crew IDs.
    - In the **Query Settings** panel on the right, rename the query to `crew_ingestion`.
-8. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
-9. Select `lh_zosa` → **Tables** → enter the table name `crew_bronze`.
-10. Click **Publish**.
-11. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
+8. Set the data destination:
+   - At the bottom-right of the editor, click the `+` next to **Data destination** → select **Lakehouse**.
+   - On the **Connect to data destination** screen, leave the connection as "Lakehouse admin (none)" with Organizational account authentication → click **Next**.
+   - On the **Choose destination target** screen, keep **New table** selected.
+   - Change the **Table name** to `crew_bronze`.
+   - In the left panel, scroll (or use the Search box) to find the **ZOSA-Dev** workspace → expand it → select `lh_zosa`.
+   - Click **Next** to confirm.
+9. Click **Publish**.
+10. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
 
 **What just happened?** Dataflows Gen2 is a **Power Query-based**, low-code ingestion tool. It supports **150+ connectors**, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.
 
