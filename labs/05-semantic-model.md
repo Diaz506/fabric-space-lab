@@ -315,18 +315,13 @@ Row-Level Security restricts which rows a user can see based on their identity. 
 
 ### Test the Role
 
-To test RLS, you need a **report** connected to the semantic model:
+1. From the **workspace**, find the semantic model → click the **ellipsis (...)** → select **Security**.
+2. On the Row-Level Security page, click the **ellipsis (...)** next to `Europe_Analysts`.
+3. Select **"Test as role"**.
+4. Fabric opens a report filtered by the role — verify only rows where `region = "Europe"` appear.
+5. The page header shows the role being applied. Click **"Back to Row-Level Security"** when done.
 
-1. From the workspace, find the semantic model → click **ellipsis (...)** → **Create report** (or open an existing report built on this model).
-2. Add a simple **Table visual** with columns from `gold_mission_summary` (e.g., `mission_name`, `region`, `status`).
-3. **Save** the report (give it any name, e.g., "RLS Test").
-4. In the report **Reading view**, click the **ellipsis (...)** in the top toolbar → select **"View as roles"**.
-5. Check the box for **Europe_Analysts** → click **OK**.
-6. Verify the table only shows rows where `region = "Europe"`.
-7. A yellow banner at the top confirms: *"Now viewing report as: Europe_Analysts"*.
-8. Click **"Stop viewing"** when done.
-
-> ⚠️ **The "View as roles" option only appears in report Reading view** — it is not available in the Model editor or Explore data view.
+> ⚠️ **"Test as role" lives on the Security page** (where you assign members), not in the Model editor or report menu.
 
 > 💡 **Recall:** In Module 02, you configured **OneLake Security** at the storage layer. RLS operates at the **semantic model** layer — a complementary defense. OneLake Security controls who can *access* the files; RLS controls who can *see which rows* once they have access.
 
