@@ -164,7 +164,7 @@ from pyspark.sql.functions import col, to_date, trim, when
 
 df = spark.read.table("missions_bronze")
 
-valid_statuses = ["Planned", "Active", "Completed", "Cancelled", "On Hold"]
+valid_statuses = ["Planned", "Active", "Completed", "Cancelled", "On Hold", "Failed"]
 
 silver_missions = (df
     .dropDuplicates(["mission_id"])
