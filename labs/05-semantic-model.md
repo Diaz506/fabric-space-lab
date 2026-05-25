@@ -211,7 +211,7 @@ Row-Level Security restricts which rows a user can see based on their identity. 
 ### Test the Role
 
 1. In the model toolbar, click **View as** → select **Europe_Analysts**.
-2. Navigate to the Data view and verify that `gold_mission_summary` only shows rows where `region = "Europe"`.
+2. In the **Data** pane, select the `gold_mission_summary` table and verify that only rows where `region = "Europe"` are visible.
 3. Confirm that measures like **Mission Success Rate** recalculate using only the filtered rows.
 4. Click **Stop viewing as role** when done.
 

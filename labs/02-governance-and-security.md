@@ -161,7 +161,7 @@ Sensitivity labels classify your data and enforce protection policies automatica
 
 ### Step 2: Create Labels in Microsoft Purview
 
-1. Navigate to [purview.microsoft.com](https://purview.microsoft.com) → **Information Protection** → **Sensitivity labels**
+1. Navigate to [purview.microsoft.com](https://purview.microsoft.com) → **Solutions** → **Information Protection** → **Sensitivity labels**
 2. Click **+ Create a label** — this opens the **New sensitivity label** wizard
 
 You'll create **4 labels**. Priority is determined by their **position in the label list** — the label at the top has the highest priority (wins when multiple labels could apply). After creating all 4, you'll reorder them.

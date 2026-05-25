@@ -11,7 +11,7 @@
 Your first job is standing up the central storage layer — a **Lakehouse** in your development workspace.
 
 1. Navigate to the **ZOSA-Dev** workspace.
-2. Click **+ New** → **Lakehouse**.
+2. Click **+ New item** → **Lakehouse**.
 3. Name it `lh_zosa` and click **Create**.
 
 You now have a Lakehouse with two areas:
@@ -43,7 +43,7 @@ You'll follow a two-step approach that mirrors how production teams work:
 This is your development environment. You write PySpark code that calls the API, parses JSON, and writes directly to a Delta table.
 
 1. Navigate to **ZOSA-Dev** workspace.
-2. Click **+ New** → **Notebook**.
+2. Click **+ New item** → **Notebook**.
 3. Name it `nb_api_ingestion`.
 4. Attach the notebook to your lakehouse: in the left panel, click **+ Add data items** → select **Existing Lakehouse** → choose `lh_zosa`. You should see **Tables** and **Files** folders appear under `lh_zosa`.
 
@@ -98,7 +98,7 @@ Your notebook works — but in production you can't rely on someone clicking "Ru
 The pipeline doesn't duplicate the notebook's logic. It simply **calls** the notebook on a schedule and adds operational guardrails around it.
 
 1. Navigate to **ZOSA-Dev** workspace.
-2. Click **+ New** → **Data Pipeline**.
+2. Click **+ New item** → **Data Pipeline**.
 3. Name it `pl_api_asteroid_ingestion` and click **Create**.
 4. On the landing page, click **Pipeline activity** (under "Start with a blank canvas"). An activity picker appears — type `Notebook` in the **Search** box and select **Notebook** to add it to the canvas.
 5. In the **General** tab, configure:
