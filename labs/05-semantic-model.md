@@ -164,9 +164,82 @@ erDiagram
 
 ## 📐 4 — Create DAX Measures
 
-In the **Model view**, select a table in the **Data** pane and use the formula bar to add the following measures to `gold_mission_summary` (or create a dedicated `_Measures` table for organization).
+Measures are reusable calculations that evaluate at query time. You'll add them to `gold_mission_summary` so they're easily accessible in reports.
 
-### 4.1 Hazard Index
+### How to add a measure
+
+1. In the **Data** pane (left side), expand **Tables** → expand `gold_mission_summary`.
+2. Right-click **Measures (0)** → select **New measure** (or select the table and click **New measure** in the ribbon).
+3. A **formula bar** appears at the top of the editor — paste the DAX expression.
+4. Press **Enter** or click the ✓ checkmark to save.
+5. Repeat for each measure below.
+
+> 💡 **Note:** Fabric places each measure in the table it references. Below, measures are grouped by table so you know which table to select before clicking **New measure**.
+
+---
+
+### Measures on `gold_asteroid_risk`
+
+Select **gold_asteroid_risk** in the Data pane, then create each measure:
+
+**4.1 — Active Missions**
+
+```dax
+Active Missions =
+    CALCULATE(
+        COUNTROWS(gold_mission_summary),
+        gold_mission_summary[status] = "Active"
+    )
+```
+
+**4.2 — Max Hazard Score**
+
+```dax
+Max Hazard Score =
+    MAX(gold_asteroid_risk[hazard_score])
+```
+
+**4.3 — Near-Earth Objects**
+
+```dax
+Near-Earth Objects =
+    COUNTROWS(gold_asteroid_risk)
+```
+
+**4.4 — Total Budget**
+
+```dax
+Total Budget =
+    SUM(gold_mission_summary[budget_usd])
+```
+
+---
+
+### Measures on `gold_mission_summary`
+
+Select **gold_mission_summary** in the Data pane, then create each measure:
+
+**4.5 — Critical Asteroids**
+
+```dax
+Critical Asteroids =
+    CALCULATE(
+        COUNTROWS(gold_asteroid_risk),
+        gold_asteroid_risk[risk_category] = "Critical"
+    )
+```
+
+**4.6 — Habitable Candidates**
+
+```dax
+Habitable Candidates =
+    CALCULATE(
+        COUNTROWS(gold_exoplanet_catalog),
+        gold_exoplanet_catalog[habitability_zone] = "Habitable Zone"
+    )
+```
+
+**4.7 — Hazard Index**
 
 ```dax
 Hazard Index =
@@ -175,7 +248,7 @@ Hazard Index =
 
 > This gives mission control a single number summarizing the current asteroid threat level.
 
-### 4.2 Mission Success Rate
+**4.8 — Mission Success Rate**
 
 ```dax
 Mission Success Rate =
@@ -190,67 +263,22 @@ Mission Success Rate =
 
 > 💡 **Why `DIVIDE` instead of `/`?** `DIVIDE` handles division-by-zero gracefully — returning `BLANK()` instead of an error.
 
-### 4.3 Critical Asteroids
-
-```dax
-Critical Asteroids =
-    CALCULATE(
-        COUNTROWS(gold_asteroid_risk),
-        gold_asteroid_risk[risk_category] = "Critical"
-    )
-```
-
-### 4.4 Habitable Candidates
-
-```dax
-Habitable Candidates =
-    CALCULATE(
-        COUNTROWS(gold_exoplanet_catalog),
-        gold_exoplanet_catalog[habitability_zone] = "Habitable Zone"
-    )
-```
-
-### 4.5 Total Missions
+**4.9 — Total Missions**
 
 ```dax
 Total Missions =
     COUNTROWS(gold_mission_summary)
 ```
 
-### 4.6 Active Missions
-
-```dax
-Active Missions =
-    CALCULATE(
-        COUNTROWS(gold_mission_summary),
-        gold_mission_summary[status] = "Active"
-    )
-```
-
-### 4.7 Total Budget
-
-```dax
-Total Budget =
-    SUM(gold_mission_summary[budget_usd])
-```
-
-### 4.8 Max Hazard Score
-
-```dax
-Max Hazard Score =
-    MAX(gold_asteroid_risk[hazard_score])
-```
-
-### 4.9 Near-Earth Objects
-
-```dax
-Near-Earth Objects =
-    COUNTROWS(gold_asteroid_risk)
-```
+---
 
 ### Validation
 
-After creating all nine measures, click on each one in the **Fields** pane and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables — typos in column references are the most common issue.
+After creating all nine measures you should see:
+- **gold_asteroid_risk** → Measures (4): Active Missions, Max Hazard Score, Near-Earth Objects, Total Budget
+- **gold_mission_summary** → Measures (5): Critical Asteroids, Habitable Candidates, Hazard Index, Mission Success Rate, Total Missions
+
+Click on each measure and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables.
 
 > 📚 **Learn more:** [DAX Reference](https://learn.microsoft.com/en-us/dax/dax-overview)
 
