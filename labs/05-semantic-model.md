@@ -274,11 +274,18 @@ Total Missions =
 
 ### Validation
 
-After creating all nine measures you should see:
+After creating all nine measures you should see in the Data pane:
 - **gold_asteroid_risk** → Measures (4): Active Missions, Max Hazard Score, Near-Earth Objects, Total Budget
 - **gold_mission_summary** → Measures (5): Critical Asteroids, Habitable Candidates, Hazard Index, Mission Success Rate, Total Missions
 
-Click on each measure and confirm it returns a reasonable value (not blank, not an error). If a measure shows an error, double-check column names against the Gold tables.
+To verify measures return correct values:
+
+1. Go back to the semantic model item page (click the model name in the breadcrumb).
+2. Click **"Explore this data"** (top ribbon) — this opens a lightweight report canvas.
+3. From the **Data** pane on the right, drag each measure onto the canvas — it will display as a card with the computed value.
+4. Confirm values are not blank or showing errors.
+
+> ⚠️ The **Model view** only lets you define measures — it doesn't show computed results. You must use "Explore this data" or create a report to see actual values.
 
 > 📚 **Learn more:** [DAX Reference](https://learn.microsoft.com/en-us/dax/dax-overview)
 
