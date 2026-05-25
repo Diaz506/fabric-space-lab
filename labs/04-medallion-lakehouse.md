@@ -48,7 +48,7 @@ Time to write your first Spark notebook. This is where the real data engineering
 3. Name it: `01-bronze-to-silver`
 4. In the notebook toolbar, click **+ Add data items** → **Existing Lakehouse** → select `lh_zosa`
 
-> 💡 **What just happened?** You now have a PySpark notebook connected to your Lakehouse. Fabric provides a managed Spark pool — no cluster configuration needed. The `spark` session object is pre-initialized, and all Lakehouse tables are accessible via `spark.read.table("lh_zosa.<table_name>")`.
+> 💡 **What just happened?** You now have a PySpark notebook connected to your Lakehouse. Fabric provides a managed Spark pool — no cluster configuration needed. The `spark` session object is pre-initialized, and all Lakehouse tables are accessible via `spark.read.table("<table_name>")`.
 
 ### Notebook Environment Quick Reference
 
@@ -56,7 +56,7 @@ Time to write your first Spark notebook. This is where the real data engineering
 |---------|--------|
 | **Language** | PySpark (Python + Spark) |
 | **Spark pool** | Managed by Fabric — auto-starts, auto-scales |
-| **Table access** | `spark.read.table("lh_zosa.<table>")` |
+| **Table access** | `spark.read.table("<table>")` |
 | **File access** | `Files/` folder in the Lakehouse |
 | **Cell execution** | `Shift+Enter` to run current cell |
 
@@ -90,7 +90,7 @@ Each Bronze table gets its own cell in the notebook. The pattern is consistent:
 # Cell 1: Asteroids Bronze → Silver
 from pyspark.sql.functions import col, to_date, trim
 
-df = spark.read.table("lh_zosa.asteroids_bronze")
+df = spark.read.table("asteroids_bronze")
 
 silver_asteroids = (df
     .dropDuplicates(["neo_id", "close_approach_date"])
@@ -104,7 +104,7 @@ silver_asteroids = (df
     .filter(col("neo_id").isNotNull())
 )
 
-silver_asteroids.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_silver")
+silver_asteroids.write.mode("overwrite").format("delta").saveAsTable("asteroids_silver")
 print(f"✅ asteroids_silver: {silver_asteroids.count()} rows")
 ```
 
@@ -114,7 +114,7 @@ print(f"✅ asteroids_silver: {silver_asteroids.count()} rows")
 # Cell 2: Solar Events Bronze → Silver
 from pyspark.sql.functions import col, to_timestamp, trim, upper
 
-df = spark.read.table("lh_zosa.solar_events_bronze")
+df = spark.read.table("solar_events_bronze")
 
 silver_solar = (df
     .dropDuplicates(["event_id"])
@@ -127,7 +127,7 @@ silver_solar = (df
     .filter(col("event_id").isNotNull())
 )
 
-silver_solar.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.solar_events_silver")
+silver_solar.write.mode("overwrite").format("delta").saveAsTable("solar_events_silver")
 print(f"✅ solar_events_silver: {silver_solar.count()} rows")
 ```
 
@@ -137,7 +137,7 @@ print(f"✅ solar_events_silver: {silver_solar.count()} rows")
 # Cell 3: Exoplanets Bronze → Silver
 from pyspark.sql.functions import col, trim
 
-df = spark.read.table("lh_zosa.exoplanets_bronze")
+df = spark.read.table("exoplanets_bronze")
 
 silver_exoplanets = (df
     .dropDuplicates(["planet_name"])
@@ -152,7 +152,7 @@ silver_exoplanets = (df
     .filter(col("planet_name").isNotNull())
 )
 
-silver_exoplanets.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.exoplanets_silver")
+silver_exoplanets.write.mode("overwrite").format("delta").saveAsTable("exoplanets_silver")
 print(f"✅ exoplanets_silver: {silver_exoplanets.count()} rows")
 ```
 
@@ -162,7 +162,7 @@ print(f"✅ exoplanets_silver: {silver_exoplanets.count()} rows")
 # Cell 4: Missions Bronze → Silver
 from pyspark.sql.functions import col, to_date, trim, when
 
-df = spark.read.table("lh_zosa.missions_bronze")
+df = spark.read.table("missions_bronze")
 
 valid_statuses = ["Planned", "Active", "Completed", "Cancelled", "On Hold"]
 
@@ -180,7 +180,7 @@ silver_missions = (df
     .drop("start_date")
 )
 
-silver_missions.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.missions_silver")
+silver_missions.write.mode("overwrite").format("delta").saveAsTable("missions_silver")
 print(f"✅ missions_silver: {silver_missions.count()} rows")
 ```
 
@@ -190,7 +190,7 @@ print(f"✅ missions_silver: {silver_missions.count()} rows")
 # Cell 5: Crew Bronze → Silver
 from pyspark.sql.functions import col, to_date, trim, split as spark_split
 
-df = spark.read.table("lh_zosa.crew_bronze")
+df = spark.read.table("crew_bronze")
 
 silver_crew = (df
     .dropDuplicates(["crew_id"])
@@ -206,7 +206,7 @@ silver_crew = (df
     .filter(col("email").rlike("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
 )
 
-silver_crew.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.crew_silver")
+silver_crew.write.mode("overwrite").format("delta").saveAsTable("crew_silver")
 print(f"✅ crew_silver: {silver_crew.count()} rows")
 ```
 
@@ -216,7 +216,7 @@ print(f"✅ crew_silver: {silver_crew.count()} rows")
 # Cell 6: Telemetry Bronze → Silver
 from pyspark.sql.functions import col, to_timestamp, trim, when
 
-df = spark.read.table("lh_zosa.telemetry_bronze")
+df = spark.read.table("telemetry_bronze")
 
 valid_statuses = ["Nominal", "Warning", "Critical", "Offline", "Maintenance", "Online"]
 
@@ -240,7 +240,7 @@ silver_telemetry = (df
     .filter(col("ground_station_id").isNotNull())
 )
 
-silver_telemetry.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.telemetry_silver")
+silver_telemetry.write.mode("overwrite").format("delta").saveAsTable("telemetry_silver")
 print(f"✅ telemetry_silver: {silver_telemetry.count()} rows")
 ```
 
@@ -264,7 +264,7 @@ Gold tables are purpose-built for reporting and analytics. They answer specific 
 # Cell 1: Asteroid Risk Scoring
 from pyspark.sql.functions import col, when, round as spark_round
 
-silver = spark.read.table("lh_zosa.asteroids_silver")
+silver = spark.read.table("asteroids_silver")
 
 gold_asteroid_risk = (silver
     .withColumn("avg_diameter_m",
@@ -286,7 +286,7 @@ gold_asteroid_risk = (silver
     .orderBy(col("hazard_score").desc())
 )
 
-gold_asteroid_risk.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_asteroid_risk")
+gold_asteroid_risk.write.mode("overwrite").format("delta").saveAsTable("gold_asteroid_risk")
 print(f"✅ gold_asteroid_risk: {gold_asteroid_risk.count()} rows")
 ```
 
@@ -302,7 +302,7 @@ from pyspark.sql.functions import (
 )
 from pyspark.sql.window import Window
 
-silver = spark.read.table("lh_zosa.missions_silver")
+silver = spark.read.table("missions_silver")
 
 gold_mission_summary = (silver
     .withColumn("launch_year", year(col("launch_date")))
@@ -322,7 +322,7 @@ gold_mission_summary = (silver
     .orderBy("launch_year", "mission_type")
 )
 
-gold_mission_summary.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_mission_summary")
+gold_mission_summary.write.mode("overwrite").format("delta").saveAsTable("gold_mission_summary")
 print(f"✅ gold_mission_summary: {gold_mission_summary.count()} rows")
 ```
 
@@ -340,7 +340,7 @@ from pyspark.sql.functions import (
     sum as spark_sum, when
 )
 
-silver = spark.read.table("lh_zosa.solar_events_silver")
+silver = spark.read.table("solar_events_silver")
 
 # Derive a severity score from the solar flare class_type (X=5, M=4, C=3, B=2, A=1)
 gold_solar_activity = (silver
@@ -363,7 +363,7 @@ gold_solar_activity = (silver
     .orderBy("event_month", "event_type")
 )
 
-gold_solar_activity.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_solar_activity")
+gold_solar_activity.write.mode("overwrite").format("delta").saveAsTable("gold_solar_activity")
 print(f"✅ gold_solar_activity: {gold_solar_activity.count()} rows")
 ```
 
@@ -379,7 +379,7 @@ from pyspark.sql.functions import (
 )
 from pyspark.sql.window import Window
 
-silver = spark.read.table("lh_zosa.exoplanets_silver")
+silver = spark.read.table("exoplanets_silver")
 
 # Simplified Earth Similarity Index (ESI)
 # Based on radius, temperature, and orbital period relative to Earth
@@ -416,7 +416,7 @@ gold_exoplanet_catalog = (silver
     .orderBy("rank")
 )
 
-gold_exoplanet_catalog.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_exoplanet_catalog")
+gold_exoplanet_catalog.write.mode("overwrite").format("delta").saveAsTable("gold_exoplanet_catalog")
 print(f"✅ gold_exoplanet_catalog: {gold_exoplanet_catalog.count()} rows")
 ```
 
@@ -439,13 +439,13 @@ from pyspark.sql.functions import col, current_timestamp, max as spark_max
 
 # Read the current watermark (last load time)
 try:
-    watermark = (spark.read.table("lh_zosa.asteroids_silver")
+    watermark = (spark.read.table("asteroids_silver")
         .select(spark_max("_loaded_at")).collect()[0][0])
 except:
     watermark = None  # First run — process everything
 
 # Read only new Bronze rows
-df = spark.read.table("lh_zosa.asteroids_bronze")
+df = spark.read.table("asteroids_bronze")
 if watermark:
     df = df.filter(col("_ingested_at") > watermark)
 
@@ -457,7 +457,7 @@ silver = (df
 )
 
 # Append instead of overwrite
-silver.write.mode("append").format("delta").saveAsTable("lh_zosa.asteroids_silver")
+silver.write.mode("append").format("delta").saveAsTable("asteroids_silver")
 ```
 
 > ⚠️ **For this lab**, stick with `mode("overwrite")`. The incremental pattern is shown here for reference — you'll use it when you operationalize your pipelines in a real project.
