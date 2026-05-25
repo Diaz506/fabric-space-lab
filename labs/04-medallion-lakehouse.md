@@ -305,41 +305,39 @@ print(f"✅ gold_asteroid_risk: {gold_asteroid_risk.count()} rows")
 
 ### 4.2 — gold_mission_summary
 
-> 🎯 **Business question:** How are missions performing across years, types, and regions?
+> 🎯 **Business question:** How are missions performing, and how do they relate to crew and ground stations?
 
 ```python
-# Cell 2: Mission Summary Aggregation
+# Cell 2: Mission Summary (detail-level, one row per mission)
 from pyspark.sql.functions import (
-    col, year, count, sum as spark_sum,
-    round as spark_round, avg as spark_avg
+    col, year, datediff, round as spark_round, when
 )
-from pyspark.sql.window import Window
 
 silver = spark.read.table("missions_silver")
 
 gold_mission_summary = (silver
     .withColumn("launch_year", year(col("launch_date")))
-    .groupBy("launch_year", "mission_type", "status", "region")
-    .agg(
-        count("*").alias("mission_count"),
-        spark_round(spark_sum("budget_usd"), 2).alias("total_budget_usd"),
-        spark_round(spark_avg("budget_usd"), 2).alias("avg_budget_usd")
+    .withColumn("duration_days",
+        when(col("end_date").isNotNull(),
+             datediff(col("end_date"), col("launch_date")))
+        .otherwise(None))
+    .withColumn("budget_category",
+        when(col("budget_usd") > 5000000, "High")
+        .when(col("budget_usd") > 1000000, "Medium")
+        .otherwise("Low"))
+    .select(
+        "mission_id", "mission_name", "mission_type", "status",
+        "priority", "launch_date", "end_date", "launch_year",
+        "duration_days", "target_object",
+        "primary_ground_station_id", "budget_usd", "budget_category",
+        "region"
     )
-    .withColumn("success_rate",
-        spark_round(
-            (col("mission_count") /
-             spark_sum("mission_count").over(
-                 Window.partitionBy("launch_year", "mission_type", "region")
-             )) * 100, 1
-        ))
-    .orderBy("launch_year", "mission_type")
+    .orderBy("launch_date")
 )
 
 gold_mission_summary.write.mode("overwrite").format("delta").saveAsTable("gold_mission_summary")
 print(f"✅ gold_mission_summary: {gold_mission_summary.count()} rows")
 ```
-
-> 💡 **Alternative approach:** If the Window import feels awkward inline, you can split it into two steps — first compute totals, then join back for the rate. Both are valid.
 
 ### 4.3 — gold_solar_activity
 

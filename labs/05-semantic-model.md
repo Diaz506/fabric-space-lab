@@ -78,7 +78,7 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
 
 ## 🔗 3 — Define Relationships (Star Schema)
 
-A clean star schema means faster queries and simpler DAX. Since the Gold tables are **aggregations** (grouped by dimensions like region, mission_type, and year), some relationships use shared dimension columns rather than traditional foreign keys.
+A clean star schema means faster queries and simpler DAX. Your **fact table** is `gold_mission_summary` (one row per mission); the other tables serve as dimensions or independent fact tables.
 
 ### Steps
 
@@ -90,15 +90,13 @@ A clean star schema means faster queries and simpler DAX. Since the Gold tables 
 
 | From (Table) | Column | To (Table) | Column | Cardinality | Cross-filter |
 |---|---|---|---|---|---|
-| `gold_mission_summary` | `region` | `crew_silver` | `region` | Many-to-many | Single |
-| `crew_silver` | `ground_station_id` | `telemetry_silver` | `ground_station_id` | Many-to-one | Single |
-| `gold_mission_summary` | `mission_type` | `missions_silver` | `mission_type` | Many-to-many | Single |
+| `gold_mission_summary` | `region` | `crew_silver` | `region` | One-to-many | Single |
+| `gold_mission_summary` | `primary_ground_station_id` | `telemetry_silver` | `ground_station_id` | One-to-many | Single |
+| `gold_mission_summary` | `mission_id` | `missions_silver` | `mission_id` | One-to-one | Both |
 
-3. After wiring the relationships, your diagram should show `gold_mission_summary` connected to `crew_silver`, `telemetry_silver`, and `missions_silver`. The remaining Gold tables (`gold_asteroid_risk`, `gold_solar_activity`, `gold_exoplanet_catalog`) stand independently — they don't share foreign keys with the mission data and will be used in separate report pages.
+3. After wiring the relationships, your diagram should show a star with `gold_mission_summary` at the center, connected to `crew_silver`, `telemetry_silver`, and `missions_silver`. The remaining Gold tables (`gold_asteroid_risk`, `gold_solar_activity`, `gold_exoplanet_catalog`) are independent — they answer separate business questions and will be used on their own report pages.
 
 > 💡 **Tip:** If Fabric auto-detected relationships, review them carefully. Auto-detection sometimes creates incorrect cardinalities — always validate manually.
-
-> ⚠️ **Many-to-many relationships** require careful handling in DAX. They work well for filtering but can produce unexpected results with aggregations. For this lab, they enable cross-filtering between the aggregated Gold table and the detail-level Silver tables.
 
 > 📚 **Official Documentation:**
 > - [Star Schema Design Guidance](https://learn.microsoft.com/en-us/power-bi/guidance/star-schema)
@@ -175,7 +173,7 @@ Active Missions =
 
 ```dax
 Total Budget =
-    SUM(gold_mission_summary[total_budget_usd])
+    SUM(gold_mission_summary[budget_usd])
 ```
 
 ### 4.8 Max Hazard Score
@@ -234,7 +232,7 @@ Row-Level Security restricts which rows a user can see based on their identity. 
 
 ## 🛡️ 6 — Configure Object-Level Security (OLS)
 
-Object-Level Security hides entire columns or tables from specific roles. ZOSA's `total_budget_usd` column in `gold_mission_summary` should be visible only to executives.
+Object-Level Security hides entire columns or tables from specific roles. ZOSA's `budget_usd` column in `gold_mission_summary` should be visible only to executives.
 
 ### Steps (via Tabular Editor)
 
@@ -248,7 +246,7 @@ Object-Level Security hides entire columns or tables from specific roles. ZOSA's
    - Under **Table Permissions**, set `gold_mission_summary` to **Read**.
 
 3. **Hide the column:**
-   - Expand `gold_mission_summary` → `Columns` → right-click `total_budget_usd`.
+   - Expand `gold_mission_summary` → `Columns` → right-click `budget_usd`.
    - Under **Object-Level Security**, set the `Non_Executive` role to **None** (no access).
 
 4. **Save and deploy** back to the Fabric service.
@@ -281,7 +279,7 @@ Before moving on, verify that everything is in place:
   - `Max Hazard Score` — a decimal number
   - `Near-Earth Objects` — an integer count
 - [ ] **RLS role** `Europe_Analysts` filters correctly (verified with "View as").
-- [ ] **OLS** hides `total_budget_usd` for `Non_Executive` role (verified in Tabular Editor).
+- [ ] **OLS** hides `budget_usd` for `Non_Executive` role (verified in Tabular Editor).
 
 > 🎉 **Congratulations!** Your semantic model is ready. The science directors won't need to wait until tomorrow — they can start exploring data *right now*. But raw numbers aren't enough; they want beautiful, interactive visuals. That's exactly what you'll build in Module 06.
 
