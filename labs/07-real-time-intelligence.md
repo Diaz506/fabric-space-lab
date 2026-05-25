@@ -50,9 +50,10 @@ An **Eventstream** is a no-code streaming pipeline that captures, transforms, an
 
 1. In your workspace, click **+ New item** → select **Eventstream**.
 2. Name it: `asteroid_feed` → click **Create**.
-3. In the Eventstream canvas, click **New source** → **Custom endpoint**.
-4. **Publish** the Eventstream (click **Publish** in the toolbar) — connection strings are only available after publishing.
-5. Open the Custom endpoint source node and copy the **Event Hub-compatible connection string** — you will need it for the simulator script below.
+3. In the Eventstream canvas, click **Add source** → **Custom endpoint** (also called "Custom App").
+4. Name the source (e.g., `simulator_input`) → click **Add**.
+5. Click **Publish** in the toolbar to save the Eventstream — connection strings are only available after publishing.
+6. Click the Custom endpoint source node → in the details pane, switch to the **Keys** tab → copy the **Event Hub-compatible connection string**.
 
 ### Simulator Script
 
@@ -115,8 +116,8 @@ With **direct ingestion**, the Eventstream routes raw events straight into your 
 ### Steps
 
 1. Return to the `asteroid_feed` Eventstream canvas.
-2. Click **New destination** → **Eventhouse**.
-3. Select:
+2. Click **Add destination** → **Eventhouse**.
+3. Configure:
    - **Workspace:** your ZOSA workspace
    - **Eventhouse:** `zosa_eventhouse`
    - **KQL Database:** `asteroid_detections`
@@ -134,9 +135,9 @@ With **direct ingestion**, the Eventstream routes raw events straight into your 
    | `ground_station_id` | `ground_station_id` | `string` |
    | `is_potentially_hazardous` | `is_potentially_hazardous` | `bool` |
 
-6. Click **Publish**. Within seconds, events from the simulator start landing in the Eventhouse.
+6. Click **Publish** to activate the ingestion. Within seconds, events from the simulator start landing in the Eventhouse.
 
-> 💡 **Tip:** Click **Data preview** on the destination node to confirm rows are arriving.
+> 💡 **Tip:** After publishing, click the destination node and select **Data preview** to confirm rows are arriving.
 
 > 📚 **Learn more:** [Ingest data from Eventstream](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/get-data-eventstream)
 
@@ -144,10 +145,10 @@ With **direct ingestion**, the Eventstream routes raw events straight into your 
 
 ## 🔍 5 — KQL Queries
 
-Open a **KQL Queryset** against your `asteroid_detections` database to explore the live data.
+Open a **KQL Queryset** (called **"KQL Query"** in newer Fabric versions) against your `asteroid_detections` database to explore the live data.
 
-1. In your workspace, click **+ New item** → **KQL Queryset**.
-2. Name it `asteroid_exploration` and connect it to the `asteroid_detections` database.
+1. In your workspace, click **+ New item** → **KQL Queryset** (or **KQL Query**).
+2. Name it `asteroid_exploration` and connect it to the `asteroid_detections` database in `zosa_eventhouse`.
 
 ### Last 10 Detections
 
@@ -216,6 +217,8 @@ Run the following command in your KQL Queryset:
 }
 ```
 
+> ⚠️ **Note:** If you get an error about the table being too large, add the `async` keyword: `.create async materialized-view ...`. For this lab with simulated data, the standard command should work fine.
+
 Verify the view is working:
 
 ```kql
@@ -259,9 +262,9 @@ Create a live dashboard that Mission Control can display on the big screen.
 
 ---
 
-## 🚨 8 — Activator — Set Alert
+## 🚨 8 — Data Activator — Set Alert
 
-**Activator** lets you define automated alerts that fire when real-time data meets a condition. No code required — you configure everything visually.
+**Data Activator** (formerly Reflex) lets you define automated alerts that fire when real-time data meets a condition. No code required — you configure everything visually.
 
 ### Steps
 
@@ -281,9 +284,9 @@ Create a live dashboard that Mission Control can display on the big screen.
    - 💬 **Post to a Teams channel** → select the ZOSA Mission Control channel.
    - 📓 **Run a Fabric notebook** → select a notification/logging notebook (optional).
 
-6. Click **Create**. The Activator item appears in your workspace.
+6. Click **Create**. The Data Activator item appears in your workspace.
 
-> 📖 **How it works:** Activator evaluates the condition on the schedule you set. When the condition is true, it executes *all* configured actions and passes event context (object name, distance, velocity) as dynamic parameters. You can view the alert history and manage all Activator items from the **Real-Time Hub → Alerts** tab.
+> 📖 **How it works:** Data Activator evaluates the condition on the schedule you set. When the condition is true, it executes *all* configured actions and passes event context (object name, distance, velocity) as dynamic parameters. You can view the alert history and manage all alerts from the **Real-Time Hub → Alerts** tab.
 
 > ⚠️ **Important:** In this lab, use your own email to test. You should receive an alert within a few minutes because the simulator generates close approaches (< 0.05 AU) roughly 10% of the time.
 
@@ -329,18 +332,12 @@ Real-time and batch analytics work best together. Here is the architecture ZOSA 
 
 ```kql
 // Set 30-day retention on the asteroid_detections table
-.alter table asteroid_detections policy retention
-```
-```json
-{
-    "SoftDeletePeriod": "30.00:00:00",
-    "Recoverability": "Enabled"
-}
+.alter table asteroid_detections policy retention ```{"SoftDeletePeriod": "30.00:00:00", "Recoverability": "Enabled"}```
 ```
 
-> 💡 **Tip:** In a production scenario, you would also configure a **data export rule** or use the Eventstream's second destination to write simultaneously to both the Eventhouse and the Lakehouse. This gives you real-time *and* historical coverage from a single stream.
+> 💡 **Tip:** In a production scenario, you would also enable **OneLake availability** on the Eventhouse database (Database details → OneLake availability → **Turn on**). This mirrors Eventhouse data to OneLake as Delta/Parquet, making it queryable from the Lakehouse SQL endpoint and Spark notebooks — bridging the hot/cold paths seamlessly.
 
-> 📚 **Learn more:** [Retention policies](https://learn.microsoft.com/en-us/kusto/management/retention-policy)
+> 📚 **Learn more:** [Retention policies](https://learn.microsoft.com/en-us/kusto/management/retention-policy) | [OneLake availability](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/one-logical-copy)
 
 ---
 
@@ -353,7 +350,7 @@ Verify that all components are working end-to-end:
 - [ ] **KQL queries** return results in the KQL Queryset
 - [ ] **Materialized view** `HourlyDetectionSummary` returns aggregated data
 - [ ] **Real-Time Dashboard** `Asteroid Mission Control` shows live data with 30-second refresh
-- [ ] **Activator alert** `Close Approach Warning` configured for miss distance < 0.05 AU
+- [ ] **Activator alert** `Close Approach Warning` configured (Data Activator) for miss distance < 0.05 AU
 
 > 🎉 If all boxes are checked, ZOSA now has a complete real-time detection pipeline — from ground station to Major Nakamura's phone in seconds.
 
