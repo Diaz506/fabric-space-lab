@@ -192,6 +192,7 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
    - Change the **Table name** to `crew_bronze`.
    - In the left panel, scroll (or use the Search box) to find the **ZOSA-Dev** workspace → expand it → select `lh_zosa`.
    - Click **Next** to confirm.
+   - On the **Choose destination settings** screen, verify the column mapping looks correct (all columns mapped 1:1, `hire_date` as Date). Leave **Use automatic settings** toggled on and click **Save settings**.
 9. Click **Publish**.
 10. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
 
