@@ -248,6 +248,19 @@ print(f"✅ telemetry_silver: {silver_telemetry.count()} rows")
 
 > 📚 **Learn more:** [Data Wrangler](https://learn.microsoft.com/en-us/fabric/data-science/data-wrangler) — for visual, no-code data exploration and transformation in notebooks.
 
+### Verify Silver Tables
+
+After all cells complete, navigate to `lh_zosa` → expand **Tables**. You should see six new Silver tables alongside your Bronze tables:
+
+- `asteroids_silver`
+- `solar_events_silver`
+- `exoplanets_silver`
+- `missions_silver`
+- `crew_silver`
+- `telemetry_silver`
+
+Click on any Silver table to preview the data and confirm that types were cast correctly (e.g., `miss_distance_km` shows as numeric, `close_approach_date` as date).
+
 ---
 
 ## 🥇 Section 4 — Silver → Gold Aggregations
