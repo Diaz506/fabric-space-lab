@@ -318,10 +318,15 @@ Row-Level Security restricts which rows a user can see based on their identity. 
 1. From the **workspace**, find the semantic model → click the **ellipsis (...)** → select **Security**.
 2. On the Row-Level Security page, click the **ellipsis (...)** next to `Europe_Analysts`.
 3. Select **"Test as role"**.
-4. Fabric opens a report filtered by the role — verify only rows where `region = "Europe"` appear.
-5. The page header shows the role being applied. Click **"Back to Row-Level Security"** when done.
 
-> ⚠️ **"Test as role" lives on the Security page** (where you assign members), not in the Model editor or report menu.
+> ⚠️ **Known limitation:** If you see *"Test as role does not work with Single Sign-On (SSO)"*, this is expected for **Direct Lake** semantic models in Fabric. The "Test as role" feature is unavailable when SSO/Direct Lake is active.
+>
+> **Alternative validation:** Open the report as the assigned user (e.g., in a private/incognito browser window logged in as the role member). That user should only see rows where `region = "Europe"`.
+>
+> For workshop purposes, confirming the role **definition** is correct (column = `region`, condition = `Equals`, value = `Europe`) is sufficient to demonstrate the concept.
+
+4. If the test works, Fabric opens a report filtered by the role — verify only rows where `region = "Europe"` appear.
+5. The page header shows the role being applied. Click **"Back to Row-Level Security"** when done.
 
 > 💡 **Recall:** In Module 02, you configured **OneLake Security** at the storage layer. RLS operates at the **semantic model** layer — a complementary defense. OneLake Security controls who can *access* the files; RLS controls who can *see which rows* once they have access.
 
