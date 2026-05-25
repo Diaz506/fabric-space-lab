@@ -244,7 +244,7 @@ silver_telemetry.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.te
 print(f"✅ telemetry_silver: {silver_telemetry.count()} rows")
 ```
 
-> ⚠️ **Important:** Run each cell sequentially (`Shift+Enter`). The first cell will take 30–60 seconds as the Spark session starts up. Subsequent cells run much faster.
+> 💡 **Tip:** Paste all six cells into the notebook first (use **+ Code** to add new cells), then click **Run all** from the ribbon. The first cell takes 30–60 seconds while the Spark session starts up; the rest execute quickly in sequence. Check the output of each cell for the ✅ success messages and row counts.
 
 > 📚 **Learn more:** [Data Wrangler](https://learn.microsoft.com/en-us/fabric/data-science/data-wrangler) — for visual, no-code data exploration and transformation in notebooks.
 
