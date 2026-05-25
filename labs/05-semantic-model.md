@@ -64,11 +64,9 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
    - `gold_mission_summary`
    - `gold_solar_activity`
    - `gold_exoplanet_catalog`
-5. Also add these **Silver layer** tables (you will need them for relationships):
-   - `missions_silver`
-   - `crew_silver`
-   - `telemetry_silver`
-6. Click **Confirm**. Fabric creates a Direct Lake semantic model and opens the **Model view** in **Viewing mode**. Click **Editing** in the toolbar to switch to **Editing mode** before making changes.
+   - `gold_dim_crew`
+   - `gold_dim_ground_stations`
+5. Click **Confirm**. Fabric creates a Direct Lake semantic model and opens the **Model view** in **Viewing mode**. Click **Editing** in the toolbar to switch to **Editing mode** before making changes.
 
 > 💡 **Tip:** If you don't see the Gold tables, make sure the notebooks from Module 04 ran successfully and that the tables are registered in the Lakehouse explorer.
 
@@ -90,11 +88,11 @@ A clean star schema means faster queries and simpler DAX. Your **fact table** is
 
 | From (Table) | Column | To (Table) | Column | Cardinality | Cross-filter |
 |---|---|---|---|---|---|
-| `gold_mission_summary` | `region` | `crew_silver` | `region` | One-to-many | Single |
-| `gold_mission_summary` | `primary_ground_station_id` | `telemetry_silver` | `ground_station_id` | One-to-many | Single |
-| `gold_mission_summary` | `mission_id` | `missions_silver` | `mission_id` | One-to-one | Both |
+| `gold_mission_summary` | `region` | `gold_dim_crew` | `region` | One-to-many | Single |
+| `gold_mission_summary` | `primary_ground_station_id` | `gold_dim_ground_stations` | `ground_station_id` | Many-to-one | Single |
+| `gold_dim_crew` | `ground_station_id` | `gold_dim_ground_stations` | `ground_station_id` | Many-to-one | Single |
 
-3. After wiring the relationships, your diagram should show a star with `gold_mission_summary` at the center, connected to `crew_silver`, `telemetry_silver`, and `missions_silver`. The remaining Gold tables (`gold_asteroid_risk`, `gold_solar_activity`, `gold_exoplanet_catalog`) are independent — they answer separate business questions and will be used on their own report pages.
+3. After wiring the relationships, your diagram should show a star with `gold_mission_summary` as the fact table at the center, connected to `gold_dim_crew` and `gold_dim_ground_stations` as dimensions. The remaining Gold tables (`gold_asteroid_risk`, `gold_solar_activity`, `gold_exoplanet_catalog`) are independent fact tables — they answer separate business questions and will be used on their own report pages.
 
 > 💡 **Tip:** If Fabric auto-detected relationships, review them carefully. Auto-detection sometimes creates incorrect cardinalities — always validate manually.
 
@@ -266,7 +264,7 @@ Object-Level Security hides entire columns or tables from specific roles. ZOSA's
 Before moving on, verify that everything is in place:
 
 - [ ] **Semantic model** `ZOSA Analytics Model` exists in your workspace and uses **Direct Lake** mode.
-- [ ] **Seven tables** are loaded: four Gold, three Silver.
+- [ ] **Six tables** are loaded: four Gold fact tables + two Gold dimensions.
 - [ ] **Relationships** form a star schema centered on `gold_mission_summary`.
 - [ ] **Nine DAX measures** return valid values:
   - `Hazard Index` — a decimal number

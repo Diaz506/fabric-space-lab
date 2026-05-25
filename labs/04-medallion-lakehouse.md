@@ -431,16 +431,65 @@ gold_exoplanet_catalog.write.mode("overwrite").format("delta").saveAsTable("gold
 print(f"✅ gold_exoplanet_catalog: {gold_exoplanet_catalog.count()} rows")
 ```
 
+### 4.5 — gold_dim_crew (Dimension)
+
+> 🎯 **Purpose:** A stable dimension table with only the columns needed for reporting — crew identity, role, and assignment.
+
+```python
+# Cell 5: Crew Dimension
+from pyspark.sql.functions import col, trim
+
+silver = spark.read.table("crew_silver")
+
+gold_dim_crew = (silver
+    .select(
+        "crew_id", "full_name", "first_name", "last_name",
+        "role", "specialty", "ground_station_id", "region",
+        "clearance_level"
+    )
+    .dropDuplicates(["crew_id"])
+    .orderBy("crew_id")
+)
+
+gold_dim_crew.write.mode("overwrite").format("delta").saveAsTable("gold_dim_crew")
+print(f"✅ gold_dim_crew: {gold_dim_crew.count()} rows")
+```
+
+### 4.6 — gold_dim_ground_stations (Dimension)
+
+> 🎯 **Purpose:** A distinct list of ground stations with their attributes — used to relate missions and telemetry.
+
+```python
+# Cell 6: Ground Station Dimension
+from pyspark.sql.functions import col, first
+
+silver = spark.read.table("telemetry_silver")
+
+gold_dim_ground_stations = (silver
+    .groupBy("ground_station_id")
+    .agg(
+        first("ground_station_name").alias("ground_station_name"),
+        first("region").alias("region")
+    )
+    .orderBy("ground_station_id")
+)
+
+gold_dim_ground_stations.write.mode("overwrite").format("delta").saveAsTable("gold_dim_ground_stations")
+print(f"✅ gold_dim_ground_stations: {gold_dim_ground_stations.count()} rows")
+```
+
 ### Verify Gold Tables
 
-After all cells complete, navigate to `lh_zosa` → expand **Tables**. You should see four new Gold tables:
+After all cells complete, navigate to `lh_zosa` → expand **Tables**. You should see six new Gold tables:
 
 - `gold_asteroid_risk`
 - `gold_mission_summary`
 - `gold_solar_activity`
 - `gold_exoplanet_catalog`
+- `gold_dim_crew`
+- `gold_dim_ground_stations`
 
-Click on `gold_asteroid_risk` and verify you see columns like `hazard_score` and `risk_category`. Check `gold_exoplanet_catalog` for the `earth_similarity_index` and `habitability_zone` columns.
+Click on `gold_asteroid_risk` and verify you see columns like `hazard_score` and `risk_category`. Check `gold_dim_crew` for clean crew identities and `gold_dim_ground_stations` for a distinct station list.
 
 ---
 
