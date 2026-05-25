@@ -214,11 +214,32 @@ One table down, four to go. Instead of creating more dataflows, you'll build a *
 2. Click **+ New item** → **Data Pipeline**.
 3. Name it `pl_ingest_all_sources` and click **Create**.
 4. On the pipeline landing page ("Build a pipeline to organize and move your data"), click the **Pipeline activity** card under "Start with a blank canvas." A popup appears with an activity list — select **Copy data** (under "Move and transform") to add your first Copy Data activity to the canvas.
-5. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), add a **Copy Data** activity:
-   - Search for **Copy Data** in the activity picker and add it to the canvas.
-   - **Source** tab: set the source to your **Lakehouse Files** (browse to the specific CSV).
-   - **Destination** tab: set the destination to your **Lakehouse Tables**, with a table name following the pattern `<dataset>_bronze` (e.g., `missions_bronze`).
-   - Under **Mapping**, verify column mappings and set the file format to **DelimitedText** (CSV) with header row enabled.
+5. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), configure a **Copy Data** activity:
+   - **General** tab: Rename the activity to something descriptive (e.g., `Copy_missions`).
+   - **Source** tab:
+     - **Connection**: Lakehouse admin (Preview)
+     - **Lakehouse**: `lh_zosa`
+     - **Root folder**: Select **Files**
+     - **File path**: Leave Directory empty, enter the file name (e.g., `missions.csv`). You can also click **Browse** to navigate.
+     - **File format**: Change from Binary to **DelimitedText** → click **Settings** and verify **First row as header** is checked.
+   - **Destination** tab:
+     - **Connection**: Lakehouse admin (Preview)
+     - **Lakehouse**: `lh_zosa`
+     - **Root folder**: Select **Tables**
+     - Click **+ New** → leave Schema empty → enter the table name (e.g., `missions_bronze`) → click **Create**.
+     - **Table action**: Select **Overwrite**.
+   > 💡 **Table action options:**
+   > - **Append** — adds rows to the existing table (use for incremental loads)
+   > - **Overwrite** — replaces the entire table on each run (use for full refreshes)
+   > - **Upsert** — inserts new rows and updates existing ones by matching a key column (use for change-data-capture scenarios)
+   
+   To add the next Copy Data activity, use the **Activities** tab in the ribbon → **Copy data**. Repeat for all four CSVs:
+   | Source file | Destination table |
+   |-------------|------------------|
+   | `missions.csv` | `missions_bronze` |
+   | `telemetry.csv` | `telemetry_bronze` |
+   | `solar_events.csv` | `solar_events_bronze` |
+   | `exoplanets.csv` | `exoplanets_bronze` |
 6. Since none of these activities depend on each other, **wire them in parallel**: connect the pipeline's **Start** node to all four Copy Data activities directly.
 7. Add a **pipeline parameter** for reusability:
    - Click on the pipeline canvas background → **Parameters** tab → **+ New**.
