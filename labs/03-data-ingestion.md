@@ -213,7 +213,8 @@ One table down, four to go. Instead of creating more dataflows, you'll build a *
 1. Navigate to the **ZOSA-Dev** workspace.
 2. Click **+ New item** → **Data Pipeline**.
 3. Name it `pl_ingest_all_sources` and click **Create**.
-4. On the pipeline landing page, click **Pipeline activity** under "Start with a blank canvas."
+4. On the pipeline landing page, under **"Start with guidance"**, select **Copy data** from the activity list (under "Move and transform"). This adds a Copy Data activity to the canvas.
+   > 💡 Alternatively, click the **Pipeline activity** card on the left to open a blank canvas first, then add activities from the **Activities** ribbon tab.
 5. For each of your remaining CSV files (`missions.csv`, `telemetry.csv`, `solar_events.csv`, `exoplanets.csv`), add a **Copy Data** activity:
    - Search for **Copy Data** in the activity picker and add it to the canvas.
    - **Source** tab: set the source to your **Lakehouse Files** (browse to the specific CSV).
