@@ -433,6 +433,17 @@ gold_exoplanet_catalog.write.mode("overwrite").format("delta").saveAsTable("gold
 print(f"✅ gold_exoplanet_catalog: {gold_exoplanet_catalog.count()} rows")
 ```
 
+### Verify Gold Tables
+
+After all cells complete, navigate to `lh_zosa` → expand **Tables**. You should see four new Gold tables:
+
+- `gold_asteroid_risk`
+- `gold_mission_summary`
+- `gold_solar_activity`
+- `gold_exoplanet_catalog`
+
+Click on `gold_asteroid_risk` and verify you see columns like `hazard_score` and `risk_category`. Check `gold_exoplanet_catalog` for the `earth_similarity_index` and `habitability_zone` columns.
+
 ---
 
 ## 🔄 Section 5 — Incremental Load Pattern
