@@ -29,6 +29,27 @@ Direct Lake is Microsoft Fabric's **third query mode** — and it combines the b
 
 ---
 
+## 🧠 Why a Semantic Model? (Why Not Just Query Gold Tables Directly?)
+
+Your Gold tables are clean, aggregated, and ready for analysis. So why add another layer?
+
+A **semantic model** is a business-friendly abstraction on top of your data. Think of it as the **contract between data engineers and report consumers**. It provides:
+
+| Benefit | Without Semantic Model | With Semantic Model |
+|---------|----------------------|---------------------|
+| **Business logic** | Every report re-implements measures (risk scoring, success rates) | Define once, reuse everywhere via DAX measures |
+| **Relationships** | Consumers must know how to JOIN tables | Star schema auto-resolves cross-table filters |
+| **Security** | RLS/OLS requires custom SQL views per user | RLS/OLS enforced automatically for all consumers |
+| **Performance** | Each report sends ad-hoc queries | Columnar engine optimizes all queries centrally |
+| **Governance** | Multiple "sources of truth" proliferate | One certified model = single source of truth |
+| **Self-service** | Analysts need SQL skills | Drag-and-drop fields in Power BI, Excel, or Copilot |
+
+**In short:** Gold tables are optimized for *storage*. The semantic model is optimized for *consumption*. It turns your well-engineered data into something that business users, dashboards, AI agents, and even natural-language queries (via Copilot) can all use — without needing to understand Delta tables, Spark, or SQL.
+
+> 💡 **Real-world analogy:** Gold tables are the library's organized shelves. The semantic model is the card catalog — it helps people *find and use* what's on those shelves without needing to know the Dewey Decimal System.
+
+---
+
 ## 🏗️ 2 — Create the Semantic Model
 
 You will now build the **ZOSA Analytics Model** on top of the Gold tables you created in Module 04.
