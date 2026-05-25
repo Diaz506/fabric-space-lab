@@ -173,16 +173,21 @@ Let's start with a **low-code** approach. You'll use **Dataflows Gen2** to inges
 3. Name it `df_crew_ingestion` by clicking on the default name at the top-left of the editor.
 4. Click **Get Data** → **Text/CSV**.
 5. Browse to the uploaded `crew.csv` file in your Lakehouse's Files section via the **OneLake** connector and click **Next**.
-6. In the **Power Query** editor, apply these transforms:
+6. On the **Preview file data** screen, verify the settings:
+   - **File origin:** 65001: Unicode (UTF-8)
+   - **Delimiter:** Comma
+   - **Data type detection:** Based on first 200 rows
+   - Confirm the preview table shows your columns (`crew_id`, `full_name`, `role`, etc.) with headers correctly detected. Click **Create**.
+7. In the **Power Query** editor, apply these transforms:
    - Click **Use first row as headers** (on the Home ribbon) to promote the header row.
    - Select the `hire_date` column → change its data type to **Date**.
    - Verify other columns have correct types (text for names, integer for IDs).
    - Click the dropdown on `crew_id` → **Remove empty** to filter out any rows with null crew IDs.
    - In the **Query Settings** panel on the right, rename the query to `crew_ingestion`.
-7. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
-8. Select `lh_zosa` → **Tables** → enter the table name `crew_bronze`.
-9. Click **Publish**.
-10. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
+8. Click **Add data destination** → **Lakehouse** at the bottom of the editor.
+9. Select `lh_zosa` → **Tables** → enter the table name `crew_bronze`.
+10. Click **Publish**.
+11. The dataflow will begin refreshing. Monitor the status in the workspace — it should show **Succeeded** within a minute or two.
 
 **What just happened?** Dataflows Gen2 is a **Power Query-based**, low-code ingestion tool. It supports **150+ connectors**, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.
 
