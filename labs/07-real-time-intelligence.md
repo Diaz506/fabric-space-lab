@@ -261,8 +261,8 @@ Create a live dashboard that Mission Control can display on the big screen.
 
 | Tile | KQL Query | Visual type |
 |---|---|---|
-| **Total Detections (24 h)** | `asteroid_detections \| where todatetime(timestamp) > ago(24h) \| count` | Stat / KPI card |
-| **Closest Approach** | `asteroid_detections \| where todatetime(timestamp) > ago(1h) \| summarize min(miss_distance_au)` | Gauge |
+| **Total Detections (24 h)** | `asteroid_detections \| where todatetime(timestamp) > ago(24h) \| count` | Stat |
+| **Closest Approach** | `asteroid_detections \| where todatetime(timestamp) > ago(1h) \| summarize min(miss_distance_au)` | Stat |
 | **Detection Timeline** | `asteroid_detections \| extend ts = todatetime(timestamp) \| summarize count() by bin(ts, 10m) \| render timechart` | Time chart |
 | **Hazardous Rate** | `HourlyDetectionSummary \| extend rate = round(100.0 * hazardous_count / total_detections, 1) \| project ts, rate \| render timechart` | Time chart |
 | **Ground Station Activity** | `asteroid_detections \| where todatetime(timestamp) > ago(1h) \| summarize count() by ground_station_id \| render piechart` | Pie chart |
