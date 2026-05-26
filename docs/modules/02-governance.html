@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 02 — Governance &amp; Security — Fabric Space Lab</title>
-  <meta name="description" content="Lock down space data with OneLake Security, Purview, and defense-in-depth across workspace roles, sensitivity labels, RLS, CLS, OLS, and DDM.">
+  <title>Module 02 — Module 02 — Governance & Security · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -33,70 +32,23 @@
     </div>
   </header>
 
-  <!-- Mini TOC -->
-  <nav class="mini-toc" aria-label="Table of contents">
-    <div class="toc-title">Contents</div>
-    <a href="#top"><span class="toc-dot"></span>Governance &amp; Security</a>
-    <a href="#defense-in-depth"><span class="toc-dot"></span>Defense-in-Depth Model</a>
-    <a href="#workspace-roles"><span class="toc-dot"></span>Workspace Roles &amp; Entra ID</a>
-    <a href="#sensitivity-labels"><span class="toc-dot"></span>Sensitivity Labels &amp; Purview</a>
-    <a href="#onelake-security"><span class="toc-dot"></span>OneLake Security</a>
-    <a href="#summary"><span class="toc-dot"></span>Putting It All Together</a>
-    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
-  </nav>
-
   <!-- Main Content -->
   <main class="storyboard-content">
-
-    <!-- HERO -->
     <section class="hero" id="top">
-      <div class="hero-overline">Module 02 · ⏱️ 45 minutes</div>
-      <h1>Governance &amp; Security</h1>
-      <p class="hero-desc">
-        Locking down space data with OneLake Security, Purview, and defense-in-depth.
-      </p>
-      <div class="hero-actions">
-        <a href="#defense-in-depth" class="btn btn-primary">▶ Start Securing</a>
-        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
-      </div>
-      <div class="hero-image"><div style="font-size:4rem;margin-bottom:0.5rem">🔒</div><div class="placeholder-text">Defense-in-Depth Security</div></div>
+      <div class="hero-overline">Module 02</div>
+      <h1>Module 02 — Governance & Security</h1>
     </section>
 
-    <!-- CHAPTER 1: Opening Briefing -->
-    <section class="chapter" id="briefing">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 1</span>
-        <h2>🔒 Security Briefing</h2>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👩‍💼</div>
-        <div class="comms-body">
-          <div class="comms-name">Sofia Lindqvist</div>
-          <div class="comms-role">Chief Information Security Officer</div>
-          <div class="comms-text">"Before a single byte of space data touches those workspaces, we need to lock them down. We handle asteroid threat data, crew personnel records, and classified mission details. I need defense-in-depth — not just one lock on the door, but locks on every drawer inside."</div>
-        </div>
-      </div>
-
-      <p>You have three empty workspaces from Module 01. Before any data lands, you need to configure security at every layer. Let's build Sofia's defense-in-depth.</p>
-    </section>
-
-    <!-- CHAPTER 2: Defense-in-Depth Model -->
-    <section class="chapter" id="defense-in-depth">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 2</span>
-        <h2>🛡️ The Defense-in-Depth Model</h2>
-      </div>
-
-      <p>Fabric security isn't a single gate — it's a series of concentric walls. Each layer is <strong>complementary</strong>, not an alternative. If one layer is misconfigured, the others still protect you.</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">Security Layers</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-bash">┌─────────────────────────────────────────────┐
+    <section class="chapter">
+      <h1>Module 02 — Governance & Security</h1>
+<blockquote>Locking down space data with OneLake Security, Purview, and defense-in-depth</blockquote>
+---
+<blockquote><strong>Sofia Lindqvist</strong>, ZOSA's CISO, catches you in the hallway. <em>"Before a single byte of space data touches those workspaces, we need to lock them down. We handle asteroid threat data, crew personnel records, and classified mission details. I need defense-in-depth — not just one lock on the door, but locks on every drawer inside."</em></blockquote>
+You have three empty workspaces from Module 01. Before any data lands, you need to configure security at every layer. Let's build Sofia's defense-in-depth.
+---
+<h2>🛡️ 1 — The Defense-in-Depth Model</h2>
+Fabric security isn't a single gate — it's a series of concentric walls. Each layer is <strong>complementary</strong>, not an alternative. If one layer is misconfigured, the others still protect you.
+<pre><code class="language-plaintext">┌─────────────────────────────────────────────┐
 │  TENANT                                     │
 │  Admin settings, Conditional Access, MFA    │
 │  ┌─────────────────────────────────────┐    │
@@ -115,884 +67,419 @@
 │  │  │  └─────────────────────┘    │    │    │
 │  │  └─────────────────────────────┘    │    │
 │  └─────────────────────────────────────┘    │
-└─────────────────────────────────────────────┘</code></pre>
-      </div>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Layer</th><th>What It Controls</th><th>Configured Where</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Tenant</strong></td><td>Who can use Fabric at all, MFA, Conditional Access</td><td>Microsoft Entra admin center, Fabric Admin portal</td></tr>
-          <tr><td><strong>Workspace</strong></td><td>Who can access a workspace and what they can do</td><td>Workspace → Manage access</td></tr>
-          <tr><td><strong>Item</strong></td><td>Sharing individual reports, lakehouses, or pipelines</td><td>Item → Share / Manage permissions</td></tr>
-          <tr><td><strong>Data</strong></td><td>Row, column, object, and masking rules inside datasets</td><td>OneLake Security, T-SQL, Tabular Editor</td></tr>
-        </tbody>
-      </table>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Analogy</div>
-        <p>Think of it like a building. Tenant security is the perimeter fence, workspace security is the building door, item security is the office door, and data security is the locked file cabinet inside the office.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 3: Workspace Roles & Entra ID -->
-    <section class="chapter" id="workspace-roles">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 3</span>
-        <h2>👥 Workspace Roles &amp; Entra ID Security Groups</h2>
-      </div>
-
-      <p>Instead of assigning permissions to individual users, you'll create <strong>Entra ID security groups</strong> and assign those groups to workspace roles. This is how real organizations manage access at scale.</p>
-
-      <h3>Step 1: Create Test Users</h3>
-
-      <p>To properly validate security rules later, you need accounts that represent different personas. You'll create <strong>2 test users</strong> in addition to your admin account.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Create Test Users in Entra ID</div>
-        <div class="step-body">
-          <ol>
-            <li>Navigate to <a href="https://entra.microsoft.com" target="_blank" rel="noopener">entra.microsoft.com</a></li>
-            <li>Go to <strong>Users</strong> → <strong>All users</strong></li>
-            <li>Click <strong>New user</strong> → <strong>Create new user</strong></li>
-            <li>Create each user per the table below</li>
-            <li>Click <strong>Create</strong> for each user</li>
-          </ol>
-        </div>
-      </div>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Display Name</th><th>User Principal Name</th><th>Purpose</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>ZOSA Scientist</strong></td><td><code>zosa.scientist@{tenant}.onmicrosoft.com</code></td><td>Tests restricted data views</td></tr>
-          <tr><td><strong>ZOSA Executive</strong></td><td><code>zosa.executive@{tenant}.onmicrosoft.com</code></td><td>Tests executive-level access</td></tr>
-        </tbody>
-      </table>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Assign Fabric Licenses (M365 Admin Center)</div>
-        <div class="step-body">
-          <p>License assignments are managed in the <strong>Microsoft 365 Admin Center</strong>, not Entra ID.</p>
-          <ol>
-            <li>Go to <a href="https://admin.microsoft.com" target="_blank" rel="noopener">admin.microsoft.com</a></li>
-            <li>Navigate to <strong>Users</strong> → <strong>Active users</strong></li>
-            <li>Select each test user → click <strong>Licenses and apps</strong></li>
-            <li>Assign a <strong>Microsoft Fabric (Free)</strong> license (or your trial license)</li>
-            <li>Click <strong>Save changes</strong></li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">First Sign-In for Each Test User</div>
-        <div class="step-body">
-          <ol>
-            <li>Open an <strong>InPrivate / Incognito</strong> browser window</li>
-            <li>Go to <a href="https://app.fabric.microsoft.com" target="_blank" rel="noopener">app.fabric.microsoft.com</a></li>
-            <li>Sign in as the test user and change the temporary password</li>
-            <li>Repeat for the second test user</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Browser Tip</div>
-        <p>Use separate browser profiles or InPrivate/Incognito windows to test as different users. This avoids cached-auth confusion that can make security appear broken.</p>
-      </div>
-
-      <h3>Step 2: Create Security Groups</h3>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Create Entra ID Security Groups</div>
-        <div class="step-body">
-          <ol>
-            <li>In Entra, go to <strong>Groups</strong> → <strong>All groups</strong></li>
-            <li>Click <strong>New group</strong></li>
-            <li>Configure each group:
-              <ul>
-                <li><strong>Group type:</strong> Security</li>
-                <li><strong>Group name:</strong> (see table below)</li>
-                <li><strong>Group description:</strong> (see table below)</li>
-                <li><strong>Microsoft Entra roles can be assigned:</strong> <strong>No</strong> (we use these for Fabric workspace roles, not Entra admin roles)</li>
-                <li><strong>Membership type:</strong> Assigned</li>
-                <li><strong>Members:</strong> Click "No members selected" and add the correct member (see table below)</li>
-              </ul>
-            </li>
-            <li>Click <strong>Create</strong></li>
-          </ol>
-        </div>
-      </div>
-
-      <p>Create these four groups with the <strong>correct members</strong>:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Group Name</th><th>Description</th><th>Members</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>ZOSA-Admins</code></td><td>Fabric administrators and platform owners</td><td>Your admin account</td></tr>
-          <tr><td><code>ZOSA-Engineers</code></td><td>Data engineers who build and maintain pipelines</td><td>Your admin account</td></tr>
-          <tr><td><code>ZOSA-Scientists</code></td><td>Data scientists and analysts who consume data</td><td><code>zosa.scientist</code> test user</td></tr>
-          <tr><td><code>ZOSA-Executives</code></td><td>Executive stakeholders who view dashboards</td><td><code>zosa.executive</code> test user</td></tr>
-        </tbody>
-      </table>
-
-      <div class="mission-alert info">
-        <div class="alert-title">Why This Separation?</div>
-        <p>Your admin account is in the builder groups (Admins + Engineers) so you can create and manage everything. The test users are in the consumer groups (Scientists + Executives) so you can validate that security rules actually restrict their access.</p>
-      </div>
-
-      <h3>Step 3: Assign Groups to Workspace Roles</h3>
-
-      <p>Open each workspace → click <strong>Manage access</strong> → <strong>Add people or groups</strong> → search for the Entra group → assign the role.</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Group</th><th>ZOSA-Dev Role</th><th>ZOSA-Test Role</th><th>ZOSA-Prod Role</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>ZOSA-Admins</code></td><td>Admin</td><td>Admin</td><td>Admin</td></tr>
-          <tr><td><code>ZOSA-Engineers</code></td><td>Member</td><td>Member</td><td>Contributor</td></tr>
-          <tr><td><code>ZOSA-Scientists</code></td><td>Contributor</td><td>Contributor</td><td>Viewer</td></tr>
-          <tr><td><code>ZOSA-Executives</code></td><td>Viewer</td><td>Viewer</td><td>Viewer</td></tr>
-        </tbody>
-      </table>
-
-      <p>Here's what each role can do:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Permission</th><th>Admin</th><th>Member</th><th>Contributor</th><th>Viewer</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Manage workspace settings &amp; access</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
-          <tr><td>Add/remove people</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
-          <tr><td>Create, edit, delete items</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
-          <tr><td>Read and view items</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Share items &amp; grant access</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
-        </tbody>
-      </table>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Least Privilege</div>
-        <p>Default to the <strong>Viewer</strong> role. Elevate only with justification. This is the principle of <strong>least privilege</strong> — give people the minimum access they need to do their job.</p>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Best Practice</div>
-        <p>Always assign roles via groups, never individuals. Groups scale, are auditable, and make offboarding instant — remove a user from the group and all their Fabric access disappears.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 4: Sensitivity Labels & Purview -->
-    <section class="chapter" id="sensitivity-labels">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 4</span>
-        <h2>🏷️ Sensitivity Labels &amp; Microsoft Purview</h2>
-      </div>
-
-      <p>Sensitivity labels classify your data and enforce protection policies automatically. They travel with the data — if someone exports a report to PDF, the label (and its restrictions) follow.</p>
-
-      <h3>Step 1: Enable Sensitivity Labels in Fabric</h3>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Enable in Tenant Settings</div>
-        <div class="step-body">
-          <ol>
-            <li>Go to the <strong>Fabric Admin portal</strong> → <strong>Tenant settings</strong></li>
-            <li>Under <strong>Information protection</strong>, enable:
-              <ul>
-                <li>✅ <em>Allow users to apply sensitivity labels for content</em></li>
-                <li>✅ <em>Apply sensitivity labels from data sources to their data in Fabric</em></li>
-              </ul>
-            </li>
-          </ol>
-        </div>
-      </div>
-
-      <h3>Step 2: Create Labels in Microsoft Purview</h3>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Create Labels</div>
-        <div class="step-body">
-          <ol>
-            <li>Navigate to <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a> → <strong>Information Protection</strong> → <strong>Sensitivity labels</strong></li>
-            <li>Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard</li>
-          </ol>
-          <p>You'll create <strong>4 labels</strong>. Priority is determined by their <strong>position in the label list</strong> — the label at the top has the highest priority (wins when multiple labels could apply). After creating all 4, you'll reorder them.</p>
-          <p>Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard. The wizard has 5 steps:</p>
-        </div>
-      </div>
-
-      <h4>🔁 Repeat the wizard for each label:</h4>
-
-      <h5>A) Label details (first page)</h5>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Field</th><th>Top Secret</th><th>Confidential</th><th>Internal</th><th>Public</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Name</strong></td><td><code>TopSecret</code></td><td><code>Confidential</code></td><td><code>Internal</code></td><td><code>Public</code></td></tr>
-          <tr><td><strong>Display name</strong></td><td><code>Top Secret</code></td><td><code>Confidential</code></td><td><code>Internal</code></td><td><code>Public</code></td></tr>
-          <tr><td><strong>Label priority</strong></td><td>Leave as default</td><td>Leave as default</td><td>Leave as default</td><td>Leave as default</td></tr>
-          <tr><td><strong>Description for users</strong></td><td>Classified mission data — maximum protection</td><td>Sensitive business data — restricted sharing</td><td>For internal ZOSA use only</td><td>Open data — no restrictions apply</td></tr>
-          <tr><td><strong>Description for admins</strong></td><td>Full encryption, no copy/paste/print, access audit</td><td>Encryption, block external sharing</td><td>Watermark on exports</td><td>No protection applied</td></tr>
-        </tbody>
-      </table>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">💡 About Priority</div>
-        <p>The priority number you see is just the label's <strong>position in the list</strong>. In Purview, <strong>the label at the bottom of the list has the highest priority</strong> (it wins when multiple labels apply). After creating all 4 labels, you'll reorder them in Step 2E.</p>
-      </div>
-
-      <div class="info-box">
-        <strong>💡 Tip:</strong> The <strong>Name</strong> field cannot contain spaces (use <code>TopSecret</code> not <code>Top Secret</code>). The <strong>Display name</strong> is what users see and can have spaces.
-      </div>
-
-      <h5>B) Scope — Where this label can be used</h5>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>Items (files, emails)</th><th>Groups &amp; sites</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Public</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
-          <tr><td><strong>Internal</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
-          <tr><td><strong>Confidential</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
-          <tr><td><strong>Top Secret</strong></td><td>✅ Check</td><td>❌ Uncheck (item level only)</td></tr>
-        </tbody>
-      </table>
-
-      <h5>C) Items — "Choose protection settings for the types of items you selected"</h5>
-
-      <p>This page shows two checkboxes. Check them based on the label:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>☐ Control access</th><th>☐ Apply content marking</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Public</strong></td><td>❌ Leave unchecked</td><td>❌ Leave unchecked</td></tr>
-          <tr><td><strong>Internal</strong></td><td>❌ Leave unchecked</td><td>✅ Check</td></tr>
-          <tr><td><strong>Confidential</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
-          <tr><td><strong>Top Secret</strong></td><td>✅ Check</td><td>✅ Check</td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>If you checked "Control access"</strong> → the next page is <strong>Access control</strong>:</p>
-
-      <p>First, select the radio button: ◉ <strong>Configure access control settings</strong></p>
-      <p>Then configure the dropdowns and permissions:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Setting</th><th>Confidential</th><th>Top Secret</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Assign permissions now or let users decide?</strong></td><td><code>Assign permissions now</code></td><td><code>Assign permissions now</code></td></tr>
-          <tr><td><strong>User access to content expires</strong></td><td><code>Never</code></td><td><code>Never</code></td></tr>
-          <tr><td><strong>Allow offline access</strong></td><td><code>Always</code></td><td><code>Never</code> (forces re-authentication)</td></tr>
-          <tr><td><strong>Assign permissions to specific users and groups</strong></td><td>Click <strong>Assign permissions</strong> → <strong>Add all users in your organization</strong></td><td>Click <strong>Assign permissions</strong> → <strong>Add all users in your organization</strong> → then edit to remove <strong>Copy</strong> and <strong>Print</strong> rights</td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>If you checked "Apply content marking"</strong> → the next page is <strong>Content marking</strong>:</p>
-
-      <ol>
-        <li>Toggle <strong>Content marking</strong> to <strong>On</strong></li>
-        <li>Check the boxes and click <strong>Customize text</strong> to configure each:</li>
-      </ol>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>☐ Add a watermark</th><th>☐ Add a header</th><th>☐ Add a footer</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Internal</strong></td><td>❌</td><td>❌</td><td>✅ Check → Customize text → <code>ZOSA Internal</code></td></tr>
-          <tr><td><strong>Confidential</strong></td><td>✅ Check → Customize text → <code>Confidential</code></td><td>✅ Check → Customize text → <code>ZOSA Confidential</code></td><td>❌</td></tr>
-          <tr><td><strong>Top Secret</strong></td><td>✅ Check → Customize text → <code>TOP SECRET</code></td><td>✅ Check → Customize text → <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code></td><td>❌</td></tr>
-        </tbody>
-      </table>
-
-      <div class="info-box">
-        <strong>💡 Info:</strong> All content markings apply to documents. Only headers and footers apply to emails and meeting invites — watermarks do not appear in emails.
-      </div>
-
-      <div class="info-box">
-        <strong>💡 Note:</strong> For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).
-      </div>
-
-      <h5>D) Groups &amp; sites — "Define protection settings for groups and sites"</h5>
-
-      <p>This page shows three checkboxes under <strong>Protection settings</strong> plus an <strong>Auto apply settings</strong> section:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>☐ Privacy and external user access</th><th>☐ External sharing and Conditional Access</th><th>☐ Private teams discoverability</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Public</strong></td><td>✅ Check</td><td>❌ Leave unchecked</td><td>❌ Leave unchecked</td></tr>
-          <tr><td><strong>Internal</strong></td><td>✅ Check</td><td>❌ Leave unchecked</td><td>❌ Leave unchecked</td></tr>
-          <tr><td><strong>Confidential</strong></td><td>✅ Check</td><td>✅ Check</td><td>❌ Leave unchecked</td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>If you checked "Privacy and external user access"</strong> → configure on the next page:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>Privacy</th><th>External user access</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Public</strong></td><td><strong>Public</strong> — anyone in the org can access</td><td>✅ Let group owners add external users</td></tr>
-          <tr><td><strong>Internal</strong></td><td><strong>Private</strong> — only members can access</td><td>❌ Don't let group owners add external users</td></tr>
-          <tr><td><strong>Confidential</strong></td><td><strong>Private</strong> — only members can access</td><td>❌ Don't let group owners add external users</td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>If you checked "External sharing and Conditional Access"</strong> → configure on the next page:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Label</th><th>External sharing from SharePoint sites</th><th>Conditional Access</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Confidential</strong></td><td>Only people in your organization</td><td>Require MFA (if Conditional Access policies are configured)</td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>Auto apply settings</strong> → Leave the "Apply a label to channel meetings" dropdown as default for all labels.</p>
-
-      <div class="info-box">
-        <strong>💡 Note:</strong> Top Secret has Groups &amp; sites <strong>unchecked in Scope</strong> (Step B), so this page won't appear for that label.
-      </div>
-
-      <h5>E) Finish</h5>
-      <p>Review the summary and click <strong>Create label</strong>.</p>
-
-      <p>After creation, you'll see <strong>"Your sensitivity label was created"</strong> with two options:</p>
-      <ul>
-        <li>○ Publish label to users' apps</li>
-        <li>◉ <strong>Don't create a policy yet</strong> ← Select this one!</li>
-      </ul>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Don't Publish Yet</div>
-        <p>Select <strong>"Don't create a policy yet"</strong> for each label. We'll publish all 4 labels together in a single policy in Step 3. Publishing them one at a time creates unnecessary duplicate policies.</p>
-      </div>
-
-      <p>Click <strong>Done</strong>, then repeat the wizard for the next label until all 4 are created.</p>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Priority Order</div>
-        <p>After creating all 4 labels, <strong>reorder them</strong> in the labels list. In Purview, <strong>bottom = highest priority</strong> (the context menu confirms: "Move to bottom (highest priority)"). Arrange them so:</p>
-        <ol>
-          <li>🟢 <strong>Public</strong> (top — lowest priority)</li>
-          <li>🔵 <strong>Internal</strong></li>
-          <li>🟠 <strong>Confidential</strong></li>
-          <li>🔴 <strong>Top Secret</strong> (bottom — highest priority)</li>
-        </ol>
-        <p><strong>💡 How to reorder:</strong> Right-click a label → use <strong>Move up / Move down</strong> or <strong>"Move to bottom (highest priority)"</strong> to place Top Secret at the bottom.</p>
-      </div>
-
-      <h3>Step 3: Publish Labels with a Policy</h3>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">Publish Labels</div>
-        <div class="step-body">
-          <p>Labels exist but aren't usable until you publish them:</p>
-          <ol>
-            <li>In <strong>Sensitivity labels</strong>, click <strong>Publish labels</strong> (top toolbar)</li>
-            <li>Click <strong>Choose sensitivity labels to publish</strong> → select all 4 labels (Public, Internal, Confidential, Top Secret)</li>
-            <li><strong>Assign admin units</strong> → Leave as default (Full directory)</li>
-            <li><strong>Publish to users and groups</strong> → Add your ZOSA security groups:
-              <ul>
-                <li><code>ZOSA-Admins</code></li>
-                <li><code>ZOSA-Engineers</code></li>
-                <li><code>ZOSA-Scientists</code></li>
-                <li><code>ZOSA-Executives</code></li>
-              </ul>
-            </li>
-            <li><strong>Policy settings</strong>:
-              <ul>
-                <li>✅ <em>Users must provide a justification to remove a label or lower its classification</em></li>
-                <li><strong>Default label for documents:</strong> <code>Internal</code></li>
-                <li><strong>Default label for emails:</strong> <code>Internal</code></li>
-              </ul>
-            </li>
-            <li><strong>Name your policy:</strong> <code>ZOSA Sensitivity Policy</code></li>
-            <li>Click <strong>Submit</strong></li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="info-box">
-        <strong>⏳ Note:</strong> Label policies can take <strong>up to 24 hours</strong> to propagate to all users. If labels don't appear immediately in Fabric, wait and check again later.
-      </div>
-
-      <h3>Step 4: Apply Labels to Fabric Items</h3>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Important</div>
-        <p>Sensitivity labels in Fabric are applied to <strong>individual items</strong> (lakehouses, reports, datasets, notebooks, etc.) — not to workspaces. There is no workspace-level label setting in Fabric.</p>
-      </div>
-
-      <p>Labels will be applied as you create items throughout the lab. Here's the plan:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Module</th><th>Item</th><th>Label to Apply</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Module 03</strong></td><td><code>lh_zosa</code> (Lakehouse)</td><td><strong>Confidential</strong></td></tr>
-          <tr><td><strong>Module 05</strong></td><td><code>ZOSA Semantic Model</code></td><td><strong>Confidential</strong></td></tr>
-          <tr><td><strong>Module 06</strong></td><td>Power BI reports</td><td><strong>Confidential</strong></td></tr>
-          <tr><td><strong>Module 08</strong></td><td>ML experiments &amp; models</td><td><strong>Top Secret</strong></td></tr>
-        </tbody>
-      </table>
-
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <div class="step-title">How to Apply a Label to Any Fabric Item</div>
-        <div class="step-body">
-          <ol>
-            <li>Navigate to the item in your workspace</li>
-            <li>Click <strong>… (More options)</strong> next to the item name</li>
-            <li>Select <strong>Sensitivity label</strong> (or find it in the item's <strong>Settings</strong>)</li>
-            <li>Choose the appropriate label from the dropdown</li>
-            <li>Click <strong>Apply</strong></li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="info-box">
-        <strong>💡 Tip:</strong> If you set a default label in your publishing policy (we set <code>Internal</code>), new items will automatically get that label. You only need to manually change items that require a higher classification like <strong>Confidential</strong> or <strong>Top Secret</strong>.
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Licensing Requirement — Read Before Proceeding</div>
-        <p>Sensitivity labels require specific Microsoft 365 licensing. Since January 2024, Microsoft <strong>strictly enforces</strong> these requirements — there is no grace period.</p>
-
-        <table class="data-table" style="margin: 1rem 0;">
-          <thead>
-            <tr><th>Feature</th><th>Minimum License Required</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Manual labeling</strong> (apply labels to items)</td><td>Microsoft 365 <strong>E3</strong>, Business Premium, EMS E3/E5, or AIP <strong>P1</strong></td></tr>
-            <tr><td><strong>Auto-labeling</strong> (classify &amp; label automatically)</td><td>Microsoft 365 <strong>E5</strong>, E5 Compliance add-on, or E5 Information Protection &amp; Governance add-on</td></tr>
-          </tbody>
-        </table>
-
-        <p>For this lab, you need <strong>at least E3 or AIP P1</strong> to manually apply sensitivity labels. If your tenant only has F1/E1 licenses, you can <strong>skip this section</strong> and come back once you've upgraded — the rest of the lab does not depend on sensitivity labels.</p>
-
-        <p><strong>Trial tenants:</strong> If you're using a Microsoft 365 E5 trial, sensitivity labels are included. You can start a trial at <a href="https://admin.microsoft.com" target="_blank" rel="noopener">admin.microsoft.com</a> → <strong>Billing</strong> → <strong>Purchase services</strong> → search for "Microsoft 365 E5".</p>
-      </div>
-
-      <h3>Step 5: Configure Endorsement</h3>
-
-      <p>Endorsement lets you mark trusted, validated datasets so users know which data to rely on:</p>
-
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <div class="step-title">Set Endorsement</div>
-        <div class="step-body">
-          <ol>
-            <li>Navigate to a dataset → <strong>…</strong> (more options) → <strong>Settings</strong> → <strong>Endorsement</strong></li>
-            <li>Options:
-              <ul>
-                <li><strong>Promoted</strong> — recommended by the data owner</li>
-                <li><strong>Certified</strong> — validated and approved by a designated certifier (set in Admin portal)</li>
-              </ul>
-            </li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Future Reference</div>
-        <p>In later modules, once you build your Gold-layer datasets, you'll mark them as <strong>Certified</strong>. This tells analysts: "This is the single source of truth."</p>
-      </div>
-
-      <h3>Step 6: Enable Microsoft Purview Unified Catalog</h3>
-
-      <h4>6a) Enable Admin API Settings (required before scanning)</h4>
-
-      <div class="step-card">
-        <div class="step-number">6a</div>
-        <div class="step-title">Enable API Access</div>
-        <div class="step-body">
-          <p>Before Purview can scan your Fabric tenant, you must enable API access:</p>
-          <ol>
-            <li>Go to <a href="https://admin.powerbi.com" target="_blank" rel="noopener">admin.powerbi.com</a> → <strong>Tenant settings</strong></li>
-            <li>Search for and enable these settings under <strong>Admin API settings</strong>:
-              <ul>
-                <li>✅ <strong>Allow service principals to use Power BI APIs</strong> → Apply to <code>ZOSA-Admins</code> group</li>
-                <li>✅ <strong>Enhance admin APIs responses with detailed metadata</strong> → Enable for entire organization</li>
-              </ul>
-            </li>
-            <li><strong>Wait ~15 minutes</strong> for the settings to propagate</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Common Error</div>
-        <p>Without these settings, the scan will fail with error <code>3871 UserErrorDataScanPowerBIBasicMetadataFailure</code>. This is the most common cause of Purview scan failures for Fabric tenants.</p>
-      </div>
-
-      <h4>6b) Register Fabric in Data Map</h4>
-
-      <div class="step-card">
-        <div class="step-number">6b</div>
-        <div class="step-title">Register &amp; Scan in Data Map</div>
-        <div class="step-body">
-          <ol>
-            <li>In <a href="https://purview.microsoft.com" target="_blank" rel="noopener">purview.microsoft.com</a>, go to <strong>Data Map</strong> (left sidebar)</li>
-            <li>Click <strong>Register</strong> (or <strong>+ Add Source</strong>) → Select <strong>Microsoft Fabric</strong></li>
-            <li>Configure the registration:
-              <ul>
-                <li><strong>Source name:</strong> <code>ZOSA Fabric Tenant</code></li>
-                <li><strong>Registration scope:</strong> Select <strong>Tenant</strong> (scans all workspaces)</li>
-                <li><strong>Tenant ID:</strong> Your Entra tenant GUID (find it in Entra ID → Overview)</li>
-              </ul>
-            </li>
-            <li>Grant Purview permission to read Fabric metadata when prompted</li>
-            <li>Click <strong>Save and Run</strong> to start the initial scan</li>
-            <li>Once the scan completes, go to <strong>Unified Catalog</strong> to browse your discovered Fabric assets</li>
-          </ol>
-          <p>This gives your organization a searchable inventory of every dataset, report, and lakehouse — with lineage tracking.</p>
-        </div>
-      </div>
-
-      <div class="info-box">
-        <strong>💡 Note:</strong> The scan may take a few minutes depending on the number of items in your workspaces. You can set up a recurring schedule for automatic discovery of new items.
-      </div>
-    </section>
-
-    <!-- CHAPTER 5: OneLake Security -->
-    <section class="chapter" id="onelake-security">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 5</span>
-        <h2>🔐 OneLake Security (GA)</h2>
-      </div>
-
-      <p>OneLake Security is the <strong>unified data access control layer</strong> for Microsoft Fabric. Once configured, permissions propagate to <strong>all engines</strong> — Spark notebooks, SQL analytics endpoints, Power BI semantic models, Dataflows, and even Copilot. You define rules once; they're enforced everywhere.</p>
-
-      <div class="mission-alert danger">
-        <div class="alert-title">Irreversible Setting</div>
-        <p>OneLake Security, once enabled on a lakehouse, <strong>cannot be turned off</strong>. Plan your roles and rules carefully before flipping the switch.</p>
-      </div>
-
-      <h3>Enabling OneLake Security</h3>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Prerequisite</div>
-        <p>You need a lakehouse with tables before you can enable OneLake Security. The option <strong>Manage OneLake Security</strong> appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 04 — then come back here to enable security.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Enable OneLake Security (after Module 04)</div>
-        <div class="step-body">
-          <ol>
-            <li>Open <strong>ZOSA-Dev</strong> workspace</li>
-            <li>Open your <strong>Lakehouse</strong> item</li>
-            <li>In the lakehouse toolbar, click <strong>Manage OneLake Security</strong></li>
-            <li>Toggle <strong>Enable OneLake Security</strong> → Confirm</li>
-          </ol>
-          <p>Once enabled, you'll see the role management interface where you can create roles with specific data access rules.</p>
-        </div>
-      </div>
-
-      <h3>🔒 4a — Row-Level Security (RLS)</h3>
-
-      <div class="mission-alert">
-        <div class="alert-title">📋 Plan now, implement in Module 04</div>
-        <p>The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 04.</p>
-      </div>
-
-      <p><strong>Scenario:</strong> ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from <strong>their region</strong>. A European analyst shouldn't browse Asian station data.</p>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Configure RLS</div>
-        <div class="step-body">
-          <ol>
-            <li>In the OneLake Security panel, click <strong>New Role</strong></li>
-            <li><strong>Role name:</strong> <code>Europe_Analysts</code></li>
-            <li>Under <strong>Table rules</strong>, select the <code>observations</code> table</li>
-            <li>Add a filter expression:</li>
-          </ol>
-
-          <div class="code-terminal">
-            <div class="terminal-header">
-              <div class="terminal-dots"><span></span><span></span><span></span></div>
-              <span class="terminal-title">DAX Filter</span>
-              <button class="copy-btn">Copy</button>
-            </div>
-            <pre><code class="language-javascript">[region] = "Europe"</code></pre>
-          </div>
-
-          <ol start="5">
-            <li>Click <strong>Save</strong></li>
-            <li>Assign the <code>ZOSA-Scientists</code> group (or a subset) to this role</li>
-          </ol>
-        </div>
-      </div>
-
-      <p>Repeat for other regions:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Role Name</th><th>Filter Expression</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>Europe_Analysts</code></td><td><code>[region] = "Europe"</code></td></tr>
-          <tr><td><code>NorthAmerica_Analysts</code></td><td><code>[region] = "North America"</code></td></tr>
-          <tr><td><code>Asia_Analysts</code></td><td><code>[region] = "Asia"</code></td></tr>
-          <tr><td><code>Global_Analysts</code></td><td><em>(no filter — sees all rows)</em></td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>How it works:</strong> When a European analyst queries the <code>observations</code> table, Fabric automatically appends the filter. They literally cannot see rows outside their region — not in SQL, not in Spark, not in Power BI.</p>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Behind the Scenes</div>
-        <p>For SQL analytics endpoints, the equivalent filter uses a <code>WHERE</code> clause injected at query time:</p>
-      </div>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">SQL — What Fabric does behind the scenes</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-sql">-- This is what Fabric does behind the scenes for Europe_Analysts
-SELECT * FROM observations WHERE region = 'Europe'</code></pre>
-      </div>
-
-      <h3>🔒 4b — Column-Level Security (CLS)</h3>
-
-      <div class="mission-alert">
-        <div class="alert-title">📋 Plan now, implement in Module 04</div>
-        <p>CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.</p>
-      </div>
-
-      <p><strong>Scenario:</strong> Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should <strong>never see</strong> the <code>budget_usd</code> or <code>clearance_level</code> columns.</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">SQL — Column-Level Security</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-sql">-- Block scientists from seeing budget data
+└─────────────────────────────────────────────┘
+</code></pre>
+| Layer | What It Controls | Configured Where |
+|-------|-----------------|------------------|
+| <strong>Tenant</strong> | Who can use Fabric at all, MFA, Conditional Access | Microsoft Entra admin center, Fabric Admin portal |
+| <strong>Workspace</strong> | Who can access a workspace and what they can do | Workspace → Manage access |
+| <strong>Item</strong> | Sharing individual reports, lakehouses, or pipelines | Item → Share / Manage permissions |
+| <strong>Data</strong> | Row, column, object, and masking rules inside datasets | OneLake Security, T-SQL, Tabular Editor |
+<strong>💡 Tip:</strong> Think of it like a building. Tenant security is the perimeter fence, workspace security is the building door, item security is the office door, and data security is the locked file cabinet inside the office.
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-security">OneLake Security — Get Started</a></blockquote>
+---
+<h2>👥 2 — Workspace Roles & Entra ID Security Groups</h2>
+Instead of assigning permissions to individual users, you'll create <strong>Entra ID security groups</strong> and assign those groups to workspace roles. This is how real organizations manage access at scale.
+<h3>Step 1: Create Test Users</h3>
+To properly validate security rules later, you need accounts that represent different personas. You'll create <strong>2 test users</strong> in addition to your admin account.
+<ul><ul><li>Navigate to <a href="https://entra.microsoft.com">entra.microsoft.com</a></li></ul>
+<ul><li>Go to <strong>Users</strong> → <strong>All users</strong></li></ul>
+<ul><li>Click <strong>New user</strong> → <strong>Create new user</strong></li></ul>
+<ul><li>Create each user:</li></ul></ul>
+| Display Name | User Principal Name | Password | Purpose |
+|-------------|---------------------|----------|---------|
+| <strong>ZOSA Scientist</strong> | <code>zosa.scientist@{your-tenant}.onmicrosoft.com</code> | Set a temporary password | Tests restricted data views |
+| <strong>ZOSA Executive</strong> | <code>zosa.executive@{your-tenant}.onmicrosoft.com</code> | Set a temporary password | Tests executive-level access |
+<ul><ul><li>Click <strong>Create</strong> for each user</li></ul></ul>
+<h3>Step 1b: Assign Fabric Licenses (M365 Admin Center)</h3>
+License assignments are managed in the <strong>Microsoft 365 Admin Center</strong>, not Entra ID.
+<ul><ul><li>Go to <a href="https://admin.microsoft.com">admin.microsoft.com</a></li></ul>
+<ul><li>Navigate to <strong>Users</strong> → <strong>Active users</strong></li></ul>
+<ul><li>Select each test user → click <strong>Licenses and apps</strong></li></ul>
+<ul><li>Assign a <strong>Microsoft Fabric (Free)</strong> license (or your trial license)</li></ul>
+<ul><li>Click <strong>Save changes</strong></li></ul></ul>
+<h3>Step 1c: First Sign-In</h3>
+<ul><ul><li>Open an <strong>InPrivate / Incognito</strong> browser window</li></ul>
+<ul><li>Go to <a href="https://app.fabric.microsoft.com">app.fabric.microsoft.com</a></li></ul>
+<ul><li>Sign in as the test user and change the temporary password</li></ul>
+<ul><li>Repeat for the second test user</li></ul></ul>
+<blockquote><strong>💡 Tip:</strong> Use separate browser profiles or InPrivate windows to test as different users. This avoids cached-auth confusion that can make security appear broken.</blockquote>
+<blockquote><strong>⚠️ Note:</strong> Your admin account (the one you've been using) acts as the third persona — the admin/engineer with full access. No need to create a separate user for this.</blockquote>
+<h3>Step 2: Create Security Groups</h3>
+<ul><ul><li>In Entra, go to <strong>Groups</strong> → <strong>All groups</strong></li></ul>
+<ul><li>Click <strong>New group</strong></li></ul>
+<ul><li>Configure each group:</li></ul></ul>
+   - <strong>Group type:</strong> Security
+   - <strong>Group name:</strong> (see table below)
+   - <strong>Group description:</strong> (see table below)
+   - <strong>Microsoft Entra roles can be assigned to the group:</strong> <strong>No</strong> (we use these for Fabric workspace roles, not Entra admin roles)
+   - <strong>Membership type:</strong> Assigned
+   - <strong>Members:</strong> Click "No members selected" and add the correct member (see table below)
+<ul><ul><li>Click <strong>Create</strong></li></ul></ul>
+Create these four groups and assign the <strong>correct members</strong>:
+| Group Name | Description | Members |
+|------------|-------------|---------|
+| <code>ZOSA-Admins</code> | Fabric administrators and platform owners | Your admin account |
+| <code>ZOSA-Engineers</code> | Data engineers who build and maintain pipelines | Your admin account |
+| <code>ZOSA-Scientists</code> | Data scientists and analysts who consume data | <code>zosa.scientist</code> test user |
+| <code>ZOSA-Executives</code> | Executive stakeholders who view dashboards | <code>zosa.executive</code> test user |
+<strong>Why this separation matters:</strong> Your admin account is in the builder groups (Admins + Engineers) so you can create and manage everything. The test users are in the consumer groups (Scientists + Executives) so you can validate that security rules actually restrict their access.
+<h3>Step 3: Assign Groups to Workspace Roles</h3>
+Open each workspace → click <strong>Manage access</strong> → <strong>Add people or groups</strong> → search for the Entra group → assign the role.
+| Group | ZOSA-Dev Role | ZOSA-Test Role | ZOSA-Prod Role |
+|-------|---------------|----------------|----------------|
+| ZOSA-Admins | Admin | Admin | Admin |
+| ZOSA-Engineers | Member | Member | Contributor |
+| ZOSA-Scientists | Contributor | Contributor | Viewer |
+| ZOSA-Executives | Viewer | Viewer | Viewer |
+Here's what each role can do:
+| Permission | Admin | Member | Contributor | Viewer |
+|-----------|-------|--------|-------------|--------|
+| Manage workspace settings & access | ✅ | ❌ | ❌ | ❌ |
+| Add/remove people | ✅ | ✅ | ❌ | ❌ |
+| Create, edit, delete items | ✅ | ✅ | ✅ | ❌ |
+| Read and view items | ✅ | ✅ | ✅ | ✅ |
+| Share items & grant access | ✅ | ✅ | ❌ | ❌ |
+<strong>⚠️ Note:</strong> Default to the <strong>Viewer</strong> role. Elevate only with justification. This is the principle of <strong>least privilege</strong> — give people the minimum access they need to do their job.
+<strong>💡 Tip:</strong> Always assign roles via groups, never individuals. Groups scale, are auditable, and make offboarding instant — remove a user from the group and all their Fabric access disappears.
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/get-started/roles-workspaces">Workspace Roles in Microsoft Fabric</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/entra/fundamentals/how-to-manage-groups">Manage Entra ID Security Groups</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/admin/admin-center">Fabric Admin Portal</a></blockquote>
+---
+<h2>🏷️ 3 — Sensitivity Labels & Microsoft Purview</h2>
+Sensitivity labels classify your data and enforce protection policies automatically. They travel with the data — if someone exports a report to PDF, the label (and its restrictions) follow.
+<h3>Step 1: Enable Sensitivity Labels in Fabric</h3>
+<ul><ul><li>Go to the <strong>Fabric Admin portal</strong> → <strong>Tenant settings</strong></li></ul>
+<ul><li>Under <strong>Information protection</strong>, enable:</li></ul></ul>
+   - ✅ <em>Allow users to apply sensitivity labels for content</em>
+   - ✅ <em>Apply sensitivity labels from data sources to their data in Fabric</em>
+<h3>Step 2: Create Labels in Microsoft Purview</h3>
+<ul><ul><li>Navigate to <a href="https://purview.microsoft.com">purview.microsoft.com</a> → <strong>Solutions</strong> → <strong>Information Protection</strong> → <strong>Sensitivity labels</strong></li></ul>
+<ul><li>Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard</li></ul></ul>
+You'll create <strong>4 labels</strong>. Priority is determined by their <strong>position in the label list</strong> — the label at the top has the highest priority (wins when multiple labels could apply). After creating all 4, you'll reorder them.
+Click <strong>+ Create a label</strong> — this opens the <strong>New sensitivity label</strong> wizard. The wizard has 5 steps:
+---
+<h4>🔁 Repeat the wizard for each label below:</h4>
+<strong>A) Label details</strong> (first page of the wizard)
+| Field | Top Secret | Confidential | Internal | Public |
+|-------|------------|--------------|----------|--------|
+| <strong>Name</strong> | <code>TopSecret</code> | <code>Confidential</code> | <code>Internal</code> | <code>Public</code> |
+| <strong>Display name</strong> | <code>Top Secret</code> | <code>Confidential</code> | <code>Internal</code> | <code>Public</code> |
+| <strong>Label priority</strong> | Leave as default | Leave as default | Leave as default | Leave as default |
+| <strong>Description for users</strong> | Classified mission data — maximum protection | Sensitive business data — restricted sharing | For internal ZOSA use only | Open data — no restrictions apply |
+| <strong>Description for admins</strong> | Full encryption, no copy/paste/print, access audit | Encryption, block external sharing | Watermark on exports | No protection applied |
+<blockquote><strong>💡 About Priority:</strong> The priority number you see is just the label's <strong>position in the list</strong>. In Purview, <strong>the label at the bottom of the list has the highest priority</strong> (it wins when multiple labels apply). After creating all 4 labels, you'll reorder them in Step 2E.</blockquote>
+> 
+<blockquote><strong>💡 Tip:</strong> The <strong>Name</strong> field cannot contain spaces (use <code>TopSecret</code> not <code>Top Secret</code>). The <strong>Display name</strong> is what users see and can have spaces.</blockquote>
+<strong>B) Scope</strong> — Define where this label can be used:
+| Label | Items (files, emails) | Groups & sites |
+|-------|-----------------------|----------------|
+| <strong>Public</strong> | ✅ Check | ✅ Check |
+| <strong>Internal</strong> | ✅ Check | ✅ Check |
+| <strong>Confidential</strong> | ✅ Check | ✅ Check |
+| <strong>Top Secret</strong> | ✅ Check | ❌ Uncheck (applied at item level, not container) |
+<strong>C) Items</strong> — "Choose protection settings for the types of items you selected":
+This page shows two checkboxes. Check them based on the label:
+| Label | ☐ Control access | ☐ Apply content marking |
+|-------|-------------------|------------------------|
+| <strong>Public</strong> | ❌ Leave unchecked | ❌ Leave unchecked |
+| <strong>Internal</strong> | ❌ Leave unchecked | ✅ Check |
+| <strong>Confidential</strong> | ✅ Check | ✅ Check |
+| <strong>Top Secret</strong> | ✅ Check | ✅ Check |
+<strong>If you checked "Control access"</strong> → the next page is <strong>Access control</strong>:
+First, select the radio button: ◉ <strong>Configure access control settings</strong>
+Then configure the dropdowns and permissions:
+| Setting | Confidential | Top Secret |
+|---------|-------------|------------|
+| <strong>Assign permissions now or let users decide?</strong> | <code>Assign permissions now</code> | <code>Assign permissions now</code> |
+| <strong>User access to content expires</strong> | <code>Never</code> | <code>Never</code> |
+| <strong>Allow offline access</strong> | <code>Always</code> | <code>Never</code> (forces re-authentication) |
+| <strong>Assign permissions to specific users and groups</strong> | Click <strong>Assign permissions</strong> → <strong>Add all users in your organization</strong> | Click <strong>Assign permissions</strong> → <strong>Add all users in your organization</strong> → then edit to remove <strong>Copy</strong> and <strong>Print</strong> rights |
+<strong>If you checked "Apply content marking"</strong> → the next page is <strong>Content marking</strong>:
+<ul><ul><li>Toggle <strong>Content marking</strong> to <strong>On</strong></li></ul>
+<ul><li>Check the boxes and click <strong>Customize text</strong> to configure each:</li></ul></ul>
+| Label | ☐ Add a watermark | ☐ Add a header | ☐ Add a footer |
+|-------|-------------------|----------------|----------------|
+| <strong>Internal</strong> | ❌ | ❌ | ✅ Check → Customize text → <code>ZOSA Internal</code> |
+| <strong>Confidential</strong> | ✅ Check → Customize text → <code>Confidential</code> | ✅ Check → Customize text → <code>ZOSA Confidential</code> | ❌ |
+| <strong>Top Secret</strong> | ✅ Check → Customize text → <code>TOP SECRET</code> | ✅ Check → Customize text → <code>🔴 TOP SECRET — ZOSA CLASSIFIED</code> | ❌ |
+<blockquote><strong>💡 Info:</strong> All content markings apply to documents. Only headers and footers apply to emails and meeting invites — watermarks do not appear in emails.</blockquote>
+<blockquote><strong>💡 Note:</strong> For Public, since both checkboxes are unchecked, the wizard skips directly to the next step (no protection pages shown).</blockquote>
+<strong>D) Groups & sites</strong> — "Define protection settings for groups and sites":
+This page shows three checkboxes under <strong>Protection settings</strong> plus an <strong>Auto apply settings</strong> section:
+| Label | ☐ Privacy and external user access | ☐ External sharing and Conditional Access | ☐ Private teams discoverability |
+|-------|-------------------------------------|-------------------------------------------|-------------------------------|
+| <strong>Public</strong> | ✅ Check | ❌ Leave unchecked | ❌ Leave unchecked |
+| <strong>Internal</strong> | ✅ Check | ❌ Leave unchecked | ❌ Leave unchecked |
+| <strong>Confidential</strong> | ✅ Check | ✅ Check | ❌ Leave unchecked |
+<strong>If you checked "Privacy and external user access"</strong> → configure on the next page:
+| Label | Privacy | External user access |
+|-------|---------|---------------------|
+| <strong>Public</strong> | <strong>Public</strong> — anyone in the org can access | ✅ Let group owners add external users |
+| <strong>Internal</strong> | <strong>Private</strong> — only members can access | ❌ Don't let group owners add external users |
+| <strong>Confidential</strong> | <strong>Private</strong> — only members can access | ❌ Don't let group owners add external users |
+<strong>If you checked "External sharing and Conditional Access"</strong> → configure on the next page:
+| Label | External sharing from SharePoint sites | Conditional Access |
+|-------|----------------------------------------|-------------------|
+| <strong>Confidential</strong> | Only people in your organization | Require MFA (if Conditional Access policies are configured) |
+<strong>Auto apply settings</strong> → Leave the "Apply a label to channel meetings" dropdown as default for all labels.
+<blockquote><strong>💡 Note:</strong> Top Secret has Groups & sites <strong>unchecked in Scope</strong> (Step B), so this page won't appear for that label.</blockquote>
+<strong>E) Finish</strong> — Review the summary and click <strong>Create label</strong>
+After creation, you'll see <strong>"Your sensitivity label was created"</strong> with two options:
+<ul><ul><li>○ Publish label to users' apps</li></ul>
+<ul><li>◉ <strong>Don't create a policy yet</strong> ← Select this one!</li></ul></ul>
+<blockquote><strong>⚠️ Select "Don't create a policy yet"</strong> for each label. We'll publish all 4 labels together in a single policy in Step 3. Publishing them one at a time creates unnecessary duplicate policies.</blockquote>
+Click <strong>Done</strong>, then repeat the wizard for the next label until all 4 are created.
+After creating all 4 labels, <strong>reorder them</strong> in the labels list. In Purview, <strong>bottom = highest priority</strong> (the context menu confirms: "Move to bottom (highest priority)"). Arrange them so:
+<ul><ul><li>🟢 <strong>Public</strong> (top — lowest priority)</li></ul>
+<ul><li>🔵 <strong>Internal</strong></li></ul>
+<ul><li>🟠 <strong>Confidential</strong></li></ul>
+<ul><li>🔴 <strong>Top Secret</strong> (bottom — highest priority)</li></ul></ul>
+<blockquote><strong>💡 How to reorder:</strong> Right-click a label → use <strong>Move up / Move down</strong> or <strong>"Move to bottom (highest priority)"</strong> to place Top Secret at the bottom.</blockquote>
+---
+<h3>Step 3: Publish Labels with a Policy</h3>
+Labels exist but aren't usable until you publish them:
+<ul><ul><li>In <strong>Sensitivity labels</strong>, click <strong>Publish labels</strong> (top toolbar)</li></ul>
+<ul><li>Click <strong>Choose sensitivity labels to publish</strong> → select all 4 labels (Public, Internal, Confidential, Top Secret)</li></ul>
+<ul><li><strong>Assign admin units</strong> → Leave as default (Full directory)</li></ul>
+<ul><li><strong>Publish to users and groups</strong> → Add your ZOSA security groups:</li></ul></ul>
+   - <code>ZOSA-Admins</code>
+   - <code>ZOSA-Engineers</code>
+   - <code>ZOSA-Scientists</code>
+   - <code>ZOSA-Executives</code>
+<ul><ul><li><strong>Policy settings</strong>:</li></ul></ul>
+   - ✅ <em>Users must provide a justification to remove a label or lower its classification</em>
+   - <strong>Default label for documents</strong>: <code>Internal</code>
+   - <strong>Default label for emails</strong>: <code>Internal</code>
+<ul><ul><li><strong>Name your policy</strong>: <code>ZOSA Sensitivity Policy</code></li></ul>
+<ul><li>Click <strong>Submit</strong></li></ul></ul>
+<blockquote><strong>⏳ Note:</strong> Label policies can take <strong>up to 24 hours</strong> to propagate to all users. If labels don't appear immediately in Fabric, wait and check again later.</blockquote>
+<h3>Step 4: Apply Labels to Fabric Items</h3>
+<blockquote><strong>⚠️ Important:</strong> Sensitivity labels in Fabric are applied to <strong>individual items</strong> (lakehouses, reports, datasets, notebooks, etc.) — not to workspaces. There is no workspace-level label setting in Fabric.</blockquote>
+Labels will be applied as you create items throughout the lab. Here's the plan:
+| Module | Item | Label to Apply |
+|--------|------|---------------|
+| <strong>Module 03</strong> | <code>lh_zosa</code> (Lakehouse) | <strong>Confidential</strong> |
+| <strong>Module 05</strong> | <code>ZOSA Semantic Model</code> | <strong>Confidential</strong> |
+| <strong>Module 06</strong> | Power BI reports | <strong>Confidential</strong> |
+| <strong>Module 08</strong> | ML experiments & models | <strong>Top Secret</strong> |
+<strong>How to apply a label to any Fabric item:</strong>
+<ul><ul><li>Navigate to the item in your workspace</li></ul>
+<ul><li>Click <strong>… (More options)</strong> next to the item name</li></ul>
+<ul><li>Select <strong>Sensitivity label</strong> (or find it in the item's <strong>Settings</strong>)</li></ul>
+<ul><li>Choose the appropriate label from the dropdown</li></ul>
+<ul><li>Click <strong>Apply</strong></li></ul></ul>
+<blockquote><strong>💡 Tip:</strong> If you set a default label in your publishing policy (we set <code>Internal</code>), new items will automatically get that label. You only need to manually change items that require a higher classification like <strong>Confidential</strong> or <strong>Top Secret</strong>.</blockquote>
+<strong>⚠️ Licensing Requirement — Read Before Proceeding:</strong>
+Sensitivity labels require specific Microsoft 365 licensing. Since January 2024, Microsoft <strong>strictly enforces</strong> these requirements — there is no grace period.
+| Feature | Minimum License Required |
+|---------|--------------------------|
+| <strong>Manual labeling</strong> (apply labels to items) | Microsoft 365 <strong>E3</strong>, Business Premium, EMS E3/E5, or AIP <strong>P1</strong> |
+| <strong>Auto-labeling</strong> (classify & label automatically) | Microsoft 365 <strong>E5</strong>, E5 Compliance add-on, or E5 Information Protection & Governance add-on |
+For this lab, you need <strong>at least E3 or AIP P1</strong> to manually apply sensitivity labels. If your tenant only has F1/E1 licenses, you can <strong>skip this section</strong> and come back once you've upgraded — the rest of the lab does not depend on sensitivity labels.
+<blockquote><strong>Trial tenants:</strong> If you're using a Microsoft 365 E5 trial, sensitivity labels are included. You can start a trial at <a href="https://admin.microsoft.com">admin.microsoft.com</a> → <strong>Billing</strong> → <strong>Purchase services</strong> → search for "Microsoft 365 E5".</blockquote>
+<h3>Step 5: Configure Endorsement</h3>
+Endorsement lets you mark trusted, validated datasets so users know which data to rely on:
+<ul><ul><li>Navigate to a dataset → <strong>…</strong> (more options) → <strong>Settings</strong> → <strong>Endorsement</strong></li></ul>
+<ul><li>Options:</li></ul></ul>
+   - <strong>Promoted</strong> — recommended by the data owner
+   - <strong>Certified</strong> — validated and approved by a designated certifier (set in Admin portal)
+<strong>💡 Tip:</strong> In later modules, once you build your Gold-layer datasets, you'll mark them as <strong>Certified</strong>. This tells analysts: "This is the single source of truth."
+<h3>Step 6: Enable Microsoft Purview Unified Catalog</h3>
+<h4>6a) Enable Admin API Settings (required before scanning)</h4>
+Before Purview can scan your Fabric tenant, you must enable API access:
+<ul><ul><li>Go to <a href="https://admin.powerbi.com">admin.powerbi.com</a> → <strong>Tenant settings</strong></li></ul>
+<ul><li>Search for and enable these settings under <strong>Admin API settings</strong>:</li></ul></ul>
+   - ✅ <strong>Allow service principals to use Power BI APIs</strong> → Apply to <code>ZOSA-Admins</code> group
+   - ✅ <strong>Enhance admin APIs responses with detailed metadata</strong> → Enable for entire organization
+<ul><ul><li><strong>Wait ~15 minutes</strong> for the settings to propagate</li></ul></ul>
+<blockquote><strong>⚠️ Without these settings</strong>, the scan will fail with error <code>3871 UserErrorDataScanPowerBIBasicMetadataFailure</code>. This is a common gotcha.</blockquote>
+<h4>6b) Register Fabric in Data Map</h4>
+<ul><ul><li>In <a href="https://purview.microsoft.com">purview.microsoft.com</a>, go to <strong>Data Map</strong> (left sidebar)</li></ul>
+<ul><li>Click <strong>Register</strong> (or <strong>+ Add Source</strong>) → Select <strong>Microsoft Fabric</strong></li></ul>
+<ul><li>Configure the registration:</li></ul></ul>
+   - <strong>Source name</strong>: <code>ZOSA Fabric Tenant</code>
+   - <strong>Registration scope</strong>: Select <strong>Tenant</strong> (scans all workspaces)
+   - <strong>Tenant ID</strong>: Your Entra tenant GUID (find it in Entra ID → Overview)
+<ul><ul><li>Grant Purview permission to read Fabric metadata when prompted</li></ul>
+<ul><li>Click <strong>Save and Run</strong> to start the initial scan</li></ul>
+<ul><li>Once the scan completes, go to <strong>Unified Catalog</strong> to browse your discovered Fabric assets</li></ul></ul>
+This gives your organization a searchable inventory of every dataset, report, and lakehouse — with lineage tracking.
+<blockquote><strong>💡 Note:</strong> The scan may take a few minutes depending on the number of items in your workspaces. You can set up a recurring schedule for automatic discovery of new items.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/governance/information-protection">Sensitivity Labels & Information Protection</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/purview/register-scan-fabric-tenant">Microsoft Purview with Fabric</a></blockquote>
+---
+<h2>🔐 4 — OneLake Security (GA)</h2>
+OneLake Security is the <strong>unified data access control layer</strong> for Microsoft Fabric. Once configured, permissions propagate to <strong>all engines</strong> — Spark notebooks, SQL analytics endpoints, Power BI semantic models, Dataflows, and even Copilot. You define rules once; they're enforced everywhere.
+<strong>⚠️ Note: OneLake Security, once enabled on a lakehouse, cannot be turned off. Plan your roles and rules carefully before flipping the switch.</strong>
+<h3>Enabling OneLake Security</h3>
+<blockquote>⚠️ <strong>Prerequisite:</strong> You need a lakehouse with tables before you can enable OneLake Security. The option <strong>Manage OneLake Security</strong> appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 04 — then come back here to enable security.</blockquote>
+<strong>When you're ready (after Module 04):</strong>
+<ul><ul><li>Open <strong>ZOSA-Dev</strong> workspace</li></ul>
+<ul><li>Open your <strong>Lakehouse</strong> item</li></ul>
+<ul><li>In the lakehouse toolbar, click <strong>Manage OneLake Security</strong></li></ul>
+<ul><li>Toggle <strong>Enable OneLake Security</strong> → Confirm</li></ul></ul>
+Once enabled, you'll see the role management interface where you can create roles with specific data access rules.
+---
+<h3>🔒 4a — Row-Level Security (RLS)</h3>
+<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 04.</blockquote>
+<strong>Scenario:</strong> ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from <strong>their region</strong>. A European analyst shouldn't browse Asian station data.
+<h4>How to Configure RLS (after data ingestion)</h4>
+<ul><ul><li>In the OneLake Security panel, click <strong>New Role</strong></li></ul>
+<ul><li><strong>Role name:</strong> <code>Europe_Analysts</code></li></ul>
+<ul><li>Under <strong>Table rules</strong>, select the <code>observations</code> table</li></ul>
+<ul><li>Add a filter expression:</li></ul></ul>
+<pre><code class="language-dax">[region] = &quot;Europe&quot;
+</code></pre>
+<ul><ul><li>Click <strong>Save</strong></li></ul>
+<ul><li>Assign the <code>ZOSA-Scientists</code> group (or a subset) to this role</li></ul></ul>
+Repeat for other regions:
+| Role Name | Filter Expression |
+|-----------|-------------------|
+| <code>Europe_Analysts</code> | <code>[region] = "Europe"</code> |
+| <code>NorthAmerica_Analysts</code> | <code>[region] = "North America"</code> |
+| <code>Asia_Analysts</code> | <code>[region] = "Asia"</code> |
+| <code>Global_Analysts</code> | <em>(no filter — sees all rows)</em> |
+<strong>How it works:</strong> When a European analyst queries the <code>observations</code> table, Fabric automatically appends the filter. They literally cannot see rows outside their region — not in SQL, not in Spark, not in Power BI.
+<strong>💡 Tip:</strong> For SQL analytics endpoints, the equivalent filter uses a <code>WHERE</code> clause injected at query time:
+<pre><code class="language-sql">-- This is what Fabric does behind the scenes for Europe_Analysts
+SELECT * FROM observations WHERE region = 'Europe'
+</code></pre>
+---
+<h3>🔒 4b — Column-Level Security (CLS)</h3>
+<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.</blockquote>
+<strong>Scenario:</strong> Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should <strong>never see</strong> the <code>budget_usd</code> or <code>clearance_level</code> columns.
+<h4>How to Configure CLS (after data ingestion)</h4>
+Use the <strong>SQL analytics endpoint</strong> of your lakehouse and run T-SQL <code>DENY</code> statements:
+<pre><code class="language-sql">-- Block scientists from seeing budget data
 DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Scientists];
-
 -- Block scientists from seeing clearance levels
 DENY SELECT ON dbo.crew(clearance_level) TO [ZOSA-Scientists];
-
 -- Block engineers from seeing budget data (only execs need this)
-DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];</code></pre>
-      </div>
-
-      <p><strong>What happens:</strong> If a scientist runs <code>SELECT * FROM missions</code>, the <code>budget_usd</code> column is simply <strong>not returned</strong>. No error — the column is invisible. If they explicitly reference it (<code>SELECT budget_usd FROM missions</code>), they get a permission error.</p>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Access Path</div>
-        <p>CLS works at the SQL analytics endpoint level. Ensure users are accessing data through the endpoint (or Power BI semantic model) rather than directly reading Parquet files via Spark with a storage account key.</p>
-      </div>
-
-      <h3>🔒 4c — Object-Level Security (OLS)</h3>
-
-      <div class="mission-alert">
-        <div class="alert-title">📋 Plan now, implement in Module 04</div>
-        <p>OLS is configured via Tabular Editor on the semantic model, which is created in Module 05. Review the concept now and implement later.</p>
-      </div>
-
-      <p><strong>Scenario:</strong> ZOSA has a <code>classified_defense_missions</code> table containing data about planetary defense operations. This table should be <strong>completely invisible</strong> to anyone without defense clearance.</p>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">Configure OLS via Tabular Editor</div>
-        <div class="step-body">
-          <ol>
-            <li>Download and install <a href="https://tabulareditor.com/" target="_blank" rel="noopener">Tabular Editor</a></li>
-            <li>Connect to your Fabric semantic model via the XMLA endpoint</li>
-            <li>Navigate to the <code>classified_defense_missions</code> table</li>
-            <li>Set the <strong>Object Level Security</strong> property:
-              <ul>
-                <li>For the <code>ZOSA-Scientists</code> role: <strong>None</strong> (table is hidden)</li>
-                <li>For the <code>ZOSA-Engineers</code> role: <strong>None</strong> (table is hidden)</li>
-                <li>For the <code>ZOSA-Admins</code> role: <strong>Read</strong> (table is visible)</li>
-              </ul>
-            </li>
-            <li>Save and publish the model</li>
-          </ol>
-        </div>
-      </div>
-
-      <p><strong>What happens:</strong> When a scientist opens the semantic model in Power BI, the <code>classified_defense_missions</code> table simply <strong>doesn't appear</strong> in the field list. They can't query it, they can't reference it, they don't even know it exists.</p>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Most Restrictive Layer</div>
-        <p>OLS is the most restrictive data security layer — it hides entire tables or columns from the model itself. Use it for truly classified data that certain roles should have zero awareness of.</p>
-      </div>
-
-      <h3>🔒 4d — Dynamic Data Masking (DDM)</h3>
-
-      <div class="mission-alert">
-        <div class="alert-title">📋 Plan now, implement in Module 04</div>
-        <p>DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.</p>
-      </div>
-
-      <p><strong>Scenario:</strong> External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be <strong>partially masked</strong>.</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">SQL — Dynamic Data Masking</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-sql">-- Mask email addresses (shows first letter and domain: j***@zosa.org)
+DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];
+</code></pre>
+<strong>What happens:</strong> If a scientist runs <code>SELECT * FROM missions</code>, the <code>budget_usd</code> column is simply <strong>not returned</strong>. No error — the column is invisible. If they explicitly reference it (<code>SELECT budget_usd FROM missions</code>), they get a permission error.
+<strong>🧪 How to verify:</strong> Sign in as <code>zosa.scientist</code> in an InPrivate browser → open the SQL analytics endpoint → run <code>SELECT * FROM missions</code> → the <code>budget_usd</code> column should not appear in the results.
+---
+<h3>🔒 4c — Object-Level Security (OLS)</h3>
+<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — OLS is configured via Tabular Editor on the semantic model, which is created in Module 05. Review the concept now and implement later.</blockquote>
+<strong>Scenario:</strong> ZOSA has a <code>classified_defense_missions</code> table containing data about planetary defense operations. This table should be <strong>completely invisible</strong> to anyone without defense clearance.
+<h4>How to Configure OLS (after semantic model creation)</h4>
+OLS is configured via the <strong>Tabular Editor</strong> (a free external tool) or the <strong>XMLA endpoint</strong>:
+<ul><ul><li>Download and install <a href="https://tabulareditor.com/">Tabular Editor</a></li></ul>
+<ul><li>Connect to your Fabric semantic model via the XMLA endpoint</li></ul>
+<ul><li>Navigate to the <code>classified_defense_missions</code> table</li></ul>
+<ul><li>Set the <strong>Object Level Security</strong> property:</li></ul></ul>
+   - For the <code>ZOSA-Scientists</code> role: <strong>None</strong> (table is hidden)
+   - For the <code>ZOSA-Engineers</code> role: <strong>None</strong> (table is hidden)
+   - For the <code>ZOSA-Admins</code> role: <strong>Read</strong> (table is visible)
+<ul><ul><li>Save and publish the model</li></ul></ul>
+<strong>What happens:</strong> When a scientist opens the semantic model in Power BI, the <code>classified_defense_missions</code> table simply <strong>doesn't appear</strong> in the field list. They can't query it, they can't reference it, they don't even know it exists.
+<strong>💡 Tip:</strong> OLS is the most restrictive data security layer — it hides entire tables or columns from the model itself. Use it for truly classified data that certain roles should have zero awareness of.
+---
+<h3>🔒 4d — Dynamic Data Masking (DDM)</h3>
+<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.</blockquote>
+<strong>Scenario:</strong> External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be <strong>partially masked</strong>.
+<h4>How to Configure DDM (after data ingestion)</h4>
+Use T-SQL on the SQL analytics endpoint:
+<pre><code class="language-sql">-- Mask email addresses (shows first letter and domain: j<em>*</em>@zosa.org)
 ALTER TABLE crew
 ALTER COLUMN email ADD MASKED WITH (FUNCTION = 'email()');
-
--- Partial mask on names (shows first and last character: S***a)
+-- Partial mask on names (shows first and last character: S<em>*</em>a)
 ALTER TABLE crew
-ALTER COLUMN full_name ADD MASKED WITH (FUNCTION = 'partial(1,"***",1)');
-
+ALTER COLUMN full_name ADD MASKED WITH (FUNCTION = 'partial(1,&quot;<em>*</em>&quot;,1)');
 -- Default mask on crew IDs (shows XXXX)
 ALTER TABLE crew
-ALTER COLUMN crew_id ADD MASKED WITH (FUNCTION = 'default()');</code></pre>
-      </div>
-
-      <p><strong>What happens:</strong> Users with <code>UNMASK</code> permission see the real data. Everyone else sees the masked version. An external analyst querying crew data would see:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>crew_id</th><th>full_name</th><th>email</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>XXXX</td><td>S***a</td><td>s***@zosa.org</td></tr>
-          <tr><td>XXXX</td><td>M***l</td><td>m***@zosa.org</td></tr>
-        </tbody>
-      </table>
-
-      <p>To grant unmasking to specific users:</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">SQL — Grant Unmask</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-sql">-- Admins can see real data
-GRANT UNMASK TO [ZOSA-Admins];</code></pre>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">DDM vs Other Layers</div>
-        <p>DDM is different from the other layers. It doesn't block access — it <strong>obscures</strong> the actual values. Use it for PII that needs to be present but not readable.</p>
-      </div>
+ALTER COLUMN crew_id ADD MASKED WITH (FUNCTION = 'default()');
+</code></pre>
+<strong>What happens:</strong> Users with <code>UNMASK</code> permission see the real data. Everyone else sees the masked version. An external analyst querying crew data would see:
+| crew_id | full_name | email |
+|---------|-----------|-------|
+| XXXX | S<strong><em>a | s</strong></em>@zosa.org |
+| XXXX | M<strong><em>l | m</strong></em>@zosa.org |
+To grant unmasking to specific users:
+<pre><code class="language-sql">-- Admins can see real data
+GRANT UNMASK TO [ZOSA-Admins];
+</code></pre>
+<strong>🧪 How to verify:</strong> Sign in as <code>zosa.scientist</code> in an InPrivate browser → open the SQL analytics endpoint → run <code>SELECT TOP 5 <em> FROM crew</code> → emails should appear as <code>s</em>**@zosa.org</code>. Then sign in as your admin account → same query → real data appears.
+<strong>💡 Tip:</strong> DDM is different from the other layers. It doesn't block access — it <strong>obscures</strong> the actual values. Use it for PII that needs to be present but not readable.
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">Row-Level Security in Fabric</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-warehouse/column-level-security">Column-Level Security</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-ols">Object-Level Security</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-warehouse/dynamic-data-masking">Dynamic Data Masking</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-security">OneLake Security — Get Started</a></blockquote>
+---
+<h2>🧩 5 — Putting It All Together</h2>
+Here's a summary of which security layer protects what at ZOSA:
+| Data to Protect | Who's Blocked | Security Layer | Where Configured |
+|----------------|---------------|----------------|------------------|
+| Observation data by region | Scientists outside the region | <strong>RLS</strong> | OneLake Security roles |
+| Budget amounts | Non-executive roles | <strong>CLS</strong> | T-SQL <code>DENY</code> on SQL endpoint |
+| Classified missions table | Non-defense personnel | <strong>OLS</strong> | Tabular Editor / XMLA |
+| Crew PII (email, name) | External analysts | <strong>DDM</strong> | T-SQL <code>ALTER COLUMN</code> masking |
+| Workspace access | Unauthorized users | <strong>Workspace Roles</strong> | Workspace → Manage access |
+| Data classification | Policy enforcement | <strong>Sensitivity Labels</strong> | Microsoft Purview |
+| Data discovery & lineage | Shadow data sprawl | <strong>Purview Unified Catalog</strong> | purview.microsoft.com |
+<strong>Key takeaway:</strong> No single layer does it all. Sofia wants defense-in-depth because <strong>each layer covers a different threat vector</strong>. Workspace roles stop unauthorized users from opening the door. RLS/CLS/OLS/DDM stop authorized users from seeing data beyond their need-to-know.
+---
+<h2>✅ Checkpoint</h2>
+Verify you've completed the following:
+<ul><ul><li>[ ] Created 2 test users in Entra ID (<code>zosa.scientist</code> and <code>zosa.executive</code>) and signed in once with each</li></ul>
+<ul><li>[ ] Created 4 Entra ID security groups (<code>ZOSA-Admins</code>, <code>ZOSA-Engineers</code>, <code>ZOSA-Scientists</code>, <code>ZOSA-Executives</code>)</li></ul>
+<ul><li>[ ] Assigned your admin account to <code>ZOSA-Admins</code> + <code>ZOSA-Engineers</code>, test users to <code>ZOSA-Scientists</code> + <code>ZOSA-Executives</code></li></ul>
+<ul><li>[ ] Assigned groups to appropriate workspace roles in ZOSA-Dev, ZOSA-Test, and ZOSA-Prod</li></ul>
+<ul><li>[ ] Sensitivity labels configured and published via policy (Internal default baseline)</li></ul>
+<ul><li>[ ] Endorsement process understood (Promoted vs. Certified)</li></ul>
+<ul><li>[ ] You understand the 4 data security layers: <strong>RLS</strong> (row filter), <strong>CLS</strong> (column deny), <strong>OLS</strong> (object hide), <strong>DDM</strong> (value mask)</li></ul>
+<ul><li>[ ] OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded</li></ul></ul>
+<h3>🧪 How You'll Validate Security (Preview)</h3>
+You've defined the rules — but how do you prove they work? Here's what you'll do once data exists (Modules 04–05):
+| Security Layer | Validation Method |
+|---------------|-------------------|
+| <strong>RLS</strong> | Power BI → <strong>Modeling</strong> → <strong>View as Role</strong> → select <code>Europe_Analysts</code> and confirm only European data appears |
+| <strong>CLS</strong> | Sign in as <code>zosa.scientist</code> in an InPrivate browser → open the SQL analytics endpoint → run <code>SELECT * FROM missions</code> → confirm <code>budget_usd</code> column is missing |
+| <strong>DDM</strong> | Sign in as <code>zosa.scientist</code> → query <code>SELECT <em> FROM crew</code> → confirm emails show as <code>s</em>**@zosa.org</code> |
+| <strong>OLS</strong> | Sign in as <code>zosa.scientist</code> → open the Power BI semantic model → confirm <code>classified_defense_missions</code> table is not visible |
+<strong>⚠️ Note:</strong> We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be <strong>implemented</strong> in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.
+---
+<blockquote>Sofia reviews your security plan and nods slowly. <em>"This is solid. Defense-in-depth, least privilege, everything auditable. I'll sign off on moving forward."</em> She pauses at the door. <em>"Oh, and one more thing — the first data drop from NASA arrives tomorrow. Don't let any of it land unencrypted."</em></blockquote>
+>
+<blockquote>You glance at your plan: data ingestion is next. Time to build the pipelines.</blockquote>
+---
+<a href="01-capacity-and-workspace.md">← Module 01 — Capacity & Workspace Setup</a> | <a href="03-data-ingestion.md">Module 03 — Data Ingestion →</a>
+<a href="../README.md">← Back to README</a>
     </section>
 
-    <!-- CHAPTER 6: Putting It All Together -->
-    <section class="chapter" id="summary">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 6</span>
-        <h2>🧩 Putting It All Together</h2>
-      </div>
-
-      <p>Here's a summary of which security layer protects what at ZOSA:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Data to Protect</th><th>Who's Blocked</th><th>Security Layer</th><th>Where Configured</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Observation data by region</td><td>Scientists outside the region</td><td><strong>RLS</strong></td><td>OneLake Security roles</td></tr>
-          <tr><td>Budget amounts</td><td>Non-executive roles</td><td><strong>CLS</strong></td><td>T-SQL <code>DENY</code> on SQL endpoint</td></tr>
-          <tr><td>Classified missions table</td><td>Non-defense personnel</td><td><strong>OLS</strong></td><td>Tabular Editor / XMLA</td></tr>
-          <tr><td>Crew PII (email, name)</td><td>External analysts</td><td><strong>DDM</strong></td><td>T-SQL <code>ALTER COLUMN</code> masking</td></tr>
-          <tr><td>Workspace access</td><td>Unauthorized users</td><td><strong>Workspace Roles</strong></td><td>Workspace → Manage access</td></tr>
-          <tr><td>Data classification</td><td>Policy enforcement</td><td><strong>Sensitivity Labels</strong></td><td>Microsoft Purview</td></tr>
-          <tr><td>Data discovery &amp; lineage</td><td>Shadow data sprawl</td><td><strong>Purview Unified Catalog</strong></td><td>purview.microsoft.com</td></tr>
-        </tbody>
-      </table>
-
-      <div class="mission-alert info">
-        <div class="alert-title">Key Takeaway</div>
-        <p>No single layer does it all. Sofia wants defense-in-depth because <strong>each layer covers a different threat vector</strong>. Workspace roles stop unauthorized users from opening the door. RLS/CLS/OLS/DDM stop authorized users from seeing data beyond their need-to-know.</p>
-      </div>
-    </section>
-
-    <!-- CHECKPOINT -->
-    <section class="chapter" id="checkpoint">
-      <div class="checkpoint">
-        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 02 Complete</div>
-        <p>Verify you've completed the following:</p>
-        <ul>
-          <li>Created 4 Entra ID security groups (<code>ZOSA-Admins</code>, <code>ZOSA-Engineers</code>, <code>ZOSA-Scientists</code>, <code>ZOSA-Executives</code>)</li>
-          <li>Assigned groups to appropriate workspace roles in ZOSA-Dev, ZOSA-Test, and ZOSA-Prod</li>
-          <li>Sensitivity labels configured and applied to workspaces (Confidential baseline)</li>
-          <li>Endorsement process understood (Promoted vs. Certified)</li>
-          <li>You understand the 4 data security layers: <strong>RLS</strong> (row filter), <strong>CLS</strong> (column deny), <strong>OLS</strong> (object hide), <strong>DDM</strong> (value mask)</li>
-          <li>OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded</li>
-        </ul>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Implementation Note</div>
-        <p>We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be <strong>implemented</strong> in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.</p>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👩‍💼</div>
-        <div class="comms-body">
-          <div class="comms-name">Sofia Lindqvist</div>
-          <div class="comms-role">Chief Information Security Officer</div>
-          <div class="comms-text">"This is solid. Defense-in-depth, least privilege, everything auditable. I'll sign off on moving forward." She pauses at the door. "Oh, and one more thing — the first data drop from NASA arrives tomorrow. Don't let any of it land unencrypted."</div>
-        </div>
-      </div>
-
-      <p>You glance at your plan: data ingestion is next. Time to build the pipelines.</p>
-    </section>
-
-    <!-- Module Navigation -->
+    <!-- Navigation -->
     <nav class="module-nav">
-      <a href="01-capacity.html" class="prev">
-        <span class="nav-label">← Previous</span>
-        <span class="nav-title">Module 01: Capacity &amp; Workspace Setup</span>
-      </a>
-      <a href="03-ingestion.html" class="next">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">Module 03: Data Ingestion</span>
-      </a>
+      
+        <a href="01-capacity.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 01: Capacity & Workspace</span>
+        </a>
+      
+        <a href="03-ingestion.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 03: Data Ingestion</span>
+        </a>
     </nav>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
   </footer>
 
   <!-- Scripts -->
   <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
   <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
   <script src="../assets/vendor/prism-bash.min.js"></script>
-  <script src="../assets/vendor/prism-javascript.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/storyboard.js"></script>
   <script src="../js/code-blocks.js"></script>

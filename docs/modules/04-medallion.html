@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 04 — Medallion Lakehouse · Fabric Space Lab</title>
+  <title>Module 04 — 🏗️ Module 04 — Medallion Lakehouse · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -32,659 +32,434 @@
     </div>
   </header>
 
-  <!-- Mini TOC Sidebar -->
-  <nav class="mini-toc" aria-label="Table of contents">
-    <div class="toc-title">Contents</div>
-    <a href="#top"><span class="toc-dot"></span>Overview</a>
-    <a href="#what-youll-build"><span class="toc-dot"></span>What You'll Build</a>
-    <a href="#medallion-architecture"><span class="toc-dot"></span>Medallion Architecture</a>
-    <a href="#first-notebook"><span class="toc-dot"></span>Create Your First Notebook</a>
-    <a href="#bronze-to-silver"><span class="toc-dot"></span>Bronze → Silver</a>
-    <a href="#silver-to-gold"><span class="toc-dot"></span>Silver → Gold</a>
-    <a href="#incremental-load"><span class="toc-dot"></span>Incremental Load Pattern</a>
-    <a href="#validate"><span class="toc-dot"></span>Validate Your Lakehouse</a>
-    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
-  </nav>
-
   <!-- Main Content -->
   <main class="storyboard-content">
-
-    <!-- HERO -->
     <section class="hero" id="top">
       <div class="hero-overline">Module 04</div>
-      <h1>Medallion Lakehouse</h1>
-      <p class="hero-desc">Transform raw ingested data into a production-ready Medallion Architecture — building 6 Silver tables and 4 Gold tables using PySpark notebooks in Microsoft Fabric.</p>
-      <div class="hero-actions">
-        <a href="#what-youll-build" class="btn btn-primary">▶ Start Lab</a>
-        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
-      </div>
-      <div class="hero-image"><img src="../assets/svg/scenes/medallion-flow.svg" alt="Bronze Silver Gold medallion architecture flow" width="800" height="350" loading="eager"></div>
+      <h1>🏗️ Module 04 — Medallion Lakehouse</h1>
     </section>
 
-    <!-- Dr. Osei Opening Quote -->
-    <section class="chapter" id="what-youll-build">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 1</span>
-        <h2>What You'll Build</h2>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👨‍💻</div>
-        <div class="comms-body">
-          <div class="comms-name">Dr. Kwame Osei</div>
-          <div class="comms-role">Lead Data Scientist</div>
-          <div class="comms-text">"Think of our Bronze data like raw radio signals from deep space. Full of noise, duplicates, and mixed formats. Your job is to process them — filter the noise (Silver), then create the star maps that our scientists can actually use (Gold). That's the Medallion Architecture."</div>
-        </div>
-      </div>
-
-      <p>In this module you'll transform raw ingested data into a production-ready <strong>Medallion Architecture</strong> — the industry-standard pattern for organizing data in a Lakehouse. By the end, you'll have <strong>6 Silver tables</strong> (cleaned) and <strong>4 Gold tables</strong> (aggregated), all queryable from the SQL Analytics Endpoint.</p>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">⏱ Time Estimate</div>
-        <p>45–60 minutes</p>
-      </div>
-    </section>
-
-    <!-- Section 1: Understanding the Medallion Architecture -->
-    <section class="chapter" id="medallion-architecture">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 2</span>
-        <h2>Understanding the Medallion Architecture</h2>
-      </div>
-
-      <p>The Medallion Architecture organizes your data into three progressive layers of quality:</p>
-
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Layer</th>
-            <th>Purpose</th>
-            <th>Characteristics</th>
-            <th>ZOSA Example</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>🥉 <strong>Bronze</strong></td>
-            <td>Raw landing zone</td>
-            <td>Schema-on-read, append-only, exact copy of source</td>
-            <td><code>asteroids_bronze</code> — raw JSON from NASA API</td>
-          </tr>
-          <tr>
-            <td>🥈 <strong>Silver</strong></td>
-            <td>Conformance zone</td>
-            <td>Cleaned, typed, deduplicated, validated. Schema-on-write</td>
-            <td><code>asteroids_silver</code> — parsed dates, cast numerics, no duplicates</td>
-          </tr>
-          <tr>
-            <td>🥇 <strong>Gold</strong></td>
-            <td>Delivery zone</td>
-            <td>Business-ready aggregations and joins. Optimized for consumption</td>
-            <td><code>gold_asteroid_risk</code> — hazard scores, risk categories</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">💡 Fabric Advantage</div>
-        <p>All three layers live as <strong>Delta tables</strong> in the same Lakehouse. No separate storage accounts, no ETL orchestration between zones — just notebooks writing to different tables.</p>
-      </div>
-
-      <h3>Why Medallion?</h3>
-      <ul>
-        <li><strong>Reprocessing safety</strong> — Bronze is your immutable source of truth. If Silver logic changes, just re-run the notebook.</li>
-        <li><strong>Separation of concerns</strong> — Data engineers own Bronze→Silver; analysts own Silver→Gold.</li>
-        <li><strong>Incremental complexity</strong> — Each layer adds value without coupling to the others.</li>
-      </ul>
-    </section>
-
-    <!-- Section 2: Create Your First Notebook -->
-    <section class="chapter" id="first-notebook">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 3</span>
-        <h2>Create Your First Notebook</h2>
-      </div>
-
-      <p>Time to write your first Spark notebook. This is where the real data engineering happens.</p>
-
-      <div class="step-card" id="step-2-1">
-        <div class="step-number">1</div>
-        <div class="step-title">Open the ZOSA-Dev workspace</div>
-        <div class="step-body"><p>Open the <strong>ZOSA-Dev</strong> workspace in Fabric.</p></div>
-      </div>
-
-      <div class="step-card" id="step-2-2">
-        <div class="step-number">2</div>
-        <div class="step-title">Create a new Notebook</div>
-        <div class="step-body"><p>Click <strong>+ New</strong> → <strong>Notebook</strong>.</p></div>
-      </div>
-
-      <div class="step-card" id="step-2-3">
-        <div class="step-number">3</div>
-        <div class="step-title">Name the notebook</div>
-        <div class="step-body"><p>Name it: <code>01-bronze-to-silver</code></p></div>
-      </div>
-
-      <div class="step-card" id="step-2-4">
-        <div class="step-number">4</div>
-        <div class="step-title">Attach the Lakehouse</div>
-        <div class="step-body"><p>In the notebook toolbar, click <strong>Add Lakehouse</strong> → select <code>lh_zosa</code>.</p></div>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">💡 What just happened?</div>
-        <p>You now have a PySpark notebook connected to your Lakehouse. Fabric provides a managed Spark pool — no cluster configuration needed. The <code>spark</code> session object is pre-initialized, and all Lakehouse tables are accessible via <code>spark.read.table("lh_zosa.&lt;table_name&gt;")</code>.</p>
-      </div>
-
-      <h3>Notebook Environment Quick Reference</h3>
-
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th>Detail</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Language</strong></td><td>PySpark (Python + Spark)</td></tr>
-          <tr><td><strong>Spark pool</strong></td><td>Managed by Fabric — auto-starts, auto-scales</td></tr>
-          <tr><td><strong>Table access</strong></td><td><code>spark.read.table("lh_zosa.&lt;table&gt;")</code></td></tr>
-          <tr><td><strong>File access</strong></td><td><code>Files/</code> folder in the Lakehouse</td></tr>
-          <tr><td><strong>Cell execution</strong></td><td><code>Shift+Enter</code> to run current cell</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Section 3: Bronze → Silver Transformations -->
-    <section class="chapter" id="bronze-to-silver">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 4</span>
-        <h2>Bronze → Silver Transformations</h2>
-      </div>
-
-      <p>Each Bronze table gets its own cell in the notebook. The pattern is consistent:</p>
-
-      <ol>
-        <li><strong>Read</strong> the Bronze table</li>
-        <li><strong>Deduplicate</strong> on natural keys</li>
-        <li><strong>Cast</strong> columns to proper types</li>
-        <li><strong>Validate</strong> — filter out null keys and invalid values</li>
-        <li><strong>Write</strong> as a Silver Delta table</li>
-      </ol>
-
-      <!-- 3.1 Asteroids -->
-      <h3>3.1 — Asteroids</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 1: Asteroids Bronze → Silver</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 1: Asteroids Bronze → Silver
+    <section class="chapter">
+      <h1>🏗️ Module 04 — Medallion Lakehouse</h1>
+<blockquote>"Think of our Bronze data like raw radio signals from deep space," Dr. Osei explains during the morning standup. "Full of noise, duplicates, and mixed formats. Your job is to process them — filter the noise (Silver), then create the star maps that our scientists can actually use (Gold). That's the Medallion Architecture."</blockquote>
+---
+<h2>🎯 What You'll Build</h2>
+In this module you'll transform raw ingested data into a production-ready <strong>Medallion Architecture</strong> — the industry-standard pattern for organizing data in a Lakehouse. By the end, you'll have <strong>6 Silver tables</strong> (cleaned) and <strong>4 Gold tables</strong> (aggregated), all queryable from the SQL Analytics Endpoint.
+<strong>Time estimate:</strong> 45–60 minutes
+---
+<h2>📐 Section 1 — Understanding the Medallion Architecture</h2>
+The Medallion Architecture organizes your data into three progressive layers of quality:
+!<a href="../assets/diagrams/architecture.md#medallion-lakehouse-flow">Medallion Flow</a>
+| Layer | Purpose | Characteristics | ZOSA Example |
+|-------|---------|-----------------|--------------|
+| 🥉 <strong>Bronze</strong> | Raw landing zone | Schema-on-read, append-only, exact copy of source | <code>asteroids_bronze</code> — raw JSON from NASA API |
+| 🥈 <strong>Silver</strong> | Conformance zone | Cleaned, typed, deduplicated, validated. Schema-on-write | <code>asteroids_silver</code> — parsed dates, cast numerics, no duplicates |
+| 🥇 <strong>Gold</strong> | Delivery zone | Business-ready aggregations and joins. Optimized for consumption | <code>gold_asteroid_risk</code> — hazard scores, risk categories |
+<blockquote>💡 <strong>Fabric advantage:</strong> All three layers live as <strong>Delta tables</strong> in the same Lakehouse. No separate storage accounts, no ETL orchestration between zones — just notebooks writing to different tables.</blockquote>
+<h3>Why Medallion?</h3>
+<ul><ul><li><strong>Reprocessing safety</strong> — Bronze is your immutable source of truth. If Silver logic changes, just re-run the notebook.</li></ul>
+<ul><li><strong>Separation of concerns</strong> — Data engineers own Bronze→Silver; analysts own Silver→Gold.</li></ul>
+<ul><li><strong>Incremental complexity</strong> — Each layer adds value without coupling to the others.</li></ul></ul>
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/onelake/onelake-medallion-lakehouse-architecture">Medallion Architecture</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-overview">Lakehouse & Delta Tables</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-and-delta-tables">Delta Lake Format</a></blockquote>
+---
+<h2>🗒️ Section 2 — Create Your First Notebook</h2>
+Time to write your first Spark notebook. This is where the real data engineering happens.
+<ul><ul><li>Open the <strong>ZOSA-Dev</strong> workspace in Fabric</li></ul>
+<ul><li>Click <strong>+ New item</strong> → <strong>Notebook</strong></li></ul>
+<ul><li>Name it: <code>01-bronze-to-silver</code></li></ul>
+<ul><li>In the notebook toolbar, click <strong>+ Add data items</strong> → <strong>Existing Lakehouse</strong> → select <code>lh_zosa</code></li></ul></ul>
+<blockquote>💡 <strong>What just happened?</strong> You now have a PySpark notebook connected to your Lakehouse. Fabric provides a managed Spark pool — no cluster configuration needed. The <code>spark</code> session object is pre-initialized, and all Lakehouse tables are accessible via <code>spark.read.table("<table_name>")</code>.</blockquote>
+<h3>Notebook Environment Quick Reference</h3>
+| Feature | Detail |
+|---------|--------|
+| <strong>Language</strong> | PySpark (Python + Spark) |
+| <strong>Spark pool</strong> | Managed by Fabric — auto-starts, auto-scales |
+| <strong>Table access</strong> | <code>spark.read.table("<table>")</code> |
+| <strong>File access</strong> | <code>Files/</code> folder in the Lakehouse |
+| <strong>Cell execution</strong> | <code>Shift+Enter</code> to run current cell |
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook">Notebooks in Fabric</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/spark-compute">Spark in Fabric</a></blockquote>
+---
+<h2>🥈 Section 3 — Bronze → Silver Transformations</h2>
+Each Bronze table gets its own cell in the notebook. The pattern is consistent:
+<ul><ul><li><strong>Read</strong> the Bronze table</li></ul>
+<ul><li><strong>Deduplicate</strong> on natural keys</li></ul>
+<ul><li><strong>Cast</strong> columns to proper types</li></ul>
+<ul><li><strong>Validate</strong> — filter out null keys and invalid values</li></ul>
+<ul><li><strong>Write</strong> as a Silver Delta table</li></ul></ul>
+<h3>3.1 — Asteroids</h3>
+<blockquote>⚠️ <strong>Note:</strong> This code assumes <code>asteroids_bronze</code> was created by the <strong>API notebook</strong> (Lab 03, Section 2), which writes columns named <code>is_hazardous</code>, <code>relative_velocity_kph</code>, <code>estimated_diameter_min_m</code>, and <code>estimated_diameter_max_m</code>. If you used the <strong>CSV sample file</strong> instead (via pipeline), the column names differ (<code>is_potentially_hazardous</code>, <code>relative_velocity_kmps</code>, <code>estimated_diameter_min_km</code>, <code>estimated_diameter_max_km</code>). In that case, rename columns before applying the transforms below:</blockquote>
+<blockquote><pre><code class="language-python">&gt; df = df.withColumnRenamed(&quot;is_potentially_hazardous&quot;, &quot;is_hazardous&quot;) \</blockquote>
+&gt;        .withColumnRenamed(&quot;relative_velocity_kmps&quot;, &quot;relative_velocity_kph&quot;) \
+&gt;        .withColumnRenamed(&quot;estimated_diameter_min_km&quot;, &quot;estimated_diameter_min_m&quot;) \
+&gt;        .withColumnRenamed(&quot;estimated_diameter_max_km&quot;, &quot;estimated_diameter_max_m&quot;)
+&gt; </code></pre>
+<pre><code class="language-python"># Cell 1: Asteroids Bronze → Silver
 from pyspark.sql.functions import col, to_date, trim
-
-df = spark.read.table("lh_zosa.asteroids_bronze")
-
+df = spark.read.table(&quot;asteroids_bronze&quot;)
 silver_asteroids = (df
-    .dropDuplicates(["neo_id", "close_approach_date"])
-    .withColumn("close_approach_date", to_date(col("close_approach_date")))
-    .withColumn("miss_distance_au", col("miss_distance_au").cast("double"))
-    .withColumn("miss_distance_km", col("miss_distance_km").cast("double"))
-    .withColumn("relative_velocity_kmps", col("relative_velocity_kmps").cast("double"))
-    .withColumn("estimated_diameter_min_km", col("estimated_diameter_min_km").cast("double"))
-    .withColumn("estimated_diameter_max_km", col("estimated_diameter_max_km").cast("double"))
-    .withColumn("name", trim(col("name")))
-    .filter(col("neo_id").isNotNull())
+    .dropDuplicates([&quot;neo_id&quot;, &quot;close_approach_date&quot;])
+    .withColumn(&quot;close_approach_date&quot;, to_date(col(&quot;close_approach_date&quot;)))
+    .withColumn(&quot;miss_distance_km&quot;, col(&quot;miss_distance_km&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;relative_velocity_kph&quot;, col(&quot;relative_velocity_kph&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;estimated_diameter_min_m&quot;, col(&quot;estimated_diameter_min_m&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;estimated_diameter_max_m&quot;, col(&quot;estimated_diameter_max_m&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;absolute_magnitude&quot;, col(&quot;absolute_magnitude&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;name&quot;, trim(col(&quot;name&quot;)))
+    .filter(col(&quot;neo_id&quot;).isNotNull())
 )
-
-silver_asteroids.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_silver")
-print(f"✅ asteroids_silver: {silver_asteroids.count()} rows")</code></pre>
-      </div>
-
-      <!-- 3.2 Solar Events -->
-      <h3>3.2 — Solar Events</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 2: Solar Events Bronze → Silver</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 2: Solar Events Bronze → Silver
-from pyspark.sql.functions import col, to_timestamp, trim, upper
-
-df = spark.read.table("lh_zosa.solar_events_bronze")
-
+silver_asteroids.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;asteroids_silver&quot;)
+print(f&quot;✅ asteroids_silver: {silver_asteroids.count()} rows&quot;)
+</code></pre>
+<h3>3.2 — Solar Events</h3>
+<pre><code class="language-python"># Cell 2: Solar Events Bronze → Silver
+from pyspark.sql.functions import col, to_timestamp, trim, upper, coalesce, lit
+df = spark.read.table(&quot;solar_events_bronze&quot;)
 silver_solar = (df
-    .dropDuplicates(["event_id"])
-    .withColumn("event_timestamp", to_timestamp(col("event_timestamp")))
-    .withColumn("peak_timestamp", to_timestamp(col("peak_timestamp")))
-    .withColumn("end_timestamp", to_timestamp(col("end_timestamp")))
-    .withColumn("severity", col("severity").cast("int"))
-    .withColumn("event_type", trim(upper(col("event_type"))))
-    .withColumn("latitude", col("latitude").cast("double"))
-    .withColumn("longitude", col("longitude").cast("double"))
-    .filter(col("event_id").isNotNull())
+    .dropDuplicates([&quot;event_id&quot;])
+    .withColumn(&quot;start_time&quot;,
+        coalesce(
+            to_timestamp(col(&quot;start_time&quot;), &quot;yyyy-MM-dd'T'HH:mm'Z'&quot;),
+            to_timestamp(col(&quot;start_time&quot;), &quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;),
+            to_timestamp(col(&quot;start_time&quot;))
+        ))
+    .withColumn(&quot;end_time&quot;,
+        coalesce(
+            to_timestamp(col(&quot;end_time&quot;), &quot;yyyy-MM-dd'T'HH:mm'Z'&quot;),
+            to_timestamp(col(&quot;end_time&quot;), &quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;),
+            to_timestamp(col(&quot;end_time&quot;))
+        ))
+    .withColumn(&quot;event_type&quot;, trim(upper(col(&quot;event_type&quot;))))
+    .withColumn(&quot;class_type&quot;, trim(col(&quot;class_type&quot;)))
+    .withColumn(&quot;source_location&quot;, trim(col(&quot;source_location&quot;)))
+    .withColumn(&quot;note&quot;, trim(col(&quot;note&quot;)))
+    .filter(col(&quot;event_id&quot;).isNotNull())
 )
-
-silver_solar.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.solar_events_silver")
-print(f"✅ solar_events_silver: {silver_solar.count()} rows")</code></pre>
-      </div>
-
-      <!-- 3.3 Exoplanets -->
-      <h3>3.3 — Exoplanets</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 3: Exoplanets Bronze → Silver</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 3: Exoplanets Bronze → Silver
+silver_solar.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;solar_events_silver&quot;)
+print(f&quot;✅ solar_events_silver: {silver_solar.count()} rows&quot;)
+</code></pre>
+<h3>3.3 — Exoplanets</h3>
+<pre><code class="language-python"># Cell 3: Exoplanets Bronze → Silver
 from pyspark.sql.functions import col, trim
-
-df = spark.read.table("lh_zosa.exoplanets_bronze")
-
+df = spark.read.table(&quot;exoplanets_bronze&quot;)
 silver_exoplanets = (df
-    .dropDuplicates(["planet_name"])
-    .withColumn("planet_name", trim(col("planet_name")))
-    .withColumn("discovery_year", col("discovery_year").cast("int"))
-    .withColumn("orbital_period_days", col("orbital_period_days").cast("double"))
-    .withColumn("planet_radius_earth", col("planet_radius_earth").cast("double"))
-    .withColumn("planet_mass_earth", col("planet_mass_earth").cast("double"))
-    .withColumn("equilibrium_temp_k", col("equilibrium_temp_k").cast("double"))
-    .withColumn("distance_ly", col("distance_ly").cast("double"))
-    .filter(col("planet_name").isNotNull())
+    .dropDuplicates([&quot;planet_name&quot;])
+    .withColumn(&quot;planet_name&quot;, trim(col(&quot;planet_name&quot;)))
+    .withColumn(&quot;discovery_year&quot;, col(&quot;discovery_year&quot;).cast(&quot;int&quot;))
+    .withColumn(&quot;orbital_period_days&quot;, col(&quot;orbital_period_days&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;planet_radius_earth&quot;, col(&quot;planet_radius_earth&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;planet_mass_earth&quot;, col(&quot;planet_mass_earth&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;equilibrium_temp_k&quot;, col(&quot;equilibrium_temp_k&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;distance_parsecs&quot;, col(&quot;distance_parsecs&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;distance_ly&quot;, col(&quot;distance_parsecs&quot;) * 3.26156)
+    .filter(col(&quot;planet_name&quot;).isNotNull())
 )
-
-silver_exoplanets.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.exoplanets_silver")
-print(f"✅ exoplanets_silver: {silver_exoplanets.count()} rows")</code></pre>
-      </div>
-
-      <!-- 3.4 Missions -->
-      <h3>3.4 — Missions</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 4: Missions Bronze → Silver</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 4: Missions Bronze → Silver
+silver_exoplanets.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;exoplanets_silver&quot;)
+print(f&quot;✅ exoplanets_silver: {silver_exoplanets.count()} rows&quot;)
+</code></pre>
+<h3>3.4 — Missions</h3>
+<pre><code class="language-python"># Cell 4: Missions Bronze → Silver
 from pyspark.sql.functions import col, to_date, trim, when
-
-df = spark.read.table("lh_zosa.missions_bronze")
-
-valid_statuses = ["Planned", "Active", "Completed", "Cancelled", "On Hold"]
-
+df = spark.read.table(&quot;missions_bronze&quot;)
+valid_statuses = [&quot;Planned&quot;, &quot;Active&quot;, &quot;Completed&quot;, &quot;Cancelled&quot;, &quot;On Hold&quot;, &quot;Failed&quot;]
 silver_missions = (df
-    .dropDuplicates(["mission_id"])
-    .withColumn("mission_name", trim(col("mission_name")))
-    .withColumn("launch_date", to_date(col("launch_date")))
-    .withColumn("end_date", to_date(col("end_date")))
-    .withColumn("budget_usd", col("budget_usd").cast("double"))
-    .withColumn("crew_size", col("crew_size").cast("int"))
-    .withColumn("status",
-        when(col("status").isin(valid_statuses), col("status"))
-        .otherwise("Unknown"))
-    .filter(col("mission_id").isNotNull())
+    .dropDuplicates([&quot;mission_id&quot;])
+    .withColumn(&quot;mission_name&quot;, trim(col(&quot;mission_name&quot;)))
+    .withColumn(&quot;launch_date&quot;, to_date(col(&quot;start_date&quot;)))
+    .withColumn(&quot;end_date&quot;, to_date(col(&quot;end_date&quot;)))
+    .withColumn(&quot;budget_usd&quot;, col(&quot;budget_usd&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;target_object&quot;, trim(col(&quot;target_object&quot;)))
+    .withColumn(&quot;status&quot;,
+        when(col(&quot;status&quot;).isin(valid_statuses), col(&quot;status&quot;))
+        .otherwise(&quot;Unknown&quot;))
+    .filter(col(&quot;mission_id&quot;).isNotNull())
+    .drop(&quot;start_date&quot;)
 )
-
-silver_missions.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.missions_silver")
-print(f"✅ missions_silver: {silver_missions.count()} rows")</code></pre>
-      </div>
-
-      <!-- 3.5 Crew -->
-      <h3>3.5 — Crew</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 5: Crew Bronze → Silver</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 5: Crew Bronze → Silver
-from pyspark.sql.functions import col, to_date, trim, regexp_extract
-
-df = spark.read.table("lh_zosa.crew_bronze")
-
+silver_missions.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;missions_silver&quot;)
+print(f&quot;✅ missions_silver: {silver_missions.count()} rows&quot;)
+</code></pre>
+<h3>3.5 — Crew</h3>
+<pre><code class="language-python"># Cell 5: Crew Bronze → Silver
+from pyspark.sql.functions import col, to_date, trim, split as spark_split
+df = spark.read.table(&quot;crew_bronze&quot;)
 silver_crew = (df
-    .dropDuplicates(["crew_id"])
-    .withColumn("first_name", trim(col("first_name")))
-    .withColumn("last_name", trim(col("last_name")))
-    .withColumn("hire_date", to_date(col("hire_date")))
-    .withColumn("email", trim(col("email")))
-    .withColumn("years_experience", col("years_experience").cast("int"))
-    .filter(col("crew_id").isNotNull())
-    .filter(col("email").rlike("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
+    .dropDuplicates([&quot;crew_id&quot;])
+    .withColumn(&quot;full_name&quot;, trim(col(&quot;full_name&quot;)))
+    .withColumn(&quot;first_name&quot;, trim(spark_split(col(&quot;full_name&quot;), &quot; &quot;).getItem(0)))
+    .withColumn(&quot;last_name&quot;, trim(spark_split(col(&quot;full_name&quot;), &quot; &quot;).getItem(1)))
+    .withColumn(&quot;role&quot;, trim(col(&quot;role&quot;)))
+    .withColumn(&quot;specialty&quot;, trim(col(&quot;specialty&quot;)))
+    .withColumn(&quot;hire_date&quot;, to_date(col(&quot;hire_date&quot;)))
+    .withColumn(&quot;email&quot;, trim(col(&quot;email&quot;)))
+    .withColumn(&quot;clearance_level&quot;, trim(col(&quot;clearance_level&quot;)))
+    .filter(col(&quot;crew_id&quot;).isNotNull())
+    .filter(col(&quot;email&quot;).rlike(&quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$&quot;))
 )
-
-silver_crew.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.crew_silver")
-print(f"✅ crew_silver: {silver_crew.count()} rows")</code></pre>
-      </div>
-
-      <!-- 3.6 Telemetry -->
-      <h3>3.6 — Telemetry</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 6: Telemetry Bronze → Silver</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 6: Telemetry Bronze → Silver
+silver_crew.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;crew_silver&quot;)
+print(f&quot;✅ crew_silver: {silver_crew.count()} rows&quot;)
+</code></pre>
+<h3>3.6 — Telemetry</h3>
+<pre><code class="language-python"># Cell 6: Telemetry Bronze → Silver
 from pyspark.sql.functions import col, to_timestamp, trim, when
-
-df = spark.read.table("lh_zosa.telemetry_bronze")
-
-valid_statuses = ["Nominal", "Warning", "Critical", "Offline", "Maintenance"]
-
+df = spark.read.table(&quot;telemetry_bronze&quot;)
+valid_statuses = [&quot;Nominal&quot;, &quot;Warning&quot;, &quot;Critical&quot;, &quot;Offline&quot;, &quot;Maintenance&quot;, &quot;Online&quot;]
 silver_telemetry = (df
-    .dropDuplicates(["timestamp", "ground_station_id"])
-    .withColumn("timestamp", to_timestamp(col("timestamp")))
-    .withColumn("signal_strength_dbm", col("signal_strength_dbm").cast("double"))
-    .withColumn("noise_floor_dbm", col("noise_floor_dbm").cast("double"))
-    .withColumn("temperature_c", col("temperature_c").cast("double"))
-    .withColumn("humidity_pct", col("humidity_pct").cast("double"))
-    .withColumn("wind_speed_kmh", col("wind_speed_kmh").cast("double"))
-    .withColumn("elevation_angle_deg", col("elevation_angle_deg").cast("double"))
-    .withColumn("ground_station_id", trim(col("ground_station_id")))
-    .withColumn("status",
-        when(col("status").isin(valid_statuses), col("status"))
-        .otherwise("Unknown"))
-    .filter(col("timestamp").isNotNull())
-    .filter(col("ground_station_id").isNotNull())
+    .dropDuplicates([&quot;timestamp&quot;, &quot;ground_station_id&quot;])
+    .withColumn(&quot;timestamp&quot;, to_timestamp(col(&quot;timestamp&quot;)))
+    .withColumn(&quot;signal_strength_dbm&quot;, col(&quot;signal_strength_dbm&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;antenna_azimuth_deg&quot;, col(&quot;antenna_azimuth_deg&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;antenna_elevation_deg&quot;, col(&quot;antenna_elevation_deg&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;data_rate_mbps&quot;, col(&quot;data_rate_mbps&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;cpu_usage_pct&quot;, col(&quot;cpu_usage_pct&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;memory_usage_pct&quot;, col(&quot;memory_usage_pct&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;disk_io_mbps&quot;, col(&quot;disk_io_mbps&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;temperature_celsius&quot;, col(&quot;temperature_celsius&quot;).cast(&quot;double&quot;))
+    .withColumn(&quot;ground_station_id&quot;, trim(col(&quot;ground_station_id&quot;)))
+    .withColumn(&quot;ground_station_name&quot;, trim(col(&quot;ground_station_name&quot;)))
+    .withColumn(&quot;status&quot;,
+        when(col(&quot;status&quot;).isin(valid_statuses), col(&quot;status&quot;))
+        .otherwise(&quot;Unknown&quot;))
+    .filter(col(&quot;timestamp&quot;).isNotNull())
+    .filter(col(&quot;ground_station_id&quot;).isNotNull())
 )
-
-silver_telemetry.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.telemetry_silver")
-print(f"✅ telemetry_silver: {silver_telemetry.count()} rows")</code></pre>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ Important</div>
-        <p>Run each cell sequentially (<code>Shift+Enter</code>). The first cell will take 30–60 seconds as the Spark session starts up. Subsequent cells run much faster.</p>
-      </div>
-    </section>
-
-    <!-- Section 4: Silver → Gold Aggregations -->
-    <section class="chapter" id="silver-to-gold">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 5</span>
-        <h2>Silver → Gold Aggregations</h2>
-      </div>
-
-      <p>Create a new notebook: <strong>+ New</strong> → <strong>Notebook</strong> → name it <code>02-silver-to-gold</code>. Attach to <code>lh_zosa</code> the same way.</p>
-      <p>Gold tables are purpose-built for reporting and analytics. They answer specific business questions.</p>
-
-      <!-- 4.1 gold_asteroid_risk -->
-      <h3>4.1 — gold_asteroid_risk</h3>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">🎯 Business Question</div>
-        <p>Which near-Earth objects pose the greatest risk, and how should we categorize them?</p>
-      </div>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 1: Asteroid Risk Scoring</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 1: Asteroid Risk Scoring
+silver_telemetry.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;telemetry_silver&quot;)
+print(f&quot;✅ telemetry_silver: {silver_telemetry.count()} rows&quot;)
+</code></pre>
+<blockquote>💡 <strong>Tip:</strong> Paste all six cells into the notebook first (use <strong>+ Code</strong> to add new cells), then click <strong>Run all</strong> from the ribbon. The first cell takes 30–60 seconds while the Spark session starts up; the rest execute quickly in sequence. Check the output of each cell for the ✅ success messages and row counts.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-science/data-wrangler">Data Wrangler</a> — for visual, no-code data exploration and transformation in notebooks.</blockquote>
+<h3>Verify Silver Tables</h3>
+After all cells complete, navigate to <code>lh_zosa</code> → expand <strong>Tables</strong>. You should see six new Silver tables alongside your Bronze tables:
+<ul><ul><li><code>asteroids_silver</code></li></ul>
+<ul><li><code>solar_events_silver</code></li></ul>
+<ul><li><code>exoplanets_silver</code></li></ul>
+<ul><li><code>missions_silver</code></li></ul>
+<ul><li><code>crew_silver</code></li></ul>
+<ul><li><code>telemetry_silver</code></li></ul></ul>
+Click on any Silver table to preview the data and confirm that types were cast correctly (e.g., <code>miss_distance_km</code> shows as numeric, <code>close_approach_date</code> as date).
+---
+<h2>🥇 Section 4 — Silver → Gold Aggregations</h2>
+Create a new notebook: <strong>+ New item</strong> → <strong>Notebook</strong> → name it <code>02-silver-to-gold</code>. Click <strong>+ Add data items</strong> → <strong>Existing Lakehouse</strong> → select <code>lh_zosa</code>.
+Gold tables are purpose-built for reporting and analytics. They answer specific business questions.
+<h3>4.1 — gold_asteroid_risk</h3>
+<blockquote>🎯 <strong>Business question:</strong> Which near-Earth objects pose the greatest risk, and how should we categorize them?</blockquote>
+<pre><code class="language-python"># Cell 1: Asteroid Risk Scoring
 from pyspark.sql.functions import col, when, round as spark_round
-
-silver = spark.read.table("lh_zosa.asteroids_silver")
-
+silver = spark.read.table(&quot;asteroids_silver&quot;)
 gold_asteroid_risk = (silver
-    .withColumn("avg_diameter_km",
-        (col("estimated_diameter_min_km") + col("estimated_diameter_max_km")) / 2)
-    .withColumn("hazard_score",
+    .withColumn(&quot;avg_diameter_m&quot;,
+        (col(&quot;estimated_diameter_min_m&quot;) + col(&quot;estimated_diameter_max_m&quot;)) / 2)
+    .withColumn(&quot;hazard_score&quot;,
         spark_round(
-            (1 / (col("miss_distance_au") + 0.001)) *
-            col("relative_velocity_kmps") *
-            col("avg_diameter_km") * 100, 2
+            (1 / (col(&quot;miss_distance_km&quot;) + 1)) *
+            col(&quot;relative_velocity_kph&quot;) *
+            col(&quot;avg_diameter_m&quot;) * 10, 2
         ))
-    .withColumn("risk_category",
-        when(col("hazard_score") &gt; 1000, "Critical")
-        .when(col("hazard_score") &gt; 100, "High")
-        .when(col("hazard_score") &gt; 10, "Medium")
-        .otherwise("Low"))
-    .select("neo_id", "name", "close_approach_date", "miss_distance_au",
-            "relative_velocity_kmps", "avg_diameter_km", "is_potentially_hazardous",
-            "hazard_score", "risk_category")
-    .orderBy(col("hazard_score").desc())
+    .withColumn(&quot;risk_category&quot;,
+        when(col(&quot;hazard_score&quot;) &gt; 15, &quot;Critical&quot;)
+        .when(col(&quot;hazard_score&quot;) &gt; 8, &quot;High&quot;)
+        .when(col(&quot;hazard_score&quot;) &gt; 3, &quot;Medium&quot;)
+        .otherwise(&quot;Low&quot;))
+    .select(&quot;neo_id&quot;, &quot;name&quot;, &quot;close_approach_date&quot;, &quot;miss_distance_km&quot;,
+            &quot;relative_velocity_kph&quot;, &quot;avg_diameter_m&quot;, &quot;is_hazardous&quot;,
+            &quot;hazard_score&quot;, &quot;risk_category&quot;)
+    .orderBy(col(&quot;hazard_score&quot;).desc())
 )
-
-gold_asteroid_risk.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_asteroid_risk")
-print(f"✅ gold_asteroid_risk: {gold_asteroid_risk.count()} rows")</code></pre>
-      </div>
-
-      <!-- 4.2 gold_mission_summary -->
-      <h3>4.2 — gold_mission_summary</h3>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">🎯 Business Question</div>
-        <p>How are missions performing across years, types, and regions?</p>
-      </div>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 2: Mission Summary Aggregation</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 2: Mission Summary Aggregation
+gold_asteroid_risk.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;gold_asteroid_risk&quot;)
+print(f&quot;✅ gold_asteroid_risk: {gold_asteroid_risk.count()} rows&quot;)
+</code></pre>
+<h3>4.2 — gold_mission_summary</h3>
+<blockquote>🎯 <strong>Business question:</strong> How are missions performing, and how do they relate to crew and ground stations?</blockquote>
+<pre><code class="language-python"># Cell 2: Mission Summary (detail-level, one row per mission)
 from pyspark.sql.functions import (
-    col, year, count, sum as spark_sum,
-    round as spark_round, avg as spark_avg
+    col, year, datediff, round as spark_round, when
 )
-
-silver = spark.read.table("lh_zosa.missions_silver")
-
+silver = spark.read.table(&quot;missions_silver&quot;)
 gold_mission_summary = (silver
-    .withColumn("launch_year", year(col("launch_date")))
-    .groupBy("launch_year", "mission_type", "status", "region")
-    .agg(
-        count("*").alias("mission_count"),
-        spark_round(spark_sum("budget_usd"), 2).alias("total_budget_usd"),
-        spark_round(spark_avg("budget_usd"), 2).alias("avg_budget_usd"),
-        spark_sum(col("crew_size")).alias("total_crew")
+    .withColumn(&quot;launch_year&quot;, year(col(&quot;launch_date&quot;)))
+    .withColumn(&quot;duration_days&quot;,
+        when(col(&quot;end_date&quot;).isNotNull(),
+             datediff(col(&quot;end_date&quot;), col(&quot;launch_date&quot;)))
+        .otherwise(None))
+    .withColumn(&quot;budget_category&quot;,
+        when(col(&quot;budget_usd&quot;) &gt; 5000000, &quot;High&quot;)
+        .when(col(&quot;budget_usd&quot;) &gt; 1000000, &quot;Medium&quot;)
+        .otherwise(&quot;Low&quot;))
+    .select(
+        &quot;mission_id&quot;, &quot;mission_name&quot;, &quot;mission_type&quot;, &quot;status&quot;,
+        &quot;priority&quot;, &quot;launch_date&quot;, &quot;end_date&quot;, &quot;launch_year&quot;,
+        &quot;duration_days&quot;, &quot;target_object&quot;,
+        &quot;primary_ground_station_id&quot;, &quot;budget_usd&quot;, &quot;budget_category&quot;,
+        &quot;region&quot;
     )
-    .withColumn("success_rate",
-        spark_round(
-            (col("mission_count") /
-             spark_sum("mission_count").over(
-                 __import__('pyspark.sql', fromlist=['Window']).Window
-                 .partitionBy("launch_year", "mission_type", "region")
-             )) * 100, 1
-        ))
-    .orderBy("launch_year", "mission_type")
+    .orderBy(&quot;launch_date&quot;)
 )
-
-gold_mission_summary.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_mission_summary")
-print(f"✅ gold_mission_summary: {gold_mission_summary.count()} rows")</code></pre>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">💡 Alternative Approach</div>
-        <p>If the Window import feels awkward inline, you can split it into two steps — first compute totals, then join back for the rate. Both are valid.</p>
-      </div>
-
-      <!-- 4.3 gold_solar_activity -->
-      <h3>4.3 — gold_solar_activity</h3>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">🎯 Business Question</div>
-        <p>What's the trend of solar activity over time, and how severe are the events?</p>
-      </div>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 3: Solar Activity Timeline</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 3: Solar Activity Timeline
+gold_mission_summary.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;gold_mission_summary&quot;)
+print(f&quot;✅ gold_mission_summary: {gold_mission_summary.count()} rows&quot;)
+</code></pre>
+<h3>4.3 — gold_solar_activity</h3>
+<blockquote>🎯 <strong>Business question:</strong> What's the trend of solar activity over time, and how severe are the events?</blockquote>
+<pre><code class="language-python"># Cell 3: Solar Activity Timeline
 from pyspark.sql.functions import (
     col, date_trunc, count, avg as spark_avg,
     round as spark_round, max as spark_max,
     sum as spark_sum, when
 )
-
-silver = spark.read.table("lh_zosa.solar_events_silver")
-
+silver = spark.read.table(&quot;solar_events_silver&quot;)
+<h1>Derive severity from class_type if available, otherwise from event_type</h1>
+<h1>NASA DONKI data: Geomagnetic Storms don't have flare classes</h1>
 gold_solar_activity = (silver
-    .withColumn("event_month", date_trunc("month", col("event_timestamp")))
-    .groupBy("event_month", "event_type")
+    .filter(col(&quot;start_time&quot;).isNotNull())
+    .withColumn(&quot;severity&quot;,
+        when(col(&quot;class_type&quot;).startswith(&quot;X&quot;), 5)
+        .when(col(&quot;class_type&quot;).startswith(&quot;M&quot;), 4)
+        .when(col(&quot;class_type&quot;).startswith(&quot;C&quot;), 3)
+        .when(col(&quot;class_type&quot;).startswith(&quot;B&quot;), 2)
+        .when(col(&quot;class_type&quot;).startswith(&quot;A&quot;), 1)
+        .when(col(&quot;event_type&quot;).contains(&quot;STORM&quot;), 4)
+        .when(col(&quot;event_type&quot;).contains(&quot;FLARE&quot;), 3)
+        .when(col(&quot;event_type&quot;).contains(&quot;CME&quot;), 3)
+        .when(col(&quot;event_type&quot;).contains(&quot;RADIATION&quot;), 4)
+        .otherwise(2))
+    .withColumn(&quot;event_month&quot;, date_trunc(&quot;month&quot;, col(&quot;start_time&quot;)))
+    .groupBy(&quot;event_month&quot;, &quot;event_type&quot;)
     .agg(
-        count("*").alias("event_count"),
-        spark_round(spark_avg("severity"), 2).alias("avg_severity"),
-        spark_max("severity").alias("max_severity"),
-        spark_sum(when(col("severity") &gt;= 4, 1).otherwise(0)).alias("high_severity_count"),
-        spark_sum(when(col("severity") &lt; 4, 1).otherwise(0)).alias("low_severity_count")
+        count(&quot;*&quot;).alias(&quot;event_count&quot;),
+        spark_round(spark_avg(&quot;severity&quot;), 2).alias(&quot;avg_severity&quot;),
+        spark_max(&quot;severity&quot;).alias(&quot;max_severity&quot;),
+        spark_sum(when(col(&quot;severity&quot;) &gt;= 4, 1).otherwise(0)).alias(&quot;high_severity_count&quot;),
+        spark_sum(when(col(&quot;severity&quot;) &lt; 4, 1).otherwise(0)).alias(&quot;low_severity_count&quot;)
     )
-    .orderBy("event_month", "event_type")
+    .orderBy(&quot;event_month&quot;, &quot;event_type&quot;)
 )
-
-gold_solar_activity.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_solar_activity")
-print(f"✅ gold_solar_activity: {gold_solar_activity.count()} rows")</code></pre>
-      </div>
-
-      <!-- 4.4 gold_exoplanet_catalog -->
-      <h3>4.4 — gold_exoplanet_catalog</h3>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">🎯 Business Question</div>
-        <p>Which exoplanets are the most Earth-like, and where should ZOSA focus future observations?</p>
-      </div>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Cell 4: Exoplanet Habitability Catalog</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python"># Cell 4: Exoplanet Habitability Catalog
+gold_solar_activity.write.mode(&quot;overwrite&quot;).option(&quot;overwriteSchema&quot;, &quot;true&quot;).format(&quot;delta&quot;).saveAsTable(&quot;gold_solar_activity&quot;)
+print(f&quot;✅ gold_solar_activity: {gold_solar_activity.count()} rows&quot;)
+</code></pre>
+<h3>4.4 — gold_exoplanet_catalog</h3>
+<blockquote>🎯 <strong>Business question:</strong> Which exoplanets are the most Earth-like, and where should ZOSA focus future observations?</blockquote>
+<pre><code class="language-python"># Cell 4: Exoplanet Habitability Catalog
 from pyspark.sql.functions import (
     col, when, abs as spark_abs, round as spark_round,
     row_number
 )
 from pyspark.sql.window import Window
-
-silver = spark.read.table("lh_zosa.exoplanets_silver")
-
-# Simplified Earth Similarity Index (ESI)
-# Based on radius, temperature, and orbital period relative to Earth
-# Earth values: radius=1, temp=255K, orbital_period=365.25 days
+silver = spark.read.table(&quot;exoplanets_silver&quot;)
+<h1>Simplified Earth Similarity Index (ESI)</h1>
+<h1>Based on radius, temperature, and orbital period relative to Earth</h1>
+<h1>Earth values: radius=1, temp=255K, orbital_period=365.25 days</h1>
 gold_exoplanet_catalog = (silver
-    .filter(col("planet_radius_earth").isNotNull())
-    .filter(col("equilibrium_temp_k").isNotNull())
-    .withColumn("radius_similarity",
-        1 - spark_abs(col("planet_radius_earth") - 1) / col("planet_radius_earth"))
-    .withColumn("temp_similarity",
-        1 - spark_abs(col("equilibrium_temp_k") - 255) / col("equilibrium_temp_k"))
-    .withColumn("period_similarity",
-        when(col("orbital_period_days").isNotNull(),
-             1 - spark_abs(col("orbital_period_days") - 365.25) / col("orbital_period_days"))
+    .filter(col(&quot;planet_radius_earth&quot;).isNotNull())
+    .filter(col(&quot;equilibrium_temp_k&quot;).isNotNull())
+    .withColumn(&quot;radius_similarity&quot;,
+        1 - spark_abs(col(&quot;planet_radius_earth&quot;) - 1) / col(&quot;planet_radius_earth&quot;))
+    .withColumn(&quot;temp_similarity&quot;,
+        1 - spark_abs(col(&quot;equilibrium_temp_k&quot;) - 255) / col(&quot;equilibrium_temp_k&quot;))
+    .withColumn(&quot;period_similarity&quot;,
+        when(col(&quot;orbital_period_days&quot;).isNotNull(),
+             1 - spark_abs(col(&quot;orbital_period_days&quot;) - 365.25) / col(&quot;orbital_period_days&quot;))
         .otherwise(0))
-    .withColumn("earth_similarity_index",
+    .withColumn(&quot;earth_similarity_index&quot;,
         spark_round(
-            (col("radius_similarity") + col("temp_similarity") + col("period_similarity")) / 3, 4
+            (col(&quot;radius_similarity&quot;) + col(&quot;temp_similarity&quot;) + col(&quot;period_similarity&quot;)) / 3, 4
         ))
-    .withColumn("habitability_zone",
+    .withColumn(&quot;habitability_zone&quot;,
         when(
-            (col("equilibrium_temp_k").between(180, 310)) &amp;
-            (col("planet_radius_earth").between(0.5, 2.5)),
-            "Habitable Zone"
-        ).otherwise("Outside HZ"))
-    .withColumn("rank",
+            (col(&quot;equilibrium_temp_k&quot;).between(180, 310)) &amp;
+            (col(&quot;planet_radius_earth&quot;).between(0.5, 2.5)),
+            &quot;Habitable Zone&quot;
+        ).otherwise(&quot;Outside HZ&quot;))
+    .withColumn(&quot;rank&quot;,
         row_number().over(
-            Window.orderBy(col("earth_similarity_index").desc())
+            Window.orderBy(col(&quot;earth_similarity_index&quot;).desc())
         ))
-    .select("rank", "planet_name", "host_star", "discovery_year",
-            "discovery_method", "distance_ly", "planet_radius_earth",
-            "planet_mass_earth", "equilibrium_temp_k", "orbital_period_days",
-            "earth_similarity_index", "habitability_zone")
-    .orderBy("rank")
+    .select(&quot;rank&quot;, &quot;planet_name&quot;, &quot;host_star&quot;, &quot;discovery_year&quot;,
+            &quot;discovery_method&quot;, &quot;distance_ly&quot;, &quot;planet_radius_earth&quot;,
+            &quot;planet_mass_earth&quot;, &quot;equilibrium_temp_k&quot;, &quot;orbital_period_days&quot;,
+            &quot;earth_similarity_index&quot;, &quot;habitability_zone&quot;)
+    .orderBy(&quot;rank&quot;)
 )
-
-gold_exoplanet_catalog.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.gold_exoplanet_catalog")
-print(f"✅ gold_exoplanet_catalog: {gold_exoplanet_catalog.count()} rows")</code></pre>
-      </div>
-    </section>
-
-    <!-- Section 5: Incremental Load Pattern -->
-    <section class="chapter" id="incremental-load">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 6</span>
-        <h2>Incremental Load Pattern</h2>
-      </div>
-
-      <p>In this lab we use <strong>full overwrite</strong> (<code>mode("overwrite")</code>) for simplicity. In production, you'd use a <strong>watermark-based incremental pattern</strong> to process only new data.</p>
-
-      <h3>How It Works</h3>
-      <ol>
-        <li>Add a <code>_loaded_at</code> timestamp column when writing Silver tables</li>
-        <li>Track the last successful watermark (max <code>_loaded_at</code> value)</li>
-        <li>On subsequent runs, only process rows where the source timestamp exceeds the watermark</li>
-      </ol>
-
-      <h3>Incremental Pattern Example</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">PySpark — Incremental Load Pattern</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python">from pyspark.sql.functions import col, current_timestamp, max as spark_max
-
-# Read the current watermark (last load time)
+gold_exoplanet_catalog.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;gold_exoplanet_catalog&quot;)
+print(f&quot;✅ gold_exoplanet_catalog: {gold_exoplanet_catalog.count()} rows&quot;)
+</code></pre>
+<h3>4.5 — gold_dim_crew (Dimension)</h3>
+<blockquote>🎯 <strong>Purpose:</strong> A stable dimension table with only the columns needed for reporting — crew identity, role, and assignment.</blockquote>
+<pre><code class="language-python"># Cell 5: Crew Dimension
+from pyspark.sql.functions import col, trim
+silver = spark.read.table(&quot;crew_silver&quot;)
+gold_dim_crew = (silver
+    .select(
+        &quot;crew_id&quot;, &quot;full_name&quot;, &quot;first_name&quot;, &quot;last_name&quot;,
+        &quot;role&quot;, &quot;specialty&quot;, &quot;ground_station_id&quot;, &quot;region&quot;,
+        &quot;clearance_level&quot;
+    )
+    .dropDuplicates([&quot;crew_id&quot;])
+    .orderBy(&quot;crew_id&quot;)
+)
+gold_dim_crew.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;gold_dim_crew&quot;)
+print(f&quot;✅ gold_dim_crew: {gold_dim_crew.count()} rows&quot;)
+</code></pre>
+<h3>4.6 — gold_dim_ground_stations (Dimension)</h3>
+<blockquote>🎯 <strong>Purpose:</strong> A distinct list of ground stations with their attributes — used to relate missions and telemetry.</blockquote>
+<pre><code class="language-python"># Cell 6: Ground Station Dimension
+from pyspark.sql.functions import col, first
+silver = spark.read.table(&quot;telemetry_silver&quot;)
+gold_dim_ground_stations = (silver
+    .groupBy(&quot;ground_station_id&quot;)
+    .agg(
+        first(&quot;ground_station_name&quot;).alias(&quot;ground_station_name&quot;),
+        first(&quot;region&quot;).alias(&quot;region&quot;)
+    )
+    .orderBy(&quot;ground_station_id&quot;)
+)
+gold_dim_ground_stations.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;gold_dim_ground_stations&quot;)
+print(f&quot;✅ gold_dim_ground_stations: {gold_dim_ground_stations.count()} rows&quot;)
+</code></pre>
+<h3>Verify Gold Tables</h3>
+After all cells complete, navigate to <code>lh_zosa</code> → expand <strong>Tables</strong>. You should see six new Gold tables:
+<ul><ul><li><code>gold_asteroid_risk</code></li></ul>
+<ul><li><code>gold_mission_summary</code></li></ul>
+<ul><li><code>gold_solar_activity</code></li></ul>
+<ul><li><code>gold_exoplanet_catalog</code></li></ul>
+<ul><li><code>gold_dim_crew</code></li></ul>
+<ul><li><code>gold_dim_ground_stations</code></li></ul></ul>
+Click on <code>gold_asteroid_risk</code> and verify you see columns like <code>hazard_score</code> and <code>risk_category</code>. Check <code>gold_dim_crew</code> for clean crew identities and <code>gold_dim_ground_stations</code> for a distinct station list.
+---
+<h2>🔄 Section 5 — Incremental Load Pattern</h2>
+In this lab we use <strong>full overwrite</strong> (<code>mode("overwrite")</code>) for simplicity. In production, you'd use a <strong>watermark-based incremental pattern</strong> to process only new data.
+<h3>How It Works</h3>
+<ul><ul><li>Add a <code>_loaded_at</code> timestamp column when writing Silver tables</li></ul>
+<ul><li>Track the last successful watermark (max <code>_loaded_at</code> value)</li></ul>
+<ul><li>On subsequent runs, only process rows where the source timestamp exceeds the watermark</li></ul></ul>
+<h3>Incremental Pattern Example</h3>
+<pre><code class="language-python">from pyspark.sql.functions import col, current_timestamp, max as spark_max
+<h1>Read the current watermark (last load time)</h1>
 try:
-    watermark = (spark.read.table("lh_zosa.asteroids_silver")
-        .select(spark_max("_loaded_at")).collect()[0][0])
+    watermark = (spark.read.table(&quot;asteroids_silver&quot;)
+        .select(spark_max(&quot;_loaded_at&quot;)).collect()[0][0])
 except:
     watermark = None  # First run — process everything
-
-# Read only new Bronze rows
-df = spark.read.table("lh_zosa.asteroids_bronze")
+<h1>Read only new Bronze rows</h1>
+df = spark.read.table(&quot;asteroids_bronze&quot;)
 if watermark:
-    df = df.filter(col("_ingested_at") &gt; watermark)
-
-# Apply Silver transformations...
+    df = df.filter(col(&quot;_ingested_at&quot;) &gt; watermark)
+<h1>Apply Silver transformations...</h1>
 silver = (df
-    .dropDuplicates(["neo_id", "close_approach_date"])
+    .dropDuplicates([&quot;neo_id&quot;, &quot;close_approach_date&quot;])
     # ... (same transformations as before)
-    .withColumn("_loaded_at", current_timestamp())
+    .withColumn(&quot;_loaded_at&quot;, current_timestamp())
 )
-
-# Append instead of overwrite
-silver.write.mode("append").format("delta").saveAsTable("lh_zosa.asteroids_silver")</code></pre>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">⚠️ For This Lab</div>
-        <p>Stick with <code>mode("overwrite")</code>. The incremental pattern is shown here for reference — you'll use it when you operationalize your pipelines in a real project.</p>
-      </div>
-    </section>
-
-    <!-- Section 6: Validate Your Medallion Lakehouse -->
-    <section class="chapter" id="validate">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 7</span>
-        <h2>Validate Your Medallion Lakehouse</h2>
-      </div>
-
-      <p>Open the <strong>SQL Analytics Endpoint</strong> for your Lakehouse and run this validation query:</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">SQL — Medallion Layer Validation</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-sql">-- Medallion Layer Validation
+<h1>Append instead of overwrite</h1>
+silver.write.mode(&quot;append&quot;).format(&quot;delta&quot;).saveAsTable(&quot;asteroids_silver&quot;)
+</code></pre>
+<blockquote>⚠️ <strong>For this lab</strong>, stick with <code>mode("overwrite")</code>. The incremental pattern is shown here for reference — you'll use it when you operationalize your pipelines in a real project.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-notebook-load-data">Incremental Refresh & Load Patterns</a></blockquote>
+---
+<h2>✅ Section 6 — Validate Your Medallion Lakehouse</h2>
+Open the <strong>SQL Analytics Endpoint</strong> for your Lakehouse and run this validation query:
+<pre><code class="language-sql">-- Medallion Layer Validation
 SELECT 'Bronze' AS layer, 'asteroids' AS dataset, COUNT(*) AS rows FROM asteroids_bronze
 UNION ALL SELECT 'Bronze', 'solar_events', COUNT(*) FROM solar_events_bronze
 UNION ALL SELECT 'Bronze', 'exoplanets', COUNT(*) FROM exoplanets_bronze
@@ -701,61 +476,42 @@ UNION ALL SELECT 'Gold', 'asteroid_risk', COUNT(*) FROM gold_asteroid_risk
 UNION ALL SELECT 'Gold', 'mission_summary', COUNT(*) FROM gold_mission_summary
 UNION ALL SELECT 'Gold', 'solar_activity', COUNT(*) FROM gold_solar_activity
 UNION ALL SELECT 'Gold', 'exoplanet_catalog', COUNT(*) FROM gold_exoplanet_catalog
-ORDER BY layer, dataset;</code></pre>
-      </div>
-
-      <p>You should see:</p>
-      <ul>
-        <li><strong>Bronze ≥ Silver</strong> for each dataset (Silver may have fewer rows after deduplication and filtering)</li>
-        <li><strong>Gold</strong> tables with aggregated rows (fewer rows, richer columns)</li>
-        <li><strong>No empty tables</strong> — every layer should have data</li>
-      </ul>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">💡 Pro Tip</div>
-        <p>You can also browse tables visually in the Lakehouse explorer. Click any table to preview its data and schema.</p>
-      </div>
+ORDER BY layer, dataset;
+</code></pre>
+You should see:
+<ul><ul><li><strong>Bronze ≥ Silver</strong> for each dataset (Silver may have fewer rows after deduplication and filtering)</li></ul>
+<ul><li><strong>Gold</strong> tables with aggregated rows (fewer rows, richer columns)</li></ul>
+<ul><li><strong>No empty tables</strong> — every layer should have data</li></ul></ul>
+<blockquote>💡 <strong>Pro tip:</strong> You can also browse tables visually in the Lakehouse explorer. Click any table to preview its data and schema.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-sql-analytics-endpoint">SQL Analytics Endpoint</a></blockquote>
+---
+<h2>🏁 Checkpoint</h2>
+Verify your Medallion Lakehouse is complete:
+<ul><ul><li>[ ] <strong>6 Bronze tables</strong> exist from Module 03 (asteroids, solar_events, exoplanets, missions, crew, telemetry)</li></ul>
+<ul><li>[ ] <strong>6 Silver tables</strong> created — cleaned, typed, deduplicated</li></ul>
+<ul><li>[ ] <strong>4 Gold tables</strong> created — asteroid_risk, mission_summary, solar_activity, exoplanet_catalog</li></ul>
+<ul><li>[ ] Both notebooks (<code>01-bronze-to-silver</code>, <code>02-silver-to-gold</code>) run without errors</li></ul>
+<ul><li>[ ] Gold tables contain meaningful aggregations (hazard scores, summary stats, rankings)</li></ul>
+<ul><li>[ ] You can query all layers from the SQL Analytics Endpoint</li></ul></ul>
+<blockquote>Dr. Osei pulls up the <code>gold_asteroid_risk</code> table on the main screen. "Look at this — every near-Earth object ranked by hazard score, clean and queryable. <em>This</em> is what the science directors have been waiting for." She turns to you. "Now they want dashboards. Time to build the models."</blockquote>
+---
+<strong>Navigation:</strong>
+<a href="03-data-ingestion.md">← Module 03 — Data Ingestion</a> | <a href="05-semantic-model.md">Module 05 — Semantic Model →</a>
+<a href="../README.md">← Back to README</a>
     </section>
 
-    <!-- Checkpoint -->
-    <section class="chapter" id="checkpoint">
-      <div class="chapter-heading">
-        <span class="chapter-label">Checkpoint</span>
-        <h2>🏁 Mission Checkpoint</h2>
-      </div>
-
-      <div class="checkpoint">
-        <h3>Verify your Medallion Lakehouse is complete:</h3>
-        <ul>
-          <li><strong>6 Bronze tables</strong> exist from Module 03 (asteroids, solar_events, exoplanets, missions, crew, telemetry)</li>
-          <li><strong>6 Silver tables</strong> created — cleaned, typed, deduplicated</li>
-          <li><strong>4 Gold tables</strong> created — asteroid_risk, mission_summary, solar_activity, exoplanet_catalog</li>
-          <li>Both notebooks (<code>01-bronze-to-silver</code>, <code>02-silver-to-gold</code>) run without errors</li>
-          <li>Gold tables contain meaningful aggregations (hazard scores, summary stats, rankings)</li>
-          <li>You can query all layers from the SQL Analytics Endpoint</li>
-        </ul>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👨‍💻</div>
-        <div class="comms-body">
-          <div class="comms-name">Dr. Kwame Osei</div>
-          <div class="comms-role">Lead Data Scientist</div>
-          <div class="comms-text">"Look at this — every near-Earth object ranked by hazard score, clean and queryable. <em>This</em> is what the science directors have been waiting for. Now they want dashboards. Time to build the models."</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Module Nav -->
+    <!-- Navigation -->
     <nav class="module-nav">
-      <a href="03-ingestion.html" class="prev">
-        <span class="nav-label">← Previous</span>
-        <span class="nav-title">Module 03: Data Ingestion</span>
-      </a>
-      <a href="05-semantic-model.html" class="next">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">Module 05: Semantic Model</span>
-      </a>
+      
+        <a href="03-ingestion.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 03: Data Ingestion</span>
+        </a>
+      
+        <a href="05-semantic-model.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 05: Semantic Model</span>
+        </a>
     </nav>
   </main>
 
@@ -767,6 +523,9 @@ ORDER BY layer, dataset;</code></pre>
   <script src="../assets/vendor/prism.min.js"></script>
   <script src="../assets/vendor/prism-python.min.js"></script>
   <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/storyboard.js"></script>
   <script src="../js/code-blocks.js"></script>

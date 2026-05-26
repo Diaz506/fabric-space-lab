@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 07 — Real-Time Intelligence — Fabric Space Lab</title>
-  <meta name="description" content="Build a real-time asteroid detection pipeline with Eventhouse, Eventstream, KQL, and Activator alerts.">
+  <title>Module 07 — Module 07 — Real-Time Intelligence · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -33,307 +32,138 @@
     </div>
   </header>
 
-  <!-- Mini TOC -->
-  <nav class="mini-toc" aria-label="Table of contents">
-    <div class="toc-title">Contents</div>
-    <a href="#top"><span class="toc-dot"></span>Mission Briefing</a>
-    <a href="#real-time-hub"><span class="toc-dot"></span>Real-Time Hub</a>
-    <a href="#eventhouse"><span class="toc-dot"></span>Create Eventhouse</a>
-    <a href="#eventstream"><span class="toc-dot"></span>Create Eventstream</a>
-    <a href="#direct-ingestion"><span class="toc-dot"></span>Direct Ingestion</a>
-    <a href="#kql-queries"><span class="toc-dot"></span>KQL Queries</a>
-    <a href="#materialized-views"><span class="toc-dot"></span>Materialized Views</a>
-    <a href="#dashboard"><span class="toc-dot"></span>Real-Time Dashboard</a>
-    <a href="#activator"><span class="toc-dot"></span>Activator Alerts</a>
-    <a href="#hot-cold"><span class="toc-dot"></span>Hot/Cold Pattern</a>
-    <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
-  </nav>
-
   <!-- Main Content -->
   <main class="storyboard-content">
-
-    <!-- HERO -->
     <section class="hero" id="top">
-      <div class="hero-overline">Module 07 · ⏱️ 45–60 minutes</div>
-      <h1>Real-Time Intelligence</h1>
-      <p class="hero-desc">
-        <strong>BREAKING:</strong> Geneva Prime ground station detected a new near-Earth object on an unusual trajectory.
-        Major Nakamura bursts into the data center: <em>"We need real-time alerts. Not tomorrow — NOW.
-        If something comes within 0.05 AU, I want to know within seconds."</em>
-      </p>
-      <div class="hero-actions">
-        <a href="#real-time-hub" class="btn btn-primary">▶ Start Module</a>
-        <a href="#checkpoint" class="btn btn-ghost">Skip to Checkpoint</a>
-      </div>
-    
-      <div class="hero-image"><img src="../assets/svg/scenes/real-time-stream.svg" alt="Real-Time Data Streaming" width="800" height="350" loading="eager"></div>
+      <div class="hero-overline">Module 07</div>
+      <h1>Module 07 — Real-Time Intelligence</h1>
     </section>
 
-    <!-- CHAPTER 1: Real-Time Hub Overview -->
-    <section class="chapter" id="real-time-hub">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 1</span>
-        <h2>🌐 Real-Time Hub Overview</h2>
-      </div>
-
-      <p>The <strong>Real-Time Hub</strong> is Fabric's centralized management surface for all streaming artifacts — Eventstreams, Eventhouse databases, and Activator alerts live here in one place. Think of it as Mission Control for every piece of data that moves in real time.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Explore the Real-Time Hub</div>
-        <div class="step-body">
-          <p>In the Fabric portal, click <strong>Real-Time Hub</strong> in the left navigation pane.</p>
-          <p>Explore the three tabs:</p>
-          <ul>
-            <li><strong>My streams</strong> — Eventstreams you own or have access to.</li>
-            <li><strong>All streams</strong> — Organization-wide streaming sources.</li>
-            <li><strong>Alerts</strong> — Active Activator rules and their status.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Single Pane of Glass</div>
-        <p>As you build artifacts in this module, return to the Real-Time Hub to see them appear automatically. It is the single pane of glass for everything real-time.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 2: Create an Eventhouse -->
-    <section class="chapter" id="eventhouse">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 2</span>
-        <h2>🏠 Create an Eventhouse</h2>
-      </div>
-
-      <p>An <strong>Eventhouse</strong> is Fabric's real-time analytics engine, optimized for time-series and log data. It delivers sub-second query performance using the Kusto Query Language (KQL). Inside an Eventhouse you create one or more KQL databases to organize your data.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Create the Eventhouse</div>
-        <div class="step-body">
-          <ol>
-            <li>Navigate to your <strong>ZOSA</strong> workspace.</li>
-            <li>Click <strong>+ New item</strong> → select <strong>Eventhouse</strong>.</li>
-            <li>Name it: <code>zosa_eventhouse</code> → click <strong>Create</strong>.</li>
-            <li>Once the Eventhouse opens, a default KQL database is created automatically. Rename it to <code>asteroid_detections</code> (or create a new one with that name).</li>
-            <li>Confirm the database appears under your Eventhouse in the workspace list.</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="mission-alert info">
-        <div class="alert-title">Why Eventhouse?</div>
-        <p>Traditional Lakehouse queries run in seconds to minutes. Eventhouse returns results in <em>milliseconds</em> — essential when Major Nakamura wants to know about a close approach <em>now</em>, not after the next Spark job finishes.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 3: Create an Eventstream -->
-    <section class="chapter" id="eventstream">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 3</span>
-        <h2>📡 Create an Eventstream</h2>
-      </div>
-
-      <p>An <strong>Eventstream</strong> is a no-code streaming pipeline that captures, transforms, and routes real-time events. For this lab you will simulate live asteroid detections using a Custom App source.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Create the Eventstream</div>
-        <div class="step-body">
-          <ol>
-            <li>In your workspace, click <strong>+ New item</strong> → select <strong>Eventstream</strong>.</li>
-            <li>Name it: <code>asteroid_feed</code> → click <strong>Create</strong>.</li>
-            <li>In the Eventstream canvas, click <strong>New source</strong> → <strong>Custom App</strong>.</li>
-            <li>Copy the <strong>connection string / endpoint URL</strong> shown — you will need it for the simulator script below.</li>
-          </ol>
-        </div>
-      </div>
-
-      <h3>Simulator Script</h3>
-      <p>Create a Python file <code>simulate_detections.py</code> on your local machine and run it while you work through the rest of this module:</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">simulate_detections.py</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-python">import requests
-import json
-import time
-import random
-from datetime import datetime
-
-# Paste the connection string from Eventstream Custom App source
-ENDPOINT = "YOUR_EVENTSTREAM_ENDPOINT"
-
-OBJECTS = ["2024 XR1", "2025 AB3", "2024 QZ7", "2025 KN9", "2024 VT2"]
-STATIONS = ["GS-01", "GS-03", "GS-06", "GS-11"]
-
-print("🚀 Asteroid detection simulator started — Ctrl+C to stop")
-
-while True:
-    event = {
-        "detection_id": f"DET-{random.randint(10000, 99999)}",
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-        "object_name": random.choice(OBJECTS),
-        "miss_distance_au": round(random.uniform(0.01, 0.5), 4),
-        "velocity_kmps": round(random.uniform(5.0, 35.0), 2),
-        "estimated_diameter_km": round(random.uniform(0.01, 2.0), 3),
-        "ground_station_id": random.choice(STATIONS),
-        "is_potentially_hazardous": random.random() &lt; 0.3,
-    }
-    try:
-        resp = requests.post(ENDPOINT, json=event)
-        status = "✅" if resp.status_code &lt; 300 else f"⚠️ {resp.status_code}"
-        print(f"{status} Sent {event['detection_id']} — {event['object_name']} at {event['miss_distance_au']} AU")
-    except Exception as e:
-        print(f"❌ Error: {e}")
-    time.sleep(5)</code></pre>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Important</div>
-        <p>Replace <code>YOUR_EVENTSTREAM_ENDPOINT</code> with the actual endpoint URL copied from step 4. Keep the script running in a terminal for the remainder of this module.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 4: Direct Ingestion to Eventhouse -->
-    <section class="chapter" id="direct-ingestion">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 4</span>
-        <h2>🔗 Direct Ingestion to Eventhouse</h2>
-      </div>
-
-      <p>With <strong>direct ingestion</strong>, the Eventstream routes raw events straight into your Eventhouse KQL database — no intermediate Lakehouse or transformation step required.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Configure the Destination</div>
-        <div class="step-body">
-          <ol>
-            <li>Return to the <code>asteroid_feed</code> Eventstream canvas.</li>
-            <li>Click <strong>New destination</strong> → <strong>Eventhouse</strong>.</li>
-            <li>Select:
-              <ul>
-                <li><strong>Workspace:</strong> your ZOSA workspace</li>
-                <li><strong>Eventhouse:</strong> <code>zosa_eventhouse</code></li>
-                <li><strong>KQL Database:</strong> <code>asteroid_detections</code></li>
-              </ul>
-            </li>
-            <li>Under <strong>Table</strong>, choose <strong>Create new</strong> → name it <code>asteroid_detections</code>.</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Review Column Mapping</div>
-        <div class="step-body">
-          <p>Fabric auto-detects the schema from incoming events. Review the column mapping:</p>
-
-          <table class="data-table">
-            <thead>
-              <tr><th>Source field</th><th>Column name</th><th>Data type</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><code>detection_id</code></td><td><code>detection_id</code></td><td><code>string</code></td></tr>
-              <tr><td><code>timestamp</code></td><td><code>timestamp</code></td><td><code>datetime</code></td></tr>
-              <tr><td><code>object_name</code></td><td><code>object_name</code></td><td><code>string</code></td></tr>
-              <tr><td><code>miss_distance_au</code></td><td><code>miss_distance_au</code></td><td><code>real</code></td></tr>
-              <tr><td><code>velocity_kmps</code></td><td><code>velocity_kmps</code></td><td><code>real</code></td></tr>
-              <tr><td><code>estimated_diameter_km</code></td><td><code>estimated_diameter_km</code></td><td><code>real</code></td></tr>
-              <tr><td><code>ground_station_id</code></td><td><code>ground_station_id</code></td><td><code>string</code></td></tr>
-              <tr><td><code>is_potentially_hazardous</code></td><td><code>is_potentially_hazardous</code></td><td><code>bool</code></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">Publish</div>
-        <div class="step-body">
-          <p>Click <strong>Publish</strong>. Within seconds, events from the simulator start landing in the Eventhouse.</p>
-        </div>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Data Preview</div>
-        <p>Click <strong>Data preview</strong> on the destination node to confirm rows are arriving.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 5: KQL Queries -->
-    <section class="chapter" id="kql-queries">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 5</span>
-        <h2>🔍 KQL Queries</h2>
-      </div>
-
-      <p>Open a <strong>KQL Queryset</strong> against your <code>asteroid_detections</code> database to explore the live data.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Create a KQL Queryset</div>
-        <div class="step-body">
-          <ol>
-            <li>In your workspace, click <strong>+ New item</strong> → <strong>KQL Queryset</strong>.</li>
-            <li>Name it <code>asteroid_exploration</code> and connect it to the <code>asteroid_detections</code> database.</li>
-          </ol>
-        </div>
-      </div>
-
-      <h3>Last 10 Detections</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Last 10 Detections</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">asteroid_detections
+    <section class="chapter">
+      <h1>Module 07 — Real-Time Intelligence</h1>
+<blockquote><strong>BREAKING:</strong> Geneva Prime ground station detected a new near-Earth object on an unusual trajectory. Major Nakamura bursts into the data center: <em>"We need real-time alerts. Not tomorrow — NOW. If something comes within 0.05 AU, I want to know within seconds."</em></blockquote>
+<strong>⏱️ Estimated time:</strong> 45–60 minutes
+---
+<h2>🌐 1 — Real-Time Hub Overview</h2>
+The <strong>Real-Time Hub</strong> is Fabric's centralized management surface for all streaming artifacts — Eventstreams, Eventhouse databases, and Activator alerts live here in one place. Think of it as Mission Control for every piece of data that moves in real time.
+<ul><ul><li>In the Fabric portal, click <strong>Real-Time Hub</strong> in the left navigation pane.</li></ul>
+<ul><li>Explore the three tabs:</li></ul></ul>
+   - <strong>My streams</strong> — Eventstreams you own or have access to.
+   - <strong>All streams</strong> — Organization-wide streaming sources.
+   - <strong>Alerts</strong> — Active Activator rules and their status.
+<blockquote>💡 <strong>Tip:</strong> As you build artifacts in this module, return to the Real-Time Hub to see them appear automatically. It is the single pane of glass for everything real-time.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/real-time-hub-overview">Real-Time Hub Overview</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview">Real-Time Intelligence Overview</a></blockquote>
+---
+<h2>🏠 2 — Create an Eventhouse</h2>
+An <strong>Eventhouse</strong> is Fabric's real-time analytics engine, optimized for time-series and log data. It delivers sub-second query performance using the Kusto Query Language (KQL). Inside an Eventhouse you create one or more KQL databases to organize your data.
+<h3>Steps</h3>
+<ul><ul><li>Navigate to your <strong>ZOSA</strong> workspace.</li></ul>
+<ul><li>Click <strong>+ New item</strong> → select <strong>Eventhouse</strong>.</li></ul>
+<ul><li>Name it: <code>zosa_eventhouse</code> → click <strong>Create</strong>.</li></ul>
+<ul><li>Once the Eventhouse opens, a default KQL database is created automatically. Rename it to <code>asteroid_detections</code> (or create a new one with that name).</li></ul>
+<ul><li>Confirm the database appears under your Eventhouse in the workspace list.</li></ul></ul>
+<blockquote>📖 <strong>Why Eventhouse?</strong> Traditional Lakehouse queries run in seconds to minutes. Eventhouse returns results in <em>milliseconds</em> — essential when Major Nakamura wants to know about a close approach <em>now</em>, not after the next Spark job finishes.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-eventhouse">Create an Eventhouse</a></blockquote>
+---
+<h2>📡 3 — Create an Eventstream</h2>
+An <strong>Eventstream</strong> is a no-code streaming pipeline that captures, transforms, and routes real-time events. For this lab you will simulate live asteroid detections using a <strong>Custom endpoint</strong> source.
+<h3>Steps</h3>
+<ul><ul><li>In your workspace, click <strong>+ New item</strong> → select <strong>Eventstream</strong>.</li></ul>
+<ul><li>Name it: <code>asteroid_feed</code> → click <strong>Create</strong>.</li></ul>
+<ul><li>In the Eventstream canvas, click <strong>Add source</strong> → <strong>Custom endpoint</strong> (also called "Custom App").</li></ul>
+<ul><li>Name the source (e.g., <code>simulator_input</code>) → click <strong>Add</strong>.</li></ul>
+<ul><li>Click <strong>Publish</strong> in the toolbar to save the Eventstream — connection strings are only available after publishing.</li></ul>
+<ul><li>Click the Custom endpoint source node → in the details pane, switch to the <strong>Keys</strong> tab → copy the <strong>Event Hub-compatible connection string</strong>.</li></ul></ul>
+<h3>Simulator Script</h3>
+<blockquote>⚠️ <strong>Prerequisites:</strong> Install the Azure Event Hubs SDK first:</blockquote>
+<blockquote><pre><code class="language-bash">&gt; pip install azure-eventhub</blockquote>
+&gt; </code></pre>
+Custom endpoints in Fabric use the <strong>Event Hubs / Kafka protocol</strong> (not HTTP POST). Create a Python file <code>simulate_detections.py</code> on your local machine and run it while you work through the rest of this module:
+<pre><code class="language-python">from azure.eventhub import EventHubProducerClient, EventData
+import json, time, random
+<h1>Paste the Event Hub-compatible connection string from your Custom endpoint source</h1>
+CONNECTION_STR = &quot;&lt;your-custom-endpoint-connection-string&gt;&quot;
+producer = EventHubProducerClient.from_connection_string(CONNECTION_STR)
+OBJECTS = [&quot;2024 XR1&quot;, &quot;2025 AB3&quot;, &quot;2024 QZ7&quot;, &quot;2025 KN9&quot;, &quot;2024 VT2&quot;]
+STATIONS = [&quot;GS-01&quot;, &quot;GS-03&quot;, &quot;GS-06&quot;, &quot;GS-11&quot;]
+print(&quot;🚀 Asteroid detection simulator started — Ctrl+C to stop&quot;)
+try:
+    while True:
+        reading = {
+            &quot;detection_id&quot;: f&quot;DET-{random.randint(10000, 99999)}&quot;,
+            &quot;timestamp&quot;: time.strftime(&quot;%Y-%m-%dT%H:%M:%SZ&quot;, time.gmtime()),
+            &quot;object_name&quot;: random.choice(OBJECTS),
+            &quot;miss_distance_au&quot;: round(random.uniform(0.01, 0.5), 4),
+            &quot;velocity_kmps&quot;: round(random.uniform(5.0, 35.0), 2),
+            &quot;estimated_diameter_km&quot;: round(random.uniform(0.01, 2.0), 3),
+            &quot;ground_station_id&quot;: random.choice(STATIONS),
+            &quot;is_potentially_hazardous&quot;: random.random() &lt; 0.3,
+        }
+        batch = producer.create_batch()
+        batch.add(EventData(json.dumps(reading)))
+        producer.send_batch(batch)
+        print(f&quot;✅ Sent {reading['detection_id']} — {reading['object_name']} at {reading['miss_distance_au']} AU&quot;)
+        time.sleep(5)
+except KeyboardInterrupt:
+    print(&quot;\n🛑 Simulator stopped.&quot;)
+finally:
+    producer.close()
+</code></pre>
+<blockquote>⚠️ <strong>Important:</strong> Replace <code><your-custom-endpoint-connection-string></code> with the actual connection string copied from step 5. The connection string is only available <strong>after publishing</strong> the Eventstream. Keep the script running in a terminal for the remainder of this module.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-manage-an-eventstream">Create and manage an Eventstream</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/add-source-custom-endpoint">Add Custom endpoint source</a></blockquote>
+---
+<h2>🔗 4 — Direct Ingestion to Eventhouse</h2>
+With <strong>direct ingestion</strong>, the Eventstream routes raw events straight into your Eventhouse KQL database — no intermediate Lakehouse or transformation step required.
+<h3>Steps</h3>
+<ul><ul><li>Return to the <code>asteroid_feed</code> Eventstream canvas.</li></ul>
+<ul><li>Click <strong>Add destination</strong> → <strong>Eventhouse</strong>.</li></ul>
+<ul><li>Configure:</li></ul></ul>
+   - <strong>Workspace:</strong> your ZOSA workspace
+   - <strong>Eventhouse:</strong> <code>zosa_eventhouse</code>
+   - <strong>KQL Database:</strong> <code>asteroid_detections</code>
+<ul><ul><li>Under <strong>Table</strong>, choose <strong>Create new</strong> → name it <code>asteroid_detections</code>.</li></ul>
+<ul><li>Fabric auto-detects the schema from incoming events. Review the column mapping:</li></ul></ul>
+   | Source field | Column name | Data type |
+   |---|---|---|
+   | <code>detection_id</code> | <code>detection_id</code> | <code>string</code> |
+   | <code>timestamp</code> | <code>timestamp</code> | <code>datetime</code> |
+   | <code>object_name</code> | <code>object_name</code> | <code>string</code> |
+   | <code>miss_distance_au</code> | <code>miss_distance_au</code> | <code>real</code> |
+   | <code>velocity_kmps</code> | <code>velocity_kmps</code> | <code>real</code> |
+   | <code>estimated_diameter_km</code> | <code>estimated_diameter_km</code> | <code>real</code> |
+   | <code>ground_station_id</code> | <code>ground_station_id</code> | <code>string</code> |
+   | <code>is_potentially_hazardous</code> | <code>is_potentially_hazardous</code> | <code>bool</code> |
+<ul><ul><li>Click <strong>Publish</strong> to activate the ingestion. Within seconds, events from the simulator start landing in the Eventhouse.</li></ul></ul>
+<blockquote>💡 <strong>Tip:</strong> After publishing, click the destination node and select <strong>Data preview</strong> to confirm rows are arriving.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/get-data-eventstream">Ingest data from Eventstream</a></blockquote>
+---
+<h2>🔍 5 — KQL Queries</h2>
+Open a <strong>KQL Queryset</strong> (called <strong>"KQL Query"</strong> in newer Fabric versions) against your <code>asteroid_detections</code> database to explore the live data.
+<ul><ul><li>In your workspace, click <strong>+ New item</strong> → <strong>KQL Queryset</strong> (or <strong>KQL Query</strong>).</li></ul>
+<ul><li>Name it <code>asteroid_exploration</code> and connect it to the <code>asteroid_detections</code> database in <code>zosa_eventhouse</code>.</li></ul></ul>
+<h3>Last 10 Detections</h3>
+<pre><code class="language-kql">asteroid_detections
 | order by timestamp desc
-| take 10</code></pre>
-      </div>
-
-      <h3>Close Approaches (&lt; 0.05 AU) in the Last Hour</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Close Approaches</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">asteroid_detections
+| take 10
+</code></pre>
+<h3>Close Approaches (< 0.05 AU) in the Last Hour</h3>
+<pre><code class="language-kql">asteroid_detections
 | where timestamp &gt; ago(1h)
 | where miss_distance_au &lt; 0.05
 | project timestamp, object_name, miss_distance_au, velocity_kmps
-| order by miss_distance_au asc</code></pre>
-      </div>
-
-      <h3>Detection Rate per 10-Minute Window</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Detection Rate</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">asteroid_detections
+| order by miss_distance_au asc
+</code></pre>
+<h3>Detection Rate per 10-Minute Window</h3>
+<pre><code class="language-kql">asteroid_detections
 | summarize count() by bin(timestamp, 10m)
-| render timechart</code></pre>
-      </div>
-
-      <h3>Hazardous Object Breakdown</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Hazardous Objects</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">asteroid_detections
+| render timechart
+</code></pre>
+<h3>Hazardous Object Breakdown</h3>
+<pre><code class="language-kql">asteroid_detections
 | where timestamp &gt; ago(1h)
 | summarize
     total = count(),
@@ -341,33 +171,17 @@ while True:
     closest = min(miss_distance_au)
   by object_name
 | extend hazard_pct = round(100.0 * hazardous / total, 1)
-| order by closest asc</code></pre>
-      </div>
-
-      <div class="mission-alert info">
-        <div class="alert-title">Why KQL?</div>
-        <p>KQL is purpose-built for time-series analytics. Queries that would take minutes in SQL run in milliseconds here because the Eventhouse indexes data by time automatically.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 6: Materialized Views -->
-    <section class="chapter" id="materialized-views">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 6</span>
-        <h2>📊 Materialized Views</h2>
-      </div>
-
-      <p><strong>Materialized views</strong> pre-compute rolling aggregations inside the Eventhouse. Dashboards read from the view instead of scanning raw data, which dramatically improves performance at scale.</p>
-
-      <p>Run the following command in your KQL Queryset:</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Create Materialized View</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">.create materialized-view HourlyDetectionSummary on table asteroid_detections
+| order by closest asc
+</code></pre>
+<blockquote>📖 <strong>Note:</strong> KQL is purpose-built for time-series analytics. Queries that would take minutes in SQL run in milliseconds here because the Eventhouse indexes data by time automatically.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/kusto/query/">KQL Query Language reference</a></blockquote>
+<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-query-set">Create a KQL Queryset</a></blockquote>
+---
+<h2>📊 6 — Materialized Views</h2>
+<strong>Materialized views</strong> pre-compute rolling aggregations inside the Eventhouse. Dashboards read from the view instead of scanning raw data, which dramatically improves performance at scale.
+Run the following command in your KQL Queryset:
+<pre><code class="language-kql">.create materialized-view HourlyDetectionSummary on table asteroid_detections
 {
     asteroid_detections
     | summarize
@@ -376,181 +190,60 @@ while True:
         min_distance = min(miss_distance_au),
         avg_velocity = avg(velocity_kmps)
       by bin(timestamp, 1h)
-}</code></pre>
-      </div>
-
-      <p>Verify the view is working:</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Verify Materialized View</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">HourlyDetectionSummary
+}
+</code></pre>
+<blockquote>⚠️ <strong>Note:</strong> If you get an error about the table being too large, add the <code>async</code> keyword: <code>.create async materialized-view ...</code>. For this lab with simulated data, the standard command should work fine.</blockquote>
+Verify the view is working:
+<pre><code class="language-kql">HourlyDetectionSummary
 | order by timestamp desc
-| take 24</code></pre>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Incremental Updates</div>
-        <p>Materialized views update incrementally as new data arrives — you do not need to refresh them manually. They are ideal for dashboard tiles that display hourly or daily summaries.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 7: Real-Time Dashboard -->
-    <section class="chapter" id="dashboard">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 7</span>
-        <h2>📈 Real-Time Dashboard</h2>
-      </div>
-
-      <p>Create a live dashboard that Mission Control can display on the big screen.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Create the Dashboard</div>
-        <div class="step-body">
-          <ol>
-            <li>In your workspace, click <strong>+ New item</strong> → <strong>Real-Time Dashboard</strong>.</li>
-            <li>Name it: <code>Asteroid Mission Control</code>.</li>
-            <li>Click <strong>+ Add tile</strong> and connect to the <code>asteroid_detections</code> database.</li>
-          </ol>
-        </div>
-      </div>
-
-      <h3>Suggested Tiles</h3>
-
-      <table class="data-table">
-        <thead>
-          <tr><th>Tile</th><th>KQL Query</th><th>Visual type</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Total Detections (24 h)</strong></td>
-            <td><code>asteroid_detections | where timestamp &gt; ago(24h) | count</code></td>
-            <td>Stat / KPI card</td>
-          </tr>
-          <tr>
-            <td><strong>Closest Approach</strong></td>
-            <td><code>asteroid_detections | where timestamp &gt; ago(1h) | summarize min(miss_distance_au)</code></td>
-            <td>Gauge</td>
-          </tr>
-          <tr>
-            <td><strong>Detection Timeline</strong></td>
-            <td><code>asteroid_detections | summarize count() by bin(timestamp, 10m) | render timechart</code></td>
-            <td>Time chart</td>
-          </tr>
-          <tr>
-            <td><strong>Hazardous Rate</strong></td>
-            <td><code>HourlyDetectionSummary | extend rate = round(100.0 * hazardous_count / total_detections, 1) | project timestamp, rate | render timechart</code></td>
-            <td>Time chart</td>
-          </tr>
-          <tr>
-            <td><strong>Ground Station Activity</strong></td>
-            <td><code>asteroid_detections | where timestamp &gt; ago(1h) | summarize count() by ground_station_id | render piechart</code></td>
-            <td>Pie chart</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Configure Auto Refresh</div>
-        <div class="step-body">
-          <p>After adding all tiles, click <strong>Manage</strong> → <strong>Auto refresh</strong> → set interval to <strong>30 seconds</strong>.</p>
-          <p>Click <strong>Save</strong> and optionally pin the dashboard to the workspace home.</p>
-        </div>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👨‍🚀</div>
-        <div class="comms-body">
-          <div class="comms-name">Major Kenji Nakamura</div>
-          <div class="comms-role">Planetary Defense Director</div>
-          <div class="comms-text">"Drag and resize tiles to create a Mission Control layout. Put the closest-approach gauge front and center — that is the number I care about most."</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHAPTER 8: Activator — Set Alert -->
-    <section class="chapter" id="activator">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 8</span>
-        <h2>🚨 Activator — Set Alert</h2>
-      </div>
-
-      <p><strong>Activator</strong> lets you define automated alerts that fire when real-time data meets a condition. No code required — you configure everything visually.</p>
-
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <div class="step-title">Create the Alert</div>
-        <div class="step-body">
-          <ol>
-            <li>Open your <code>Asteroid Mission Control</code> Real-Time Dashboard.</li>
-            <li>Hover over the <strong>Closest Approach</strong> gauge tile.</li>
-            <li>Click the <strong>ellipsis (…)</strong> menu → <strong>Set alert</strong>.</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <div class="step-title">Configure the Rule</div>
-        <div class="step-body">
-          <table class="data-table">
-            <thead>
-              <tr><th>Setting</th><th>Value</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Condition</strong></td><td><code>min_distance</code> is less than <code>0.05</code></td></tr>
-              <tr><td><strong>Evaluate every</strong></td><td>1 minute</td></tr>
-              <tr><td><strong>Alert name</strong></td><td><code>Close Approach Warning</code></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <div class="step-title">Add Actions</div>
-        <div class="step-body">
-          <ul>
-            <li>✉️ <strong>Send an email</strong> → enter Major Nakamura's email address.</li>
-            <li>💬 <strong>Post to a Teams channel</strong> → select the ZOSA Mission Control channel.</li>
-            <li>📓 <strong>Run a Fabric notebook</strong> → select a notification/logging notebook (optional).</li>
-          </ul>
-          <p>Click <strong>Create</strong>. The Activator item appears in your workspace.</p>
-        </div>
-      </div>
-
-      <div class="mission-alert info">
-        <div class="alert-title">How Activator Works</div>
-        <p>Activator evaluates the condition on the schedule you set. When the condition is true, it executes <em>all</em> configured actions and passes event context (object name, distance, velocity) as dynamic parameters. You can view the alert history and manage all Activator items from the <strong>Real-Time Hub → Alerts</strong> tab.</p>
-      </div>
-
-      <div class="mission-alert warning">
-        <div class="alert-title">Testing Tip</div>
-        <p>In this lab, use your own email to test. You should receive an alert within a few minutes because the simulator generates close approaches (&lt; 0.05 AU) roughly 10% of the time.</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 9: Hot/Cold Data Pattern -->
-    <section class="chapter" id="hot-cold">
-      <div class="chapter-heading">
-        <span class="chapter-label">Chapter 9</span>
-        <h2>❄️ Hot/Cold Data Pattern</h2>
-      </div>
-
-      <p>Real-time and batch analytics work best together. Here is the architecture ZOSA uses:</p>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">Architecture Diagram</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-bash">                        ┌─────────────────────┐
+| take 24
+</code></pre>
+<blockquote>💡 <strong>Tip:</strong> Materialized views update incrementally as new data arrives — you do not need to refresh them manually. They are ideal for dashboard tiles that display hourly or daily summaries.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/kusto/management/materialized-views/materialized-view-overview">Materialized views overview</a></blockquote>
+---
+<h2>📈 7 — Real-Time Dashboard</h2>
+Create a live dashboard that Mission Control can display on the big screen.
+<h3>Steps</h3>
+<ul><ul><li>In your workspace, click <strong>+ New item</strong> → <strong>Real-Time Dashboard</strong>.</li></ul>
+<ul><li>Name it: <code>Asteroid Mission Control</code>.</li></ul>
+<ul><li>Click <strong>+ Add tile</strong> and connect to the <code>asteroid_detections</code> database.</li></ul></ul>
+<h3>Suggested Tiles</h3>
+| Tile | KQL Query | Visual type |
+|---|---|---|
+| <strong>Total Detections (24 h)</strong> | <code>asteroid_detections \| where timestamp > ago(24h) \| count</code> | Stat / KPI card |
+| <strong>Closest Approach</strong> | <code>asteroid_detections \| where timestamp > ago(1h) \| summarize min(miss_distance_au)</code> | Gauge |
+| <strong>Detection Timeline</strong> | <code>asteroid_detections \| summarize count() by bin(timestamp, 10m) \| render timechart</code> | Time chart |
+| <strong>Hazardous Rate</strong> | <code>HourlyDetectionSummary \| extend rate = round(100.0 * hazardous_count / total_detections, 1) \| project timestamp, rate \| render timechart</code> | Time chart |
+| <strong>Ground Station Activity</strong> | <code>asteroid_detections \| where timestamp > ago(1h) \| summarize count() by ground_station_id \| render piechart</code> | Pie chart |
+<ul><ul><li>After adding all tiles, click <strong>Manage</strong> → <strong>Auto refresh</strong> → set interval to <strong>30 seconds</strong>.</li></ul>
+<ul><li>Click <strong>Save</strong> and optionally pin the dashboard to the workspace home.</li></ul></ul>
+<blockquote>🎯 <strong>Pro tip:</strong> Drag and resize tiles to create a Mission Control layout. Put the closest-approach gauge front and center — that is the number Major Nakamura cares about most.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/dashboard-real-time-create">Create a Real-Time Dashboard</a></blockquote>
+---
+<h2>🚨 8 — Data Activator — Set Alert</h2>
+<strong>Data Activator</strong> (formerly Reflex) lets you define automated alerts that fire when real-time data meets a condition. No code required — you configure everything visually.
+<h3>Steps</h3>
+<ul><ul><li>Open your <code>Asteroid Mission Control</code> Real-Time Dashboard.</li></ul>
+<ul><li>Hover over the <strong>Closest Approach</strong> gauge tile.</li></ul>
+<ul><li>Click the <strong>ellipsis (…)</strong> menu → <strong>Set alert</strong>.</li></ul>
+<ul><li>Configure the alert rule:</li></ul></ul>
+   | Setting | Value |
+   |---|---|
+   | <strong>Condition</strong> | <code>min_distance</code> is less than <code>0.05</code> |
+   | <strong>Evaluate every</strong> | 1 minute |
+   | <strong>Alert name</strong> | <code>Close Approach Warning</code> |
+<ul><ul><li>Add <strong>Actions</strong>:</li></ul></ul>
+   - ✉️ <strong>Send an email</strong> → enter Major Nakamura's email address.
+   - 💬 <strong>Post to a Teams channel</strong> → select the ZOSA Mission Control channel.
+   - 📓 <strong>Run a Fabric notebook</strong> → select a notification/logging notebook (optional).
+<ul><ul><li>Click <strong>Create</strong>. The Data Activator item appears in your workspace.</li></ul></ul>
+<blockquote>📖 <strong>How it works:</strong> Data Activator evaluates the condition on the schedule you set. When the condition is true, it executes <em>all</em> configured actions and passes event context (object name, distance, velocity) as dynamic parameters. You can view the alert history and manage all alerts from the <strong>Real-Time Hub → Alerts</strong> tab.</blockquote>
+<blockquote>⚠️ <strong>Important:</strong> In this lab, use your own email to test. You should receive an alert within a few minutes because the simulator generates close approaches (< 0.05 AU) roughly 10% of the time.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction">Data Activator introduction</a></blockquote>
+---
+<h2>❄️ 9 — Hot/Cold Data Pattern</h2>
+Real-time and batch analytics work best together. Here is the architecture ZOSA uses:
+<pre><code class="language-plaintext">                        ┌─────────────────────┐
   Ground Stations ──▶   │   Eventstream        │
                         │   (asteroid_feed)    │
                         └────────┬────────────┘
@@ -568,113 +261,55 @@ while True:
           └─────────────────┘       └──────────────────┘
                     │                          ▲
                     └── Retention policy ──────┘
-                        (auto-export after 30d)</code></pre>
-      </div>
-
-      <h3>Key Concepts</h3>
-
-      <div class="step-card">
-        <div class="step-number">🔥</div>
-        <div class="step-title">Hot Path (Eventhouse)</div>
-        <div class="step-body">
-          <p>Holds the last 30 days of data. Optimized for sub-second KQL queries, live dashboards, and Activator alerts. This is where Mission Control looks when an asteroid is approaching <em>right now</em>.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">❄️</div>
-        <div class="step-title">Cold Path (Lakehouse via OneLake)</div>
-        <div class="step-body">
-          <p>Stores the full historical archive. Queried via the Lakehouse SQL analytics endpoint or Spark notebooks for batch analytics, Power BI semantic models, and ML training. This is where Dr. Osei's data science team runs predictive models.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">🔄</div>
-        <div class="step-title">Automatic Transition</div>
-        <div class="step-body">
-          <p>Configure an Eventhouse <strong>retention policy</strong> to export data older than 30 days to OneLake automatically. Cold data remains queryable — it just moves to a more cost-effective storage tier.</p>
-        </div>
-      </div>
-
-      <h3>Configure Retention (Optional)</h3>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">KQL — Set Retention Policy</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-kusto">// Set 30-day retention on the asteroid_detections table
-.alter table asteroid_detections policy retention</code></pre>
-      </div>
-
-      <div class="code-terminal">
-        <div class="terminal-header">
-          <div class="terminal-dots"><span></span><span></span><span></span></div>
-          <span class="terminal-title">JSON — Retention Policy Body</span>
-          <button class="copy-btn">Copy</button>
-        </div>
-        <pre><code class="language-json">{
-    "SoftDeletePeriod": "30.00:00:00",
-    "Recoverability": "Enabled"
-}</code></pre>
-      </div>
-
-      <div class="mission-alert tip">
-        <div class="alert-title">Dual Destination Pattern</div>
-        <p>In a production scenario, you would also configure a <strong>data export rule</strong> or use the Eventstream's second destination to write simultaneously to both the Eventhouse and the Lakehouse. This gives you real-time <em>and</em> historical coverage from a single stream.</p>
-      </div>
+                        (auto-export after 30d)
+</code></pre>
+<h3>Key Concepts</h3>
+<ul><ul><li><strong>Hot path (Eventhouse):</strong> Holds the last 30 days of data. Optimized for sub-second KQL queries, live dashboards, and Activator alerts. This is where Mission Control looks when an asteroid is approaching <em>right now</em>.</li></ul></ul>
+<ul><ul><li><strong>Cold path (Lakehouse via OneLake):</strong> Stores the full historical archive. Queried via the Lakehouse SQL analytics endpoint or Spark notebooks for batch analytics, Power BI semantic models, and ML training. This is where Dr. Osei's data science team runs predictive models.</li></ul></ul>
+<ul><ul><li><strong>Automatic transition:</strong> Configure an Eventhouse <strong>retention policy</strong> to export data older than 30 days to OneLake automatically. Cold data remains queryable — it just moves to a more cost-effective storage tier.</li></ul></ul>
+<h3>Configure Retention (Optional)</h3>
+<pre><code class="language-kql">// Set 30-day retention on the asteroid_detections table
+.alter table asteroid_detections policy retention </code></pre>{"SoftDeletePeriod": "30.00:00:00", "Recoverability": "Enabled"}<pre><code class="language-plaintext"></code></pre>
+<blockquote>💡 <strong>Tip:</strong> In a production scenario, you would also enable <strong>OneLake availability</strong> on the Eventhouse database (Database details → OneLake availability → <strong>Turn on</strong>). This mirrors Eventhouse data to OneLake as Delta/Parquet, making it queryable from the Lakehouse SQL endpoint and Spark notebooks — bridging the hot/cold paths seamlessly.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/kusto/management/retention-policy">Retention policies</a> | <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/one-logical-copy">OneLake availability</a></blockquote>
+---
+<h2>✅ Checkpoint</h2>
+Verify that all components are working end-to-end:
+<ul><ul><li>[ ] <strong>Eventhouse</strong> <code>zosa_eventhouse</code> created with KQL database <code>asteroid_detections</code></li></ul>
+<ul><li>[ ] <strong>Eventstream</strong> <code>asteroid_feed</code> receiving simulated events from the Python script</li></ul>
+<ul><li>[ ] <strong>KQL queries</strong> return results in the KQL Queryset</li></ul>
+<ul><li>[ ] <strong>Materialized view</strong> <code>HourlyDetectionSummary</code> returns aggregated data</li></ul>
+<ul><li>[ ] <strong>Real-Time Dashboard</strong> <code>Asteroid Mission Control</code> shows live data with 30-second refresh</li></ul>
+<ul><li>[ ] <strong>Activator alert</strong> <code>Close Approach Warning</code> configured (Data Activator) for miss distance < 0.05 AU</li></ul></ul>
+<blockquote>🎉 If all boxes are checked, ZOSA now has a complete real-time detection pipeline — from ground station to Major Nakamura's phone in seconds.</blockquote>
+---
+<h2>🔮 Story Closing</h2>
+<blockquote>The Real-Time Dashboard glows on the main screen in Mission Control. A simulated asteroid detection flashes — <strong>0.03 AU</strong>. Within seconds, Major Nakamura's phone buzzes with the alert. He looks up at the screen, then at you.</blockquote>
+>
+<blockquote><em>"This is exactly what we needed. Now… Dr. Osei wants to know if we can</em> predict <em>which asteroids are dangerous before they get close."</em></blockquote>
+>
+<blockquote><strong>Next up:</strong> Machine learning models in Fabric.</blockquote>
+---
+<strong>Navigation:</strong>
+<a href="06-power-bi-reports.md">← Module 06 — Power BI Reports</a> | <a href="08-data-science.md">Module 08 — Data Science →</a>
+<a href="../README.md">← Back to README</a>
     </section>
 
-    <!-- CHECKPOINT -->
-    <section class="chapter" id="checkpoint">
-      <div class="checkpoint">
-        <div class="checkpoint-title">🎯 Mission Checkpoint — Module 07 Complete</div>
-        <p>Verify that all components are working end-to-end:</p>
-        <ul>
-          <li><strong>Eventhouse</strong> <code>zosa_eventhouse</code> created with KQL database <code>asteroid_detections</code></li>
-          <li><strong>Eventstream</strong> <code>asteroid_feed</code> receiving simulated events from the Python script</li>
-          <li><strong>KQL queries</strong> return results in the KQL Queryset</li>
-          <li><strong>Materialized view</strong> <code>HourlyDetectionSummary</code> returns aggregated data</li>
-          <li><strong>Real-Time Dashboard</strong> <code>Asteroid Mission Control</code> shows live data with 30-second refresh</li>
-          <li><strong>Activator alert</strong> <code>Close Approach Warning</code> configured for miss distance &lt; 0.05 AU</li>
-        </ul>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👨‍🚀</div>
-        <div class="comms-body">
-          <div class="comms-name">Major Kenji Nakamura</div>
-          <div class="comms-role">Planetary Defense Director</div>
-          <div class="comms-text">"The Real-Time Dashboard glows on the main screen. A simulated asteroid detection flashes — 0.03 AU. Within seconds, my phone buzzes with the alert. This is exactly what we needed."</div>
-        </div>
-      </div>
-
-      <div class="comms-panel">
-        <div class="avatar">👨‍💻</div>
-        <div class="comms-body">
-          <div class="comms-name">Dr. Kwame Osei</div>
-          <div class="comms-role">Lead Data Scientist</div>
-          <div class="comms-text">"Now… can we <em>predict</em> which asteroids are dangerous before they get close? I have some ML models in mind. That's Module 08."</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Module Navigation -->
+    <!-- Navigation -->
     <nav class="module-nav">
-      <a href="06-power-bi.html" class="prev">
-        <span class="nav-label">← Previous</span>
-        <span class="nav-title">Module 06: Power BI Reports</span>
-      </a>
-      <a href="08-data-science.html" class="next">
-        <span class="nav-label">Next →</span>
-        <span class="nav-title">Module 08: Data Science &amp; ML</span>
-      </a>
+      
+        <a href="06-power-bi.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 06: Power BI Reports</span>
+        </a>
+      
+        <a href="08-data-science.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 08: Data Science</span>
+        </a>
     </nav>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
   </footer>
@@ -682,9 +317,10 @@ while True:
   <!-- Scripts -->
   <script src="../assets/vendor/prism.min.js"></script>
   <script src="../assets/vendor/prism-python.min.js"></script>
-  <script src="../assets/vendor/prism-kusto.min.js"></script>
-  <script src="../assets/vendor/prism-json.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
   <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/storyboard.js"></script>
   <script src="../js/code-blocks.js"></script>
