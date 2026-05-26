@@ -53,7 +53,10 @@ An **Eventstream** is a no-code streaming pipeline that captures, transforms, an
 3. In the Eventstream canvas, click **Add source** → **Custom endpoint** (also called "Custom App").
 4. Name the source (e.g., `simulator_input`) → click **Add**.
 5. Click **Publish** in the toolbar to save the Eventstream — connection strings are only available after publishing.
-6. Click the Custom endpoint source node → in the details pane, switch to the **Keys** tab → copy the **Event Hub-compatible connection string**.
+6. Click the Custom endpoint source node → in the details pane, switch to the **Keys** tab:
+   - Ensure **Event Hub** protocol is selected at the top
+   - In the left sidebar, click **SAS Key Authentication**
+   - Copy the **Connection string** (starts with `Endpoint=sb://...`)
 
 ### Simulator Script
 
