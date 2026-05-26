@@ -270,7 +270,7 @@ Create a live dashboard that Mission Control can display on the big screen.
 4. After adding all tiles, click **Manage** → **Auto refresh** → set interval to **30 seconds**.
 5. Click **Save** and optionally pin the dashboard to the workspace home.
 
-> 🎯 **Pro tip:** Drag and resize tiles to create a Mission Control layout. Put the closest-approach gauge front and center — that is the number Major Nakamura cares about most.
+> 🎯 **Pro tip:** Drag and resize tiles to create a Mission Control layout. Put the closest-approach stat tile front and center — that is the number Major Nakamura cares about most.
 
 > 📚 **Learn more:** [Create a Real-Time Dashboard](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/dashboard-real-time-create)
 
