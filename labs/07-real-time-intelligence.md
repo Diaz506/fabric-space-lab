@@ -237,7 +237,7 @@ Verify the view is working:
 
 ```kql
 HourlyDetectionSummary
-| order by timestamp desc
+| order by ts desc
 | take 24
 ```
 
