@@ -60,12 +60,15 @@ An **Eventstream** is a no-code streaming pipeline that captures, transforms, an
 
 ### Simulator Script
 
-> ⚠️ **Prerequisites:** Install the Azure Event Hubs SDK first:
-> ```bash
-> pip install azure-eventhub
-> ```
+The simulator runs **on your local machine** (not in Fabric) to send events to the Custom endpoint.
 
-Custom endpoints in Fabric use the **Event Hubs / Kafka protocol** (not HTTP POST). Create a Python file `simulate_detections.py` on your local machine and run it while you work through the rest of this module:
+**Prerequisites:** Open a terminal/PowerShell on your local machine and install the Azure Event Hubs SDK:
+
+```bash
+pip install azure-eventhub
+```
+
+Then create a Python file `simulate_detections.py` on your local machine:
 
 ```python
 from azure.eventhub import EventHubProducerClient, EventData
