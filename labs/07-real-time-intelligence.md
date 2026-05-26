@@ -170,14 +170,13 @@ asteroid_detections
 
 ```kql
 asteroid_detections
-| extend ts = todatetime(timestamp)
-| where ts > ago(1h)
+| where todatetime(timestamp) > ago(1h)
 | where miss_distance_au < 0.05
 | project timestamp, object_name, miss_distance_au, velocity_kmps
 | order by miss_distance_au asc
 ```
 
-> 💡 **Note:** The `extend ts = todatetime(timestamp)` line converts the timestamp string to datetime. If your timestamp column was correctly set to `datetime` type during ingestion, you can remove this line and use `where timestamp > ago(1h)` directly.
+> 💡 **Note:** The `todatetime(timestamp)` function converts the timestamp string to datetime for comparison with `ago(1h)`. If your timestamp column was correctly set to `datetime` type during ingestion, you can use `where timestamp > ago(1h)` directly.
 
 ### Detection Rate per 10-Minute Window
 
@@ -220,14 +219,17 @@ Run the following command in your KQL Queryset:
 .create materialized-view HourlyDetectionSummary on table asteroid_detections
 {
     asteroid_detections
+    | extend ts = todatetime(timestamp)
     | summarize
         total_detections = count(),
         hazardous_count = countif(is_potentially_hazardous),
         min_distance = min(miss_distance_au),
         avg_velocity = avg(velocity_kmps)
-      by bin(timestamp, 1h)
+      by bin(ts, 1h)
 }
 ```
+
+> ⚠️ **Note:** The `extend ts = todatetime(timestamp)` converts the string timestamp to datetime for the `bin()` function. If your timestamp column is already `datetime` type, you can use `by bin(timestamp, 1h)` directly.
 
 > ⚠️ **Note:** If you get an error about the table being too large, add the `async` keyword: `.create async materialized-view ...`. For this lab with simulated data, the standard command should work fine.
 
