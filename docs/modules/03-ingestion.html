@@ -32,6 +32,23 @@
     </div>
   </header>
 
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#section-1-create-the-lakehouse"><span class="toc-dot"></span>Section 1: Create the Lakehouse</a>
+  <a href="#-section-2-ingest-data-from-a-public-api"><span class="toc-dot"></span>🌐 Section 2: Ingest Data from a Public API</a>
+    <a href="#step-1-create-the-ingestion-notebook"><span class="toc-dot"></span>Step 1: Create the Ingestion Notebook</a>
+    <a href="#step-2-wrap-in-a-data-pipeline-production-orchestration"><span class="toc-dot"></span>Step 2: Wrap in a Data Pipeline (Production Orchestration)</a>
+    <a href="#-when-to-use-web-activity-in-pipelines"><span class="toc-dot"></span>💡 When to use Web Activity in pipelines</a>
+  <a href="#-section-3-upload-remaining-data-internal-sources"><span class="toc-dot"></span>📂 Section 3: Upload Remaining Data (Internal Sources)</a>
+  <a href="#-section-4-dataflows-gen2--low-code-ingestion"><span class="toc-dot"></span>🔄 Section 4: Dataflows Gen2 — Low-Code Ingestion</a>
+  <a href="#-section-5-data-pipeline--orchestrated-ingestion"><span class="toc-dot"></span>🔧 Section 5: Data Pipeline — Orchestrated Ingestion</a>
+  <a href="#-section-6-onelake-shortcuts-optional-advanced"><span class="toc-dot"></span>🔗 Section 6: OneLake Shortcuts (Optional Advanced)</a>
+  <a href="#section-7-verify-your-ingestion"><span class="toc-dot"></span>Section 7: Verify Your Ingestion</a>
+  <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+</nav>
+
   <!-- Main Content -->
   <main class="storyboard-content">
     <section class="hero" id="top">
@@ -40,46 +57,57 @@
     </section>
 
     <section class="chapter">
-      <h1>Module 03 — Data Ingestion</h1>
+      <h1 id="module-03--data-ingestion">Module 03 — Data Ingestion</h1>
 <blockquote>First data drop — NASA feeds, internal databases, and OneLake</blockquote>
 <blockquote><em>Your inbox pings at 6 AM: "Data transfer approved — NASA feed credentials attached. Also, IT says the old missions database export is ready. You have 6 datasets hitting your desk today. Time to build the ingestion layer." — Dr. Vasquez</em></blockquote>
----
-<h2>🏗️ Section 1: Create the Lakehouse</h2>
-Your first job is standing up the central storage layer — a <strong>Lakehouse</strong> in your development workspace.
-<ul><ul><li>Navigate to the <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Click <strong>+ New item</strong> → <strong>Lakehouse</strong>.</li></ul>
-<ul><li>Name it <code>lh_zosa</code> and click <strong>Create</strong>.</li></ul></ul>
-You now have a Lakehouse with two areas:
-<ul><ul><li><strong>Files</strong> — for unstructured or raw file uploads (CSVs, Parquet, images, anything).</li></ul>
-<ul><li><strong>Tables</strong> — for managed <strong>Delta Lake</strong> tables that you can query with SQL and Spark.</li></ul></ul>
-<strong>💡 Tip:</strong> Notice that Fabric automatically created a <strong>SQL Analytics Endpoint</strong> alongside your Lakehouse. This is a read-only SQL interface that lets you query your Delta tables using T-SQL — no Spark cluster required. You'll use it at the end of this module to verify your ingestion.
-<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-overview">Lakehouse Overview</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/create-lakehouse">Create a Lakehouse</a></blockquote>
----
-<h2>🌐 Section 2: Ingest Data from a Public API</h2>
-In real-world scenarios, data doesn't arrive as CSV files on your desktop — it comes from <strong>REST APIs, databases, and streaming sources</strong>. Let's ingest asteroid data directly from NASA's Near-Earth Object (NeoWs) API <strong>inside Fabric</strong>, no local tools required.
-You'll follow a two-step approach that mirrors how production teams work:
-<ul><ul><li><strong>Develop</strong> the ingestion logic in a Notebook (flexible, debuggable)</li></ul>
-<ul><li><strong>Productionize</strong> by wrapping it in a Data Pipeline (scheduling, retries, monitoring)</li></ul></ul>
----
-<h3>Step 1: Create the Ingestion Notebook</h3>
-This is your development environment. You write PySpark code that calls the API, parses JSON, and writes directly to a Delta table.
-<ul><ul><li>Navigate to <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Click <strong>+ New item</strong> → <strong>Notebook</strong>.</li></ul>
-<ul><li>Name it <code>nb_api_ingestion</code>.</li></ul>
-<ul><li>Attach the notebook to your lakehouse: in the left panel, click <strong>+ Add data items</strong> → select <strong>Existing Lakehouse</strong> → choose <code>lh_zosa</code>. You should see <strong>Tables</strong> and <strong>Files</strong> folders appear under <code>lh_zosa</code>.</li></ul></ul>
-   > ⚠️ <strong>Common mistake:</strong> Make sure you add a <strong>Lakehouse</strong>, not a Warehouse. A Lakehouse shows <strong>Tables</strong> and <strong>Files</strong> folders. A Warehouse shows <strong>Schemas</strong> and <strong>Security</strong> folders — if you see those, remove it and add the Lakehouse instead.
-<ul><ul><li>Paste this code into a cell and run it:</li></ul></ul>
+<hr>
+<h2 id="section-1-create-the-lakehouse">🏗️ Section 1: Create the Lakehouse</h2>
+<p>Your first job is standing up the central storage layer — a <strong>Lakehouse</strong> in your development workspace.</p>
+<ol>
+  <li>Navigate to the <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Click <strong>+ New item</strong> → <strong>Lakehouse</strong>.</li>
+  <li>Name it <code>lh_zosa</code> and click <strong>Create</strong>.</li>
+</ol>
+<p>You now have a Lakehouse with two areas:</p>
+<ul>
+  <li><strong>Files</strong> — for unstructured or raw file uploads (CSVs, Parquet, images, anything).</li>
+  <li><strong>Tables</strong> — for managed <strong>Delta Lake</strong> tables that you can query with SQL and Spark.</li>
+</ul>
+<p><strong>💡 Tip:</strong> Notice that Fabric automatically created a <strong>SQL Analytics Endpoint</strong> alongside your Lakehouse. This is a read-only SQL interface that lets you query your Delta tables using T-SQL — no Spark cluster required. You'll use it at the end of this module to verify your ingestion.</p>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-overview">Lakehouse Overview</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/create-lakehouse">Create a Lakehouse</a></blockquote>
+<hr>
+<h2 id="-section-2-ingest-data-from-a-public-api">🌐 Section 2: Ingest Data from a Public API</h2>
+<p>In real-world scenarios, data doesn't arrive as CSV files on your desktop — it comes from <strong>REST APIs, databases, and streaming sources</strong>. Let's ingest asteroid data directly from NASA's Near-Earth Object (NeoWs) API <strong>inside Fabric</strong>, no local tools required.</p>
+<p>You'll follow a two-step approach that mirrors how production teams work:</p>
+<ol>
+  <li><strong>Develop</strong> the ingestion logic in a Notebook (flexible, debuggable)</li>
+  <li><strong>Productionize</strong> by wrapping it in a Data Pipeline (scheduling, retries, monitoring)</li>
+</ol>
+<hr>
+<h3 id="step-1-create-the-ingestion-notebook">Step 1: Create the Ingestion Notebook</h3>
+<p>This is your development environment. You write PySpark code that calls the API, parses JSON, and writes directly to a Delta table.</p>
+<ol>
+  <li>Navigate to <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Click <strong>+ New item</strong> → <strong>Notebook</strong>.</li>
+  <li>Name it <code>nb_api_ingestion</code>.</li>
+  <li>Attach the notebook to your lakehouse: in the left panel, click <strong>+ Add data items</strong> → select <strong>Existing Lakehouse</strong> → choose <code>lh_zosa</code>. You should see <strong>Tables</strong> and <strong>Files</strong> folders appear under <code>lh_zosa</code>.</li>
+</ol>
+<blockquote>⚠️ <strong>Common mistake:</strong> Make sure you add a <strong>Lakehouse</strong>, not a Warehouse. A Lakehouse shows <strong>Tables</strong> and <strong>Files</strong> folders. A Warehouse shows <strong>Schemas</strong> and <strong>Security</strong> folders — if you see those, remove it and add the Lakehouse instead.</blockquote>
+<ol>
+  <li>Paste this code into a cell and run it:</li>
+</ol>
 <pre><code class="language-python">import requests
 from pyspark.sql import Row
 from pyspark.sql.types import StructType, StructField, StringType, FloatType, BooleanType, DateType
-<h1>NASA NeoWs API — Near-Earth Objects for the past 7 days</h1>
+
+# NASA NeoWs API — Near-Earth Objects for the past 7 days
 API_KEY = &quot;YOUR_NASA_API_KEY&quot;  # Replace with your key from api.nasa.gov
 url = f&quot;https://api.nasa.gov/neo/rest/v1/feed?start_date=2024-01-01&amp;end_date=2024-01-07&amp;api_key={API_KEY}&quot;
+
 response = requests.get(url)
 data = response.json()
-<h1>Flatten the nested JSON into rows</h1>
+
+# Flatten the nested JSON into rows
 rows = []
 for date, neos in data[&quot;near_earth_objects&quot;].items():
     for neo in neos:
@@ -94,212 +122,248 @@ for date, neos in data[&quot;near_earth_objects&quot;].items():
             estimated_diameter_min_m=float(neo[&quot;estimated_diameter&quot;][&quot;meters&quot;][&quot;estimated_diameter_min&quot;]),
             estimated_diameter_max_m=float(neo[&quot;estimated_diameter&quot;][&quot;meters&quot;][&quot;estimated_diameter_max&quot;])
         ))
-<h1>Create DataFrame and write as Delta table</h1>
+
+# Create DataFrame and write as Delta table
 df = spark.createDataFrame(rows)
 df.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;lh_zosa.asteroids_bronze&quot;)
-print(f&quot;✅ Loaded {df.count()} asteroid records into asteroids_bronze&quot;)
-</code></pre>
-<ul><ul><li>Run the cell — you should see the success message with the row count.</li></ul></ul>
-<strong>What just happened?</strong> You called a live REST API from a Fabric notebook, transformed nested JSON into a flat structure using PySpark, and persisted it directly as a Delta table. No CSV files, no local downloads, no uploads.
----
-<h3>Step 2: Wrap in a Data Pipeline (Production Orchestration)</h3>
-Your notebook works — but in production you can't rely on someone clicking "Run" every morning. You need <strong>scheduling, automatic retries, failure alerts, and run history</strong>. That's what a Data Pipeline provides.
-The pipeline doesn't duplicate the notebook's logic. It simply <strong>calls</strong> the notebook on a schedule and adds operational guardrails around it.
-<ul><ul><li>Navigate to <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Click <strong>+ New item</strong> → <strong>Data Pipeline</strong>.</li></ul>
-<ul><li>Name it <code>pl_api_asteroid_ingestion</code> and click <strong>Create</strong>.</li></ul>
-<ul><li>On the landing page, click <strong>Pipeline activity</strong> (under "Start with a blank canvas"). An activity picker appears — type <code>Notebook</code> in the <strong>Search</strong> box and select <strong>Notebook</strong> to add it to the canvas.</li></ul>
-<ul><li>In the <strong>General</strong> tab, configure:</li></ul></ul>
-   - <strong>Name:</strong> <code>Ingest Asteroids from NASA</code>
-<ul><ul><li>In the <strong>Settings</strong> tab, configure:</li></ul></ul>
-   - <strong>Connection:</strong> <em>(leave as default or select your workspace connection)</em>
-   - <strong>Workspace:</strong> <code>ZOSA-Dev</code>
-   - <strong>Notebook:</strong> select <code>nb_api_ingestion</code> from the dropdown
-   - <strong>Base parameters:</strong> <em>(leave empty for now — the API key is hardcoded in the notebook)</em>
-   - <strong>Advanced settings:</strong> <em>(leave defaults)</em>
-<ul><ul><li>Click <strong>Run</strong> (▷) in the toolbar to execute the pipeline. Monitor the <strong>Output</strong> tab at the bottom — the Notebook activity should complete with a green checkmark. It may take 1–2 minutes as it starts a Spark session.</li></ul>
-<ul><li>Once the pipeline succeeds, navigate to <code>lh_zosa</code> → <strong>Tables</strong> and verify that <code>asteroids_bronze</code> has been refreshed with data.</li></ul></ul>
-<strong>What you gained:</strong> The pipeline wraps your notebook with production capabilities:
-| Capability | How to enable |
-|-----------|---------------|
-| <strong>Run daily at 6 AM</strong> | Click <strong>Schedule</strong> in the toolbar → set a recurrence trigger |
-| <strong>Retry on failure</strong> | Select the Notebook activity → <strong>General</strong> tab → set Retry count to 3 |
-| <strong>Email on failure</strong> | Click <strong>Trigger</strong> → <strong>Add trigger</strong> → configure alerts |
-| <strong>Run history</strong> | Click <strong>View run history</strong> to see all past executions |
-| <strong>Parameterize dates</strong> | Add pipeline parameters and pass them to the notebook via Base parameters |
-<strong>💡 Tip:</strong> To parameterize the date range, add <code>start_date</code> and <code>end_date</code> pipeline parameters, pass them to the notebook via <strong>Base parameters</strong>, and read them in the notebook with <code>notebookutils.notebook.get_arg("start_date")</code>. This lets you backfill historical data or schedule incremental daily pulls.
----
-<h3>💡 When to use Web Activity in pipelines</h3>
-The <strong>Web Activity</strong> is useful in pipelines when you need to:
-<ul><ul><li>Check an API health endpoint before proceeding (with an <strong>If Condition</strong> activity)</li></ul>
-<ul><li>Fetch a short-lived auth token for downstream activities</li></ul>
-<ul><li>Trigger an external webhook or notify another system</li></ul>
-<ul><li>Call a simple REST endpoint where the response drives pipeline control flow</li></ul></ul>
-It's <strong>not</strong> the right tool for ingesting large API responses into a lakehouse — that's what notebooks excel at.
-<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook">Notebooks in Fabric</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-factory/create-first-pipeline-with-sample-data">Data Pipelines</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-factory/web-activity">Web Activity in Pipelines</a></blockquote>
----
-<h2>📂 Section 3: Upload Remaining Data (Internal Sources)</h2>
-The asteroids came from a live API, but ZOSA's remaining datasets come from <strong>internal database exports</strong> — the IT team delivered them as CSVs. This is common in enterprises: some data is API-driven, some arrives as file drops.
-<ul><ul><li>Open <code>lh_zosa</code> and click <strong>Files</strong> in the left Explorer panel.</li></ul>
-<ul><li>Click <strong>Get data</strong> → <strong>Upload files</strong>.</li></ul>
-<ul><li>Browse to the <code>data/sample/</code> folder from your cloned repository and select all CSV files to upload:</li></ul></ul>
-   - <code>crew.csv</code> — astronaut roster
-   - <code>missions.csv</code> — mission manifest
-   - <code>telemetry.csv</code> — spacecraft sensor readings
-   - <code>solar_events.csv</code> — geomagnetic storm events
-   - <code>exoplanets.csv</code> — confirmed exoplanet catalog
-   > ℹ️ You'll also see <code>asteroids.csv</code> in the folder — you can skip it since we already ingested asteroids from the live API in Section 2. Uploading it won't cause problems; it just won't be used.
-<ul><ul><li>Once the upload finishes, expand the <strong>Files</strong> section — you should see your five CSV files listed.</li></ul></ul>
-These are <strong>raw CSVs</strong> sitting in the Files area. They are <em>not</em> yet queryable as tables — think of this as your staging area.
----
-<h2>🔄 Section 4: Dataflows Gen2 — Low-Code Ingestion</h2>
-Let's start with a <strong>low-code</strong> approach. You'll use <strong>Dataflows Gen2</strong> to ingest <code>crew.csv</code> with some light transformations — promoting headers, fixing data types, and filtering bad rows.
-<ul><ul><li>Navigate to the <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Click <strong>+ New item</strong> → <strong>Dataflow Gen2</strong>.</li></ul>
-<ul><li>Name it <code>df_crew_ingestion</code> by clicking on the default name at the top-left of the editor.</li></ul>
-<ul><li>Click <strong>Get Data</strong> → <strong>Text/CSV</strong>.</li></ul>
-<ul><li>Browse to the uploaded <code>crew.csv</code> file in your Lakehouse's Files section via the <strong>OneLake</strong> connector and click <strong>Next</strong>.</li></ul>
-<ul><li>On the <strong>Preview file data</strong> screen, verify the settings:</li></ul></ul>
-   - <strong>File origin:</strong> 65001: Unicode (UTF-8)
-   - <strong>Delimiter:</strong> Comma
-   - <strong>Data type detection:</strong> Based on first 200 rows
-   - Confirm the preview table shows your columns (<code>crew_id</code>, <code>full_name</code>, <code>role</code>, etc.) with headers correctly detected. Click <strong>Create</strong>.
-<ul><ul><li>In the <strong>Power Query</strong> editor, apply these transforms:</li></ul></ul>
-   - Click <strong>Use first row as headers</strong> (on the Home ribbon) to promote the header row.
-   - Select the <code>hire_date</code> column → change its data type to <strong>Date</strong>.
-   - Verify other columns have correct types (text for names, integer for IDs).
-   > 💡 <strong>Note:</strong> If the <strong>Applied steps</strong> panel already shows "Promoted headers" and "Changed column types", Fabric auto-applied these from the preview screen — you can skip the steps above and just verify the results look correct.
-   - Click the dropdown on <code>crew_id</code> → <strong>Remove empty</strong> to filter out any rows with null crew IDs.
-   - In the <strong>Query Settings</strong> panel on the right, rename the query to <code>crew_ingestion</code>.
-<ul><ul><li>Set the data destination:</li></ul></ul>
-   - At the bottom-right of the editor, click the <code>+</code> next to <strong>Data destination</strong> → select <strong>Lakehouse</strong>.
-   - On the <strong>Connect to data destination</strong> screen, leave the connection as "Lakehouse admin (none)" with Organizational account authentication → click <strong>Next</strong>.
-   - On the <strong>Choose destination target</strong> screen, keep <strong>New table</strong> selected.
-   - Change the <strong>Table name</strong> to <code>crew_bronze</code>.
-   - In the left panel, scroll (or use the Search box) to find the <strong>ZOSA-Dev</strong> workspace → expand it → select <code>lh_zosa</code>.
-   - Click <strong>Next</strong> to confirm.
-   - On the <strong>Choose destination settings</strong> screen, verify the column mapping looks correct (all columns mapped 1:1, <code>hire_date</code> as Date). Leave <strong>Use automatic settings</strong> toggled on and click <strong>Save settings</strong>.
-<ul><ul><li>Click <strong>Save & run</strong> (top-left in the Home ribbon) to publish the dataflow and trigger a refresh.</li></ul>
-<ul><li>Verify the run completed successfully:</li></ul></ul>
-    - In the Power Query editor, click <strong>Recent runs</strong> (top ribbon) to check the status — it should show <strong>Succeeded</strong> within a minute or two.
-    - Navigate back to the <strong>ZOSA-Dev</strong> workspace → open <code>lh_zosa</code> → expand <strong>Tables</strong>. You should see a new <code>crew_bronze</code> table with 9 columns and your crew data loaded.
-<strong>What just happened?</strong> Dataflows Gen2 is a <strong>Power Query-based</strong>, low-code ingestion tool. It supports <strong>150+ connectors</strong>, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.
-<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-factory/create-first-dataflow-gen2">Dataflows Gen2</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-overview">Power Query in Dataflows</a></blockquote>
----
-<h2>🔧 Section 5: Data Pipeline — Orchestrated Ingestion</h2>
-One table down, four to go. Instead of creating more dataflows, you'll build a <strong>Data Pipeline</strong> that ingests the remaining CSVs in parallel.
-<ul><ul><li>Navigate to the <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Click <strong>+ New item</strong> → <strong>Data Pipeline</strong>.</li></ul>
-<ul><li>Name it <code>pl_ingest_all_sources</code> and click <strong>Create</strong>.</li></ul>
-<ul><li>On the pipeline landing page ("Build a pipeline to organize and move your data"), click the <strong>Pipeline activity</strong> card under "Start with a blank canvas." A popup appears with an activity list — select <strong>Copy data</strong> (under "Move and transform") to add your first Copy Data activity to the canvas.</li></ul></ul>
-   > 💡 <strong>Alternative approach:</strong> You could create 4 separate Copy Data activities (one per file) on the canvas — that works fine for a small number of files. However, we'll use a <strong>metadata-driven approach</strong> with a ForEach loop, which is more scalable and realistic for production pipelines.
-<ul><ul><li>Delete the Copy Data activity you just added (we'll place it inside a ForEach instead). First, set up a pipeline parameter with the file list:</li></ul></ul>
-   - Click on the pipeline <strong>canvas background</strong> (deselect any activity) → in the bottom panel, click the <strong>Parameters</strong> tab → <strong>+ New</strong>.
-   - Name: <code>files</code>, Type: <strong>Array</strong>, Default value:
-     <pre><code class="language-json">     [
+
+print(f&quot;✅ Loaded {df.count()} asteroid records into asteroids_bronze&quot;)</code></pre>
+<ol>
+  <li>Run the cell — you should see the success message with the row count.</li>
+</ol>
+<p><strong>What just happened?</strong> You called a live REST API from a Fabric notebook, transformed nested JSON into a flat structure using PySpark, and persisted it directly as a Delta table. No CSV files, no local downloads, no uploads.</p>
+<hr>
+<h3 id="step-2-wrap-in-a-data-pipeline-production-orchestration">Step 2: Wrap in a Data Pipeline (Production Orchestration)</h3>
+<p>Your notebook works — but in production you can't rely on someone clicking "Run" every morning. You need <strong>scheduling, automatic retries, failure alerts, and run history</strong>. That's what a Data Pipeline provides.</p>
+<p>The pipeline doesn't duplicate the notebook's logic. It simply <strong>calls</strong> the notebook on a schedule and adds operational guardrails around it.</p>
+<ol>
+  <li>Navigate to <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Click <strong>+ New item</strong> → <strong>Data Pipeline</strong>.</li>
+  <li>Name it <code>pl_api_asteroid_ingestion</code> and click <strong>Create</strong>.</li>
+  <li>On the landing page, click <strong>Pipeline activity</strong> (under "Start with a blank canvas"). An activity picker appears — type <code>Notebook</code> in the <strong>Search</strong> box and select <strong>Notebook</strong> to add it to the canvas.</li>
+  <li>In the <strong>General</strong> tab, configure:</li>
+  <li><strong>Name:</strong> <code>Ingest Asteroids from NASA</code></li>
+  <li>In the <strong>Settings</strong> tab, configure:</li>
+  <li><strong>Connection:</strong> <em>(leave as default or select your workspace connection)</em></li>
+  <li><strong>Workspace:</strong> <code>ZOSA-Dev</code></li>
+  <li><strong>Notebook:</strong> select <code>nb_api_ingestion</code> from the dropdown</li>
+  <li><strong>Base parameters:</strong> <em>(leave empty for now — the API key is hardcoded in the notebook)</em></li>
+  <li><strong>Advanced settings:</strong> <em>(leave defaults)</em></li>
+  <li>Click <strong>Run</strong> (▷) in the toolbar to execute the pipeline. Monitor the <strong>Output</strong> tab at the bottom — the Notebook activity should complete with a green checkmark. It may take 1–2 minutes as it starts a Spark session.</li>
+  <li>Once the pipeline succeeds, navigate to <code>lh_zosa</code> → <strong>Tables</strong> and verify that <code>asteroids_bronze</code> has been refreshed with data.</li>
+</ol>
+<p><strong>What you gained:</strong> The pipeline wraps your notebook with production capabilities:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Capability</th>
+      <th>How to enable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Run daily at 6 AM</strong></td>
+      <td>Click <strong>Schedule</strong> in the toolbar → set a recurrence trigger</td>
+    </tr>
+    <tr>
+      <td><strong>Retry on failure</strong></td>
+      <td>Select the Notebook activity → <strong>General</strong> tab → set Retry count to 3</td>
+    </tr>
+    <tr>
+      <td><strong>Email on failure</strong></td>
+      <td>Click <strong>Trigger</strong> → <strong>Add trigger</strong> → configure alerts</td>
+    </tr>
+    <tr>
+      <td><strong>Run history</strong></td>
+      <td>Click <strong>View run history</strong> to see all past executions</td>
+    </tr>
+    <tr>
+      <td><strong>Parameterize dates</strong></td>
+      <td>Add pipeline parameters and pass them to the notebook via Base parameters</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>💡 Tip:</strong> To parameterize the date range, add <code>start_date</code> and <code>end_date</code> pipeline parameters, pass them to the notebook via <strong>Base parameters</strong>, and read them in the notebook with <code>notebookutils.notebook.get_arg("start_date")</code>. This lets you backfill historical data or schedule incremental daily pulls.</p>
+<hr>
+<h3 id="-when-to-use-web-activity-in-pipelines">💡 When to use Web Activity in pipelines</h3>
+<p>The <strong>Web Activity</strong> is useful in pipelines when you need to:</p>
+<ul>
+  <li>Check an API health endpoint before proceeding (with an <strong>If Condition</strong> activity)</li>
+  <li>Fetch a short-lived auth token for downstream activities</li>
+  <li>Trigger an external webhook or notify another system</li>
+  <li>Call a simple REST endpoint where the response drives pipeline control flow</li>
+</ul>
+<p>It's <strong>not</strong> the right tool for ingesting large API responses into a lakehouse — that's what notebooks excel at.</p>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook">Notebooks in Fabric</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-factory/create-first-pipeline-with-sample-data">Data Pipelines</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-factory/web-activity">Web Activity in Pipelines</a></blockquote>
+<hr>
+<h2 id="-section-3-upload-remaining-data-internal-sources">📂 Section 3: Upload Remaining Data (Internal Sources)</h2>
+<p>The asteroids came from a live API, but ZOSA's remaining datasets come from <strong>internal database exports</strong> — the IT team delivered them as CSVs. This is common in enterprises: some data is API-driven, some arrives as file drops.</p>
+<ol>
+  <li>Open <code>lh_zosa</code> and click <strong>Files</strong> in the left Explorer panel.</li>
+  <li>Click <strong>Get data</strong> → <strong>Upload files</strong>.</li>
+  <li>Browse to the <code>data/sample/</code> folder from your cloned repository and select all CSV files to upload:</li>
+  <li><code>crew.csv</code> — astronaut roster</li>
+  <li><code>missions.csv</code> — mission manifest</li>
+  <li><code>telemetry.csv</code> — spacecraft sensor readings</li>
+  <li><code>solar_events.csv</code> — geomagnetic storm events</li>
+  <li><code>exoplanets.csv</code> — confirmed exoplanet catalog</li>
+</ol>
+<blockquote>ℹ️ You'll also see <code>asteroids.csv</code> in the folder — you can skip it since we already ingested asteroids from the live API in Section 2. Uploading it won't cause problems; it just won't be used.</blockquote>
+<ol>
+  <li>Once the upload finishes, expand the <strong>Files</strong> section — you should see your five CSV files listed.</li>
+</ol>
+<p>These are <strong>raw CSVs</strong> sitting in the Files area. They are <em>not</em> yet queryable as tables — think of this as your staging area.</p>
+<hr>
+<h2 id="-section-4-dataflows-gen2--low-code-ingestion">🔄 Section 4: Dataflows Gen2 — Low-Code Ingestion</h2>
+<p>Let's start with a <strong>low-code</strong> approach. You'll use <strong>Dataflows Gen2</strong> to ingest <code>crew.csv</code> with some light transformations — promoting headers, fixing data types, and filtering bad rows.</p>
+<blockquote>💡 <strong>Note:</strong> If the <strong>Applied steps</strong> panel already shows "Promoted headers" and "Changed column types", Fabric auto-applied these from the preview screen — you can skip the steps above and just verify the results look correct.</blockquote>
+<ol>
+  <li>Navigate to the <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Click <strong>+ New item</strong> → <strong>Dataflow Gen2</strong>.</li>
+  <li>Name it <code>df_crew_ingestion</code> by clicking on the default name at the top-left of the editor.</li>
+  <li>Click <strong>Get Data</strong> → <strong>Text/CSV</strong>.</li>
+  <li>Browse to the uploaded <code>crew.csv</code> file in your Lakehouse's Files section via the <strong>OneLake</strong> connector and click <strong>Next</strong>.</li>
+  <li>On the <strong>Preview file data</strong> screen, verify the settings:</li>
+  <li><strong>File origin:</strong> 65001: Unicode (UTF-8)</li>
+  <li><strong>Delimiter:</strong> Comma</li>
+  <li><strong>Data type detection:</strong> Based on first 200 rows</li>
+  <li>Confirm the preview table shows your columns (<code>crew_id</code>, <code>full_name</code>, <code>role</code>, etc.) with headers correctly detected. Click <strong>Create</strong>.</li>
+  <li>In the <strong>Power Query</strong> editor, apply these transforms:</li>
+  <li>Click <strong>Use first row as headers</strong> (on the Home ribbon) to promote the header row.</li>
+  <li>Select the <code>hire_date</code> column → change its data type to <strong>Date</strong>.</li>
+  <li>Verify other columns have correct types (text for names, integer for IDs).</li>
+  <li>Click the dropdown on <code>crew_id</code> → <strong>Remove empty</strong> to filter out any rows with null crew IDs.</li>
+  <li>In the <strong>Query Settings</strong> panel on the right, rename the query to <code>crew_ingestion</code>.</li>
+  <li>Set the data destination:</li>
+  <li>At the bottom-right of the editor, click the <code>+</code> next to <strong>Data destination</strong> → select <strong>Lakehouse</strong>.</li>
+  <li>On the <strong>Connect to data destination</strong> screen, leave the connection as "Lakehouse admin (none)" with Organizational account authentication → click <strong>Next</strong>.</li>
+  <li>On the <strong>Choose destination target</strong> screen, keep <strong>New table</strong> selected.</li>
+  <li>Change the <strong>Table name</strong> to <code>crew_bronze</code>.</li>
+  <li>In the left panel, scroll (or use the Search box) to find the <strong>ZOSA-Dev</strong> workspace → expand it → select <code>lh_zosa</code>.</li>
+  <li>Click <strong>Next</strong> to confirm.</li>
+  <li>On the <strong>Choose destination settings</strong> screen, verify the column mapping looks correct (all columns mapped 1:1, <code>hire_date</code> as Date). Leave <strong>Use automatic settings</strong> toggled on and click <strong>Save settings</strong>.</li>
+  <li>Click <strong>Save & run</strong> (top-left in the Home ribbon) to publish the dataflow and trigger a refresh.</li>
+  <li>Verify the run completed successfully:</li>
+  <li>In the Power Query editor, click <strong>Recent runs</strong> (top ribbon) to check the status — it should show <strong>Succeeded</strong> within a minute or two.</li>
+  <li>Navigate back to the <strong>ZOSA-Dev</strong> workspace → open <code>lh_zosa</code> → expand <strong>Tables</strong>. You should see a new <code>crew_bronze</code> table with 9 columns and your crew data loaded.</li>
+</ol>
+<p><strong>What just happened?</strong> Dataflows Gen2 is a <strong>Power Query-based</strong>, low-code ingestion tool. It supports <strong>150+ connectors</strong>, runs on managed Spark under the hood, and is ideal for business users and simple transforms. Think of it as the approachable on-ramp to data ingestion in Fabric.</p>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-factory/create-first-dataflow-gen2">Dataflows Gen2</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-factory/dataflows-gen2-overview">Power Query in Dataflows</a></blockquote>
+<hr>
+<h2 id="-section-5-data-pipeline--orchestrated-ingestion">🔧 Section 5: Data Pipeline — Orchestrated Ingestion</h2>
+<p>One table down, four to go. Instead of creating more dataflows, you'll build a <strong>Data Pipeline</strong> that ingests the remaining CSVs in parallel.</p>
+<ol>
+  <li>Navigate to the <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Click <strong>+ New item</strong> → <strong>Data Pipeline</strong>.</li>
+  <li>Name it <code>pl_ingest_all_sources</code> and click <strong>Create</strong>.</li>
+  <li>On the pipeline landing page ("Build a pipeline to organize and move your data"), click the <strong>Pipeline activity</strong> card under "Start with a blank canvas." A popup appears with an activity list — select <strong>Copy data</strong> (under "Move and transform") to add your first Copy Data activity to the canvas.</li>
+</ol>
+<blockquote>💡 <strong>Alternative approach:</strong> You could create 4 separate Copy Data activities (one per file) on the canvas — that works fine for a small number of files. However, we'll use a <strong>metadata-driven approach</strong> with a ForEach loop, which is more scalable and realistic for production pipelines.</blockquote>
+<pre><code class="language-json">     [
        {&quot;source&quot;: &quot;missions.csv&quot;, &quot;destination&quot;: &quot;missions_bronze&quot;},
        {&quot;source&quot;: &quot;telemetry.csv&quot;, &quot;destination&quot;: &quot;telemetry_bronze&quot;},
        {&quot;source&quot;: &quot;solar_events.csv&quot;, &quot;destination&quot;: &quot;solar_events_bronze&quot;},
        {&quot;source&quot;: &quot;exoplanets.csv&quot;, &quot;destination&quot;: &quot;exoplanets_bronze&quot;}
-     ]
-     </code></pre>
-<ul><ul><li>Add a <strong>ForEach</strong> activity:</li></ul></ul>
-   - From the <strong>Activities</strong> tab in the ribbon → under "Control flow" → select <strong>ForEach</strong> and add it to the canvas.
-   - <strong>General</strong> tab: Rename it to <code>ForEach_Ingest_CSVs</code>.
-   - <strong>Settings</strong> tab:
-     - Check <strong>Sequential</strong> if you want one-at-a-time execution, or leave it <strong>unchecked</strong> for parallel execution (recommended — all 4 run simultaneously).
-     - <strong>Items</strong>: Click the text field → select <strong>Pipeline expression</strong> (or click "Add dynamic content") → enter: <code>@pipeline().parameters.files</code>
-<ul><ul><li>Add a <strong>Copy Data</strong> activity <strong>inside</strong> the ForEach:</li></ul></ul>
-   - Double-click the ForEach activity (or click the ✏️ pencil icon) to open its inner canvas.
-   - Add a <strong>Copy data</strong> activity from the Activities ribbon.
-   - <strong>Source</strong> tab:
-     - <strong>Connection</strong>: Lakehouse admin (Preview)
-     - <strong>Lakehouse</strong>: <code>lh_zosa</code>
-     - <strong>Root folder</strong>: Select <strong>Files</strong>
-     - <strong>File path</strong>: Leave Directory empty. For File name, click the text field → <strong>Add dynamic content</strong> → enter: <code>@item().source</code>
-     - <strong>File format</strong>: Change from Binary to <strong>DelimitedText</strong> → click <strong>Settings</strong> and verify <strong>First row as header</strong> is checked.
-   - <strong>Destination</strong> tab:
-     - <strong>Connection</strong>: Lakehouse admin (Preview)
-     - <strong>Lakehouse</strong>: <code>lh_zosa</code>
-     - <strong>Root folder</strong>: Select <strong>Tables</strong>
-     - Check <strong>Enter manually</strong> → in the Table name field, click → <strong>Add dynamic content</strong> → enter: <code>@item().destination</code>
-     - <strong>Table action</strong>: Select <strong>Overwrite</strong>.
-   > 💡 <strong>Table action options:</strong>
-   > - <strong>Append</strong> — adds rows to the existing table (use for incremental loads)
-   > - <strong>Overwrite</strong> — replaces the entire table on each run (use for full refreshes)
-   > - <strong>Upsert</strong> — inserts new rows and updates existing ones by matching a key column (use for change-data-capture scenarios)
-<ul><ul><li>Navigate back to the main pipeline canvas (click the pipeline name in the breadcrumb at the top).</li></ul>
-<ul><li>Click <strong>Run</strong> (▷) to execute the pipeline.</li></ul>
-<ul><li>Monitor the <strong>Output</strong> tab at the bottom — you should see the ForEach activity running and completing all four copies within a few minutes. Click on the ForEach run to see individual activity statuses.</li></ul>
-<ul><li><strong>Verify the results:</strong> Navigate to <code>lh_zosa</code> → expand <strong>Tables</strong>. You should now see all four new tables:</li></ul></ul>
-    - <code>missions_bronze</code>
-    - <code>telemetry_bronze</code>
-    - <code>solar_events_bronze</code>
-    - <code>exoplanets_bronze</code>
-    Click on any table to preview its data and confirm rows were loaded successfully.
-<strong>What just happened?</strong> Data Pipelines are Fabric's <strong>orchestration engine</strong>. The <strong>Copy Activity</strong> handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.
-<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-factory/create-first-pipeline-with-sample-data">Data Pipelines</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/fabric/data-factory/copy-data-activity">Copy Activity</a></blockquote>
----
-<h2>🔗 Section 6: OneLake Shortcuts (Optional Advanced)</h2>
-If you have an <strong>Azure subscription</strong>, you can experience one of Fabric's most powerful features: <strong>shortcuts</strong> — zero-copy references to external data.
-<ul><ul><li>In the Azure portal, create an <strong>Azure Data Lake Storage Gen2</strong> storage account (or use an existing one).</li></ul>
-<ul><li>Create a container (e.g., <code>zosa-external</code>) and upload one dataset — say, <code>exoplanets.csv</code> — into it.</li></ul>
-<ul><li>Back in Fabric, open <code>lh_zosa</code>.</li></ul>
-<ul><li>In the Explorer panel, right-click <strong>Tables</strong> (or <strong>Files</strong>) and select <strong>New shortcut</strong>.</li></ul>
-<ul><li>Choose <strong>Azure Data Lake Storage Gen2</strong>.</li></ul>
-<ul><li>Provide the <strong>storage account URL</strong> (e.g., <code>https://<account>.dfs.core.windows.net</code>) and authenticate with your Azure credentials.</li></ul>
-<ul><li>Browse to the container and select the folder or file.</li></ul>
-<ul><li>Click <strong>Create</strong>. The data now appears as a table in your Lakehouse — <strong>zero copy</strong>.</li></ul></ul>
-<strong>Why this matters:</strong> Shortcuts reference external data without duplicating it. The data stays in its original location but becomes queryable through OneLake, just like any native table. This is perfect for <strong>cross-domain data sharing</strong>, <strong>multi-cloud scenarios</strong>, and keeping storage costs down.
-<strong>⚠️ Note:</strong> Shortcuts are <strong>read-only</strong> references. You can query the data but you cannot modify the source through a shortcut. Any writes need to happen at the original storage location.
+     ]</code></pre>
+<ol>
+  <li>Delete the Copy Data activity you just added (we'll place it inside a ForEach instead). First, set up a pipeline parameter with the file list:</li>
+  <li>Click on the pipeline <strong>canvas background</strong> (deselect any activity) → in the bottom panel, click the <strong>Parameters</strong> tab → <strong>+ New</strong>.</li>
+  <li>Name: <code>files</code>, Type: <strong>Array</strong>, Default value:</li>
+  <li>Add a <strong>ForEach</strong> activity:</li>
+  <li>From the <strong>Activities</strong> tab in the ribbon → under "Control flow" → select <strong>ForEach</strong> and add it to the canvas.</li>
+  <li><strong>General</strong> tab: Rename it to <code>ForEach_Ingest_CSVs</code>.</li>
+  <li><strong>Settings</strong> tab:</li>
+  <li>Check <strong>Sequential</strong> if you want one-at-a-time execution, or leave it <strong>unchecked</strong> for parallel execution (recommended — all 4 run simultaneously).</li>
+  <li><strong>Items</strong>: Click the text field → select <strong>Pipeline expression</strong> (or click "Add dynamic content") → enter: <code>@pipeline().parameters.files</code></li>
+  <li>Add a <strong>Copy Data</strong> activity <strong>inside</strong> the ForEach:</li>
+  <li>Double-click the ForEach activity (or click the ✏️ pencil icon) to open its inner canvas.</li>
+  <li>Add a <strong>Copy data</strong> activity from the Activities ribbon.</li>
+  <li><strong>Source</strong> tab:</li>
+  <li><strong>Connection</strong>: Lakehouse admin (Preview)</li>
+  <li><strong>Lakehouse</strong>: <code>lh_zosa</code></li>
+  <li><strong>Root folder</strong>: Select <strong>Files</strong></li>
+  <li><strong>File path</strong>: Leave Directory empty. For File name, click the text field → <strong>Add dynamic content</strong> → enter: <code>@item().source</code></li>
+  <li><strong>File format</strong>: Change from Binary to <strong>DelimitedText</strong> → click <strong>Settings</strong> and verify <strong>First row as header</strong> is checked.</li>
+  <li><strong>Destination</strong> tab:</li>
+  <li><strong>Connection</strong>: Lakehouse admin (Preview)</li>
+  <li><strong>Lakehouse</strong>: <code>lh_zosa</code></li>
+  <li><strong>Root folder</strong>: Select <strong>Tables</strong></li>
+  <li>Check <strong>Enter manually</strong> → in the Table name field, click → <strong>Add dynamic content</strong> → enter: <code>@item().destination</code></li>
+  <li><strong>Table action</strong>: Select <strong>Overwrite</strong>.</li>
+</ol>
+<blockquote>💡 <strong>Table action options:</strong> - <strong>Append</strong> — adds rows to the existing table (use for incremental loads) - <strong>Overwrite</strong> — replaces the entire table on each run (use for full refreshes) - <strong>Upsert</strong> — inserts new rows and updates existing ones by matching a key column (use for change-data-capture scenarios)</blockquote>
+<ol>
+  <li>Navigate back to the main pipeline canvas (click the pipeline name in the breadcrumb at the top).</li>
+  <li>Click <strong>Run</strong> (▷) to execute the pipeline.</li>
+  <li>Monitor the <strong>Output</strong> tab at the bottom — you should see the ForEach activity running and completing all four copies within a few minutes. Click on the ForEach run to see individual activity statuses.</li>
+  <li><strong>Verify the results:</strong> Navigate to <code>lh_zosa</code> → expand <strong>Tables</strong>. You should now see all four new tables:</li>
+  <li><code>missions_bronze</code></li>
+  <li><code>telemetry_bronze</code></li>
+  <li><code>solar_events_bronze</code></li>
+  <li><code>exoplanets_bronze</code></li>
+</ol>
+<p>    Click on any table to preview its data and confirm rows were loaded successfully.</p>
+<p><strong>What just happened?</strong> Data Pipelines are Fabric's <strong>orchestration engine</strong>. The <strong>Copy Activity</strong> handles data movement, but pipelines can also trigger Notebooks, Dataflows, Stored Procedures, and more. Think of them as the conductor — they don't transform data themselves, but they make sure everything runs in the right order.</p>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-factory/create-first-pipeline-with-sample-data">Data Pipelines</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-factory/copy-data-activity">Copy Activity</a></blockquote>
+<hr>
+<h2 id="-section-6-onelake-shortcuts-optional-advanced">🔗 Section 6: OneLake Shortcuts (Optional Advanced)</h2>
+<p>If you have an <strong>Azure subscription</strong>, you can experience one of Fabric's most powerful features: <strong>shortcuts</strong> — zero-copy references to external data.</p>
+<ol>
+  <li>In the Azure portal, create an <strong>Azure Data Lake Storage Gen2</strong> storage account (or use an existing one).</li>
+  <li>Create a container (e.g., <code>zosa-external</code>) and upload one dataset — say, <code>exoplanets.csv</code> — into it.</li>
+  <li>Back in Fabric, open <code>lh_zosa</code>.</li>
+  <li>In the Explorer panel, right-click <strong>Tables</strong> (or <strong>Files</strong>) and select <strong>New shortcut</strong>.</li>
+  <li>Choose <strong>Azure Data Lake Storage Gen2</strong>.</li>
+  <li>Provide the <strong>storage account URL</strong> (e.g., <code>https://<account>.dfs.core.windows.net</code>) and authenticate with your Azure credentials.</li>
+  <li>Browse to the container and select the folder or file.</li>
+  <li>Click <strong>Create</strong>. The data now appears as a table in your Lakehouse — <strong>zero copy</strong>.</li>
+</ol>
+<p><strong>Why this matters:</strong> Shortcuts reference external data without duplicating it. The data stays in its original location but becomes queryable through OneLake, just like any native table. This is perfect for <strong>cross-domain data sharing</strong>, <strong>multi-cloud scenarios</strong>, and keeping storage costs down.</p>
+<p><strong>⚠️ Note:</strong> Shortcuts are <strong>read-only</strong> references. You can query the data but you cannot modify the source through a shortcut. Any writes need to happen at the original storage location.</p>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts">OneLake Shortcuts</a></blockquote>
----
-<h2>✅ Section 7: Verify Your Ingestion</h2>
-Time to confirm everything landed correctly.
-<ul><ul><li>Open <code>lh_zosa</code> → expand the <strong>Tables</strong> section in the Explorer panel.</li></ul>
-<ul><li>You should see <strong>six tables</strong>:</li></ul></ul>
-   - <code>asteroids_bronze</code>
-   - <code>solar_events_bronze</code>
-   - <code>exoplanets_bronze</code>
-   - <code>missions_bronze</code>
-   - <code>crew_bronze</code>
-   - <code>telemetry_bronze</code>
-<ul><ul><li>Click on any table → <strong>Preview data</strong> to eyeball the rows and verify column names look correct.</li></ul>
-<ul><li>Now switch to the <strong>SQL Analytics Endpoint</strong> (click the dropdown next to the Lakehouse name at the top and select it).</li></ul>
-<ul><li>Open a <strong>New SQL query</strong> and run:</li></ul></ul>
-<pre><code class="language-sql">SELECT COUNT(*) AS row_count, 'asteroids' AS dataset FROM asteroids_bronze
+<hr>
+<h2 id="section-7-verify-your-ingestion">✅ Section 7: Verify Your Ingestion</h2>
+<p>Time to confirm everything landed correctly.</p>
+<ol>
+  <li>Open <code>lh_zosa</code> → expand the <strong>Tables</strong> section in the Explorer panel.</li>
+  <li>You should see <strong>six tables</strong>:</li>
+  <li><code>asteroids_bronze</code></li>
+  <li><code>solar_events_bronze</code></li>
+  <li><code>exoplanets_bronze</code></li>
+  <li><code>missions_bronze</code></li>
+  <li><code>crew_bronze</code></li>
+  <li><code>telemetry_bronze</code></li>
+  <li>Click on any table → <strong>Preview data</strong> to eyeball the rows and verify column names look correct.</li>
+  <li>Now switch to the <strong>SQL Analytics Endpoint</strong> (click the dropdown next to the Lakehouse name at the top and select it).</li>
+  <li>Open a <strong>New SQL query</strong> and run:</li>
+</ol>
+<pre><code class="language-sql">SELECT COUNT(*) AS row_count, &#x27;asteroids&#x27; AS dataset FROM asteroids_bronze
 UNION ALL
-SELECT COUNT(*), 'solar_events' FROM solar_events_bronze
+SELECT COUNT(*), &#x27;solar_events&#x27; FROM solar_events_bronze
 UNION ALL
-SELECT COUNT(*), 'exoplanets' FROM exoplanets_bronze
+SELECT COUNT(*), &#x27;exoplanets&#x27; FROM exoplanets_bronze
 UNION ALL
-SELECT COUNT(*), 'missions' FROM missions_bronze
+SELECT COUNT(*), &#x27;missions&#x27; FROM missions_bronze
 UNION ALL
-SELECT COUNT(*), 'crew' FROM crew_bronze
+SELECT COUNT(*), &#x27;crew&#x27; FROM crew_bronze
 UNION ALL
-SELECT COUNT(*), 'telemetry' FROM telemetry_bronze;
-</code></pre>
-You should see a result set with six rows — one per dataset — each showing a non-zero row count. If any table shows zero rows, go back and check the corresponding Copy Data activity in your pipeline.
----
-<h2>✅ Checkpoint</h2>
-Verify that you've completed the following before moving on:
-<ul><ul><li>[ ] Lakehouse <code>lh_zosa</code> created in ZOSA-Dev workspace</li></ul>
-<ul><li>[ ] 6 Bronze-layer tables loaded with data (<code>asteroids_bronze</code>, <code>solar_events_bronze</code>, <code>exoplanets_bronze</code>, <code>missions_bronze</code>, <code>crew_bronze</code>, <code>telemetry_bronze</code>)</li></ul>
-<ul><li>[ ] You can query all tables via the SQL Analytics Endpoint</li></ul>
-<ul><li>[ ] You understand the difference between <strong>Dataflows Gen2</strong> (low-code, Power Query-based) and <strong>Data Pipelines</strong> (orchestration engine with Copy Activity)</li></ul></ul>
----
+SELECT COUNT(*), &#x27;telemetry&#x27; FROM telemetry_bronze;</code></pre>
+<p>You should see a result set with six rows — one per dataset — each showing a non-zero row count. If any table shows zero rows, go back and check the corresponding Copy Data activity in your pipeline.</p>
+<hr>
+<h2 id="checkpoint">✅ Checkpoint</h2>
+<p>Verify that you've completed the following before moving on:</p>
+<ul>
+  <li>[ ] Lakehouse <code>lh_zosa</code> created in ZOSA-Dev workspace</li>
+  <li>[ ] 6 Bronze-layer tables loaded with data (<code>asteroids_bronze</code>, <code>solar_events_bronze</code>, <code>exoplanets_bronze</code>, <code>missions_bronze</code>, <code>crew_bronze</code>, <code>telemetry_bronze</code>)</li>
+  <li>[ ] You can query all tables via the SQL Analytics Endpoint</li>
+  <li>[ ] You understand the difference between <strong>Dataflows Gen2</strong> (low-code, Power Query-based) and <strong>Data Pipelines</strong> (orchestration engine with Copy Activity)</li>
+</ul>
+<hr>
 <blockquote><em>You send Dr. Vasquez a screenshot of the SQL query results — six datasets, all loaded. She replies within seconds: "Impressive. Raw data is in. But raw data is like unprocessed telescope images — noisy and hard to read. Tomorrow, we refine it. The science team is waiting."</em></blockquote>
----
-<strong>Navigation:</strong>
-<a href="02-governance-and-security.md">← Module 02 — Governance & Security</a> | <a href="04-medallion-lakehouse.md">Module 04 — Medallion Lakehouse →</a>
-<a href="../README.md">← Back to README</a>
+<hr>
+<p><strong>Navigation:</strong></p>
+<p><a href="02-governance-and-security.md">← Module 02 — Governance & Security</a> | <a href="04-medallion-lakehouse.md">Module 04 — Medallion Lakehouse →</a></p>
+<p><a href="../README.md">← Back to README</a></p>
     </section>
 
     <!-- Navigation -->

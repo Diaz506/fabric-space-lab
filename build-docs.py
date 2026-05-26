@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-Fabric Space Lab - Markdown to HTML Builder
-Converts lab markdown files to styled HTML storyline pages.
+Fabric Space Lab - Enhanced Markdown to HTML Builder
+Converts lab markdown files to styled HTML storyline pages with proper structure.
 """
 
 import re
 import os
 from pathlib import Path
 from typing import Dict, List, Tuple
+import html
 
 # Markdown to HTML module mapping
 MODULE_MAP = {
@@ -44,79 +45,211 @@ MODULE_TITLES = {
 }
 
 
-def escape_html(text: str) -> str:
-    """Escape HTML special characters."""
-    return (text
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;"))
-
-
-def convert_markdown_to_html(md_content: str) -> str:
-    """Convert markdown content to HTML with custom styling."""
-    html = md_content
+class MarkdownConverter:
+    """Enhanced markdown to HTML converter with proper structure."""
     
-    # Code blocks with language
-    def replace_code_block(match):
-        lang = match.group(1) or ""
-        code = match.group(2)
-        escaped_code = escape_html(code)
-        lang_class = f"language-{lang}" if lang else "language-plaintext"
-        return f'<pre><code class="{lang_class}">{escaped_code}</code></pre>'
+    def __init__(self):
+        self.toc = []
+        self.current_section = 0
     
-    html = re.sub(r'```(\w+)?\n(.*?)```', replace_code_block, html, flags=re.DOTALL)
-    
-    # Inline code
-    html = re.sub(r'`([^`]+)`', r'<code>\1</code>', html)
-    
-    # Headers
-    html = re.sub(r'^# (.+)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
-    html = re.sub(r'^## (.+)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
-    html = re.sub(r'^### (.+)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
-    html = re.sub(r'^#### (.+)$', r'<h4>\1</h4>', html, flags=re.MULTILINE)
-    
-    # Blockquotes (narrative sections)
-    html = re.sub(r'^> (.+)$', r'<blockquote>\1</blockquote>', html, flags=re.MULTILINE)
-    
-    # Bold and italic
-    html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html)
-    html = re.sub(r'\*(.+?)\*', r'<em>\1</em>', html)
-    
-    # Links
-    html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', html)
-    
-    # Lists
-    html = re.sub(r'^\- (.+)$', r'<li>\1</li>', html, flags=re.MULTILINE)
-    html = re.sub(r'^\d+\. (.+)$', r'<li>\1</li>', html, flags=re.MULTILINE)
-    
-    # Wrap consecutive <li> in <ul>
-    html = re.sub(r'(<li>.*?</li>)\n(?!<li>)', r'<ul>\1</ul>\n', html, flags=re.DOTALL)
-    html = re.sub(r'(<li>.*?</li>)', r'<ul>\1</ul>', html)
-    
-    # Paragraphs
-    lines = html.split('\n')
-    in_block = False
-    result = []
-    
-    for line in lines:
-        stripped = line.strip()
-        if not stripped:
-            continue
+    def convert(self, md_content: str) -> Tuple[str, List[Dict]]:
+        """Convert markdown to HTML and extract TOC."""
+        lines = md_content.split('\n')
+        html_lines = []
+        in_code_block = False
+        code_lang = ""
+        code_buffer = []
+        in_table = False
+        table_buffer = []
+        in_blockquote = False
+        blockquote_buffer = []
+        in_list = False
+        list_buffer = []
+        list_type = None
         
-        # Check if line is already wrapped
-        if stripped.startswith(('<h', '<pre', '<ul', '<ol', '<blockquote', '<table', '<div')):
-            in_block = True
-            result.append(line)
-        elif stripped.startswith(('</pre', '</ul', '</ol', '</blockquote', '</table', '</div')):
-            in_block = False
-            result.append(line)
-        elif not in_block and not stripped.startswith('<'):
-            result.append(f'<p>{line}</p>')
-        else:
-            result.append(line)
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            stripped = line.strip()
+            
+            # Code blocks
+            if stripped.startswith('```'):
+                if in_code_block:
+                    # End code block
+                    code_html = html.escape('\n'.join(code_buffer))
+                    lang_class = f'language-{code_lang}' if code_lang else 'language-plaintext'
+                    html_lines.append(f'<pre><code class="{lang_class}">{code_html}</code></pre>')
+                    in_code_block = False
+                    code_buffer = []
+                    code_lang = ""
+                else:
+                    # Start code block
+                    code_lang = stripped[3:].strip()
+                    in_code_block = True
+                i += 1
+                continue
+            
+            if in_code_block:
+                code_buffer.append(line)
+                i += 1
+                continue
+            
+            # Tables
+            if stripped.startswith('|') and '|' in stripped[1:]:
+                if not in_table:
+                    in_table = True
+                    table_buffer = []
+                table_buffer.append(stripped)
+                i += 1
+                continue
+            elif in_table and not stripped.startswith('|'):
+                # End table
+                html_lines.append(self._convert_table(table_buffer))
+                in_table = False
+                table_buffer = []
+                # Don't increment i, process this line
+            
+            # Horizontal rules
+            if stripped in ['---', '***', '___']:
+                html_lines.append('<hr>')
+                i += 1
+                continue
+            
+            # Blockquotes
+            if stripped.startswith('>'):
+                if not in_blockquote:
+                    in_blockquote = True
+                    blockquote_buffer = []
+                blockquote_buffer.append(stripped[1:].strip())
+                i += 1
+                continue
+            elif in_blockquote and not stripped.startswith('>'):
+                # End blockquote
+                blockquote_html = self._process_inline(' '.join(blockquote_buffer))
+                html_lines.append(f'<blockquote>{blockquote_html}</blockquote>')
+                in_blockquote = False
+                blockquote_buffer = []
+                # Don't increment i, process this line
+            
+            # Headers
+            h_match = re.match(r'^(#{1,6})\s+(.+)$', stripped)
+            if h_match:
+                level = len(h_match.group(1))
+                title = h_match.group(2)
+                title_clean = re.sub(r'^[#\s\d🏗️📊🎯🥉🥈🥇🗒️🔍📐📡🚨❄️✅🔮—:-]+', '', title).strip()
+                anchor = re.sub(r'[^\w\s-]', '', title_clean.lower()).replace(' ', '-')
+                
+                # Add to TOC if h2 or h3
+                if level in [2, 3]:
+                    self.toc.append({'level': level, 'title': title_clean, 'anchor': anchor})
+                
+                html_lines.append(f'<h{level} id="{anchor}">{self._process_inline(title)}</h{level}>')
+                i += 1
+                continue
+            
+            # Lists
+            list_match = re.match(r'^(\d+\.|-|\*)\s+(.+)$', stripped)
+            if list_match:
+                marker = list_match.group(1)
+                content = list_match.group(2)
+                new_list_type = 'ol' if marker[0].isdigit() else 'ul'
+                
+                if not in_list:
+                    in_list = True
+                    list_type = new_list_type
+                    list_buffer = []
+                
+                list_buffer.append(f'  <li>{self._process_inline(content)}</li>')
+                i += 1
+                continue
+            elif in_list and not list_match:
+                # End list
+                html_lines.append(f'<{list_type}>')
+                html_lines.extend(list_buffer)
+                html_lines.append(f'</{list_type}>')
+                in_list = False
+                list_buffer = []
+                list_type = None
+                # Don't increment i, process this line
+            
+            # Empty lines
+            if not stripped:
+                i += 1
+                continue
+            
+            # Paragraphs
+            html_lines.append(f'<p>{self._process_inline(line)}</p>')
+            i += 1
+        
+        # Close any open blocks
+        if in_code_block:
+            code_html = html.escape('\n'.join(code_buffer))
+            lang_class = f'language-{code_lang}' if code_lang else 'language-plaintext'
+            html_lines.append(f'<pre><code class="{lang_class}">{code_html}</code></pre>')
+        
+        if in_table:
+            html_lines.append(self._convert_table(table_buffer))
+        
+        if in_blockquote:
+            blockquote_html = self._process_inline(' '.join(blockquote_buffer))
+            html_lines.append(f'<blockquote>{blockquote_html}</blockquote>')
+        
+        if in_list:
+            html_lines.append(f'<{list_type}>')
+            html_lines.extend(list_buffer)
+            html_lines.append(f'</{list_type}>')
+        
+        return '\n'.join(html_lines), self.toc
     
-    return '\n'.join(result)
+    def _process_inline(self, text: str) -> str:
+        """Process inline markdown (bold, italic, links, code)."""
+        # Inline code
+        text = re.sub(r'`([^`]+)`', r'<code>\1</code>', text)
+        
+        # Links
+        text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
+        
+        # Bold
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+        
+        # Italic
+        text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+        
+        return text
+    
+    def _convert_table(self, lines: List[str]) -> str:
+        """Convert markdown table to HTML table."""
+        if not lines:
+            return ""
+        
+        # Parse header
+        header_line = lines[0]
+        headers = [cell.strip() for cell in header_line.split('|')[1:-1]]
+        
+        # Skip separator line (usually index 1)
+        data_lines = lines[2:] if len(lines) > 2 else []
+        
+        # Build HTML
+        html = ['<table class="data-table">']
+        html.append('  <thead>')
+        html.append('    <tr>')
+        for h in headers:
+            html.append(f'      <th>{self._process_inline(h)}</th>')
+        html.append('    </tr>')
+        html.append('  </thead>')
+        html.append('  <tbody>')
+        
+        for line in data_lines:
+            cells = [cell.strip() for cell in line.split('|')[1:-1]]
+            html.append('    <tr>')
+            for cell in cells:
+                html.append(f'      <td>{self._process_inline(cell)}</td>')
+            html.append('    </tr>')
+        
+        html.append('  </tbody>')
+        html.append('</table>')
+        
+        return '\n'.join(html)
 
 
 def extract_module_number(filename: str) -> str:
@@ -125,8 +258,25 @@ def extract_module_number(filename: str) -> str:
     return match.group(1) if match else "00"
 
 
+def build_toc_html(toc: List[Dict]) -> str:
+    """Build mini-TOC HTML."""
+    if not toc:
+        return ""
+    
+    html = ['<nav class="mini-toc" aria-label="Table of contents">']
+    html.append('  <div class="toc-title">Contents</div>')
+    html.append('  <a href="#top"><span class="toc-dot"></span>Overview</a>')
+    
+    for item in toc:
+        indent = '  ' if item['level'] == 3 else ''
+        html.append(f'  {indent}<a href="#{item["anchor"]}"><span class="toc-dot"></span>{item["title"]}</a>')
+    
+    html.append('</nav>')
+    return '\n'.join(html)
+
+
 def build_html_page(md_file: Path, output_file: Path):
-    """Build a single HTML page from markdown."""
+    """Build a single HTML page from markdown with enhanced structure."""
     print(f"Building {md_file.name} -> {output_file.name}")
     
     # Read markdown
@@ -136,13 +286,17 @@ def build_html_page(md_file: Path, output_file: Path):
     # Extract title from first # heading
     title_match = re.search(r'^#\s+(.+)$', md_content, re.MULTILINE)
     title = title_match.group(1) if title_match else "Lab Module"
-    title_clean = re.sub(r'^[#\s\d—:-]+', '', title).strip()
+    title_clean = re.sub(r'^[#\s\d🏗️📊🎯—:-]+', '', title).strip()
     
     # Module number
     module_num = extract_module_number(md_file.name)
     
     # Convert markdown to HTML
-    content_html = convert_markdown_to_html(md_content)
+    converter = MarkdownConverter()
+    content_html, toc = converter.convert(md_content)
+    
+    # Build TOC
+    toc_html = build_toc_html(toc)
     
     # Build navigation
     module_int = int(module_num)
@@ -153,16 +307,20 @@ def build_html_page(md_file: Path, output_file: Path):
     next_link = ""
     
     if prev_num and prev_num in MODULE_TITLES:
-        prev_file = [v for k, v in MODULE_MAP.items() if k.startswith(prev_num)][0]
-        prev_link = f'''
+        prev_files = [v for k, v in MODULE_MAP.items() if k.startswith(prev_num)]
+        if prev_files:
+            prev_file = prev_files[0]
+            prev_link = f'''
         <a href="{prev_file}" class="prev">
           <span class="nav-label">← Previous</span>
           <span class="nav-title">{MODULE_TITLES[prev_num]}</span>
         </a>'''
     
     if next_num and next_num in MODULE_TITLES:
-        next_file = [v for k, v in MODULE_MAP.items() if k.startswith(next_num)][0]
-        next_link = f'''
+        next_files = [v for k, v in MODULE_MAP.items() if k.startswith(next_num)]
+        if next_files:
+            next_file = next_files[0]
+            next_link = f'''
         <a href="{next_file}" class="next">
           <span class="nav-label">Next →</span>
           <span class="nav-title">{MODULE_TITLES[next_num]}</span>
@@ -202,6 +360,9 @@ def build_html_page(md_file: Path, output_file: Path):
       </nav>
     </div>
   </header>
+
+  <!-- Mini TOC Sidebar -->
+  {toc_html}
 
   <!-- Main Content -->
   <main class="storyboard-content">

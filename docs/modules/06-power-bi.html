@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 06 — 📊 Module 06 — Power BI Reports · Fabric Space Lab</title>
+  <title>Module 06 — Module 06 — Power BI Reports · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -32,228 +32,408 @@
     </div>
   </header>
 
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#learning-objectives"><span class="toc-dot"></span>Learning Objectives</a>
+  <a href="#-prerequisites"><span class="toc-dot"></span>📋 Prerequisites</a>
+  <a href="#-report-1-mission-control-dashboard"><span class="toc-dot"></span>⃣ Report 1: Mission Control Dashboard</a>
+    <a href="#connect-to-the-semantic-model"><span class="toc-dot"></span>Connect to the Semantic Model</a>
+    <a href="#page-1-executive-overview"><span class="toc-dot"></span>Page 1: Executive Overview</a>
+    <a href="#page-2-asteroid-threat-monitor"><span class="toc-dot"></span>Page 2: Asteroid Threat Monitor</a>
+    <a href="#page-3-solar-activity-timeline"><span class="toc-dot"></span>Page 3: Solar Activity Timeline</a>
+    <a href="#add-tooltips-and-interactivity"><span class="toc-dot"></span>Add Tooltips and Interactivity</a>
+  <a href="#-report-2-exoplanet-explorer"><span class="toc-dot"></span>⃣ Report 2: Exoplanet Explorer</a>
+    <a href="#create-a-new-report"><span class="toc-dot"></span>Create a New Report</a>
+    <a href="#exoplanet-scatter-plot"><span class="toc-dot"></span>Exoplanet Scatter Plot</a>
+    <a href="#filter-panel"><span class="toc-dot"></span>Filter Panel</a>
+    <a href="#planet-detail-card"><span class="toc-dot"></span>Planet Detail Card</a>
+    <a href="#bookmarks-for-preset-views"><span class="toc-dot"></span>Bookmarks for Preset Views</a>
+  <a href="#-design-tips--the-zosa-look"><span class="toc-dot"></span>⃣ Design Tips — The ZOSA Look</a>
+    <a href="#color-theme"><span class="toc-dot"></span>Color Theme</a>
+    <a href="#typography"><span class="toc-dot"></span>Typography</a>
+    <a href="#mobile-layout"><span class="toc-dot"></span>Mobile Layout</a>
+  <a href="#-publish-and-save"><span class="toc-dot"></span>⃣ Publish and Save</a>
+    <a href="#if-using-power-bi-desktop"><span class="toc-dot"></span>If using Power BI Desktop</a>
+    <a href="#save-in-the-fabric-portal"><span class="toc-dot"></span>Save in the Fabric Portal</a>
+    <a href="#verify-in-the-service"><span class="toc-dot"></span>Verify in the Service</a>
+    <a href="#pin-to-a-shared-dashboard"><span class="toc-dot"></span>Pin to a Shared Dashboard</a>
+  <a href="#-checkpoint"><span class="toc-dot"></span>⃣ Checkpoint</a>
+    <a href="#verification-checklist"><span class="toc-dot"></span>Verification Checklist</a>
+    <a href="#test-rls-in-the-service"><span class="toc-dot"></span>Test RLS in the Service</a>
+  <a href="#-module-complete"><span class="toc-dot"></span>🎉 Module Complete!</a>
+  <a href="#-navigation"><span class="toc-dot"></span>🧭 Navigation</a>
+</nav>
+
   <!-- Main Content -->
   <main class="storyboard-content">
     <section class="hero" id="top">
       <div class="hero-overline">Module 06</div>
-      <h1>📊 Module 06 — Power BI Reports</h1>
+      <h1>Module 06 — Power BI Reports</h1>
     </section>
 
     <section class="chapter">
-      <h1>📊 Module 06 — Power BI Reports</h1>
+      <h1 id="module-06--power-bi-reports">📊 Module 06 — Power BI Reports</h1>
 <blockquote><strong>Major Nakamura stood at the center of Mission Control, staring at the wall of blank monitors. "We have the data," she said. "We have the model. But my team is still opening spreadsheets to check mission status." She turned to her analyst. "I need a dashboard on that main screen — something that tells me what's happening <em>right now</em>. And the public affairs team? They want an Exoplanet Explorer for the website so the public can browse our discoveries." Two reports, one model. Time to build.</strong></blockquote>
----
-<h2>🎯 Learning Objectives</h2>
-By the end of this module, you will:
-<ul><ul><li>Build a <strong>multi-page Mission Control Dashboard</strong> connected to the ZOSA Analytics Model</li></ul>
-<ul><li>Create an <strong>interactive Exoplanet Explorer</strong> report for public engagement</li></ul>
-<ul><li>Apply conditional formatting, bookmarks, tooltips, and slicers</li></ul>
-<ul><li>Design with a space-themed ZOSA color palette</li></ul>
-<ul><li>Publish reports to the ZOSA-Dev workspace and pin visuals to a shared dashboard</li></ul></ul>
-<h2>📋 Prerequisites</h2>
-| Requirement | Details |
-|---|---|
-| <strong>Module 05 complete</strong> | ZOSA Analytics Model published with Direct Lake, measures, and RLS |
-| <strong>Workspace access</strong> | Contributor or higher on <strong>ZOSA-Dev</strong> |
+<hr>
+<h2 id="learning-objectives">🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+  <li>Build a <strong>multi-page Mission Control Dashboard</strong> connected to the ZOSA Analytics Model</li>
+  <li>Create an <strong>interactive Exoplanet Explorer</strong> report for public engagement</li>
+  <li>Apply conditional formatting, bookmarks, tooltips, and slicers</li>
+  <li>Design with a space-themed ZOSA color palette</li>
+  <li>Publish reports to the ZOSA-Dev workspace and pin visuals to a shared dashboard</li>
+</ul>
+<h2 id="-prerequisites">📋 Prerequisites</h2>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Requirement</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Module 05 complete</strong></td>
+      <td>ZOSA Analytics Model published with Direct Lake, measures, and RLS</td>
+    </tr>
+    <tr>
+      <td><strong>Workspace access</strong></td>
+      <td>Contributor or higher on <strong>ZOSA-Dev</strong></td>
+    </tr>
+  </tbody>
+</table>
 <blockquote>💡 <strong>Tip:</strong> You can build reports directly in the Fabric portal (from the semantic model → <strong>Create report</strong>) or use <strong>Power BI Desktop</strong> connected to the semantic model. This lab uses the web experience by default — no Desktop install required.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/guidance/power-bi-optimization">Report Design Best Practices</a></blockquote>
----
-<h2>1️⃣ Report 1: Mission Control Dashboard</h2>
-This is Major Nakamura's operational dashboard — the one going up on the big screen in Mission Control. It has three pages, each focused on a different domain.
-<h3>Connect to the Semantic Model</h3>
-<ul><ul><li>In the <strong>Fabric portal</strong>, navigate to your <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Find <strong>ZOSA Analytics Model</strong> → click the <strong>ellipsis (...)</strong> → select <strong>Create report</strong>.</li></ul>
-<ul><li>A blank report canvas opens, connected to the semantic model. You should see all your Gold tables and measures in the <strong>Data</strong> pane on the right.</li></ul></ul>
-<blockquote>💡 <strong>Tip:</strong> Because you're connected to the published semantic model, the Direct Lake connection, relationships, and measures are already configured. No data import needed.</blockquote>
->
-<blockquote><strong>Alternatively</strong>, if you prefer Power BI Desktop: open Desktop → <strong>Home → Get data → Power BI semantic models</strong> → select your workspace → choose <strong>ZOSA Analytics Model</strong> → <strong>Connect</strong>.</blockquote>
-<h3>Page 1: Executive Overview</h3>
-This is the "at-a-glance" page — KPIs across the top, charts below.
-<h4>KPI Cards</h4>
-<ul><ul><li>Create four <strong>Card</strong> visuals across the top of the canvas:</li></ul></ul>
-   | Card | Measure / Field | Format |
-   |---|---|---|
-   | Total Missions | <code>[Total Missions]</code> | Whole number |
-   | Success Rate | <code>[Mission Success Rate]</code> | Percentage, 1 decimal |
-   | Active Missions | <code>[Active Missions]</code> | Whole number |
-   | Critical Asteroids | <code>[Critical Asteroids]</code> | Whole number, <strong>red</strong> callout color |
-<ul><ul><li>For each card:</li></ul></ul>
-   - Drag the measure to the canvas and select the <strong>Card</strong> visual type.
-   - In <strong>Format → Callout value</strong>, set the font size to <strong>28pt</strong>.
-   - For "Critical Asteroids," set the callout color to <strong>red (#FF4444)</strong>.
-<h4>Mission Status Donut Chart</h4>
-<ul><ul><li>Add a <strong>Donut chart</strong> visual below the KPI cards (left side).</li></ul>
-<ul><li>Configure:</li></ul></ul>
-   - <strong>Legend:</strong> <code>gold_mission_summary[status]</code>
-   - <strong>Values:</strong> <code>[Total Missions]</code>
-<ul><ul><li>In <strong>Format → Data colors</strong>, assign:</li></ul></ul>
-   - Completed → Green (<code>#4CAF50</code>)
-   - Active → Blue (<code>#2196F3</code>)
-   - Failed → Red (<code>#F44336</code>)
-   - Planned → Gold (<code>#FFC107</code>)
-<h4>Budget by Mission Type (Bar Chart)</h4>
-<ul><ul><li>Add a <strong>Clustered bar chart</strong> (right side, next to the donut).</li></ul>
-<ul><li>Configure:</li></ul></ul>
-   - <strong>Y-axis:</strong> <code>gold_mission_summary[mission_type]</code>
-   - <strong>X-axis:</strong> <code>[Total Budget]</code>
-<ul><ul><li>Sort descending by Total Budget.</li></ul>
-<ul><li>In <strong>Format → Data colors</strong>, use a gradient from navy (<code>#0D1B2A</code>) to gold (<code>#FFD700</code>).</li></ul></ul>
-<h4>Slicers</h4>
-<ul><ul><li>Add a <strong>Date range slicer</strong> at the top of the page:</li></ul></ul>
-   - Field: <code>gold_mission_summary[launch_date]</code>
-   - Style: <strong>Between</strong> (date range picker)
-<ul><ul><li>Add a <strong>Region dropdown slicer</strong> next to it:</li></ul></ul>
-   - Field: <code>gold_mission_summary[region]</code>
-   - Style: <strong>Dropdown</strong>
+<hr>
+<h2 id="-report-1-mission-control-dashboard">1️⃣ Report 1: Mission Control Dashboard</h2>
+<p>This is Major Nakamura's operational dashboard — the one going up on the big screen in Mission Control. It has three pages, each focused on a different domain.</p>
+<h3 id="connect-to-the-semantic-model">Connect to the Semantic Model</h3>
+<ol>
+  <li>In the <strong>Fabric portal</strong>, navigate to your <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Find <strong>ZOSA Analytics Model</strong> → click the <strong>ellipsis (...)</strong> → select <strong>Create report</strong>.</li>
+  <li>A blank report canvas opens, connected to the semantic model. You should see all your Gold tables and measures in the <strong>Data</strong> pane on the right.</li>
+</ol>
+<blockquote>💡 <strong>Tip:</strong> Because you're connected to the published semantic model, the Direct Lake connection, relationships, and measures are already configured. No data import needed.  <strong>Alternatively</strong>, if you prefer Power BI Desktop: open Desktop → <strong>Home → Get data → Power BI semantic models</strong> → select your workspace → choose <strong>ZOSA Analytics Model</strong> → <strong>Connect</strong>.</blockquote>
+<h3 id="page-1-executive-overview">Page 1: Executive Overview</h3>
+<p>This is the "at-a-glance" page — KPIs across the top, charts below.</p>
+<h4 id="kpi-cards">KPI Cards</h4>
+<ol>
+  <li>Create four <strong>Card</strong> visuals across the top of the canvas:</li>
+</ol>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Card</th>
+      <th>Measure / Field</th>
+      <th>Format</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Total Missions</td>
+      <td><code>[Total Missions]</code></td>
+      <td>Whole number</td>
+    </tr>
+    <tr>
+      <td>Success Rate</td>
+      <td><code>[Mission Success Rate]</code></td>
+      <td>Percentage, 1 decimal</td>
+    </tr>
+    <tr>
+      <td>Active Missions</td>
+      <td><code>[Active Missions]</code></td>
+      <td>Whole number</td>
+    </tr>
+    <tr>
+      <td>Critical Asteroids</td>
+      <td><code>[Critical Asteroids]</code></td>
+      <td>Whole number, <strong>red</strong> callout color</td>
+    </tr>
+  </tbody>
+</table>
+<ol>
+  <li>For each card:</li>
+  <li>Drag the measure to the canvas and select the <strong>Card</strong> visual type.</li>
+  <li>In <strong>Format → Callout value</strong>, set the font size to <strong>28pt</strong>.</li>
+  <li>For "Critical Asteroids," set the callout color to <strong>red (#FF4444)</strong>.</li>
+</ol>
+<h4 id="mission-status-donut-chart">Mission Status Donut Chart</h4>
+<ol>
+  <li>Add a <strong>Donut chart</strong> visual below the KPI cards (left side).</li>
+  <li>Configure:</li>
+  <li><strong>Legend:</strong> <code>gold_mission_summary[status]</code></li>
+  <li><strong>Values:</strong> <code>[Total Missions]</code></li>
+  <li>In <strong>Format → Data colors</strong>, assign:</li>
+  <li>Completed → Green (<code>#4CAF50</code>)</li>
+  <li>Active → Blue (<code>#2196F3</code>)</li>
+  <li>Failed → Red (<code>#F44336</code>)</li>
+  <li>Planned → Gold (<code>#FFC107</code>)</li>
+</ol>
+<h4 id="budget-by-mission-type-bar-chart">Budget by Mission Type (Bar Chart)</h4>
+<ol>
+  <li>Add a <strong>Clustered bar chart</strong> (right side, next to the donut).</li>
+  <li>Configure:</li>
+  <li><strong>Y-axis:</strong> <code>gold_mission_summary[mission_type]</code></li>
+  <li><strong>X-axis:</strong> <code>[Total Budget]</code></li>
+  <li>Sort descending by Total Budget.</li>
+  <li>In <strong>Format → Data colors</strong>, use a gradient from navy (<code>#0D1B2A</code>) to gold (<code>#FFD700</code>).</li>
+</ol>
+<h4 id="slicers">Slicers</h4>
+<ol>
+  <li>Add a <strong>Date range slicer</strong> at the top of the page:</li>
+  <li>Field: <code>gold_mission_summary[launch_date]</code></li>
+  <li>Style: <strong>Between</strong> (date range picker)</li>
+  <li>Add a <strong>Region dropdown slicer</strong> next to it:</li>
+  <li>Field: <code>gold_mission_summary[region]</code></li>
+  <li>Style: <strong>Dropdown</strong></li>
+</ol>
 <blockquote>⚠️ <strong>Important:</strong> Place slicers consistently at the top of every page. Users expect filters in the same location across pages.</blockquote>
-<blockquote>📚 <strong>Official Documentation:</strong></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-report-visualizations">Visualizations Overview</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-card">Card Visuals</a></blockquote>
-<blockquote>- <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers">Slicers</a></blockquote>
-<h3>Page 2: Asteroid Threat Monitor</h3>
-This is the page that keeps Major Nakamura up at night.
-<h4>Threat Scatter Plot</h4>
-<ul><ul><li>Add a <strong>Scatter chart</strong> as the main visual (top half of the page).</li></ul>
-<ul><li>Configure:</li></ul></ul>
-   - <strong>X-axis:</strong> <code>gold_asteroid_risk[miss_distance_km]</code>
-   - <strong>Y-axis:</strong> <code>gold_asteroid_risk[relative_velocity_kph]</code>
-   - <strong>Size:</strong> <code>gold_asteroid_risk[avg_diameter_m]</code>
-   - <strong>Legend (color):</strong> <code>gold_asteroid_risk[risk_category]</code>
-   - <strong>Tooltips:</strong> Add <code>gold_asteroid_risk[name]</code>, <code>gold_asteroid_risk[hazard_score]</code>
-<ul><ul><li>Apply conditional formatting on the legend:</li></ul></ul>
-   - Critical → Red (<code>#FF4444</code>)
-   - High → Orange (<code>#FF9800</code>)
-   - Medium → Yellow (<code>#FFC107</code>)
-   - Low → Green (<code>#4CAF50</code>)
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-report-visualizations">Visualizations Overview</a> - <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-card">Card Visuals</a> - <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers">Slicers</a></blockquote>
+<h3 id="page-2-asteroid-threat-monitor">Page 2: Asteroid Threat Monitor</h3>
+<p>This is the page that keeps Major Nakamura up at night.</p>
+<h4 id="threat-scatter-plot">Threat Scatter Plot</h4>
+<ol>
+  <li>Add a <strong>Scatter chart</strong> as the main visual (top half of the page).</li>
+  <li>Configure:</li>
+  <li><strong>X-axis:</strong> <code>gold_asteroid_risk[miss_distance_km]</code></li>
+  <li><strong>Y-axis:</strong> <code>gold_asteroid_risk[relative_velocity_kph]</code></li>
+  <li><strong>Size:</strong> <code>gold_asteroid_risk[avg_diameter_m]</code></li>
+  <li><strong>Legend (color):</strong> <code>gold_asteroid_risk[risk_category]</code></li>
+  <li><strong>Tooltips:</strong> Add <code>gold_asteroid_risk[name]</code>, <code>gold_asteroid_risk[hazard_score]</code></li>
+  <li>Apply conditional formatting on the legend:</li>
+  <li>Critical → Red (<code>#FF4444</code>)</li>
+  <li>High → Orange (<code>#FF9800</code>)</li>
+  <li>Medium → Yellow (<code>#FFC107</code>)</li>
+  <li>Low → Green (<code>#4CAF50</code>)</li>
+</ol>
 <blockquote>💡 <strong>Tip:</strong> Enable <strong>zoom sliders</strong> on both axes so analysts can zoom into the cluster of near-miss asteroids.</blockquote>
-<h4>Top 10 Hazardous Asteroids Table</h4>
-<ul><ul><li>Add a <strong>Table</strong> visual (bottom-left).</li></ul>
-<ul><li>Add columns:</li></ul></ul>
-   - <code>gold_asteroid_risk[name]</code>
-   - <code>gold_asteroid_risk[avg_diameter_m]</code>
-   - <code>gold_asteroid_risk[miss_distance_km]</code>
-   - <code>gold_asteroid_risk[relative_velocity_kph]</code>
-   - <code>gold_asteroid_risk[hazard_score]</code>
-   - <code>gold_asteroid_risk[risk_category]</code>
-<ul><ul><li>Apply a <strong>Top N filter</strong> on the visual:</li></ul></ul>
-   - Filter on <code>hazard_score</code> → Top <strong>10</strong> → By value: <code>hazard_score</code>
-<ul><ul><li>Add <strong>conditional formatting</strong> on the <code>risk_category</code> column:</li></ul></ul>
-   - <strong>Background color</strong> → Rules:
-     - If value is "Critical" → Red background, white text
-     - If value is "High" → Orange background
-     - If value is "Medium" → Yellow background
-     - If value is "Low" → Green background
-<h4>Hazard Score Card</h4>
-<ul><ul><li>Add a <strong>Card</strong> visual (bottom-right) showing <code>[Max Hazard Score]</code>.</li></ul>
-<ul><li>Add conditional formatting:</li></ul></ul>
-   - If value > 20 → Red
-   - If value > 10 → Orange
-   - Otherwise → Green
+<h4 id="top-10-hazardous-asteroids-table">Top 10 Hazardous Asteroids Table</h4>
+<ol>
+  <li>Add a <strong>Table</strong> visual (bottom-left).</li>
+  <li>Add columns:</li>
+  <li><code>gold_asteroid_risk[name]</code></li>
+  <li><code>gold_asteroid_risk[avg_diameter_m]</code></li>
+  <li><code>gold_asteroid_risk[miss_distance_km]</code></li>
+  <li><code>gold_asteroid_risk[relative_velocity_kph]</code></li>
+  <li><code>gold_asteroid_risk[hazard_score]</code></li>
+  <li><code>gold_asteroid_risk[risk_category]</code></li>
+  <li>Apply a <strong>Top N filter</strong> on the visual:</li>
+  <li>Filter on <code>hazard_score</code> → Top <strong>10</strong> → By value: <code>hazard_score</code></li>
+  <li>Add <strong>conditional formatting</strong> on the <code>risk_category</code> column:</li>
+  <li><strong>Background color</strong> → Rules:</li>
+  <li>If value is "Critical" → Red background, white text</li>
+  <li>If value is "High" → Orange background</li>
+  <li>If value is "Medium" → Yellow background</li>
+  <li>If value is "Low" → Green background</li>
+</ol>
+<h4 id="hazard-score-card">Hazard Score Card</h4>
+<ol>
+  <li>Add a <strong>Card</strong> visual (bottom-right) showing <code>[Max Hazard Score]</code>.</li>
+  <li>Add conditional formatting:</li>
+  <li>If value > 20 → Red</li>
+  <li>If value > 10 → Orange</li>
+  <li>Otherwise → Green</li>
+</ol>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting">Conditional Formatting</a></blockquote>
-<h3>Page 3: Solar Activity Timeline</h3>
-Space weather data for the science team.
-<h4>Solar Events Over Time (Line Chart)</h4>
-<ul><ul><li>Add a <strong>Line chart</strong> (top half).</li></ul>
-<ul><li>Configure:</li></ul></ul>
-   - <strong>X-axis:</strong> <code>gold_solar_activity[event_month]</code>
-   - <strong>Y-axis:</strong> <code>gold_solar_activity[event_count]</code>
-   - <strong>Legend:</strong> <code>gold_solar_activity[event_type]</code>
-<ul><ul><li>Set the X-axis to a continuous date axis (not categorical).</li></ul></ul>
-<h4>Severity Breakdown (Stacked Column Chart)</h4>
-<ul><ul><li>Add a <strong>Stacked column chart</strong> (bottom-left).</li></ul>
-<ul><li>Configure:</li></ul></ul>
-   - <strong>X-axis:</strong> <code>gold_solar_activity[event_type]</code>
-   - <strong>Y-axis:</strong> <code>gold_solar_activity[high_severity_count]</code>
-   - Add <code>gold_solar_activity[low_severity_count]</code> as a second Y-axis value
-<ul><ul><li>Color the series:</li></ul></ul>
-   - high_severity_count → Red/Orange
-   - low_severity_count → Green
-<h4>Latest Events Table</h4>
-<ul><ul><li>Add a <strong>Table</strong> visual (bottom-right).</li></ul>
-<ul><li>Columns: <code>event_month</code>, <code>event_type</code>, <code>event_count</code>, <code>avg_severity</code>, <code>max_severity</code></li></ul>
-<ul><li>Sort by <code>event_month</code> descending to show most recent first.</li></ul>
-<ul><li>Optionally apply a <strong>Top N</strong> filter: Top 15 by <code>event_month</code>.</li></ul></ul>
-<h3>Add Tooltips and Interactivity</h3>
-<ul><ul><li><strong>Cross-filtering:</strong> Ensure all visuals on each page cross-filter each other (this is the default behavior).</li></ul>
-<ul><li><strong>Tooltip pages:</strong> Optionally create a tooltip page for asteroids:</li></ul></ul>
-   - New page → set <strong>Page size</strong> to <strong>Tooltip</strong> in Format pane.
-   - Add a mini-card with asteroid name, diameter, velocity, and hazard score.
-   - On the scatter chart, set <strong>Tooltip → Page</strong> to your tooltip page.
-<ul><ul><li><strong>Drillthrough:</strong> Add a drillthrough page for individual mission details:</li></ul></ul>
-   - Create a new page with mission details (launch date, cost, crew, outcomes).
-   - Add <code>gold_mission_summary[mission_id]</code> as a <strong>drillthrough field</strong>.
-   - Right-click any mission in the donut chart → <strong>Drillthrough</strong> → Mission Detail.
+<h3 id="page-3-solar-activity-timeline">Page 3: Solar Activity Timeline</h3>
+<p>Space weather data for the science team.</p>
+<h4 id="solar-events-over-time-line-chart">Solar Events Over Time (Line Chart)</h4>
+<ol>
+  <li>Add a <strong>Line chart</strong> (top half).</li>
+  <li>Configure:</li>
+  <li><strong>X-axis:</strong> <code>gold_solar_activity[event_month]</code></li>
+  <li><strong>Y-axis:</strong> <code>gold_solar_activity[event_count]</code></li>
+  <li><strong>Legend:</strong> <code>gold_solar_activity[event_type]</code></li>
+  <li>Set the X-axis to a continuous date axis (not categorical).</li>
+</ol>
+<h4 id="severity-breakdown-stacked-column-chart">Severity Breakdown (Stacked Column Chart)</h4>
+<ol>
+  <li>Add a <strong>Stacked column chart</strong> (bottom-left).</li>
+  <li>Configure:</li>
+  <li><strong>X-axis:</strong> <code>gold_solar_activity[event_type]</code></li>
+  <li><strong>Y-axis:</strong> <code>gold_solar_activity[high_severity_count]</code></li>
+  <li>Add <code>gold_solar_activity[low_severity_count]</code> as a second Y-axis value</li>
+  <li>Color the series:</li>
+  <li>high_severity_count → Red/Orange</li>
+  <li>low_severity_count → Green</li>
+</ol>
+<h4 id="latest-events-table">Latest Events Table</h4>
+<ol>
+  <li>Add a <strong>Table</strong> visual (bottom-right).</li>
+  <li>Columns: <code>event_month</code>, <code>event_type</code>, <code>event_count</code>, <code>avg_severity</code>, <code>max_severity</code></li>
+  <li>Sort by <code>event_month</code> descending to show most recent first.</li>
+  <li>Optionally apply a <strong>Top N</strong> filter: Top 15 by <code>event_month</code>.</li>
+</ol>
+<h3 id="add-tooltips-and-interactivity">Add Tooltips and Interactivity</h3>
+<ol>
+  <li><strong>Cross-filtering:</strong> Ensure all visuals on each page cross-filter each other (this is the default behavior).</li>
+  <li><strong>Tooltip pages:</strong> Optionally create a tooltip page for asteroids:</li>
+  <li>New page → set <strong>Page size</strong> to <strong>Tooltip</strong> in Format pane.</li>
+  <li>Add a mini-card with asteroid name, diameter, velocity, and hazard score.</li>
+  <li>On the scatter chart, set <strong>Tooltip → Page</strong> to your tooltip page.</li>
+  <li><strong>Drillthrough:</strong> Add a drillthrough page for individual mission details:</li>
+  <li>Create a new page with mission details (launch date, cost, crew, outcomes).</li>
+  <li>Add <code>gold_mission_summary[mission_id]</code> as a <strong>drillthrough field</strong>.</li>
+  <li>Right-click any mission in the donut chart → <strong>Drillthrough</strong> → Mission Detail.</li>
+</ol>
 <blockquote>💡 <strong>Tip:</strong> Custom tooltip pages are a great way to show contextual detail without cluttering the main visuals. Major Nakamura loves hovering over a dot and seeing the asteroid's full profile.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-tooltips">Tooltips & Drill-through</a></blockquote>
----
-<h2>2️⃣ Report 2: Exoplanet Explorer</h2>
-This is the public-facing report — designed for curiosity, not crisis. The public affairs team wants visitors to explore ZOSA's exoplanet catalog interactively.
-<h3>Create a New Report</h3>
-<ul><ul><li>Go back to the <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Find <strong>ZOSA Analytics Model</strong> → click the <strong>ellipsis (...)</strong> → select <strong>Create report</strong>.</li></ul>
-<ul><li>A new blank report canvas opens, connected to the same model.</li></ul></ul>
+<hr>
+<h2 id="-report-2-exoplanet-explorer">2️⃣ Report 2: Exoplanet Explorer</h2>
+<p>This is the public-facing report — designed for curiosity, not crisis. The public affairs team wants visitors to explore ZOSA's exoplanet catalog interactively.</p>
+<h3 id="create-a-new-report">Create a New Report</h3>
+<ol>
+  <li>Go back to the <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Find <strong>ZOSA Analytics Model</strong> → click the <strong>ellipsis (...)</strong> → select <strong>Create report</strong>.</li>
+  <li>A new blank report canvas opens, connected to the same model.</li>
+</ol>
 <blockquote>💡 <strong>Alternatively in Power BI Desktop:</strong> File → New → Get data → Power BI semantic models → select ZOSA Analytics Model.</blockquote>
-<h3>Exoplanet Scatter Plot</h3>
-<ul><ul><li>Add a <strong>Scatter chart</strong> as the centerpiece of the page.</li></ul>
-<ul><li>Configure:</li></ul></ul>
-   - <strong>X-axis:</strong> <code>gold_exoplanet_catalog[orbital_period_days]</code> (consider log scale)
-   - <strong>Y-axis:</strong> <code>gold_exoplanet_catalog[planet_mass_earth]</code>
-   - <strong>Legend (color):</strong> <code>gold_exoplanet_catalog[discovery_method]</code>
-   - <strong>Tooltips:</strong> <code>gold_exoplanet_catalog[planet_name]</code>, <code>gold_exoplanet_catalog[host_star]</code>, <code>gold_exoplanet_catalog[distance_ly]</code>, <code>gold_exoplanet_catalog[habitability_zone]</code>
-<ul><ul><li>Enable <strong>zoom sliders</strong> on both axes.</li></ul>
-<ul><li>Set axis scaling to <strong>Logarithmic</strong> for orbital period (values span many orders of magnitude).</li></ul></ul>
-<h3>Filter Panel</h3>
-Add the following slicers in a vertical panel on the left side:
-| Slicer | Field | Style |
-|---|---|---|
-| Habitable Zone | <code>gold_exoplanet_catalog[habitability_zone]</code> | <strong>Toggle</strong> (Yes/No buttons) |
-| Discovery Year | <code>gold_exoplanet_catalog[discovery_year]</code> | <strong>Between</strong> (range slider) |
-| Distance (ly) | <code>gold_exoplanet_catalog[distance_ly]</code> | <strong>Between</strong> (range slider) |
-| Discovery Method | <code>gold_exoplanet_catalog[discovery_method]</code> | <strong>Dropdown</strong> (multi-select) |
+<h3 id="exoplanet-scatter-plot">Exoplanet Scatter Plot</h3>
+<ol>
+  <li>Add a <strong>Scatter chart</strong> as the centerpiece of the page.</li>
+  <li>Configure:</li>
+  <li><strong>X-axis:</strong> <code>gold_exoplanet_catalog[orbital_period_days]</code> (consider log scale)</li>
+  <li><strong>Y-axis:</strong> <code>gold_exoplanet_catalog[planet_mass_earth]</code></li>
+  <li><strong>Legend (color):</strong> <code>gold_exoplanet_catalog[discovery_method]</code></li>
+  <li><strong>Tooltips:</strong> <code>gold_exoplanet_catalog[planet_name]</code>, <code>gold_exoplanet_catalog[host_star]</code>, <code>gold_exoplanet_catalog[distance_ly]</code>, <code>gold_exoplanet_catalog[habitability_zone]</code></li>
+  <li>Enable <strong>zoom sliders</strong> on both axes.</li>
+  <li>Set axis scaling to <strong>Logarithmic</strong> for orbital period (values span many orders of magnitude).</li>
+</ol>
+<h3 id="filter-panel">Filter Panel</h3>
+<p>Add the following slicers in a vertical panel on the left side:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Slicer</th>
+      <th>Field</th>
+      <th>Style</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Habitable Zone</td>
+      <td><code>gold_exoplanet_catalog[habitability_zone]</code></td>
+      <td><strong>Toggle</strong> (Yes/No buttons)</td>
+    </tr>
+    <tr>
+      <td>Discovery Year</td>
+      <td><code>gold_exoplanet_catalog[discovery_year]</code></td>
+      <td><strong>Between</strong> (range slider)</td>
+    </tr>
+    <tr>
+      <td>Distance (ly)</td>
+      <td><code>gold_exoplanet_catalog[distance_ly]</code></td>
+      <td><strong>Between</strong> (range slider)</td>
+    </tr>
+    <tr>
+      <td>Discovery Method</td>
+      <td><code>gold_exoplanet_catalog[discovery_method]</code></td>
+      <td><strong>Dropdown</strong> (multi-select)</td>
+    </tr>
+  </tbody>
+</table>
 <blockquote>💡 <strong>Tip:</strong> Group the slicers inside a <strong>rectangle shape</strong> with a subtle background (<code>#0D1B2A</code> at 80% transparency) to create a clean filter panel effect.</blockquote>
-<h3>Planet Detail Card</h3>
-<ul><ul><li>Add a <strong>Multi-row card</strong> visual on the right side.</li></ul>
-<ul><li>Include fields:</li></ul></ul>
-   - <code>planet_name</code>, <code>host_star</code>, <code>discovery_method</code>, <code>discovery_year</code>
-   - <code>planet_mass_earth</code>, <code>orbital_period_days</code>, <code>distance_ly</code>
-   - <code>habitability_zone</code>, <code>planet_radius_earth</code>, <code>earth_similarity_index</code>
-<ul><ul><li>This card updates dynamically when you click a dot on the scatter plot.</li></ul></ul>
-<h3>Bookmarks for Preset Views</h3>
-Create two bookmarks so users can jump to curated views:
-<h4>Bookmark 1: "Habitable Candidates"</h4>
-<ul><ul><li>Set the <strong>Habitable Zone</strong> slicer to <strong>Yes</strong>.</li></ul>
-<ul><li>Optionally filter distance to < 100 light-years.</li></ul>
-<ul><li>Go to <strong>View → Bookmarks pane → Add bookmark</strong>.</li></ul>
-<ul><li>Name it <strong>🌍 Habitable Candidates</strong>.</li></ul></ul>
-<h4>Bookmark 2: "Recent Discoveries"</h4>
-<ul><ul><li>Set the <strong>Discovery Year</strong> slicer to the last 5 years.</li></ul>
-<ul><li>Clear all other filters.</li></ul>
-<ul><li>Add bookmark → Name it <strong>🔭 Recent Discoveries</strong>.</li></ul></ul>
-<h4>Add Bookmark Navigation Buttons</h4>
-<ul><ul><li>Go to <strong>Insert → Buttons → Navigator → Bookmark navigator</strong>, or add manual buttons:</li></ul></ul>
-   - Add two <strong>Blank buttons</strong> at the top of the page.
-   - Label them "🌍 Habitable Candidates" and "🔭 Recent Discoveries".
-   - In <strong>Format → Action</strong>, set type to <strong>Bookmark</strong> and select the corresponding bookmark.
+<h3 id="planet-detail-card">Planet Detail Card</h3>
+<ol>
+  <li>Add a <strong>Multi-row card</strong> visual on the right side.</li>
+  <li>Include fields:</li>
+  <li><code>planet_name</code>, <code>host_star</code>, <code>discovery_method</code>, <code>discovery_year</code></li>
+  <li><code>planet_mass_earth</code>, <code>orbital_period_days</code>, <code>distance_ly</code></li>
+  <li><code>habitability_zone</code>, <code>planet_radius_earth</code>, <code>earth_similarity_index</code></li>
+  <li>This card updates dynamically when you click a dot on the scatter plot.</li>
+</ol>
+<h3 id="bookmarks-for-preset-views">Bookmarks for Preset Views</h3>
+<p>Create two bookmarks so users can jump to curated views:</p>
+<h4 id="bookmark-1-habitable-candidates">Bookmark 1: "Habitable Candidates"</h4>
+<ol>
+  <li>Set the <strong>Habitable Zone</strong> slicer to <strong>Yes</strong>.</li>
+  <li>Optionally filter distance to < 100 light-years.</li>
+  <li>Go to <strong>View → Bookmarks pane → Add bookmark</strong>.</li>
+  <li>Name it <strong>🌍 Habitable Candidates</strong>.</li>
+</ol>
+<h4 id="bookmark-2-recent-discoveries">Bookmark 2: "Recent Discoveries"</h4>
+<ol>
+  <li>Set the <strong>Discovery Year</strong> slicer to the last 5 years.</li>
+  <li>Clear all other filters.</li>
+  <li>Add bookmark → Name it <strong>🔭 Recent Discoveries</strong>.</li>
+</ol>
+<h4 id="add-bookmark-navigation-buttons">Add Bookmark Navigation Buttons</h4>
+<ol>
+  <li>Go to <strong>Insert → Buttons → Navigator → Bookmark navigator</strong>, or add manual buttons:</li>
+  <li>Add two <strong>Blank buttons</strong> at the top of the page.</li>
+  <li>Label them "🌍 Habitable Candidates" and "🔭 Recent Discoveries".</li>
+  <li>In <strong>Format → Action</strong>, set type to <strong>Bookmark</strong> and select the corresponding bookmark.</li>
+</ol>
 <blockquote>💡 <strong>Tip:</strong> Bookmarks capture the state of all slicers, filters, and visual selections. They're like "saved searches" that let users explore without getting lost.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks">Bookmarks</a></blockquote>
----
-<h2>3️⃣ Design Tips — The ZOSA Look</h2>
-Both reports should feel like they belong in a space agency. Here's the ZOSA design system:
-<h3>Color Theme</h3>
-| Role | Color | Hex |
-|---|---|---|
-| Background (primary) | Deep Space Navy | <code>#0D1B2A</code> |
-| Background (secondary) | Dark Slate | <code>#1B2838</code> |
-| Accent (primary) | ZOSA Gold | <code>#FFD700</code> |
-| Accent (secondary) | Nebula Blue | <code>#2196F3</code> |
-| Text (primary) | White | <code>#FFFFFF</code> |
-| Text (secondary) | Silver | <code>#B0BEC5</code> |
-| Alert / Critical | Red | <code>#FF4444</code> |
-| Success | Green | <code>#4CAF50</code> |
-| Warning | Orange | <code>#FF9800</code> |
-<h4>Apply the Theme</h4>
-<ul><ul><li>Create a JSON theme file (<code>zosa-theme.json</code>):</li></ul></ul>
-   <pre><code class="language-json">   {
+<hr>
+<h2 id="-design-tips--the-zosa-look">3️⃣ Design Tips — The ZOSA Look</h2>
+<p>Both reports should feel like they belong in a space agency. Here's the ZOSA design system:</p>
+<h3 id="color-theme">Color Theme</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Color</th>
+      <th>Hex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Background (primary)</td>
+      <td>Deep Space Navy</td>
+      <td><code>#0D1B2A</code></td>
+    </tr>
+    <tr>
+      <td>Background (secondary)</td>
+      <td>Dark Slate</td>
+      <td><code>#1B2838</code></td>
+    </tr>
+    <tr>
+      <td>Accent (primary)</td>
+      <td>ZOSA Gold</td>
+      <td><code>#FFD700</code></td>
+    </tr>
+    <tr>
+      <td>Accent (secondary)</td>
+      <td>Nebula Blue</td>
+      <td><code>#2196F3</code></td>
+    </tr>
+    <tr>
+      <td>Text (primary)</td>
+      <td>White</td>
+      <td><code>#FFFFFF</code></td>
+    </tr>
+    <tr>
+      <td>Text (secondary)</td>
+      <td>Silver</td>
+      <td><code>#B0BEC5</code></td>
+    </tr>
+    <tr>
+      <td>Alert / Critical</td>
+      <td>Red</td>
+      <td><code>#FF4444</code></td>
+    </tr>
+    <tr>
+      <td>Success</td>
+      <td>Green</td>
+      <td><code>#4CAF50</code></td>
+    </tr>
+    <tr>
+      <td>Warning</td>
+      <td>Orange</td>
+      <td><code>#FF9800</code></td>
+    </tr>
+  </tbody>
+</table>
+<h4 id="apply-the-theme">Apply the Theme</h4>
+<ol>
+  <li>Create a JSON theme file (<code>zosa-theme.json</code>):</li>
+</ol>
+<pre><code class="language-json">   {
      &quot;name&quot;: &quot;ZOSA Mission Control&quot;,
      &quot;dataColors&quot;: [
        &quot;#FFD700&quot;, &quot;#2196F3&quot;, &quot;#4CAF50&quot;, &quot;#FF9800&quot;,
@@ -262,84 +442,159 @@ Both reports should feel like they belong in a space agency. Here's the ZOSA des
      &quot;background&quot;: &quot;#0D1B2A&quot;,
      &quot;foreground&quot;: &quot;#FFFFFF&quot;,
      &quot;tableAccent&quot;: &quot;#FFD700&quot;
-   }
-   </code></pre>
-<ul><ul><li>In Power BI Desktop: <strong>View → Themes → Browse for themes</strong> → select your JSON file.</li></ul></ul>
+   }</code></pre>
+<ol>
+  <li>In Power BI Desktop: <strong>View → Themes → Browse for themes</strong> → select your JSON file.</li>
+</ol>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-themes">Report Themes</a></blockquote>
-<h3>Typography</h3>
-<ul><ul><li><strong>Titles:</strong> Segoe UI Semibold, 14pt, White</li></ul>
-<ul><li><strong>Labels:</strong> Segoe UI, 10pt, Silver (<code>#B0BEC5</code>)</li></ul>
-<ul><li><strong>KPI values:</strong> Segoe UI Bold, 28pt, Gold (<code>#FFD700</code>)</li></ul></ul>
-<h3>Mobile Layout</h3>
-Field scientists need data on their tablets in remote locations.
-<ul><ul><li>Go to <strong>View → Mobile layout</strong>.</li></ul>
-<ul><li>Drag the most critical visuals to the phone canvas:</li></ul></ul>
-   - <strong>Page 1:</strong> KPI cards + Mission Status donut
-   - <strong>Page 2:</strong> Hazard Score card + Top 10 table
-   - <strong>Page 3:</strong> Solar Events line chart
-<ul><ul><li>Resize visuals to fit the portrait aspect ratio.</li></ul></ul>
+<h3 id="typography">Typography</h3>
+<ul>
+  <li><strong>Titles:</strong> Segoe UI Semibold, 14pt, White</li>
+  <li><strong>Labels:</strong> Segoe UI, 10pt, Silver (<code>#B0BEC5</code>)</li>
+  <li><strong>KPI values:</strong> Segoe UI Bold, 28pt, Gold (<code>#FFD700</code>)</li>
+</ul>
+<h3 id="mobile-layout">Mobile Layout</h3>
+<p>Field scientists need data on their tablets in remote locations.</p>
+<ol>
+  <li>Go to <strong>View → Mobile layout</strong>.</li>
+  <li>Drag the most critical visuals to the phone canvas:</li>
+  <li><strong>Page 1:</strong> KPI cards + Mission Status donut</li>
+  <li><strong>Page 2:</strong> Hazard Score card + Top 10 table</li>
+  <li><strong>Page 3:</strong> Solar Events line chart</li>
+  <li>Resize visuals to fit the portrait aspect ratio.</li>
+</ol>
 <blockquote>💡 <strong>Tip:</strong> Mobile layouts are separate from the desktop layout — you can choose which visuals to show on mobile without affecting the desktop experience. Prioritize the "need-to-know" visuals for field use.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-create-mobile-optimized-report-about">Mobile-Optimized Reports</a></blockquote>
----
-<h2>4️⃣ Publish and Save</h2>
-Since you built the reports directly in the Fabric portal, they're already saved in your workspace. If you used Power BI Desktop instead, publish here.
-<h3>If using Power BI Desktop</h3>
-<ul><ul><li>For each report, go to <strong>File → Publish → Publish to Power BI</strong>.</li></ul>
-<ul><li>Select the <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Click <strong>Select</strong>. Wait for the upload to complete.</li></ul></ul>
-<h3>Save in the Fabric Portal</h3>
-<ul><ul><li>Click the <strong>Save</strong> icon (💾) in the top-left corner.</li></ul>
-<ul><li>Name the report (e.g., <strong>Mission Control Dashboard</strong> or <strong>Exoplanet Explorer</strong>).</li></ul>
-<ul><li>Select the <strong>ZOSA-Dev</strong> workspace as the destination → <strong>Save</strong>.</li></ul></ul>
-<h3>Verify in the Service</h3>
-<ul><ul><li>Open the <strong>Fabric portal</strong> → Navigate to <strong>ZOSA-Dev</strong> workspace.</li></ul>
-<ul><li>Confirm you see:</li></ul></ul>
-   - <strong>Mission Control Dashboard</strong> (report)
-   - <strong>Exoplanet Explorer</strong> (report)
-   - Both reports should be connected to <strong>ZOSA Analytics Model</strong> (no duplicate datasets).
+<hr>
+<h2 id="-publish-and-save">4️⃣ Publish and Save</h2>
+<p>Since you built the reports directly in the Fabric portal, they're already saved in your workspace. If you used Power BI Desktop instead, publish here.</p>
+<h3 id="if-using-power-bi-desktop">If using Power BI Desktop</h3>
+<ol>
+  <li>For each report, go to <strong>File → Publish → Publish to Power BI</strong>.</li>
+  <li>Select the <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Click <strong>Select</strong>. Wait for the upload to complete.</li>
+</ol>
+<h3 id="save-in-the-fabric-portal">Save in the Fabric Portal</h3>
+<ol>
+  <li>Click the <strong>Save</strong> icon (💾) in the top-left corner.</li>
+  <li>Name the report (e.g., <strong>Mission Control Dashboard</strong> or <strong>Exoplanet Explorer</strong>).</li>
+  <li>Select the <strong>ZOSA-Dev</strong> workspace as the destination → <strong>Save</strong>.</li>
+</ol>
+<h3 id="verify-in-the-service">Verify in the Service</h3>
+<ol>
+  <li>Open the <strong>Fabric portal</strong> → Navigate to <strong>ZOSA-Dev</strong> workspace.</li>
+  <li>Confirm you see:</li>
+  <li><strong>Mission Control Dashboard</strong> (report)</li>
+  <li><strong>Exoplanet Explorer</strong> (report)</li>
+  <li>Both reports should be connected to <strong>ZOSA Analytics Model</strong> (no duplicate datasets).</li>
+</ol>
 <blockquote>⚠️ <strong>Important:</strong> Because you connected to the <em>published semantic model</em>, no new dataset is created when you publish. Both reports share the same Direct Lake model — exactly as designed.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-upload-desktop-files">Publishing Reports</a></blockquote>
-<h3>Pin to a Shared Dashboard</h3>
-<ul><ul><li>Open the <strong>Mission Control Dashboard</strong> report in the service.</li></ul>
-<ul><li>Hover over the <strong>Mission Success Rate</strong> KPI card → click the <strong>📌 Pin</strong> icon.</li></ul>
-<ul><li>Select <strong>New dashboard</strong> → Name it <strong>ZOSA Mission Control</strong>.</li></ul>
-<ul><li>Pin additional visuals:</li></ul></ul>
-   - Mission Status donut chart
-   - Critical Asteroids KPI card
-   - Hazard Score card
-   - Solar Events line chart
-<ul><ul><li>Arrange tiles on the dashboard by dragging and resizing.</li></ul></ul>
+<h3 id="pin-to-a-shared-dashboard">Pin to a Shared Dashboard</h3>
+<ol>
+  <li>Open the <strong>Mission Control Dashboard</strong> report in the service.</li>
+  <li>Hover over the <strong>Mission Success Rate</strong> KPI card → click the <strong>📌 Pin</strong> icon.</li>
+  <li>Select <strong>New dashboard</strong> → Name it <strong>ZOSA Mission Control</strong>.</li>
+  <li>Pin additional visuals:</li>
+  <li>Mission Status donut chart</li>
+  <li>Critical Asteroids KPI card</li>
+  <li>Hazard Score card</li>
+  <li>Solar Events line chart</li>
+  <li>Arrange tiles on the dashboard by dragging and resizing.</li>
+</ol>
 <blockquote>💡 <strong>Tip:</strong> Dashboards are a <em>Power BI service</em> concept — they combine pinned visuals from multiple reports onto a single canvas. Think of them as a curated "highlights reel."</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboards">Dashboards in Power BI</a></blockquote>
----
-<h2>5️⃣ Checkpoint</h2>
-Time to verify everything works end-to-end.
-<h3>✅ Verification Checklist</h3>
-| # | Check | How to Verify | Expected Result |
-|---|---|---|---|
-| 1 | Mission Control Dashboard loads | Open report in the Fabric portal | All three pages render with data |
-| 2 | Exoplanet Explorer loads | Open report in the Fabric portal | Scatter plot shows planets, slicers work |
-| 3 | KPI cards show values | Check Executive Overview page | Non-zero values for all four KPIs |
-| 4 | Slicers filter data | Change the date range slicer | All visuals update to reflect the filter |
-| 5 | Cross-filtering works | Click a segment in the donut chart | Other visuals filter to that status |
-| 6 | Conditional formatting | Look at the asteroid table | Critical rows highlighted in red |
-| 7 | Bookmarks work | Click "🌍 Habitable Candidates" button | Filters reset to habitable zone = Yes |
-| 8 | RLS filters data | Test as role from Security page (or log in as role member) | Data scoped to that role's region |
-| 9 | Mobile layout | Preview mobile layout in Desktop | KPI cards and key visuals visible |
-| 10 | Dashboard pins | Open ZOSA Mission Control dashboard | Pinned tiles show live data |
-<h3>Test RLS in the Service</h3>
-<ul><ul><li>Navigate to the semantic model → <strong>ellipsis (...)</strong> → <strong>Security</strong>.</li></ul>
-<ul><li>Click the <strong>ellipsis (...)</strong> next to a role → <strong>Test as role</strong>.</li></ul>
-<ul><li>Confirm that only the expected region's data appears.</li></ul></ul>
+<hr>
+<h2 id="-checkpoint">5️⃣ Checkpoint</h2>
+<p>Time to verify everything works end-to-end.</p>
+<h3 id="verification-checklist">✅ Verification Checklist</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Check</th>
+      <th>How to Verify</th>
+      <th>Expected Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mission Control Dashboard loads</td>
+      <td>Open report in the Fabric portal</td>
+      <td>All three pages render with data</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Exoplanet Explorer loads</td>
+      <td>Open report in the Fabric portal</td>
+      <td>Scatter plot shows planets, slicers work</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>KPI cards show values</td>
+      <td>Check Executive Overview page</td>
+      <td>Non-zero values for all four KPIs</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Slicers filter data</td>
+      <td>Change the date range slicer</td>
+      <td>All visuals update to reflect the filter</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Cross-filtering works</td>
+      <td>Click a segment in the donut chart</td>
+      <td>Other visuals filter to that status</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Conditional formatting</td>
+      <td>Look at the asteroid table</td>
+      <td>Critical rows highlighted in red</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Bookmarks work</td>
+      <td>Click "🌍 Habitable Candidates" button</td>
+      <td>Filters reset to habitable zone = Yes</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>RLS filters data</td>
+      <td>Test as role from Security page (or log in as role member)</td>
+      <td>Data scoped to that role's region</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Mobile layout</td>
+      <td>Preview mobile layout in Desktop</td>
+      <td>KPI cards and key visuals visible</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Dashboard pins</td>
+      <td>Open ZOSA Mission Control dashboard</td>
+      <td>Pinned tiles show live data</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="test-rls-in-the-service">Test RLS in the Service</h3>
+<ol>
+  <li>Navigate to the semantic model → <strong>ellipsis (...)</strong> → <strong>Security</strong>.</li>
+  <li>Click the <strong>ellipsis (...)</strong> next to a role → <strong>Test as role</strong>.</li>
+  <li>Confirm that only the expected region's data appears.</li>
+</ol>
 <blockquote>⚠️ <strong>Note:</strong> "Test as role" does not work with Direct Lake models using SSO. If you see this error, verify the role definition is correct in <strong>Manage roles</strong> and test by logging in as the assigned user in a private browser window.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">RLS Testing in the Service</a></blockquote>
----
-<h2>🎉 Module Complete!</h2>
+<hr>
+<h2 id="-module-complete">🎉 Module Complete!</h2>
 <blockquote><strong>Major Nakamura watched the Mission Control dashboard flicker to life on the main screen. Success rates, asteroid threats, solar activity — all in real time, all from one model. Down the hall, the public affairs team was already sharing the Exoplanet Explorer link on social media. "Beautiful," she murmured. Then her comm buzzed. "Major, we're getting live telemetry from the Artemis probe — velocity, temperature, radiation, streaming in every second. Can we get that on the dashboard too?" She smiled. "That's Module 07."</strong></blockquote>
----
-<h2>🧭 Navigation</h2>
-<a href="05-semantic-model.md">← Module 05 — Semantic Model (Direct Lake)</a> | <a href="07-real-time-intelligence.md">Module 07 — Real-Time Intelligence →</a>
-<a href="../README.md">← Back to README</a>
+<hr>
+<h2 id="-navigation">🧭 Navigation</h2>
+<p><a href="05-semantic-model.md">← Module 05 — Semantic Model (Direct Lake)</a> | <a href="07-real-time-intelligence.md">Module 07 — Real-Time Intelligence →</a></p>
+<p><a href="../README.md">← Back to README</a></p>
     </section>
 
     <!-- Navigation -->
