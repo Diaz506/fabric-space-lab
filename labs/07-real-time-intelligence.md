@@ -128,18 +128,20 @@ With **direct ingestion**, the Eventstream routes raw events straight into your 
    - **Eventhouse:** `zosa_eventhouse`
    - **KQL Database:** `asteroid_detections`
 4. Under **Table**, choose **Create new** → name it `asteroid_detections`.
-5. Fabric auto-detects the schema from incoming events. Review the column mapping:
+5. Fabric auto-detects the schema from incoming events. Review the column mapping and **ensure the timestamp column is set to `datetime` type** (if it defaulted to `string`, manually change it to `datetime`):
 
    | Source field | Column name | Data type |
    |---|---|---|
    | `detection_id` | `detection_id` | `string` |
-   | `timestamp` | `timestamp` | `datetime` |
+   | `timestamp` | `timestamp` | `datetime` ⚠️ |
    | `object_name` | `object_name` | `string` |
    | `miss_distance_au` | `miss_distance_au` | `real` |
    | `velocity_kmps` | `velocity_kmps` | `real` |
    | `estimated_diameter_km` | `estimated_diameter_km` | `real` |
    | `ground_station_id` | `ground_station_id` | `string` |
    | `is_potentially_hazardous` | `is_potentially_hazardous` | `bool` |
+
+> ⚠️ **Important:** If the timestamp was auto-detected as `string`, the time-based KQL queries in the next section will fail. Either update the column type to `datetime` in the mapping, or add `| extend ts = todatetime(timestamp)` to queries that use time functions.
 
 6. Click **Publish** to activate the ingestion. Within seconds, events from the simulator start landing in the Eventhouse.
 
