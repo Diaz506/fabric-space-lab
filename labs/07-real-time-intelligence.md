@@ -30,7 +30,7 @@ An **Eventhouse** is Fabric's real-time analytics engine, optimized for time-ser
 
 ### Steps
 
-1. Navigate to your **ZOSA** workspace.
+1. Navigate to your **ZOSA-Dev** workspace.
 2. Click **+ New item** → select **Eventhouse**.
 3. Name it: `zosa_eventhouse` → click **Create**.
 4. Once the Eventhouse opens, a default KQL database is created automatically. Rename it to `asteroid_detections` (or create a new one with that name).
@@ -118,7 +118,7 @@ With **direct ingestion**, the Eventstream routes raw events straight into your 
 1. Return to the `asteroid_feed` Eventstream canvas.
 2. Click **Add destination** → **Eventhouse**.
 3. Configure:
-   - **Workspace:** your ZOSA workspace
+   - **Workspace:** ZOSA-Dev
    - **Eventhouse:** `zosa_eventhouse`
    - **KQL Database:** `asteroid_detections`
 4. Under **Table**, choose **Create new** → name it `asteroid_detections`.
