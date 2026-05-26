@@ -170,17 +170,21 @@ asteroid_detections
 
 ```kql
 asteroid_detections
-| where timestamp > ago(1h)
+| extend ts = todatetime(timestamp)
+| where ts > ago(1h)
 | where miss_distance_au < 0.05
 | project timestamp, object_name, miss_distance_au, velocity_kmps
 | order by miss_distance_au asc
 ```
 
+> 💡 **Note:** The `extend ts = todatetime(timestamp)` line converts the timestamp string to datetime. If your timestamp column was correctly set to `datetime` type during ingestion, you can remove this line and use `where timestamp > ago(1h)` directly.
+
 ### Detection Rate per 10-Minute Window
 
 ```kql
 asteroid_detections
-| summarize count() by bin(timestamp, 10m)
+| extend ts = todatetime(timestamp)
+| summarize count() by bin(ts, 10m)
 | render timechart
 ```
 
@@ -188,7 +192,7 @@ asteroid_detections
 
 ```kql
 asteroid_detections
-| where timestamp > ago(1h)
+| where todatetime(timestamp) > ago(1h)
 | summarize
     total = count(),
     hazardous = countif(is_potentially_hazardous),
