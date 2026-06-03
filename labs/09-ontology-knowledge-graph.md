@@ -30,8 +30,8 @@ You've built every data layer — Bronze through Gold — stood up reports, real
 > 💡 **Why it matters:** Without an ontology, every team writes its own filters, every AI agent hallucinates its own joins, and every report defines "hazardous" differently. The ontology is the **single source of truth** for meaning.
 
 > 📚 **Official Documentation:**
-> - [GraphQL in Fabric](https://learn.microsoft.com/en-us/fabric/data-engineering/api-graphql-overview)
-> - [Knowledge Graph Concepts (Domains)](https://learn.microsoft.com/en-us/fabric/governance/use-domains)
+> - [Fabric IQ Ontology Overview](https://learn.microsoft.com/en-us/fabric/iq/ontology/overview)
+> - [Create Entity Types](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-create-entity-types)
 > - [Fabric Copilot Overview](https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview)
 
 > ⚠️ **Preview Reminder:** Fabric IQ Ontology is in **Public Preview**. The steps below reflect the current UI — expect minor changes as the feature evolves toward GA.
@@ -46,12 +46,12 @@ Before you touch Fabric, grab a whiteboard (or a Mermaid diagram). Good ontology
 
 | Entity | Key Properties | Source Table |
 |---|---|---|
-| **Asteroid** | `neo_id`, `name`, `diameter`, `is_hazardous`, `risk_category` | `gold_asteroid_risk` |
-| **Mission** | `mission_id`, `name`, `type`, `status`, `budget` | `gold_mission_summary` |
-| **Crew Member** | `crew_id`, `name`, `role`, `specialty`, `clearance` | `crew_silver` |
-| **Ground Station** | `station_id`, `name`, `region`, `location` | `telemetry_silver` |
-| **Solar Event** | `event_id`, `type`, `severity`, `timestamp` | `gold_solar_activity` |
-| **Exoplanet** | `planet_name`, `host_star`, `discovery_method`, `habitable` | `gold_exoplanet_catalog` |
+| **Asteroid** | `neo_id`, `name`, `avg_diameter_m`, `is_hazardous`, `risk_category` | `gold_asteroid_risk` |
+| **Mission** | `mission_id`, `mission_name`, `mission_type`, `status`, `budget_usd` | `gold_mission_summary` |
+| **Crew Member** | `crew_id`, `full_name`, `role`, `specialty`, `clearance_level` | `gold_dim_crew` |
+| **Ground Station** | `ground_station_id`, `ground_station_name`, `region` | `gold_dim_ground_stations` |
+| **Solar Event** | `event_month`, `event_type`, `event_count`, `avg_severity` | `gold_solar_activity` |
+| **Exoplanet** | `planet_name`, `host_star`, `discovery_method`, `habitability_zone` | `gold_exoplanet_catalog` |
 
 ### Relationships
 
@@ -70,41 +70,40 @@ erDiagram
     ASTEROID {
         string neo_id PK
         string name
-        float diameter
+        float avg_diameter_m
         boolean is_hazardous
         string risk_category
     }
     MISSION {
         string mission_id PK
-        string name
-        string type
+        string mission_name
+        string mission_type
         string status
-        float budget
+        float budget_usd
     }
     CREW_MEMBER {
         string crew_id PK
-        string name
+        string full_name
         string role
         string specialty
-        string clearance
+        string clearance_level
     }
     GROUND_STATION {
-        string station_id PK
-        string name
+        string ground_station_id PK
+        string ground_station_name
         string region
-        string location
     }
     SOLAR_EVENT {
-        string event_id PK
-        string type
-        string severity
-        datetime timestamp
+        date event_month PK
+        string event_type PK
+        int event_count
+        float avg_severity
     }
     EXOPLANET {
         string planet_name PK
         string host_star
         string discovery_method
-        boolean habitable
+        string habitability_zone
     }
 
     MISSION }o--|| ASTEROID : "targets"
@@ -123,7 +122,7 @@ erDiagram
 Now translate the whiteboard design into Fabric.
 
 1. Open the **ZOSA-Dev** workspace in the Fabric portal.
-2. Click **+ New Item** → search for **"Ontology"** (listed under the IQ preview category) → select **Ontology**.
+2. Click **+ New Item** → search for **"Ontology"** → select **Ontology (preview)**.
 3. Name the ontology: **`ZOSA Knowledge Model`**.
 4. Add an optional description: *"Unified ontology for ZOSA asteroid-defense operations."*
 5. Choose the creation method:
@@ -131,7 +130,7 @@ Now translate the whiteboard design into Fabric.
    - **Build from OneLake** — if you want to map directly to Delta tables in your Lakehouse.
 6. Click **Create**. Fabric opens the ontology designer canvas.
 
-> ⚠️ **Preview Note:** If you don't see *Ontology* under **+ New Item**, ensure your tenant admin has enabled the **Fabric IQ (Preview)** feature in the admin portal under *Tenant settings → Fabric IQ*. You may also need to enable **Microsoft Copilot and Azure OpenAI** tenant settings.
+> ⚠️ **Preview Note:** If you don't see *Ontology (preview)* under **+ New Item**, ensure your tenant admin has enabled the **Fabric IQ (Preview)** feature in the admin portal under *Tenant settings → Fabric IQ*. You may also need to enable **Microsoft Copilot and Azure OpenAI** tenant settings.
 
 > 💡 **Pro Tip:** If your Gold layer already feeds a **Power BI semantic model**, choose "Generate from semantic model" — it already contains trusted measures and dimension hierarchies that accelerate ontology mapping.
 
@@ -146,11 +145,11 @@ For each entity type in your design, connect it to the underlying Delta table.
 1. In the ontology designer, click **+ Add Entity Type**.
 2. Name it (e.g., `Asteroid`).
 3. Under the **Bindings** tab, bind the entity to your data:
-   - Select the Lakehouse → **Tables** → choose the corresponding Gold table (e.g., `gold_asteroids`).
+   - Select the Lakehouse → **Tables** → choose the corresponding Gold table (e.g., `gold_asteroid_risk`).
 4. **Map columns to entity properties:**
    - Click **Add entity type key** to designate the key field (e.g., `neo_id`) ✅
    - `name` → Display Name ✅
-   - Map remaining columns: `diameter`, `is_hazardous`, `risk_category`.
+   - Map remaining columns: `avg_diameter_m`, `is_hazardous`, `risk_category`.
 5. After mapping all entities, **Save** the ontology (changes are saved at the ontology level, not per entity).
 6. Click **Refresh the graph model** to sync data bindings with the underlying tables.
 
@@ -159,10 +158,10 @@ Repeat for all six entity types:
 | Entity | Delta Table | Entity Type Key | Display Name |
 |---|---|---|---|
 | Asteroid | `gold_asteroid_risk` | `neo_id` | `name` |
-| Mission | `gold_mission_summary` | `mission_id` | `name` |
-| Crew Member | `crew_silver` | `crew_id` | `name` |
-| Ground Station | `telemetry_silver` | `station_id` | `name` |
-| Solar Event | `gold_solar_activity` | `event_id` | `type` |
+| Mission | `gold_mission_summary` | `mission_id` | `mission_name` |
+| Crew Member | `gold_dim_crew` | `crew_id` | `full_name` |
+| Ground Station | `gold_dim_ground_stations` | `ground_station_id` | `ground_station_name` |
+| Solar Event | `gold_solar_activity` | `event_month` + `event_type` | `event_type` |
 | Exoplanet | `gold_exoplanet_catalog` | `planet_name` | `planet_name` |
 
 > 💡 **Tip:** Set friendly property names (e.g., rename `is_hazardous` to `Is Hazardous`). AI agents and search will use these names in natural-language answers.
@@ -171,11 +170,13 @@ Repeat for all six entity types:
 
 ## 5️⃣ Define Business Terms & Synonyms
 
-This is the step that ends the vocabulary wars. For each concept that different teams name differently, create **synonyms** in the ontology.
+This is the step that ends the vocabulary wars. For each concept that different teams name differently, create aliases so the ontology resolves them.
 
-### Key Synonyms to Add
+> ⚠️ **Preview Limitation:** Dedicated synonym fields are not yet a first-class UI feature in the current preview. Use the **description field** on each entity type to document common aliases. As the ontology matures toward GA, expect native synonym support to be added.
 
-| Canonical Term | Synonyms |
+### Key Terms to Document
+
+| Canonical Term | Aliases (add to description field) |
 |---|---|
 | **Asteroid** | Near-Earth Object, NEO, Target Object, Threat, Celestial Target |
 | **Hazard Score** | Risk Index, Threat Level, Danger Rating |
@@ -186,9 +187,10 @@ This is the step that ends the vocabulary wars. For each concept that different 
 ### Steps
 
 1. Select an entity type (e.g., `Asteroid`).
-2. Add synonyms for the entity by entering each alias (e.g., "Near-Earth Object," "NEO," "Threat").
-3. For property-level synonyms (e.g., `risk_category` = "Hazard Score" = "Threat Level"), select the property and add synonyms there.
-4. **Save** the ontology after updating synonyms.
+2. Open the entity's **description** or **metadata** section.
+3. Add common aliases — e.g., *"Also known as: Near-Earth Object, NEO, Threat Object, Celestial Target."*
+4. Repeat for property-level terms (e.g., `risk_category` description: *"Also called: Hazard Score, Threat Level, Danger Rating."*).
+5. **Save** the ontology after updating descriptions.
 
 > 🎯 **Why this matters:** When an analyst types *"show me all NEOs near Earth"* into a Fabric search bar or an AI agent prompt, the ontology resolves **NEO → Asteroid** automatically. No more guesswork, no more mismatched filters.
 
@@ -206,9 +208,9 @@ Derived properties are calculated values defined once in the ontology and usable
 
 | Entity | Derived Property | Logic |
 |---|---|---|
-| **Asteroid** | `threat_level` | Derived from `velocity`, `diameter`, and `close_approach_distance`. Example: `CASE WHEN velocity > 20 AND diameter > 0.5 AND close_approach_distance < 0.05 THEN 'Critical' WHEN is_hazardous = true THEN 'High' ELSE 'Normal' END` |
-| **Mission** | `duration_days` | `DATEDIFF(day, start_date, end_date)` |
-| **Crew Member** | `years_of_service` | `DATEDIFF(year, hire_date, CURRENT_DATE)` |
+| **Asteroid** | `threat_level` | Derived from `relative_velocity_kph`, `avg_diameter_m`, and `miss_distance_km`. Example: `CASE WHEN relative_velocity_kph > 72000 AND avg_diameter_m > 500 AND miss_distance_km < 7500000 THEN 'Critical' WHEN is_hazardous = true THEN 'High' ELSE 'Normal' END` |
+| **Mission** | `is_long_duration` | `CASE WHEN duration_days > 365 THEN true ELSE false END` |
+| **Exoplanet** | `is_earth_like` | `CASE WHEN earth_similarity_index > 0.8 AND habitability_zone = 'Habitable Zone' THEN true ELSE false END` |
 
 ### Steps
 
@@ -216,7 +218,7 @@ Derived properties are calculated values defined once in the ontology and usable
 2. Click **+ Add Property**.
 3. Enter the property name: `threat_level`.
 4. Write the expression using the ontology expression editor.
-5. Set the return type (`String` for threat_level, `Integer` for duration_days, etc.).
+5. Set the return type (`String` for threat_level, `Boolean` for is_long_duration and is_earth_like).
 6. **Save** the ontology.
 
 > ⚠️ **Preview Limitation:** Expression support is limited in preview. Complex expressions may need to be pre-computed in your Gold layer notebook and exposed as regular mapped properties instead.
@@ -231,7 +233,7 @@ Before handing the ontology to the rest of the agency, verify it works as expect
 
 1. In the ontology designer, open the **Preview experience** to launch the graph visualization.
 2. Select **Asteroid** — you should see a paginated list of all asteroid entities with their properties.
-3. Click any asteroid (e.g., *Apophis*) to view its **detail card**: properties, relationships, and derived values.
+3. Click any asteroid to view its **detail card**: properties, relationships, and derived values.
 
 ### Search
 
@@ -286,16 +288,23 @@ Fabric IQ Ontology maintains a **version history**. Use it to:
 
 ### Integration with External Agents (MCP)
 
-> ⚠️ **Preview Feature:** MCP (Model Context Protocol) integration is in early preview.
+> ⚠️ **Preview Feature:** MCP (Model Context Protocol) integration is part of the Fabric IQ public preview.
 
 Fabric IQ ontologies can be exposed to **third-party AI agents** via MCP endpoints. This means external tools and custom agents can query your ontology for entity definitions, relationships, and business terms — ensuring consistent language even outside the Fabric ecosystem.
+
+The MCP server endpoint follows this format:
+```
+https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/<workspace-ID>/items/<ontology-item-ID>/ontologyEndpoint
+```
+
+To connect an MCP-compatible client (VS Code Agent Mode, Claude Desktop, etc.), register this endpoint URL with OAuth 2.1 authentication.
 
 > 💡 **Future-Proofing:** As MCP support matures, your ontology becomes the **universal contract** between ZOSA's internal dashboards and external partner systems.
 
 > 📚 **Official Documentation:**
+> - [Use Ontology MCP Server](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-use-ontology-mcp-server)
 > - [Lineage](https://learn.microsoft.com/en-us/fabric/governance/lineage)
 > - [Impact Analysis](https://learn.microsoft.com/en-us/fabric/governance/impact-analysis)
-> - [Endorsement](https://learn.microsoft.com/en-us/fabric/governance/endorsement-overview)
 
 ---
 
@@ -307,7 +316,7 @@ Verify you've completed each milestone before proceeding:
 - [ ] **6 entity types** (Asteroid, Mission, Crew Member, Ground Station, Solar Event, Exoplanet) mapped to Gold Delta tables
 - [ ] **5 relationships** defined and resolvable (targets, assigned_to, operates_from, monitors, stationed_at)
 - [ ] **Business terms and synonyms** documented for at least 5 canonical terms
-- [ ] **3 derived properties** defined (threat_level, duration_days, years_of_service)
+- [ ] **3 derived properties** defined (threat_level, is_long_duration, is_earth_like)
 - [ ] **Ontology browsing and search** returns expected results
 - [ ] **Governance roles** and change-management process documented
 
