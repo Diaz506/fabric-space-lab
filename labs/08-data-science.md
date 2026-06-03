@@ -238,6 +238,8 @@ for name, model in models.items():
 
 > 💡 **What's happening under the hood:** Each `mlflow.start_run()` creates a tracked experiment run. Parameters, metrics, and the serialized model artifact all get stored automatically — no extra storage configuration needed. You'll see all three runs appear in the Fabric experiment UI within seconds.
 
+> ⚠️ **Expect near-perfect scores:** The `is_hazardous` flag in the gold table was derived from the same physical features (size, velocity, distance) used here for training. Tree-based models (RandomForest, GradientBoosting) will learn this relationship perfectly, producing 1.0 across all metrics. This is expected — the exercise focuses on the **MLflow tracking workflow**, not on building a novel classifier. In a real scenario, you'd use features that weren't used to compute the label.
+
 > 📚 **Learn more:** [MLflow Autologging in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/mlflow-autologging)
 
 ---
@@ -245,6 +247,8 @@ for name, model in models.items():
 ## 5️⃣ Compare & Select Best Model
 
 ### Compare in the Fabric UI
+
+> 💡 **Note:** Runs appear here after you execute Cell 5 in your notebook. The `mlflow.set_experiment("asteroid_risk_prediction")` call links the notebook to this experiment. If runs don't appear immediately, click the **refresh** button (🔄) in the toolbar.
 
 1. Go back to your **ZOSA-Dev** workspace
 2. Open the **asteroid_risk_prediction** experiment
@@ -261,8 +265,8 @@ for name, model in models.items():
 import pandas as pd
 
 results_df = pd.DataFrame(results).T
-results_df = results_df.sort_values("roc_auc", ascending=False)
-print("Model Comparison (sorted by ROC AUC):\n")
+results_df = results_df.sort_values(["roc_auc", "f1"], ascending=False)
+print("Model Comparison (sorted by ROC AUC, then F1):\n")
 print(results_df.to_string())
 
 best_model_name = results_df.index[0]
@@ -272,9 +276,9 @@ print(f"\n🏆 Best model: {best_model_name}")
 To register in the Fabric UI:
 
 1. Open the winning run in the experiment view
-2. Click **Save** → **Register model**
+2. Click **Save as ML model** in the ribbon
 3. Name: `asteroid_hazard_classifier`
-4. Click **Register** — the version number is assigned automatically (starting at 1)
+4. Click **Save** — the version number is assigned automatically (starting at 1)
 5. Navigate back to your workspace and confirm the **ML Model** item `asteroid_hazard_classifier` appears
 
 Your model is now a first-class citizen in the workspace — versioned, trackable, and ready for downstream use.
