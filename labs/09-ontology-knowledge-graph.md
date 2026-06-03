@@ -123,7 +123,7 @@ Now translate the whiteboard design into Fabric.
 
 1. Open the **ZOSA-Dev** workspace in the Fabric portal.
 2. Click **+ New Item** → search for **"Ontology"** → select **Ontology (preview)**.
-3. Name the ontology: **`ZOSA Knowledge Model`**.
+3. Name the ontology: **`zosa_knowledge_model`**.
 4. Add an optional description: *"Unified ontology for ZOSA asteroid-defense operations."*
 5. Choose the creation method:
    - **Generate from semantic model** — if your Gold layer already feeds a Power BI semantic model with trusted measures and dimensions, start here to accelerate ontology mapping.
@@ -312,7 +312,7 @@ To connect an MCP-compatible client (VS Code Agent Mode, Claude Desktop, etc.), 
 
 Verify you've completed each milestone before proceeding:
 
-- [ ] Ontology **`ZOSA Knowledge Model`** created in the ZOSA-Dev workspace
+- [ ] Ontology **`zosa_knowledge_model`** created in the ZOSA-Dev workspace
 - [ ] **6 entity types** (Asteroid, Mission, Crew Member, Ground Station, Solar Event, Exoplanet) mapped to Gold Delta tables
 - [ ] **5 relationships** defined and resolvable (targets, assigned_to, operates_from, monitors, stationed_at)
 - [ ] **Business terms and synonyms** documented for at least 5 canonical terms
