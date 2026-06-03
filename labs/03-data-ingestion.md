@@ -80,7 +80,7 @@ for date, neos in data["near_earth_objects"].items():
 
 # Create DataFrame and write as Delta table
 df = spark.createDataFrame(rows)
-df.write.mode("overwrite").format("delta").saveAsTable("lh_zosa.asteroids_bronze")
+df.write.mode("overwrite").format("delta").saveAsTable("asteroids_bronze")
 
 print(f"✅ Loaded {df.count()} asteroid records into asteroids_bronze")
 ```

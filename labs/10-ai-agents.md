@@ -316,7 +316,7 @@ Simulate a critical asteroid detection to verify the full workflow.
    )
 
    df = spark.createDataFrame([test_asteroid])
-   df.write.mode("append").saveAsTable("lh_zosa.gold_asteroid_risk")
+   df.write.mode("append").saveAsTable("gold_asteroid_risk")
    ```
 
 3. **Watch the Operations Agent respond.** When the agent detects the new critical data:
@@ -328,7 +328,7 @@ Simulate a critical asteroid detection to verify the full workflow.
 
 > ⚠️ **Cleanup:** After testing, remove the test row to avoid confusion:
 > ```python
-> spark.sql("DELETE FROM lh_zosa.gold_asteroid_risk WHERE neo_reference_id = 'TEST-2029-XR7'")
+> spark.sql("DELETE FROM dbo.gold_asteroid_risk WHERE neo_reference_id = 'TEST-2029-XR7'")
 > ```
 
 ---

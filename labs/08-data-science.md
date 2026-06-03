@@ -70,7 +70,8 @@ In the first cell, load your gold asteroid risk data:
 
 ```python
 # Cell 1 — Load gold asteroid risk data
-df = spark.sql("SELECT * FROM lh_zosa.gold_asteroid_risk")
+# Use dbo schema — the default lakehouse sets the catalog but tables live under dbo
+df = spark.sql("SELECT * FROM dbo.gold_asteroid_risk")
 print(f"Total records: {df.count()}")
 df.printSchema()
 df.show(5)
@@ -86,38 +87,32 @@ from pyspark.sql import functions as F
 
 features_df = df.select(
     # === Identification ===
-    F.col("neo_reference_id"),
+    F.col("neo_id"),
     
     # === Size features ===
-    ((F.col("estimated_diameter_max_km") + F.col("estimated_diameter_min_km")) / 2)
-        .alias("avg_diameter_km"),
-    (F.col("estimated_diameter_max_km") - F.col("estimated_diameter_min_km"))
-        .alias("diameter_uncertainty_km"),
+    F.col("avg_diameter_m"),
+    (F.col("avg_diameter_m") / 1000).alias("avg_diameter_km"),
     
     # === Velocity features ===
-    F.col("relative_velocity_kmps").alias("relative_velocity_kmps"),
+    F.col("relative_velocity_kph"),
+    (F.col("relative_velocity_kph") / 3600).alias("relative_velocity_kps"),
     
     # === Distance features ===
-    F.col("miss_distance_au").alias("miss_distance_au"),
-    F.col("miss_distance_km").alias("miss_distance_km"),
+    F.col("miss_distance_km"),
     
     # === Interaction features ===
-    (F.col("relative_velocity_kmps") / F.col("miss_distance_au"))
+    (F.col("relative_velocity_kph") / F.col("miss_distance_km"))
         .alias("velocity_distance_ratio"),
-    (((F.col("estimated_diameter_max_km") + F.col("estimated_diameter_min_km")) / 2)
-        * F.col("relative_velocity_kmps"))
+    (F.col("avg_diameter_m") * F.col("relative_velocity_kph"))
         .alias("size_velocity_product"),
-    (((F.col("estimated_diameter_max_km") + F.col("estimated_diameter_min_km")) / 2)
-        / F.col("miss_distance_au"))
+    (F.col("avg_diameter_m") / F.col("miss_distance_km"))
         .alias("size_distance_ratio"),
     
-    # === Orbital features ===
-    F.col("orbiting_body"),
-    
     # === Label ===
-    F.when(F.col("is_potentially_hazardous") == True, 1)
+    F.when(F.col("is_hazardous") == True, 1)
      .otherwise(0)
-     .alias("is_hazardous")
+     .cast("int")
+     .alias("is_hazardous_label")
 )
 
 print(f"Feature matrix: {features_df.count()} rows, {len(features_df.columns)} columns")
@@ -133,16 +128,15 @@ from pyspark.sql import functions as F
 
 # Drop rows with nulls in feature columns
 feature_cols = [
-    "avg_diameter_km", "diameter_uncertainty_km", "relative_velocity_kmps",
-    "miss_distance_au", "miss_distance_km", "velocity_distance_ratio",
-    "size_velocity_product", "size_distance_ratio"
+    "avg_diameter_km", "relative_velocity_kps", "miss_distance_km",
+    "velocity_distance_ratio", "size_velocity_product", "size_distance_ratio"
 ]
 
 clean_df = features_df.dropna(subset=feature_cols)
 print(f"Records after cleaning: {clean_df.count()} (dropped {features_df.count() - clean_df.count()} nulls)")
 
 # Convert to Pandas for sklearn
-pdf = clean_df.select(feature_cols + ["is_hazardous"]).toPandas()
+pdf = clean_df.select(feature_cols + ["is_hazardous_label"]).toPandas()
 
 # Normalize numeric features
 from sklearn.preprocessing import StandardScaler as SkScaler
@@ -152,8 +146,8 @@ scaler = SkScaler()
 pdf[feature_cols] = scaler.fit_transform(pdf[feature_cols])
 
 print(f"\nLabel distribution:")
-print(pdf["is_hazardous"].value_counts())
-print(f"\nHazardous ratio: {pdf['is_hazardous'].mean():.2%}")
+print(pdf["is_hazardous_label"].value_counts())
+print(f"\nHazardous ratio: {pdf['is_hazardous_label'].mean():.2%}")
 ```
 
 ### Train/Test Split
@@ -163,7 +157,7 @@ print(f"\nHazardous ratio: {pdf['is_hazardous'].mean():.2%}")
 from sklearn.model_selection import train_test_split
 
 X = pdf[feature_cols]
-y = pdf["is_hazardous"]
+y = pdf["is_hazardous_label"]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -179,6 +173,8 @@ print(f"\nTest label distribution:\n{y_test.value_counts(normalize=True)}")
 ```
 
 > ⚠️ **Important:** The `stratify=y` parameter ensures your train and test sets have the same proportion of hazardous vs. non-hazardous asteroids. Without this, you might accidentally train on an unbalanced split and get misleading metrics.
+
+> 💡 **Note:** Cell 5 below calls `mlflow.set_experiment("asteroid_risk_prediction")` — make sure this name matches exactly what you created in §2 (step 3).
 
 > 📚 **Official Documentation:**
 > - [Scikit-learn in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/train-models-scikit-learn)
@@ -253,7 +249,7 @@ for name, model in models.items():
 1. Go back to your **ZOSA-Dev** workspace
 2. Open the **asteroid_risk_prediction** experiment
 3. You'll see three runs — one per model
-4. Click **Customize columns** to display: accuracy, precision, recall, f1, roc_auc
+4. Click **Columns** to display: accuracy, precision, recall, f1, roc_auc
 5. Click a column header to sort — **sort by `roc_auc` descending** to find the best overall classifier
 
 > 📋 **What to look for:** For planetary defense, **recall** matters most — you never want to miss a truly hazardous asteroid (a false negative could be catastrophic). But high recall with low precision means too many false alarms. The **F1 score** balances both, and **ROC AUC** captures overall discriminative ability.
@@ -276,10 +272,10 @@ print(f"\n🏆 Best model: {best_model_name}")
 To register in the Fabric UI:
 
 1. Open the winning run in the experiment view
-2. Click **Register model**
+2. Click **Save** → **Register model**
 3. Name: `asteroid_hazard_classifier`
-4. Version: `1`
-5. Click **Register**
+4. Click **Register** — the version number is assigned automatically (starting at 1)
+5. Navigate back to your workspace and confirm the **ML Model** item `asteroid_hazard_classifier` appears
 
 Your model is now a first-class citizen in the workspace — versioned, trackable, and ready for downstream use.
 
@@ -304,7 +300,7 @@ pdf["predicted_hazardous"] = best_model.predict(full_X)
 pdf["hazard_probability"] = best_model.predict_proba(full_X)[:, 1]
 
 # Merge predictions with original IDs
-results_pdf = clean_df.select("neo_reference_id").toPandas()
+results_pdf = clean_df.select("neo_id").toPandas()
 results_pdf["predicted_hazardous"] = pdf["predicted_hazardous"]
 results_pdf["hazard_probability"] = pdf["hazard_probability"]
 results_pdf["model_name"] = best_model_name
@@ -313,7 +309,7 @@ results_pdf["prediction_timestamp"] = pd.Timestamp.now()
 # Save back to lakehouse as a Gold prediction table
 predictions_df = spark.createDataFrame(results_pdf)
 predictions_df.write.mode("overwrite").format("delta").saveAsTable(
-    "lh_zosa.gold_asteroid_predictions"
+    "dbo.gold_asteroid_predictions"
 )
 
 print(f"✅ Saved {predictions_df.count()} predictions to gold_asteroid_predictions")
@@ -362,7 +358,7 @@ ax.spines["right"].set_visible(False)
 plt.tight_layout()
 plt.show()
 
-# Log the chart to MLflow
+# Log the chart to MLflow (a separate run is needed because the training runs are already closed)
 with mlflow.start_run(run_name=f"{best_model_name}_feature_importance"):
     mlflow.log_figure(fig, "feature_importance.png")
     print("📊 Feature importance chart logged to MLflow")
@@ -388,12 +384,12 @@ Verify everything is in place before moving on:
 # Quick verification cell
 print("=== Module 08 Checkpoint ===\n")
 
-pred_count = spark.sql("SELECT COUNT(*) as cnt FROM lh_zosa.gold_asteroid_predictions").collect()[0]["cnt"]
+pred_count = spark.sql("SELECT COUNT(*) as cnt FROM dbo.gold_asteroid_predictions").collect()[0]["cnt"]
 print(f"✅ gold_asteroid_predictions: {pred_count} rows")
 
 hazard_count = spark.sql("""
     SELECT predicted_hazardous, COUNT(*) as cnt
-    FROM lh_zosa.gold_asteroid_predictions
+    FROM dbo.gold_asteroid_predictions
     GROUP BY predicted_hazardous
 """).show()
 
