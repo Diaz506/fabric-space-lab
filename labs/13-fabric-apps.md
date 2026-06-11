@@ -1,10 +1,10 @@
-# 📱 Module 13 — Fabric Apps
+# 🚀 Module 13 — Fabric Apps
 
-> **The Director-General leaned back in her chair. "We have dashboards, real-time alerts, ML predictions, and AI agents — but our stakeholders still have to hunt through workspaces to find what they need." She pulled up a proposal on her screen. "I want *one door* for each audience: a curated app for Mission Control, another for the Science Division, and a public-facing portal for our exoplanet discoveries. Package everything. Make it seamless."**
+> **The Director-General gathered her engineering leads. "Our dashboards tell the story. Our AI agents answer questions. But the ground station crews still copy data into spreadsheets to log maintenance tickets, and the public affairs team wants a web portal where journalists can explore our exoplanet catalog — not a Power BI report, a real *application*." She turned to you. "I heard Fabric can host full-stack apps now — TypeScript, APIs, databases, authentication — all managed. Build us a Crew Operations Portal. And if you can get a public Exoplanet Explorer web app running too? Even better."**
 
 ---
 
-**Estimated time:** 40 minutes
+**Estimated time:** 60 minutes
 
 ---
 
@@ -12,303 +12,551 @@
 
 By the end of this module, you will:
 
-- Understand what **Fabric Apps** (Power BI Apps) are and when to use them
-- Create a **Mission Control App** that bundles reports, dashboards, and metrics for ops teams
-- Create a **Science Division App** with data exploration and ML insights
-- Configure **audience-based access** with different content for different user groups
-- Set up **automatic installation** and update policies
-- Customize navigation, branding, and landing pages
+- Understand what **Fabric Apps (Preview)** are — a full-stack application platform inside Microsoft Fabric
+- Install and use the **Rayfin CLI** to scaffold, develop, and deploy a Fabric App
+- Define **TypeScript data models** with decorators that auto-generate SQL schemas and GraphQL APIs
+- Implement **row-level authorization** using `@role` decorators
+- Deploy a working web application with **Fabric SSO** authentication
+- Build a **Crew Operations Portal** connected to ZOSA's Fabric data
 
 ## 📋 Prerequisites
 
 | Requirement | Details |
 |---|---|
-| **Modules 05–06 complete** | Semantic model and reports published to ZOSA-Dev |
-| **Module 11 complete** | Content promoted to ZOSA-Prod via deployment pipelines |
-| **Workspace role** | Member or Admin on the source workspace |
+| **Module 04 complete** | Gold layer tables available in the Lakehouse |
+| **Workspace access** | Admin or Member on a Fabric-capacity workspace |
+| **Tenant setting enabled** | Fabric Apps (Preview) workload enabled by your Fabric admin |
+| **Node.js 18+** | Required for Rayfin CLI |
+| **Docker Desktop** | Required for local development |
 
-> 📚 **Learn more:** [Create and publish Power BI apps](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps)
+> ⚠️ **Preview notice:** Fabric Apps is in public preview. Features may change before GA.
+
+> 📚 **Learn more:** [What is Fabric Apps?](https://learn.microsoft.com/en-us/fabric/apps/overview)
 
 ---
 
-## 13.1 — Understanding Fabric Apps
+## 13.1 — Understanding Fabric Apps & Rayfin
 
-### What Is a Fabric App?
+### What Are Fabric Apps?
 
-A **Fabric App** is a packaged collection of content — reports, dashboards, paginated reports, metrics, and even datamart queries — distributed to consumers as a single navigable experience. Think of it as a **curated portal** with its own navigation pane, landing page, and access controls.
+**Fabric Apps** is a platform for building and deploying **data-driven web applications** directly inside Microsoft Fabric. Unlike Power BI reports (which visualize data), Fabric Apps let you build custom **interactive applications** — forms, portals, tools — with a managed backend.
 
-| Concept | Description |
+When you deploy a Fabric App, Fabric provisions and manages:
+
+| Component | What It Provides |
 |---|---|
-| **App** | A read-only bundle of content published from a workspace |
-| **Audience** | A named group of users who see a specific subset of the app's content |
-| **Navigation** | Custom sidebar with sections, links, and ordering |
-| **Landing page** | The first thing users see when they open the app |
-| **Auto-install** | Push the app to users automatically — no manual "Get apps" required |
+| **SQL Database in Fabric** | A managed database with your schema (generated from TypeScript models) |
+| **GraphQL API** | Auto-generated CRUD endpoints for your data models |
+| **Authentication** | Fabric SSO via Microsoft Entra ID — no auth code needed |
+| **Static Hosting** | Your frontend (HTML/CSS/JS) served from a public URL on OneLake storage |
 
-### When to Use Apps vs. Direct Workspace Access
+### What Is Rayfin?
+
+**Rayfin** is the open-source CLI and SDK for Fabric Apps. It handles:
+
+- Project scaffolding from templates
+- Local development with Docker (database + API + frontend)
+- Schema generation from TypeScript decorators
+- Deployment to Fabric (`rayfin up`)
+
+Think of it as **`azd` (Azure Developer CLI) but for Fabric Apps**.
+
+### Architecture
+
+```
+┌──────────────────────────────────────────────────────┐
+│                   Fabric App                          │
+├──────────────────────────────────────────────────────┤
+│  Static Frontend   │  GraphQL API  │  Auth Service   │
+│  (HTML/CSS/JS)     │  /api/graphql │  /auth (SSO)    │
+├──────────────────────────────────────────────────────┤
+│              SQL Database in Fabric                   │
+│         (schema from TypeScript models)              │
+└──────────────────────────────────────────────────────┘
+         ▲
+         │  Deployed via: npx rayfin up
+         │
+┌────────┴─────────┐
+│  Developer (You) │
+│  rayfin.yml      │
+│  /rayfin/data/   │ ← TypeScript data models
+│  /app/           │ ← Frontend code
+└──────────────────┘
+```
+
+### When to Use Fabric Apps vs. Other Options
 
 | Scenario | Use |
 |---|---|
-| Consumers who only need to *view* curated content | ✅ Fabric App |
-| Developers who need to edit reports and models | ❌ Direct workspace access |
-| Different audiences need different subsets of content | ✅ Fabric App with multiple audiences |
-| Embedding content in external portals | ❌ Power BI Embedded |
-
-> 💡 **Key principle:** Workspaces are for *builders*. Apps are for *consumers*.
-
----
-
-## 13.2 — Create the Mission Control App
-
-This app targets ZOSA's operations team — the people in Mission Control who need real-time status at a glance.
-
-### Step 1: Prepare the Workspace Content
-
-1. Navigate to your **ZOSA-Prod** workspace in the Fabric portal.
-2. Verify the following items are present (promoted from ZOSA-Dev via deployment pipelines in Module 11):
-   - 📊 **Mission Control Dashboard** (report from Module 06)
-   - 📊 **Exoplanet Explorer** (report from Module 06)
-   - 📈 **ZOSA Analytics Model** (semantic model from Module 05)
-   - ⚡ **Real-Time Alerts Dashboard** (from Module 07, if created)
-
-### Step 2: Create the App
-
-1. In **ZOSA-Prod** workspace, click **Create app** in the top toolbar.
-2. The app creation wizard opens with three tabs: **Setup**, **Content**, and **Audiences**.
-
-### Step 3: Configure Setup
-
-| Field | Value |
-|---|---|
-| App name | `ZOSA Mission Control` |
-| Description | `Real-time operational dashboards for Mission Control teams` |
-| App logo | Upload `assets/logos/zosa-logo.png` (or use a space-themed icon) |
-| Landing page | Mission Control Dashboard |
-| App contact | Your ZOSA email or distribution group |
-
-> 💡 **Tip:** The app name appears in users' Apps list and in search results. Keep it clear and professional.
-
-### Step 4: Configure Content & Navigation
-
-The **Content** tab lets you choose which workspace items to include and how to organize them.
-
-1. Select the items to include:
-   - ✅ Mission Control Dashboard
-   - ✅ Real-Time Alerts Dashboard
-   - ✅ Exoplanet Explorer
-   - ❌ ZOSA Analytics Model (consumers don't need direct model access)
-
-2. Organize the navigation:
-   ```
-   📁 Operations
-      ├── 📊 Mission Control Dashboard
-      └── ⚡ Real-Time Alerts
-   📁 Science
-      └── 🔭 Exoplanet Explorer
-   ```
-
-3. To create sections: click **New section** → name it → drag items into it.
-4. To add external links (optional): click **New link** → add a URL to ZOSA's internal wiki or incident tracker.
-
-### Step 5: Configure Audiences
-
-Audiences let you show different content to different user groups.
-
-1. **Audience 1 — Operations Team:**
-   - Name: `Operations`
-   - Content: All items (Mission Control Dashboard, Real-Time Alerts, Exoplanet Explorer)
-   - Access: Add the `ZOSA-MissionControl-Ops` security group
-
-2. **Audience 2 — Leadership:**
-   - Name: `Leadership`
-   - Content: Mission Control Dashboard, Exoplanet Explorer (exclude real-time alerts — too detailed)
-   - Access: Add the `ZOSA-Leadership` security group
-
-3. Click **Publish app**.
-
-> 📝 **Note:** Each audience gets their own navigation experience. A user in the "Leadership" audience will never see the Real-Time Alerts item.
+| Custom web portal with forms, CRUD, and business logic | ✅ Fabric Apps |
+| Dashboards and data visualization | ❌ Power BI Reports |
+| AI agent with persistent state | ✅ Fabric Apps |
+| Rapid internal tool / admin interface | ✅ Fabric Apps |
+| Complex multi-service microarchitecture | ❌ Azure App Service / Container Apps |
+| Public unauthenticated website | ❌ Static Web Apps |
 
 ---
 
-## 13.3 — Create the Science Division App
+## 13.2 — Enable Fabric Apps in Your Tenant
 
-A second app for ZOSA's researchers and data scientists.
+Before creating your first app, a Fabric admin must enable the workload:
 
-### Step 1: Create the App
+1. Sign in to the [Fabric Admin Portal](https://app.fabric.microsoft.com/admin-portal).
+2. Navigate to **Tenant settings**.
+3. Search for **Fabric Apps (preview)**.
+4. Toggle to **Enabled**.
+5. Choose: entire organization or specific security groups.
+6. Click **Apply** (changes propagate in a few minutes).
 
-1. In **ZOSA-Prod** workspace, click **Create app** again (a workspace can publish multiple apps — but only one app *per workspace* in the current Fabric model, so you may need a **ZOSA-Science** workspace).
+> 📝 **Note:** If you're on a Fabric trial, you may already have this enabled. Check by going to your workspace → **+ New item** and looking for **Fabric App**.
 
-> ⚠️ **Important:** Each workspace can publish **one app**. If you need a separate Science app, create a **ZOSA-Science** workspace and add or shortcut the relevant content there.
+---
 
-2. Alternatively, use the **multiple audiences** approach within the same app (configured in the previous step).
+## 13.3 — Install Rayfin CLI & Scaffold the Project
 
-### Step 2: Science App Content
+### Install Prerequisites
 
-If using a separate workspace:
+```bash
+# Verify Node.js 18+
+node --version
 
-| Item | Source |
-|---|---|
-| Exoplanet Explorer report | Copy or link from ZOSA-Prod |
-| Asteroid Risk Model Results | Report built on ML predictions (Module 08) |
-| Data Quality Scorecard | Report on Bronze → Silver data quality metrics (Module 04) |
-
-### Step 3: Navigation Structure
-
-```
-📁 Exploration
-   └── 🔭 Exoplanet Explorer
-📁 Risk Assessment
-   └── ☄️ Asteroid Risk Predictions
-📁 Data Quality
-   └── 📋 Quality Scorecard
+# Verify Docker is running
+docker --version
 ```
 
-### Step 4: Publish
+### Scaffold the ZOSA Crew Portal
 
-- Audience: `ZOSA-Science-Team` security group
-- Landing page: Exoplanet Explorer
-- Click **Publish app**
+```bash
+# Create a new Fabric App project from a template
+npm create @microsoft/rayfin@latest
+
+# When prompted:
+#   Project name: zosa-crew-portal
+#   Template: default (or blank)
+```
+
+This generates the project structure:
+
+```
+zosa-crew-portal/
+├── rayfin.yml              ← Project configuration
+├── rayfin/
+│   └── data/
+│       └── models.ts       ← TypeScript data models (your schema)
+├── app/                    ← Frontend application code
+│   ├── index.html
+│   ├── src/
+│   └── package.json
+├── package.json
+└── node_modules/
+```
+
+### Understand `rayfin.yml`
+
+```yaml
+name: zosa-crew-portal
+workspace: ZOSA-Dev           # Target Fabric workspace
+```
+
+This file tells Rayfin where to deploy and how to configure the app.
 
 ---
 
-## 13.4 — Auto-Install & Update Policies
+## 13.4 — Define Data Models
 
-### Enable Auto-Install
+The heart of a Fabric App is its **TypeScript data models**. You decorate classes with Rayfin decorators, and the CLI generates:
+- SQL database tables
+- GraphQL queries and mutations
+- Row-level authorization rules
 
-Push the app directly to users' Apps list without requiring them to search for it:
+### ZOSA Crew Operations Model
 
-1. Open the **Fabric Admin Portal** → **Tenant settings**.
-2. Under **Content pack and app settings**, enable:
-   - ✅ **Push apps to end users**
-3. Back in the app settings:
-   - Edit the app → **Setup** tab → toggle **Install this app automatically** → Save.
+Edit `rayfin/data/models.ts`:
 
-> 📝 **Note:** Auto-install requires **admin consent** at the tenant level. In production, work with your Fabric admin.
+```typescript
+import {
+  entity,
+  role,
+  text,
+  boolean,
+  date,
+  uuid,
+  int,
+  relation,
+} from '@microsoft/rayfin-core';
 
-### Update the App
+// --- Crew Members ---
+@entity()
+@role('authenticated', 'read')  // Any authenticated user can read
+@role('authenticated', 'create', {
+  policy: (claims) => claims.roles.includes('ops_admin'),
+})
+export class CrewMember {
+  @uuid() id!: string;
+  @text({ min: 1, max: 100 }) fullName!: string;
+  @text() role!: string;          // Commander, Pilot, Specialist, Engineer
+  @text() specialty!: string;
+  @text() clearanceLevel!: string; // L1, L2, L3, L4, L5
+  @text() homeStation!: string;
+  @boolean() isActive!: boolean;
+  @date() assignedDate!: Date;
+}
 
-When content changes in the workspace (new reports, updated dashboards):
+// --- Maintenance Tickets ---
+@entity()
+@role('authenticated', 'read')
+@role('authenticated', 'create')  // Any crew can create tickets
+@role('authenticated', 'update', {
+  policy: (claims, item) => 
+    claims.sub === item.assignedTo || claims.roles.includes('ops_admin'),
+})
+export class MaintenanceTicket {
+  @uuid() id!: string;
+  @text({ min: 1, max: 200 }) title!: string;
+  @text({ max: 2000 }) description!: string;
+  @text() priority!: string;       // Critical, High, Medium, Low
+  @text() status!: string;         // Open, InProgress, Resolved, Closed
+  @text() groundStation!: string;
+  @text() assignedTo!: string;     // crew member ID
+  @text() createdBy!: string;      // user ID from auth
+  @date() createdAt!: Date;
+  @date({ optional: true }) resolvedAt?: Date;
+}
 
-1. Go to the workspace → click **Update app**.
-2. Review changes in the Content tab (new items appear with a ✨ indicator).
-3. Assign new items to audiences as needed.
-4. Click **Update app** — all consumers see the changes immediately.
-
-> 💡 **Best practice:** Combine with Module 11's deployment pipelines — promote content to ZOSA-Prod first, *then* update the app.
-
----
-
-## 13.5 — Branding & Customization
-
-### Custom Theme
-
-Apply the ZOSA brand to the app experience:
-
-1. In the workspace, go to **Settings → Theme**.
-2. Upload a custom JSON theme file:
-
-```json
-{
-  "name": "ZOSA Space Theme",
-  "dataColors": [
-    "#2196F3", "#4CAF50", "#FFC107", "#F44336",
-    "#9C27B0", "#00BCD4", "#FF5722", "#607D8B"
-  ],
-  "background": "#0D1B2A",
-  "foreground": "#E0E0E0",
-  "tableAccent": "#2196F3"
+// --- Mission Log Entries ---
+@entity()
+@role('authenticated', 'read')
+@role('authenticated', 'create', {
+  policy: (claims) => claims.roles.includes('mission_lead'),
+})
+export class MissionLogEntry {
+  @uuid() id!: string;
+  @text() missionId!: string;
+  @text({ min: 1, max: 500 }) entry!: string;
+  @text() logType!: string;        // Status, Anomaly, Milestone, Note
+  @text() author!: string;
+  @date() timestamp!: Date;
 }
 ```
 
-3. Reports within the app will inherit this theme unless overridden at the report level.
+### What the Decorators Do
 
-### Custom Landing Page Tips
-
-- Use a **report page** as the landing page with:
-  - A ZOSA logo and welcome message (text box or image)
-  - Key metric cards showing real-time status
-  - Navigation buttons linking to other pages (using bookmarks or page navigation)
-
----
-
-## 13.6 — App Permissions & Row-Level Security
-
-Apps respect the **RLS roles** you configured in Module 05. This means:
-
-| User | RLS Role | What They See |
-|---|---|---|
-| Ground station operator (Perth) | `Station_Perth` | Only Perth station data |
-| Mission lead (all stations) | `Mission_Lead` | All station data |
-| Leadership | `Leadership` | Aggregated metrics, no PII |
-
-> 💡 **Key insight:** You don't configure RLS *in the app* — it flows through from the semantic model. The app just packages and distributes; security is enforced at the data layer.
-
-### Verify RLS in the App
-
-1. Open the app as a test user (use **"View as" → specific user** in the report).
-2. Confirm that data filters correctly based on the user's RLS role.
-3. Confirm that OLS (Object-Level Security) hides sensitive columns as expected.
-
----
-
-## 13.7 — Monitoring App Usage
-
-Track how your apps are being consumed:
-
-### Usage Metrics Report
-
-1. In the workspace, find your published report → click **ellipsis (...)** → **View usage metrics report**.
-2. Key metrics to track:
-
-| Metric | What It Tells You |
+| Decorator | Purpose |
 |---|---|
-| Report views per day | Adoption rate |
-| Unique viewers | Reach |
-| Most-viewed pages | What content is valuable |
-| Performance (avg. load time) | User experience quality |
+| `@entity()` | Marks a class as a database table + GraphQL type |
+| `@uuid()` | Auto-generated unique ID column |
+| `@text({ min, max })` | String column with validation |
+| `@boolean()` | Boolean column |
+| `@date()` | Timestamp column |
+| `@int()` | Integer column |
+| `@role(audience, action, options)` | Row-level authorization rule |
 
-### Admin Portal — App Analytics
+### Understanding `@role` Policies
 
-1. **Admin portal** → **Usage metrics** → filter by app name.
-2. See total installs, active users, and engagement trends.
+The `@role` decorator controls **who can do what**:
 
-> 📚 **Learn more:** [Monitor usage metrics](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-usage-metrics)
+```typescript
+// Anyone authenticated can read
+@role('authenticated', 'read')
+
+// Only ops_admin role can create
+@role('authenticated', 'create', {
+  policy: (claims) => claims.roles.includes('ops_admin'),
+})
+
+// Only the assigned user or admins can update
+@role('authenticated', 'update', {
+  policy: (claims, item) => claims.sub === item.assignedTo || claims.roles.includes('ops_admin'),
+})
+```
+
+This generates **row-level security** enforced at the API layer — no manual SQL policies needed.
 
 ---
 
-## 13.8 — Challenge: Public Exoplanet Portal 🏆
+## 13.5 — Local Development
 
-**Scenario:** ZOSA wants a public-facing portal where anyone can explore confirmed exoplanets. Build it as a Fabric App with restricted access (no sensitive operational data).
+Run the full stack locally before deploying to Fabric:
+
+```bash
+cd zosa-crew-portal
+
+# Install dependencies
+npm install
+
+# Start local dev environment (spins up Docker containers)
+npx rayfin dev
+```
+
+This starts:
+- A local SQL database (Docker container)
+- A local GraphQL API server
+- Your frontend with hot-reload
+- A local auth simulator (email/password for testing)
+
+### Test the GraphQL API
+
+Open `http://localhost:4000/api/graphql` in your browser to access the GraphQL playground.
+
+**Create a crew member:**
+
+```graphql
+mutation {
+  createCrewMember(input: {
+    fullName: "Elena Vasquez"
+    role: "Commander"
+    specialty: "Deep Space Navigation"
+    clearanceLevel: "L5"
+    homeStation: "Houston"
+    isActive: true
+    assignedDate: "2026-01-15"
+  }) {
+    id
+    fullName
+    role
+  }
+}
+```
+
+**Query all crew:**
+
+```graphql
+query {
+  crewMembers {
+    id
+    fullName
+    role
+    homeStation
+    isActive
+  }
+}
+```
+
+**Create a maintenance ticket:**
+
+```graphql
+mutation {
+  createMaintenanceTicket(input: {
+    title: "Antenna array misalignment - Dish 3"
+    description: "Tracking accuracy degraded by 0.3 arcsec. Needs recalibration."
+    priority: "High"
+    status: "Open"
+    groundStation: "Perth"
+    assignedTo: "elena-vasquez-id"
+    createdBy: "current-user-id"
+    createdAt: "2026-06-11T10:00:00Z"
+  }) {
+    id
+    title
+    status
+  }
+}
+```
+
+> 💡 **Tip:** The GraphQL playground gives you autocomplete and schema docs — explore the auto-generated queries and mutations.
+
+---
+
+## 13.6 — Build the Frontend
+
+The `app/` folder contains your frontend. You can use any framework (React, Vue, Svelte, vanilla JS). The scaffold provides a starter.
+
+### Using the Rayfin Client SDK
+
+The **RayfinClient** provides type-safe access to your GraphQL API:
+
+```typescript
+// app/src/main.ts
+import { RayfinClient } from '@microsoft/rayfin-client';
+
+const client = new RayfinClient();
+
+// Fetch all open tickets
+async function loadTickets() {
+  const tickets = await client.maintenanceTickets.findMany({
+    where: { status: 'Open' },
+    orderBy: { createdAt: 'desc' },
+  });
+  
+  renderTickets(tickets);
+}
+
+// Create a new ticket
+async function submitTicket(form: FormData) {
+  const ticket = await client.maintenanceTickets.create({
+    title: form.get('title') as string,
+    description: form.get('description') as string,
+    priority: form.get('priority') as string,
+    status: 'Open',
+    groundStation: form.get('station') as string,
+    assignedTo: form.get('assignee') as string,
+    createdBy: client.auth.currentUser.id,
+    createdAt: new Date(),
+  });
+  
+  console.log('Ticket created:', ticket.id);
+}
+```
+
+### Build a Simple Crew Portal UI
+
+Your frontend could include:
+
+| Page | Purpose |
+|---|---|
+| **Dashboard** | Open tickets by station, priority breakdown |
+| **Crew Directory** | List active crew, search by station/role |
+| **Submit Ticket** | Form to create maintenance tickets |
+| **Mission Log** | Timeline of mission log entries |
+
+> 💡 **Tip:** Since the GraphQL API handles all data operations and auth, your frontend is purely UI logic — no backend code to write.
+
+---
+
+## 13.7 — Deploy to Fabric
+
+When you're ready to go live:
+
+```bash
+# Authenticate with Fabric
+npx rayfin login
+
+# Deploy everything to your Fabric workspace
+npx rayfin up
+```
+
+`rayfin up` does the following:
+
+1. Creates a **Fabric App** item in your workspace (if it doesn't exist)
+2. Provisions a **SQL Database in Fabric** with your schema
+3. Deploys your **GraphQL API** endpoints
+4. Uploads your **static frontend** to OneLake hosting
+5. Configures **Fabric SSO** (Microsoft Entra ID)
+
+### After Deployment
+
+Your app is live at:
+
+```
+https://zosa-crew-portal-app.rayfin.windows.net/
+```
+
+| Endpoint | Purpose |
+|---|---|
+| `/` | Your frontend (static hosting) |
+| `/api/graphql` | Data API (GraphQL) |
+| `/auth` | Authentication service (Fabric SSO) |
+| `/storage` | File storage |
+
+### Verify in the Fabric Portal
+
+1. Navigate to your workspace in the Fabric portal.
+2. You'll see a new **Fabric App** item: `zosa-crew-portal`.
+3. Click it to see child items:
+   - **SQL Database** — view tables, run queries
+   - **Authentication** — see authenticated users
+   - **Static Content** — hosting URL
+
+---
+
+## 13.8 — Schema Updates & Iteration
+
+As ZOSA's needs evolve, update your models and redeploy:
+
+### Add a New Field
+
+```typescript
+// Add urgency escalation tracking to tickets
+export class MaintenanceTicket {
+  // ... existing fields ...
+  @boolean() escalated!: boolean;
+  @date({ optional: true }) escalatedAt?: Date;
+  @text({ optional: true }) escalatedTo?: string;
+}
+```
+
+### Apply Changes
+
+```bash
+# Apply schema migration
+npx rayfin up db apply
+```
+
+Rayfin generates and runs the SQL migration automatically. The GraphQL API updates to expose the new fields.
+
+> ⚠️ **Important:** Schema changes should always be made in code (TypeScript models), not directly in the SQL Database in the portal. Direct DB changes can cause conflicts on the next `rayfin up`.
+
+---
+
+## 13.9 — Permissions & Sharing
+
+### Item Permissions
+
+| Permission | What It Allows |
+|---|---|
+| **Run and interact** | Open and use the app (default for workspace members) |
+| **Edit (Write)** | Deploy code via `rayfin up`, modify settings |
+| **Reshare** | Grant other users access (requires workspace Admin) |
+
+### Share the App
+
+To give ZOSA ground station crews access:
+
+1. In the Fabric portal, select the **Fabric App** item.
+2. Click **Share** → add users or security groups.
+3. Assign **Run and interact** permission.
+4. Users sign in with their Microsoft Entra ID credentials — Fabric SSO handles everything.
+
+> 💡 **Key insight:** Authentication is *built in*. You never write login/logout code. Every user who accesses the app URL is authenticated via Fabric SSO automatically.
+
+---
+
+## 13.10 — Challenge: Exoplanet Explorer Web App 🏆
+
+**Scenario:** Build a second Fabric App — an interactive Exoplanet Explorer for ZOSA's public affairs team to share with journalists (authenticated via guest access).
 
 ### Requirements:
 
-1. Create a **ZOSA-Public** workspace with only:
-   - Exoplanet Explorer report (read-only, no RLS — all exoplanet data is public)
-   - A custom landing page with ZOSA branding and educational content
+1. **Data model:**
+   ```typescript
+   @entity()
+   @role('authenticated', 'read')  // Read-only for all authenticated users
+   export class Exoplanet {
+     @uuid() id!: string;
+     @text() planetName!: string;
+     @text() hostStar!: string;
+     @text() discoveryMethod!: string;
+     @text() habitabilityZone!: string;
+     @int() distanceLightYears!: number;
+     @int() earthSimilarityIndex!: number;
+   }
+   ```
 
-2. Create an app from this workspace:
-   - Audience: `ZOSA-PublicAccess` group (external users with guest access)
-   - Navigation: Single-page, clean, no operational items
+2. **Frontend:** A searchable, filterable catalog with cards showing planet details.
 
-3. **Bonus:** Add a QR code link that opens the app directly on mobile devices.
+3. **Data population:** Seed from your Gold layer exoplanet data (export → import via GraphQL mutations or direct SQL insert).
 
-> 💡 **Real-world note:** For truly public (unauthenticated) access, you'd use **Power BI Embedded** or **Publish to Web**. Fabric Apps require authentication, making them ideal for *authenticated external users* (B2B guest access via Entra ID).
+4. **Deploy** as a separate Fabric App in a `ZOSA-Public` workspace.
+
+> 💡 **Bonus:** Use the Rayfin client SDK to add interactive features — let users "favorite" exoplanets (add a `Favorite` entity with a user-to-planet relation).
 
 ---
 
-## 13.9 — Checkpoint ✅
+## 13.11 — Checkpoint ✅
 
 Verify your Fabric Apps setup:
 
 | # | Check | Status |
 |---|---|---|
-| 1 | Mission Control app created and published | ⬜ |
-| 2 | At least 2 audiences configured with different content visibility | ⬜ |
-| 3 | Navigation organized into logical sections | ⬜ |
-| 4 | Auto-install enabled (or documented why not) | ⬜ |
-| 5 | RLS verified through the app experience | ⬜ |
-| 6 | App usage metrics accessible | ⬜ |
-| 7 | (Bonus) Public Exoplanet Portal app created | ⬜ |
+| 1 | Rayfin CLI installed and authenticated | ⬜ |
+| 2 | TypeScript data models defined with decorators | ⬜ |
+| 3 | Local dev environment running (Docker + GraphQL playground) | ⬜ |
+| 4 | CRUD operations tested via GraphQL | ⬜ |
+| 5 | Frontend connects to API via RayfinClient | ⬜ |
+| 6 | App deployed to Fabric (`rayfin up` successful) | ⬜ |
+| 7 | Fabric SSO authentication working | ⬜ |
+| 8 | App shared with team (Run and interact permission) | ⬜ |
+| 9 | (Bonus) Exoplanet Explorer web app deployed | ⬜ |
 
 ---
 
@@ -316,11 +564,12 @@ Verify your Fabric Apps setup:
 
 | Concept | Summary |
 |---|---|
-| **Apps vs. Workspaces** | Workspaces are for builders; apps are for consumers |
-| **Audiences** | Control which users see which content within the same app |
-| **Security** | RLS/OLS flows through from the semantic model — apps don't override it |
-| **Distribution** | Auto-install pushes apps to users; update propagates changes instantly |
-| **Governance** | Combine with deployment pipelines for controlled promotion |
+| **Fabric Apps ≠ Power BI Apps** | Fabric Apps are full-stack web applications; Power BI Apps distribute reports |
+| **Rayfin CLI** | Scaffolds, develops locally, and deploys Fabric Apps |
+| **TypeScript → Everything** | Data models generate SQL schemas, GraphQL APIs, and auth rules |
+| **Managed infrastructure** | Fabric handles hosting, database, networking, and scaling |
+| **Fabric SSO** | Authentication is built in via Microsoft Entra ID — no auth code required |
+| **Schema-first development** | Change models in code → `rayfin up` → database migrates automatically |
 
 ---
 
@@ -328,10 +577,11 @@ Verify your Fabric Apps setup:
 
 | Resource | Link |
 |---|---|
-| Create and publish apps | [Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps) |
-| App audiences | [Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps#create-and-manage-multiple-audiences) |
-| Push apps to users | [Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps#automatically-install-apps-for-end-users) |
-| Usage metrics | [Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-usage-metrics) |
+| Fabric Apps overview | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/overview) |
+| Rayfin CLI reference | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/cli-reference) |
+| Data model decorators | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/data-models) |
+| Fabric Apps permissions | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/permissions) |
+| Local development guide | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/local-development) |
 
 ---
 
