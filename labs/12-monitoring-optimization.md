@@ -386,7 +386,7 @@ The complete ZOSA Space Analytics Platform:
 ---
 
 **Navigation:**
-[← Module 11 — CI/CD & Deployment](11-ci-cd-deployment.md)
+[← Module 11 — CI/CD & Deployment](11-ci-cd-deployment.md) | [Module 13 — Fabric Apps →](13-fabric-apps.md)
 
 [← Back to README](../README.md)
 

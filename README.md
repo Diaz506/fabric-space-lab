@@ -5,7 +5,7 @@
 
 ![Fabric](https://img.shields.io/badge/Microsoft%20Fabric-2026-blue?logo=microsoft)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Labs](https://img.shields.io/badge/modules-13-orange)
+![Labs](https://img.shields.io/badge/modules-14-orange)
 
 ## 🛸 The Story
 
@@ -49,8 +49,9 @@ to a fully operational, AI-enhanced analytics platform.
 | [10](labs/10-ai-agents.md) | **AI Agents** | Data Agents (GA), Operations Agents (Preview) | 50 min |
 | [11](labs/11-ci-cd-deployment.md) | **CI/CD & Deployment** | Git integration, Variable Library, Deployment Pipelines | 30 min |
 | [12](labs/12-monitoring-optimization.md) | **Monitoring & Optimization** | Capacity Metrics, CU analysis, cost optimization | 30 min |
+| [13](labs/13-fabric-apps.md) | **Fabric Apps** | App creation, audiences, navigation, auto-install, branding | 40 min |
 
-**Total estimated time:** ~8 hours (can be done across multiple sessions)
+**Total estimated time:** ~8.5 hours (can be done across multiple sessions)
 
 ## 🏗️ Repo Structure
 
