@@ -1,4 +1,4 @@
-# Module 07 — Real-Time Intelligence
+# Module 08 — Real-Time Intelligence
 
 > **BREAKING:** Geneva Prime ground station detected a new near-Earth object on an unusual trajectory. Major Nakamura bursts into the data center: *"We need real-time alerts. Not tomorrow — NOW. If something comes within 0.05 AU, I want to know within seconds."*
 
@@ -283,7 +283,7 @@ Create a live dashboard that Mission Control can display on the big screen.
 ### Steps
 
 1. Open your `Asteroid Mission Control` Real-Time Dashboard.
-2. Hover over the **Closest Approach** gauge tile.
+2. Hover over the **Closest Approach** stat tile.
 3. Click the **ellipsis (…)** menu → **Set alert**.
 4. Configure the alert rule:
 
@@ -381,6 +381,6 @@ Verify that all components are working end-to-end:
 ---
 
 **Navigation:**
-[← Module 06 — Power BI Reports](06-power-bi-reports.md) | [Module 08 — Data Science →](08-data-science.md)
+[← Module 07 — Power BI Reports](07-power-bi-reports.md) | [Module 09 — Data Science →](09-data-science.md)
 
 [← Back to README](../README.md)

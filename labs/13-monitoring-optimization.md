@@ -1,4 +1,4 @@
-# Module 12 — Monitoring & Optimization
+# Module 13 — Monitoring & Optimization
 
 > The CFO asks about costs — Capacity Metrics, CU analysis, and optimization strategies
 
@@ -386,7 +386,7 @@ The complete ZOSA Space Analytics Platform:
 ---
 
 **Navigation:**
-[← Module 11 — CI/CD & Deployment](11-ci-cd-deployment.md) | [Module 13 — Fabric Apps →](13-fabric-apps.md)
+[← Module 12 — CI/CD & Deployment](12-ci-cd-deployment.md) | [Module 14 — Fabric Apps →](14-fabric-apps.md)
 
 [← Back to README](../README.md)
 

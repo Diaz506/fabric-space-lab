@@ -5,7 +5,7 @@
 
 ![Fabric](https://img.shields.io/badge/Microsoft%20Fabric-2026-blue?logo=microsoft)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Labs](https://img.shields.io/badge/modules-14-orange)
+![Labs](https://img.shields.io/badge/modules-15-orange)
 
 ## 🛸 The Story
 
@@ -40,18 +40,19 @@ to a fully operational, AI-enhanced analytics platform.
 | [01](labs/01-capacity-and-workspace.md) | **Capacity & Workspaces** | SKU selection, workspace design, domains | 30 min |
 | [02](labs/02-governance-and-security.md) | **Governance & Security** | OneLake Security (RLS/CLS/OLS/DDM), Purview, sensitivity labels | 30 min |
 | [03](labs/03-data-ingestion.md) | **Data Ingestion** | Lakehouse, Dataflows Gen2, Data Pipelines, OneLake Shortcuts | 45 min |
-| [04](labs/04-medallion-lakehouse.md) | **Medallion Lakehouse** | Bronze → Silver → Gold with Spark notebooks | 60 min |
-| [05](labs/05-semantic-model.md) | **Semantic Model** | Direct Lake, DAX measures, RLS/OLS | 40 min |
-| [06](labs/06-power-bi-reports.md) | **Power BI Reports** | Mission Control dashboard, Exoplanet Explorer | 45 min |
-| [07](labs/07-real-time-intelligence.md) | **Real-Time Intelligence** | Eventstream, Eventhouse, KQL, Real-Time Hub, Activator | 45 min |
-| [08](labs/08-data-science.md) | **Data Science & AI** | MLflow, asteroid risk prediction model | 50 min |
-| [09](labs/09-ontology-knowledge-graph.md) | **Ontology & Knowledge Graph** | Fabric IQ, Ontology Project, entity mapping | 40 min |
-| [10](labs/10-ai-agents.md) | **AI Agents** | Data Agents (GA), Operations Agents (Preview) | 50 min |
-| [11](labs/11-ci-cd-deployment.md) | **CI/CD & Deployment** | Git integration, Variable Library, Deployment Pipelines | 30 min |
-| [12](labs/12-monitoring-optimization.md) | **Monitoring & Optimization** | Capacity Metrics, CU analysis, cost optimization | 30 min |
-| [13](labs/13-fabric-apps.md) | **Fabric Apps** | Rayfin CLI, TypeScript data models, GraphQL APIs, Fabric SSO, full-stack web apps | 60 min |
+| [04](labs/04-data-contracts.md) | **Data Contracts** | Schema/quality/SLA contracts, Bronze→Silver validation gate, quarantine, drift detection | 40 min |
+| [05](labs/05-medallion-lakehouse.md) | **Medallion Lakehouse** | Bronze → Silver → Gold with Spark notebooks | 60 min |
+| [06](labs/06-semantic-model.md) | **Semantic Model** | Direct Lake, DAX measures, RLS/OLS | 40 min |
+| [07](labs/07-power-bi-reports.md) | **Power BI Reports** | Mission Control dashboard, Exoplanet Explorer | 45 min |
+| [08](labs/08-real-time-intelligence.md) | **Real-Time Intelligence** | Eventstream, Eventhouse, KQL, Real-Time Hub, Activator | 45 min |
+| [09](labs/09-data-science.md) | **Data Science & AI** | MLflow, asteroid risk prediction model | 50 min |
+| [10](labs/10-ontology-knowledge-graph.md) | **Ontology & Knowledge Graph** | Fabric IQ, Ontology Project, entity mapping | 40 min |
+| [11](labs/11-ai-agents.md) | **AI Agents** | Data Agents (GA), Operations Agents (Preview) | 50 min |
+| [12](labs/12-ci-cd-deployment.md) | **CI/CD & Deployment** | Git integration, Variable Library, Deployment Pipelines | 30 min |
+| [13](labs/13-monitoring-optimization.md) | **Monitoring & Optimization** | Capacity Metrics, CU analysis, cost optimization | 30 min |
+| [14](labs/14-fabric-apps.md) | **Fabric Apps** | Rayfin CLI, TypeScript data models, GraphQL APIs, Fabric SSO, full-stack web apps | 60 min |
 
-**Total estimated time:** ~9 hours (can be done across multiple sessions)
+**Total estimated time:** ~9.5 hours (can be done across multiple sessions)
 
 ## 🏗️ Repo Structure
 

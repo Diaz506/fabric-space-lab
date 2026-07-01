@@ -345,6 +345,6 @@ Verify that you've completed the following before moving on:
 ---
 
 **Navigation:**
-[← Module 02 — Governance & Security](02-governance-and-security.md) | [Module 04 — Medallion Lakehouse →](04-medallion-lakehouse.md)
+[← Module 02 — Governance & Security](02-governance-and-security.md) | [Module 04 — Data Contracts →](04-data-contracts.md)
 
 [← Back to README](../README.md)

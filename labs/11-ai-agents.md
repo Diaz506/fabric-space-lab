@@ -1,11 +1,11 @@
-# Module 10 — AI Agents
+# Module 11 — AI Agents
 
 > Ask in plain English, act automatically — Data Agents and Operations Agents bring natural language intelligence and autonomous workflows to your unified data estate.
 
 | ⏱ Estimated time | 45 minutes |
 |---|---|
-| 🎯 Goal | Create a **Data Agent** (GA) for natural language Q&A and an **Operations Agent** (Preview) for automated threat response — both grounded to the ontology you built in Module 09. |
-| 📋 Prerequisites | Modules [07](07-activator-alerts.md), [08](08-data-science.md), and [09](09-ontology-knowledge-graph.md) completed. Gold lakehouse tables populated. ZOSA Knowledge Model ontology published. |
+| 🎯 Goal | Create a **Data Agent** (GA) for natural language Q&A and an **Operations Agent** (Preview) for automated threat response — both grounded to the ontology you built in Module 10. |
+| 📋 Prerequisites | Modules [08](08-real-time-intelligence.md), [09](09-data-science.md), and [10](10-ontology-knowledge-graph.md) completed. Gold lakehouse tables populated. ZOSA Knowledge Model ontology published. |
 
 ---
 
@@ -27,7 +27,7 @@ Data Agents provide **natural language Q&A** over your entire data estate. They 
 
 What makes Data Agents special:
 
-- **Grounded to your ontology** — the agent doesn't just guess at table relationships. It operates on the shared business meaning you defined in Module 09. When someone asks about "dangerous asteroids," the agent *knows* that means `hazard_score > 100` because your ontology says so.
+- **Grounded to your ontology** — the agent doesn't just guess at table relationships. It operates on the shared business meaning you defined in Module 10. When someone asks about "dangerous asteroids," the agent *knows* that means `hazard_score > 100` because your ontology says so.
 - **Not just ad-hoc SQL** — Data Agents understand business concepts, hierarchies, and relationships. They translate intent into precise queries across lakehouses, warehouses, and semantic models.
 - **Security-aware** — every query respects Row-Level Security (RLS), Column-Level Security (CLS), and Object-Level Security (OLS). Users only see what they're authorized to see.
 
@@ -49,7 +49,7 @@ What makes Data Agents special:
 3. Name the agent: **`ZOSA Mission Intelligence`**.
 
 4. After creation, the **OneLake catalog** opens automatically. Add your data sources (up to **5 total** — lakehouses, warehouses, semantic models, KQL databases, or ontologies in any combination):
-   - Select **ZOSA Knowledge Model** (the ontology from Module 09) → click **Add**
+   - Select **ZOSA Knowledge Model** (the ontology from Module 10) → click **Add**
    - Select the **Gold Lakehouse** → click **Add**
    - Optionally add the **ZOSA semantic model** → click **Add**
 
@@ -120,7 +120,7 @@ What is our mission success rate by region?
 List crew members with Top Secret clearance at European stations.
 ```
 
-> ⚠️ **Expected behavior:** If your RLS rules from Module 06 are active, this last query should only return results for crew members the current user is authorized to see. Try testing with different user accounts to verify.
+> ⚠️ **Expected behavior:** If your RLS rules from Module 07 are active, this last query should only return results for crew members the current user is authorized to see. Try testing with different user accounts to verify.
 
 For each query, review:
 - ✅ Did the agent return the correct results?
@@ -205,7 +205,7 @@ Operations Agents are powered by the ontology and can chain multiple actions tog
 
 ### 📐 Step 6 — Design the Automation
 
-Before building, plan the workflow. When the ML model (Module 08) scores a new asteroid as **Critical**, or the Activator (Module 07) fires an alert, the Operations Agent should:
+Before building, plan the workflow. When the ML model (Module 09) scores a new asteroid as **Critical**, or the Activator (Module 08) fires an alert, the Operations Agent should:
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -414,7 +414,7 @@ Verify you've completed all key objectives:
 >
 > Dr. Vasquez nods, but she's already thinking ahead. *"Now let's make sure this runs reliably in production. We need CI/CD pipelines, deployment gates, and a rollback plan. One workspace for dev, one for prod — no cowboy deployments."*
 >
-> You smile. That's Module 11.
+> You smile. That's Module 12.
 
 ---
 
@@ -422,7 +422,7 @@ Verify you've completed all key objectives:
 
 | Previous | Next |
 |---|---|
-| [← Module 09 — Ontology & Knowledge Graph](09-ontology-knowledge-graph.md) | [Module 11 — CI/CD & Deployment →](11-ci-cd-deployment.md) |
+| [← Module 10 — Ontology & Knowledge Graph](10-ontology-knowledge-graph.md) | [Module 12 — CI/CD & Deployment →](12-ci-cd-deployment.md) |
 
 [← Back to README](../README.md)
 

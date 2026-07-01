@@ -1,4 +1,4 @@
-# 🏗️ Module 04 — Medallion Lakehouse
+# 🏗️ Module 05 — Medallion Lakehouse
 
 > "Think of our Bronze data like raw radio signals from deep space," Dr. Osei explains during the morning standup. "Full of noise, duplicates, and mixed formats. Your job is to process them — filter the noise (Silver), then create the star maps that our scientists can actually use (Gold). That's the Medallion Architecture."
 
@@ -606,6 +606,6 @@ Verify your Medallion Lakehouse is complete:
 ---
 
 **Navigation:**
-[← Module 03 — Data Ingestion](03-data-ingestion.md) | [Module 05 — Semantic Model →](05-semantic-model.md)
+[← Module 04 — Data Contracts](04-data-contracts.md) | [Module 06 — Semantic Model →](06-semantic-model.md)
 
 [← Back to README](../README.md)

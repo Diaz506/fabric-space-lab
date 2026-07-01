@@ -13,18 +13,20 @@ import html
 # Markdown to HTML module mapping
 MODULE_MAP = {
     "00-prerequisites.md": "00-prerequisites.html",
-    "01-capacity-workspace.md": "01-capacity.html",
+    "01-capacity-and-workspace.md": "01-capacity.html",
     "02-governance-and-security.md": "02-governance.html",
     "03-data-ingestion.md": "03-ingestion.html",
-    "04-medallion-lakehouse.md": "04-medallion.html",
-    "05-semantic-model.md": "05-semantic-model.html",
-    "06-power-bi-reports.md": "06-power-bi.html",
-    "07-real-time-intelligence.md": "07-real-time.html",
-    "08-data-science.md": "08-data-science.html",
-    "09-ontology.md": "09-ontology.html",
-    "10-ai-agents.md": "10-ai-agents.html",
-    "11-ci-cd.md": "11-ci-cd.html",
-    "12-monitoring.md": "12-monitoring.html",
+    "04-data-contracts.md": "04-data-contracts.html",
+    "05-medallion-lakehouse.md": "05-medallion.html",
+    "06-semantic-model.md": "06-semantic-model.html",
+    "07-power-bi-reports.md": "07-power-bi.html",
+    "08-real-time-intelligence.md": "08-real-time.html",
+    "09-data-science.md": "09-data-science.html",
+    "10-ontology-knowledge-graph.md": "10-ontology.html",
+    "11-ai-agents.md": "11-ai-agents.html",
+    "12-ci-cd-deployment.md": "12-ci-cd.html",
+    "13-monitoring-optimization.md": "13-monitoring.html",
+    "14-fabric-apps.md": "14-fabric-apps.html",
 }
 
 # Module titles for navigation
@@ -33,15 +35,17 @@ MODULE_TITLES = {
     "01": "Module 01: Capacity & Workspace",
     "02": "Module 02: Governance & Security",
     "03": "Module 03: Data Ingestion",
-    "04": "Module 04: Medallion Lakehouse",
-    "05": "Module 05: Semantic Model",
-    "06": "Module 06: Power BI Reports",
-    "07": "Module 07: Real-Time Intelligence",
-    "08": "Module 08: Data Science",
-    "09": "Module 09: Ontology",
-    "10": "Module 10: AI Agents",
-    "11": "Module 11: CI/CD",
-    "12": "Module 12: Monitoring",
+    "04": "Module 04: Data Contracts",
+    "05": "Module 05: Medallion Lakehouse",
+    "06": "Module 06: Semantic Model",
+    "07": "Module 07: Power BI Reports",
+    "08": "Module 08: Real-Time Intelligence",
+    "09": "Module 09: Data Science",
+    "10": "Module 10: Ontology",
+    "11": "Module 11: AI Agents",
+    "12": "Module 12: CI/CD",
+    "13": "Module 13: Monitoring",
+    "14": "Module 14: Fabric Apps",
 }
 
 
@@ -301,7 +305,7 @@ def build_html_page(md_file: Path, output_file: Path):
     # Build navigation
     module_int = int(module_num)
     prev_num = f"{module_int - 1:02d}" if module_int > 0 else None
-    next_num = f"{module_int + 1:02d}" if module_int < 12 else None
+    next_num = f"{module_int + 1:02d}" if module_int < 14 else None
     
     prev_link = ""
     next_link = ""

@@ -1,4 +1,4 @@
-# Module 05 — Semantic Model (Direct Lake)
+# Module 06 — Semantic Model (Direct Lake)
 
 > **Story time 🛰️:** The science directors burst into the data-engineering bullpen at 08:00 sharp.
 > *"We need dashboards — yesterday."* You lean back in your chair and smile.
@@ -52,7 +52,7 @@ A **semantic model** is a business-friendly abstraction on top of your data. Thi
 
 ## 🏗️ 2 — Create the Semantic Model
 
-You will now build the **ZOSA Analytics Model** on top of the Gold tables you created in Module 04.
+You will now build the **ZOSA Analytics Model** on top of the Gold tables you created in Module 05.
 
 ### Steps
 
@@ -68,7 +68,7 @@ You will now build the **ZOSA Analytics Model** on top of the Gold tables you cr
    - `gold_dim_ground_stations`
 5. Click **Confirm**. Fabric creates a Direct Lake semantic model and opens the **Model view** in **Viewing mode**. Click **Editing** in the toolbar to switch to **Editing mode** before making changes.
 
-> 💡 **Tip:** If you don't see the Gold tables, make sure the notebooks from Module 04 ran successfully and that the tables are registered in the Lakehouse explorer.
+> 💡 **Tip:** If you don't see the Gold tables, make sure the notebooks from Module 05 ran successfully and that the tables are registered in the Lakehouse explorer.
 
 > 📚 **Learn more:** [Create Semantic Models in Fabric](https://learn.microsoft.com/en-us/fabric/data-warehouse/semantic-models)
 
@@ -387,11 +387,11 @@ Before moving on, verify that everything is in place:
 - [ ] **RLS role** `Europe_Analysts` filters correctly (verified with "View as").
 - [ ] **OLS** hides `budget_usd` for `Non_Executive` role (verified in Tabular Editor).
 
-> 🎉 **Congratulations!** Your semantic model is ready. The science directors won't need to wait until tomorrow — they can start exploring data *right now*. But raw numbers aren't enough; they want beautiful, interactive visuals. That's exactly what you'll build in Module 06.
+> 🎉 **Congratulations!** Your semantic model is ready. The science directors won't need to wait until tomorrow — they can start exploring data *right now*. But raw numbers aren't enough; they want beautiful, interactive visuals. That's exactly what you'll build in Module 07.
 
 ---
 
 **Navigation:**
-[← Module 04 — Medallion Lakehouse](04-medallion-lakehouse.md) | [Module 06 — Power BI Reports →](06-power-bi-reports.md)
+[← Module 05 — Medallion Lakehouse](05-medallion-lakehouse.md) | [Module 07 — Power BI Reports →](07-power-bi-reports.md)
 
 [← Back to README](../README.md)

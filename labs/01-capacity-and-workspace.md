@@ -25,7 +25,7 @@ A Fabric capacity is a **dedicated pool of compute resources** measured in **Cap
 | **F32** | 32 | Production workloads, large-scale data engineering |
 | **F64** | 64 | Enterprise production, Real-Time Intelligence, heavy concurrency |
 
-**⚠️ Note:** For this lab, an **F2 trial capacity** is sufficient for Modules 00 through 06. However, if you plan to work through **Module 07 (Real-Time Intelligence)**, you will need an **F64 or higher** — KQL databases and Eventstreams require more compute headroom.
+**⚠️ Note:** For this lab, an **F2 trial capacity** is sufficient for Modules 00 through 07. However, if you plan to work through **Module 08 (Real-Time Intelligence)**, you will need an **F64 or higher** — KQL databases and Eventstreams require more compute headroom.
 
 💡 **Tip:** Microsoft offers a free Fabric trial that provisions an F64 capacity for 60 days. If you haven't activated yours yet, go back to [Module 00](00-prerequisites.md) and follow the trial activation steps.
 
@@ -117,7 +117,7 @@ Throughout this lab, we follow a consistent naming standard for all Fabric items
 | KQL Database | `kql_` | `kql_telemetry` | Matches the eventhouse |
 | Eventstream | `es_` | `es_ground_stations` | Describes the source |
 
-**Key principle:** Keep item names **identical across workspaces** (Dev/Test/Prod). The workspace already carries the environment context, and Deployment Pipelines (Module 11) work best when items share the same name — pipeline rules handle connection swaps automatically.
+**Key principle:** Keep item names **identical across workspaces** (Dev/Test/Prod). The workspace already carries the environment context, and Deployment Pipelines (Module 12) work best when items share the same name — pipeline rules handle connection swaps automatically.
 
 > 📚 **Official Documentation:**
 > - [Workspaces in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/get-started/workspaces)
@@ -183,7 +183,7 @@ Navigate to the **OneLake** tab in your workspace settings. You'll see three key
 
 **OneLake Diagnostic Settings**
 - **Add diagnostic events to a Lakehouse** — when enabled, OneLake logs usage and access events to a lakehouse you specify. Useful for monitoring and auditing.
-- For this lab, **leave it Off** — we'll revisit diagnostics in Module 12 (Monitoring).
+- For this lab, **leave it Off** — we'll revisit diagnostics in Module 13 (Monitoring).
 
 > 💡 **Note:** External data access to OneLake (allowing tools like Azure Databricks or Synapse to connect) is controlled at the **tenant level** by your Fabric admin, not at the workspace level. For trial tenants, this is enabled by default.
 

@@ -314,9 +314,9 @@ Labels will be applied as you create items throughout the lab. Here's the plan:
 | Module | Item | Label to Apply |
 |--------|------|---------------|
 | **Module 03** | `lh_zosa` (Lakehouse) | **Confidential** |
-| **Module 05** | `ZOSA Semantic Model` | **Confidential** |
-| **Module 06** | Power BI reports | **Confidential** |
-| **Module 08** | ML experiments & models | **Top Secret** |
+| **Module 06** | `ZOSA Semantic Model` | **Confidential** |
+| **Module 07** | Power BI reports | **Confidential** |
+| **Module 09** | ML experiments & models | **Top Secret** |
 
 **How to apply a label to any Fabric item:**
 
@@ -396,9 +396,9 @@ OneLake Security is the **unified data access control layer** for Microsoft Fabr
 
 ### Enabling OneLake Security
 
-> ⚠️ **Prerequisite:** You need a lakehouse with tables before you can enable OneLake Security. The option **Manage OneLake Security** appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 04 — then come back here to enable security.
+> ⚠️ **Prerequisite:** You need a lakehouse with tables before you can enable OneLake Security. The option **Manage OneLake Security** appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 05 — then come back here to enable security.
 
-**When you're ready (after Module 04):**
+**When you're ready (after Module 05):**
 
 1. Open **ZOSA-Dev** workspace
 2. Open your **Lakehouse** item
@@ -411,7 +411,7 @@ Once enabled, you'll see the role management interface where you can create role
 
 ### 🔒 4a — Row-Level Security (RLS)
 
-> 📋 **Plan now, implement in Module 04** — The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 04.
+> 📋 **Plan now, implement in Module 05** — The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 05.
 
 **Scenario:** ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from **their region**. A European analyst shouldn't browse Asian station data.
 
@@ -451,7 +451,7 @@ SELECT * FROM observations WHERE region = 'Europe'
 
 ### 🔒 4b — Column-Level Security (CLS)
 
-> 📋 **Plan now, implement in Module 04** — CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.
+> 📋 **Plan now, implement in Module 05** — CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.
 
 **Scenario:** Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should **never see** the `budget_usd` or `clearance_level` columns.
 
@@ -478,7 +478,7 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];
 
 ### 🔒 4c — Object-Level Security (OLS)
 
-> 📋 **Plan now, implement in Module 04** — OLS is configured via Tabular Editor on the semantic model, which is created in Module 05. Review the concept now and implement later.
+> 📋 **Plan now, implement in Module 05** — OLS is configured via Tabular Editor on the semantic model, which is created in Module 06. Review the concept now and implement later.
 
 **Scenario:** ZOSA has a `classified_defense_missions` table containing data about planetary defense operations. This table should be **completely invisible** to anyone without defense clearance.
 
@@ -503,7 +503,7 @@ OLS is configured via the **Tabular Editor** (a free external tool) or the **XML
 
 ### 🔒 4d — Dynamic Data Masking (DDM)
 
-> 📋 **Plan now, implement in Module 04** — DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.
+> 📋 **Plan now, implement in Module 05** — DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.
 
 **Scenario:** External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be **partially masked**.
 
@@ -581,7 +581,7 @@ Verify you've completed the following:
 - [ ] Sensitivity labels configured and published via policy (Internal default baseline)
 - [ ] Endorsement process understood (Promoted vs. Certified)
 - [ ] You understand the 4 data security layers: **RLS** (row filter), **CLS** (column deny), **OLS** (object hide), **DDM** (value mask)
-- [ ] OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded
+- [ ] OneLake Security planning documented — you'll implement the data-level rules in Module 05 after data is loaded
 
 ### 🧪 How You'll Validate Security (Preview)
 
@@ -594,7 +594,7 @@ You've defined the rules — but how do you prove they work? Here's what you'll 
 | **DDM** | Sign in as `zosa.scientist` → query `SELECT * FROM crew` → confirm emails show as `s***@zosa.org` |
 | **OLS** | Sign in as `zosa.scientist` → open the Power BI semantic model → confirm `classified_defense_missions` table is not visible |
 
-**⚠️ Note:** We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be **implemented** in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.
+**⚠️ Note:** We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be **implemented** in Module 05 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.
 
 ---
 

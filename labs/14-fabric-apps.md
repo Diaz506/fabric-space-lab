@@ -1,4 +1,4 @@
-# 🚀 Module 13 — Fabric Apps
+# 🚀 Module 14 — Fabric Apps
 
 > **The Director-General gathered her engineering leads. "Our dashboards tell the story. Our AI agents answer questions. But the ground station crews still copy data into spreadsheets to log maintenance tickets, and the public affairs team wants a web portal where journalists can explore our exoplanet catalog — not a Power BI report, a real *application*." She turned to you. "I heard Fabric can host full-stack apps now — TypeScript, APIs, databases, authentication — all managed. Build us a Crew Operations Portal. And if you can get a public Exoplanet Explorer web app running too? Even better."**
 
@@ -23,7 +23,7 @@ By the end of this module, you will:
 
 | Requirement | Details |
 |---|---|
-| **Module 04 complete** | Gold layer tables available in the Lakehouse |
+| **Module 05 complete** | Gold layer tables available in the Lakehouse |
 | **Workspace access** | Admin or Member on a Fabric-capacity workspace |
 | **Tenant setting enabled** | Fabric Apps (Preview) workload enabled by your Fabric admin |
 | **Node.js 18+** | Required for Rayfin CLI |
@@ -586,6 +586,6 @@ Verify your Fabric Apps setup:
 ---
 
 **Navigation:**
-[← Module 12 — Monitoring & Optimization](12-monitoring-optimization.md)
+[← Module 13 — Monitoring & Optimization](13-monitoring-optimization.md)
 
 [← Back to README](../README.md)

@@ -1,4 +1,4 @@
-# Module 11 — CI/CD & Deployment
+# Module 12 — CI/CD & Deployment
 
 > From Dev to Prod — Git integration, Variable Library, and Deployment Pipelines
 
@@ -455,7 +455,7 @@ Time to monitor and optimize.
 ---
 
 **Navigation:**
-[← Module 10 — AI Agents](10-ai-agents.md) | [Module 12 — Monitoring & Optimization →](12-monitoring-optimization.md)
+[← Module 11 — AI Agents](11-ai-agents.md) | [Module 13 — Monitoring & Optimization →](13-monitoring-optimization.md)
 
 [← Back to README](../README.md)
 

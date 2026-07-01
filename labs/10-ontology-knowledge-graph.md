@@ -1,4 +1,4 @@
-# Module 09 — Ontology & Knowledge Graph
+# Module 10 — Ontology & Knowledge Graph
 
 > One language for the whole agency — Fabric IQ Ontology
 
@@ -308,7 +308,7 @@ To connect an MCP-compatible client (VS Code Agent Mode, Claude Desktop, etc.), 
 
 ---
 
-## ✅ Module 09 Checkpoint
+## ✅ Module 10 Checkpoint
 
 Verify you've completed each milestone before proceeding:
 
@@ -332,11 +332,11 @@ Verify you've completed each milestone before proceeding:
 >
 > *"Can our AI agents use this to answer questions automatically? Can I ask 'Which high-risk asteroids have no active mission?' and get a real answer — from live data — without filing a ticket?"*
 >
-> She looks at you expectantly. You smile. That's Module 10.
+> She looks at you expectantly. You smile. That's Module 11.
 
 ---
 
 **Navigation:**
-[← Module 08 — Data Science & AI](08-data-science.md) | [Module 10 — AI Agents →](10-ai-agents.md)
+[← Module 09 — Data Science & AI](09-data-science.md) | [Module 11 — AI Agents →](11-ai-agents.md)
 
 [← Back to README](../README.md)

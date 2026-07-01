@@ -1,4 +1,4 @@
-# 🔬 Module 08 — Data Science & AI
+# 🔬 Module 09 — Data Science & AI
 
 > **Story:** Dr. Osei leans forward in her chair, the glow of the dashboard reflecting off her glasses. *"We can see the asteroids after they pass. But can we predict which ones are dangerous before they get close?"* She taps the table. *"The Planetary Defense board needs a risk classifier — not hindsight, but foresight."*
 
@@ -14,7 +14,7 @@ By the end of this module you will:
 - Track experiments with MLflow
 - Register the best model and save predictions back to the lakehouse
 
-> **Prerequisites:** You need the `gold_asteroid_risk` table from [Module 04](04-medallion-lakehouse.md) and a working ZOSA-Dev workspace.
+> **Prerequisites:** You need the `gold_asteroid_risk` table from [Module 05](05-medallion-lakehouse.md) and a working ZOSA-Dev workspace.
 
 ---
 
@@ -323,7 +323,7 @@ print(f"\nSample predictions:")
 predictions_df.show(10)
 ```
 
-> 💡 **Why save predictions as a Gold table?** Downstream consumers — Power BI reports, real-time dashboards, and the ontology layer you'll build in Module 09 — can query this table directly. The model's output becomes a reusable data product, not a one-off notebook result.
+> 💡 **Why save predictions as a Gold table?** Downstream consumers — Power BI reports, real-time dashboards, and the ontology layer you'll build in Module 10 — can query this table directly. The model's output becomes a reusable data product, not a one-off notebook result.
 
 > 📚 **Learn more:** [PREDICT Function](https://learn.microsoft.com/en-us/fabric/data-science/model-scoring-predict)
 
@@ -386,7 +386,7 @@ Verify everything is in place before moving on:
 
 ```python
 # Quick verification cell
-print("=== Module 08 Checkpoint ===\n")
+print("=== Module 09 Checkpoint ===\n")
 
 pred_count = spark.sql("SELECT COUNT(*) as cnt FROM dbo.gold_asteroid_predictions").collect()[0]["cnt"]
 print(f"✅ gold_asteroid_predictions: {pred_count} rows")
@@ -408,12 +408,12 @@ print("\n✅ All checkpoint items verified!")
 
 > Dr. Osei reviews the predictions dashboard, nodding slowly. *"Good — the model catches 96% of the hazardous ones. But this knowledge is trapped in a table."* She looks up. *"How do we make this accessible to every team at ZOSA — scientists, engineers, mission planners — without everyone needing to write SQL?"*
 
-In **[Module 09 — Ontology & Knowledge Graph](09-ontology-knowledge-graph.md)**, you'll build a semantic layer that turns your lakehouse tables and ML predictions into a navigable knowledge graph — making ZOSA's data self-describing and discoverable.
+In **[Module 10 — Ontology & Knowledge Graph](10-ontology-knowledge-graph.md)**, you'll build a semantic layer that turns your lakehouse tables and ML predictions into a navigable knowledge graph — making ZOSA's data self-describing and discoverable.
 
 ---
 
 **Navigation:**
-[← Module 07 — Real-Time Intelligence](07-real-time-intelligence.md) | [Module 09 — Ontology & Knowledge Graph →](09-ontology-knowledge-graph.md)
+[← Module 08 — Real-Time Intelligence](08-real-time-intelligence.md) | [Module 10 — Ontology & Knowledge Graph →](10-ontology-knowledge-graph.md)
 
 [← Back to README](../README.md)
 

@@ -114,7 +114,7 @@ pip install -r requirements.txt
 
 ### 4. Power BI Desktop
 
-Required for **Module 06** (Semantic Model & Power BI).
+Required for **Module 07** (Semantic Model & Power BI).
 
 - Download from [https://powerbi.microsoft.com/desktop/](https://powerbi.microsoft.com/desktop/)
 - Or install via the **Microsoft Store** (auto-updates)
@@ -128,7 +128,7 @@ Required for **Module 06** (Semantic Model & Power BI).
 
 ### 5. Git
 
-Required for **Module 11** (CI/CD & Deployment Pipelines).
+Required for **Module 12** (CI/CD & Deployment Pipelines).
 
 **Verify your installation:**
 
@@ -230,8 +230,8 @@ Before moving on, verify you have:
 - [ ] NASA API key saved (or you're using sample data)
 - [ ] Python 3.10+ installed with dependencies (`pip install -r requirements.txt`)
 - [ ] Repository cloned and ready
-- [ ] Power BI Desktop installed *(can defer to Module 06)*
-- [ ] Git installed *(can defer to Module 11)*
+- [ ] Power BI Desktop installed *(can defer to Module 07)*
+- [ ] Git installed *(can defer to Module 12)*
 
 > **✅ Checkpoint:** All set? Dr. Vasquez is waiting. Let's provision your Fabric workspace.
 

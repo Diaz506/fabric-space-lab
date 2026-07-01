@@ -1,4 +1,4 @@
-# 📊 Module 06 — Power BI Reports
+# 📊 Module 07 — Power BI Reports
 
 > **Major Nakamura stood at the center of Mission Control, staring at the wall of blank monitors. "We have the data," she said. "We have the model. But my team is still opening spreadsheets to check mission status." She turned to her analyst. "I need a dashboard on that main screen — something that tells me what's happening *right now*. And the public affairs team? They want an Exoplanet Explorer for the website so the public can browse our discoveries." Two reports, one model. Time to build.**
 
@@ -18,7 +18,7 @@ By the end of this module, you will:
 
 | Requirement | Details |
 |---|---|
-| **Module 05 complete** | ZOSA Analytics Model published with Direct Lake, measures, and RLS |
+| **Module 06 complete** | ZOSA Analytics Model published with Direct Lake, measures, and RLS |
 | **Workspace access** | Contributor or higher on **ZOSA-Dev** |
 
 > 💡 **Tip:** You can build reports directly in the Fabric portal (from the semantic model → **Create report**) or use **Power BI Desktop** connected to the semantic model. This lab uses the web experience by default — no Desktop install required.
@@ -413,12 +413,12 @@ Time to verify everything works end-to-end.
 
 ## 🎉 Module Complete!
 
-> **Major Nakamura watched the Mission Control dashboard flicker to life on the main screen. Success rates, asteroid threats, solar activity — all in real time, all from one model. Down the hall, the public affairs team was already sharing the Exoplanet Explorer link on social media. "Beautiful," she murmured. Then her comm buzzed. "Major, we're getting live telemetry from the Artemis probe — velocity, temperature, radiation, streaming in every second. Can we get that on the dashboard too?" She smiled. "That's Module 07."**
+> **Major Nakamura watched the Mission Control dashboard flicker to life on the main screen. Success rates, asteroid threats, solar activity — all in real time, all from one model. Down the hall, the public affairs team was already sharing the Exoplanet Explorer link on social media. "Beautiful," she murmured. Then her comm buzzed. "Major, we're getting live telemetry from the Artemis probe — velocity, temperature, radiation, streaming in every second. Can we get that on the dashboard too?" She smiled. "That's Module 08."**
 
 ---
 
 ## 🧭 Navigation
 
-[← Module 05 — Semantic Model (Direct Lake)](05-semantic-model.md) | [Module 07 — Real-Time Intelligence →](07-real-time-intelligence.md)
+[← Module 06 — Semantic Model (Direct Lake)](06-semantic-model.md) | [Module 08 — Real-Time Intelligence →](08-real-time-intelligence.md)
 
 [← Back to README](../README.md)
