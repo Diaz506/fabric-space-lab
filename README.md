@@ -47,7 +47,7 @@ to a fully operational, AI-enhanced analytics platform.
 | [08](labs/08-real-time-intelligence.md) | **Real-Time Intelligence** | Eventstream, Eventhouse, KQL, Real-Time Hub, Activator | 45 min |
 | [09](labs/09-data-science.md) | **Data Science & AI** | MLflow, asteroid risk prediction model | 50 min |
 | [10](labs/10-ontology-knowledge-graph.md) | **Ontology & Knowledge Graph** | Fabric IQ, Ontology Project, entity mapping | 40 min |
-| [11](labs/11-ai-agents.md) | **AI Agents** | Data Agents (GA), Operations Agents (Preview) | 50 min |
+| [11](labs/11-ai-agents.md) | **AI Agents** | Data Agents (GA) + Creator Agent, Operations Agents (GA) | 50 min |
 | [12](labs/12-ci-cd-deployment.md) | **CI/CD & Deployment** | Git integration, Variable Library, Deployment Pipelines | 30 min |
 | [13](labs/13-monitoring-optimization.md) | **Monitoring & Optimization** | Capacity Metrics, CU analysis, cost optimization | 30 min |
 | [14](labs/14-fabric-apps.md) | **Fabric Apps** | Rayfin CLI, TypeScript data models, GraphQL APIs, Fabric SSO, full-stack web apps | 60 min |
@@ -113,7 +113,7 @@ This lab covers features at various maturity levels:
 | Dataflows Gen2, Data Pipelines, Mirroring | ✅ GA |
 | Git Integration, Deployment Pipelines | ✅ GA |
 | Fabric IQ / Ontology Projects | ⚠️ Preview |
-| Operations Agents | ⚠️ Preview |
+| Operations Agents | ✅ GA (June 2026) |
 | Data Agent Creator Agent, Service Principal auth | ⚠️ Preview |
 | Variable Library | ⚠️ Preview |
 | Fabric Apps / Rayfin | ⚠️ Preview |

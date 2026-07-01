@@ -4,7 +4,7 @@
 
 | ⏱ Estimated time | 45 minutes |
 |---|---|
-| 🎯 Goal | Create a **Data Agent** (GA) for natural language Q&A and an **Operations Agent** (Preview) for automated threat response — both grounded to the ontology you built in Module 10. |
+| 🎯 Goal | Create a **Data Agent** (GA) for natural language Q&A and an **Operations Agent** (GA) for automated threat response — both grounded to the ontology you built in Module 10. |
 | 📋 Prerequisites | Modules [08](08-real-time-intelligence.md), [09](09-data-science.md), and [10](10-ontology-knowledge-graph.md) completed. Gold lakehouse tables populated. ZOSA Knowledge Model ontology published. |
 
 ---
@@ -251,9 +251,9 @@ Data Agents are shared through **workspace permissions**. Users with access to t
 
 ---
 
-## ⚡ Part B — Operations Agent (Preview)
+## ⚡ Part B — Operations Agent (GA)
 
-> ⚠️ **Preview Notice:** Operations Agents are currently in **Preview**. Features, APIs, and UX may change before General Availability. Do not use for production-critical automation without a fallback plan.
+> ✅ **Now Generally Available:** Operations Agents reached **GA in June 2026** (rolled out to all regions), graduating from the preview announced at Build/FabCon 2026. You may still see a residual "Preview" tag in older tenants until the GA build fully propagates.
 
 ### 🤖 What Are Operations Agents?
 
@@ -263,7 +263,16 @@ Think of the difference this way:
 - **Data Agent:** "Which asteroids are dangerous?" → returns a table of results
 - **Operations Agent:** A new dangerous asteroid is detected → *automatically* generates a threat brief, notifies the Defense team, and creates a mission proposal
 
-Operations Agents are powered by the ontology and can chain multiple actions together in response to data events.
+Operations Agents are powered by the ontology and can chain multiple actions together in response to data events. In plain language you describe a goal; the agent **generates the monitoring rules** (grounded in your Fabric IQ ontology), **watches continuously** via Real-Time Intelligence, **investigates** anomalies, and **acts** — surfacing a recommendation or, with your authorization, running the fix itself.
+
+### 🆕 What's New at GA (June 2026)
+
+- **Chat-based creator that asks before it guesses** — setup is a conversation. For vague or compound goals like *"keep threat alerts reasonable across all stations,"* the agent asks clarifying questions instead of silently picking an interpretation, and lets you **preview the generated rules before you commit**.
+- **Acts across Fabric** — beyond notifying, an authorized agent can **run Fabric pipelines**, **execute notebooks**, **invoke User Data Functions (UDFs)**, and **kick off Power Automate workflows**. Every action is **scoped, audited, and reversible** — the agent gets only the powers you grant.
+- **Teams-native collaboration** — it posts insights and charts into your team's channel, with **recommended actions an authorized teammate can approve and trigger inline**.
+- **Ask the agent in natural language** — *"What rules are you monitoring right now?"*, *"When did this rule last fire?"*, *"What values have increased?"* — sourced answers without opening a separate report.
+- **Tracing & auditability** — new activity screens show which rule fired, on what data, what the agent reasoned, the action taken, and **who authorized it**.
+- **Governed with the rest of your AI estate** — Operations Agents are now integrated with **Microsoft Agent 365 (A365)** and **Microsoft Entra ID**, so identity, access, and lifecycle are managed centrally alongside your other org agents.
 
 > 📚 **Official Documentation:**
 > - [Operations Agent](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/operations-agent)
@@ -298,7 +307,7 @@ Before building, plan the workflow. When the ML model (Module 09) scores a new a
 
 ### 🛠️ Step 7 — Create the Operations Agent
 
-> ⚠️ **Tenant Admin Requirement:** Before creating an Operations Agent, ensure your Fabric admin has enabled the **Operations Agent (Preview)** feature, along with **Microsoft Copilot and Azure OpenAI** settings in the admin portal. Cross-geo processing and storage for AI may also need to be enabled if your capacity is outside US/EU regions.
+> ⚠️ **Tenant Admin Requirement:** Before creating an Operations Agent, ensure your Fabric admin has enabled the **Operations Agent** feature, along with **Microsoft Copilot and Azure OpenAI** settings in the admin portal. Cross-geo processing and storage for AI may also need to be enabled if your capacity is outside US/EU regions.
 
 1. On the Fabric home page, select the ellipsis (**...**) icon, then select **Create**.
 
@@ -343,6 +352,8 @@ Before building, plan the workflow. When the ML model (Module 09) scores a new a
    - Click **Open flow builder** to create a **Power Automate flow** that gets triggered by the action
    - Paste the connection string in the flow's **Connection string** field
    - Use **dynamic content** to pass action parameters into the flow (e.g., send a Teams message, insert a row)
+
+   > 💡 **More action types (GA):** Beyond Power Automate flows, an authorized agent can also **run a Fabric pipeline** (e.g., refresh `gold_asteroid_risk`), **execute a notebook** (run remediation logic), or **invoke a User Data Function (UDF)** for a targeted, parameterized action. All actions are scoped, audited, and reversible.
 
 7. Click **Save** to generate the agent's playbook. Review the playbook — it outlines the goals, instructions, data, and actions you defined.
 
@@ -412,6 +423,10 @@ Simulate a critical asteroid detection to verify the full workflow.
    - **Error details** — if any action failed, review the error message and stack trace
 
 3. Set up **alerting on agent failures** — if the Operations Agent itself fails, you want to know immediately. Configure a secondary Activator alert on the agent's execution log.
+
+4. **Ask the agent directly (GA).** Instead of digging through logs, query it in natural language: *"What rules are you monitoring right now?"*, *"When did the critical-asteroid rule last fire?"*, or *"What's changed in the threat data today?"* The agent returns a plain-language, sourced answer.
+
+5. **Review the audit trail.** The tracing/activity screens show which rule fired, on which data, what the agent reasoned, the action it recommended or took, and **who authorized it** — the audit surface you need to run an autonomous agent in a governed defense environment.
 
 ---
 
