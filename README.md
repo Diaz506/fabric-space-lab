@@ -114,6 +114,7 @@ This lab covers features at various maturity levels:
 | Git Integration, Deployment Pipelines | ✅ GA |
 | Fabric IQ / Ontology Projects | ⚠️ Preview |
 | Operations Agents | ⚠️ Preview |
+| Data Agent Creator Agent, Service Principal auth | ⚠️ Preview |
 | Variable Library | ⚠️ Preview |
 | Fabric Apps / Rayfin | ⚠️ Preview |
 

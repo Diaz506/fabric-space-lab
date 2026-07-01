@@ -39,8 +39,10 @@
   <a href="#-the-story-so-far"><span class="toc-dot"></span>🎬 The Story So Far</a>
   <a href="#-part-a--data-agent-ga"><span class="toc-dot"></span>📘 Part A — Data Agent (GA)</a>
     <a href="#-what-are-data-agents"><span class="toc-dot"></span>🤖 What Are Data Agents?</a>
+    <a href="#-whats-new-june-2026"><span class="toc-dot"></span>🆕 What's New (June 2026)</a>
     <a href="#-step-1--create-a-data-agent"><span class="toc-dot"></span>🛠️ Step 1 — Create a Data Agent</a>
     <a href="#step-2--configure-data-sources"><span class="toc-dot"></span>Step 2 — Configure Data Sources</a>
+    <a href="#-step-2b--build-with-ai-creator-agent-preview"><span class="toc-dot"></span>🧠 Step 2b — Build with AI: Creator Agent (Preview)</a>
     <a href="#-step-3--test-natural-language-queries"><span class="toc-dot"></span>🧪 Step 3 — Test Natural Language Queries</a>
     <a href="#-step-4--fine-tune-agent-behavior"><span class="toc-dot"></span>⚙️ Step 4 — Fine-Tune Agent Behavior</a>
     <a href="#-step-5--share-the-agent"><span class="toc-dot"></span>🔗 Step 5 — Share the Agent</a>
@@ -103,7 +105,19 @@
   <li><strong>Security-aware</strong> — every query respects Row-Level Security (RLS), Column-Level Security (CLS), and Object-Level Security (OLS). Users only see what they're authorized to see.</li>
 </ul>
 <blockquote>💡 <strong>Key distinction:</strong> Data Agents are the GA product name. You may see older references to "AI Skills" in documentation — they refer to the same capability, but <strong>always use "Data Agent"</strong> going forward.</blockquote>
-<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/concept-ai-skill">AI Skills Overview</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/how-to-create-ai-skill">Create an AI Skill</a> - <a href="https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview">Fabric Copilot Overview</a></blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent">Fabric data agent concept</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/data-agent-end-to-end-tutorial">Create a Fabric data agent (end-to-end tutorial)</a> - <a href="https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview">Fabric Copilot Overview</a></blockquote>
+<hr>
+<h3 id="-whats-new-june-2026">🆕 What's New (June 2026)</h3>
+<p>Data Agents have moved fast since the March 2026 GA. The most relevant recent additions:</p>
+<ul>
+  <li><strong>Creator Agent (Preview)</strong> — an AI assistant that <em>builds and refines your data agent for you</em> (schema exploration, few-shot generation, instructions). You'll try it in Step 2b below.</li>
+  <li><strong>Mirrored databases as a source</strong> — alongside lakehouses, warehouses, semantic models, KQL databases, and ontologies, you can now ground an agent on a <strong>mirrored database</strong>.</li>
+  <li><strong>Service Principal authentication (Preview)</strong> — agents can authenticate as a service principal (not just a signed-in user), enabling the automated, CI/CD-driven consumption you set up in <a href="12-ci-cd-deployment.md">Module 12</a>.</li>
+  <li><strong>Microsoft 365 Copilot integration (GA)</strong> — publish an agent so users can ask questions in <strong>Teams and Excel</strong>, not just the Fabric portal.</li>
+  <li><strong>Observability via Microsoft Foundry (Preview)</strong> — richer monitoring of agent performance and query behavior.</li>
+  <li><strong>Purview DLP enforcement (GA)</strong> — Data Loss Prevention policies can restrict what an agent returns, on top of RLS/CLS/OLS.</li>
+  <li><strong>Response sizing</strong> — agent answers are optimized for <em>conversational insights</em> (a capped number of rows/columns per request), not bulk data export.</li>
+</ul>
 <hr>
 <h3 id="-step-1--create-a-data-agent">🛠️ Step 1 — Create a Data Agent</h3>
 <ol>
@@ -116,7 +130,7 @@
   <li>Name the agent: <strong><code>ZOSA Mission Intelligence</code></strong>.</li>
 </ol>
 <ol>
-  <li>After creation, the <strong>OneLake catalog</strong> opens automatically. Add your data sources (up to <strong>5 total</strong> — lakehouses, warehouses, semantic models, KQL databases, or ontologies in any combination):</li>
+  <li>After creation, the <strong>OneLake catalog</strong> opens automatically. Add your data sources (up to <strong>5 total</strong> — lakehouses, warehouses, semantic models, KQL databases, mirrored databases, or ontologies in any combination):</li>
   <li>Select <strong>ZOSA Knowledge Model</strong> (the ontology from Module 10) → click <strong>Add</strong></li>
   <li>Select the <strong>Gold Lakehouse</strong> → click <strong>Add</strong></li>
   <li>Optionally add the <strong>ZOSA semantic model</strong> → click <strong>Add</strong></li>
@@ -165,6 +179,60 @@
   <li>Review the <strong>ontology mappings</strong> — the agent should show which ontology entities map to which tables. Confirm the mappings look correct.</li>
 </ol>
 <blockquote>🔑 <strong>Why this matters:</strong> The ontology provides the semantic layer. When a user asks about "dangerous asteroids," the agent resolves this through the ontology: - "dangerous" → <code>risk_category IN ('Critical', 'High')</code> (from the ontology's business rule) - "asteroids" → <code>gold_asteroid_risk</code> table (from the entity mapping)  Without the ontology, the agent would have to guess what "dangerous" means.</blockquote>
+<hr>
+<h3 id="-step-2b--build-with-ai-creator-agent-preview">🧠 Step 2b — Build with AI: Creator Agent (Preview)</h3>
+<p>Manually writing agent instructions and example queries is tedious. The <strong>Creator Agent</strong> is a specialized AI assistant that does the heavy lifting for you — it explores your schema, learns from past query patterns, and generates the four configuration artifacts that drive answer quality:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Configuration</th>
+      <th>What it controls</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Agent Instructions</strong></td>
+      <td>High-level rules for how the agent reasons and picks data sources</td>
+    </tr>
+    <tr>
+      <td><strong>Data Source Instructions</strong></td>
+      <td>How to use specific tables, columns, joins, and the data model</td>
+    </tr>
+    <tr>
+      <td><strong>Data Source Descriptions</strong></td>
+      <td>What each source contains and how it's organized</td>
+    </tr>
+    <tr>
+      <td><strong>Example Queries</strong></td>
+      <td>Natural-language questions paired with queries that capture business logic</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>⚠️ <strong>Preview scope:</strong> Creator Agent currently supports <strong>SQL and Eventhouse data sources only</strong>. It won't appear for a lakehouse/ontology/semantic-model agent. To try it in ZOSA, attach a supported source — for example the <strong>Eventhouse you built in <a href="08-real-time-intelligence.md">Module 08</a></strong> or your lakehouse's <strong>SQL analytics endpoint</strong> — to a data agent, with the relevant tables selected.</blockquote>
+<p><strong>To launch it:</strong> open your data agent and select <strong>Build agent with AI</strong> in the ribbon. This opens the Creator Agent chat. (<strong>Test data agent</strong> switches back to the normal test mode.)</p>
+<p><strong>The recommended loop — Explore → Learn → Generate → Validate → Apply:</strong></p>
+<ol>
+  <li><strong>Explore</strong> the schema:</li>
+</ol>
+<pre><code class="language-text">   Explore the schema and tell me which tables are relevant for asteroid threat reporting.</code></pre>
+<ol>
+  <li><strong>Learn</strong> from query history (when you have permission to view it):</li>
+</ol>
+<pre><code class="language-text">   Look at recent query patterns and suggest a few representative few-shot examples.</code></pre>
+<ol>
+  <li><strong>Generate</strong> instructions and examples:</li>
+</ol>
+<pre><code class="language-text">   Generate Data Source Instructions so the agent uses the correct join keys and date grain,
+   and suggest five few-shots about hazardous asteroids and solar activity.</code></pre>
+<ol>
+  <li><strong>Validate</strong> with a read-only query:</li>
+</ol>
+<pre><code class="language-text">   Run a sample query to verify objects with miss_distance_au &lt; 0.05 in the next 30 days.</code></pre>
+<ol>
+  <li><strong>Apply</strong> — review each suggestion and click <strong>Accept</strong> to apply it, then switch to <strong>Test mode</strong> to try sample questions.</li>
+</ol>
+<blockquote>⚠️ <strong>Two things to know:</strong> Creator Agent runs <strong>read-only</strong> queries only (data modifications are blocked), and accepting a suggestion <strong>replaces</strong> the corresponding configuration block during preview — so review changes before applying.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/data-agent-creator-agent-overview">Creator agent for data agent (Preview)</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/data-agent-tenant-settings">Configure Fabric data agent tenant settings</a></blockquote>
 <hr>
 <h3 id="-step-3--test-natural-language-queries">🧪 Step 3 — Test Natural Language Queries</h3>
 <p>Time to put the agent through its paces. The chat interface is <strong>built directly into the agent page</strong> — type your questions in the chat box and review the results.</p>
@@ -226,7 +294,7 @@
     </tr>
   </tbody>
 </table>
-<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-science/ai-skill-instructions">AI Skill Instructions</a></blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-science/data-agent-creator-agent-overview">Creator agent for data agent</a> — use it to generate and refine these instructions and few-shot examples automatically.</blockquote>
 <hr>
 <h3 id="-step-5--share-the-agent">🔗 Step 5 — Share the Agent</h3>
 <p>Data Agents are shared through <strong>workspace permissions</strong>. Users with access to the workspace can use the agent.</p>
@@ -257,6 +325,9 @@
 </table>
 <ol>
   <li>The Data Agent <strong>inherits all security layers</strong> — RLS, CLS, and OLS rules apply automatically. You don't need to configure security separately for the agent.</li>
+</ol>
+<ol>
+  <li><strong>Take it beyond the portal (GA):</strong> publish the agent into <strong>Microsoft 365 Copilot</strong> so Major Nakamura's team can ask questions directly in <strong>Teams and Excel</strong> — the same governed, permission-aware answers, delivered where they already work. For automated or CI/CD-driven consumption, authenticate the agent with a <strong>service principal</strong> (Preview) instead of a user identity.</li>
 </ol>
 <blockquote>💡 <strong>Tip:</strong> Share the agent URL with Major Nakamura's team. They can access it directly from the Fabric portal.</blockquote>
 <blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-warehouse/copilot">Copilot for Data Warehouse</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/copilot-notebooks-overview">Copilot for Data Engineering</a> - <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-introduction">Copilot for Power BI</a></blockquote>
