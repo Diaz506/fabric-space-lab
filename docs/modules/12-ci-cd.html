@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 12 — Module 12 — CI/CD & Deployment · Fabric Space Lab</title>
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#the-story-so-far"><span class="toc-dot"></span>The Story So Far</a>
+  <a href="#1--cicd-patterns-overview"><span class="toc-dot"></span>.1 — CI/CD Patterns Overview</a>
+  <a href="#2--enable-git-integration"><span class="toc-dot"></span>.2 — Enable Git Integration</a>
+    <a href="#step-by-step-connect-zosa-dev-to-github"><span class="toc-dot"></span>Step-by-Step: Connect ZOSA-Dev to GitHub</a>
+    <a href="#what-gets-stored-in-git"><span class="toc-dot"></span>What Gets Stored in Git?</a>
+  <a href="#3--variable-library-preview"><span class="toc-dot"></span>.3 — Variable Library (Preview)</a>
+    <a href="#create-a-variable-library"><span class="toc-dot"></span>Create a Variable Library</a>
+    <a href="#define-variables"><span class="toc-dot"></span>Define Variables</a>
+    <a href="#configure-value-sets"><span class="toc-dot"></span>Configure Value Sets</a>
+    <a href="#set-the-active-value-set"><span class="toc-dot"></span>Set the Active Value Set</a>
+    <a href="#version-control"><span class="toc-dot"></span>Version Control</a>
+  <a href="#4--create-a-deployment-pipeline"><span class="toc-dot"></span>.4 — Create a Deployment Pipeline</a>
+    <a href="#create-the-zosa-deployment-pipeline"><span class="toc-dot"></span>Create the ZOSA Deployment Pipeline</a>
+    <a href="#configure-pipeline-stages"><span class="toc-dot"></span>Configure Pipeline Stages</a>
+    <a href="#configure-deployment-rules"><span class="toc-dot"></span>Configure Deployment Rules</a>
+  <a href="#5--deploy-dev--test"><span class="toc-dot"></span>.5 — Deploy Dev → Test</a>
+    <a href="#run-the-deployment"><span class="toc-dot"></span>Run the Deployment</a>
+    <a href="#verify-in-the-test-workspace"><span class="toc-dot"></span>Verify in the Test Workspace</a>
+  <a href="#6--deploy-test--prod"><span class="toc-dot"></span>.6 — Deploy Test → Prod</a>
+    <a href="#pre-production-checklist"><span class="toc-dot"></span>Pre-Production Checklist</a>
+    <a href="#approval-gates"><span class="toc-dot"></span>Approval Gates</a>
+    <a href="#execute-the-production-deployment"><span class="toc-dot"></span>Execute the Production Deployment</a>
+    <a href="#post-deployment-verification"><span class="toc-dot"></span>Post-Deployment Verification</a>
+  <a href="#7--branching-strategy"><span class="toc-dot"></span>.7 — Branching Strategy</a>
+    <a href="#recommended-branch-model"><span class="toc-dot"></span>Recommended Branch Model</a>
+    <a href="#how-it-works"><span class="toc-dot"></span>How It Works</a>
+    <a href="#pr-based-promotion"><span class="toc-dot"></span>PR-Based Promotion</a>
+  <a href="#8--code-first-cicd-with-fabric-cicd"><span class="toc-dot"></span>.8 — Code-First CI/CD with fabric-cicd</a>
+    <a href="#installation"><span class="toc-dot"></span>Installation</a>
+    <a href="#example-automated-deployment-script"><span class="toc-dot"></span>Example: Automated Deployment Script</a>
+    <a href="#github-actions-integration"><span class="toc-dot"></span>GitHub Actions Integration</a>
+  <a href="#9--checkpoint-"><span class="toc-dot"></span>.9 — Checkpoint ✅</a>
+    <a href="#what-you-built"><span class="toc-dot"></span>What You Built</a>
+  <a href="#story-transition"><span class="toc-dot"></span>Story Transition</a>
+</nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 12</div>
+      <h1>Module 12 — CI/CD & Deployment</h1>
+    </section>
+
+    <section class="chapter">
+      <h1 id="module-12--cicd--deployment">Module 12 — CI/CD & Deployment</h1>
+<blockquote>From Dev to Prod — Git integration, Variable Library, and Deployment Pipelines</blockquote>
+<p><strong>Estimated time:</strong> 50 minutes</p>
+<hr>
+<h2 id="the-story-so-far">The Story So Far</h2>
+<p>Dr. Vasquez calls an all-hands meeting:</p>
+<blockquote><em>"We've been building in Dev for weeks. The mission board meets Friday and they need production dashboards. It's time to go live — but we do it the right way. No cowboy deployments."</em></blockquote>
+<p>Major Nakamura adds: <em>"If someone breaks production, they're on asteroid-naming duty for a month."</em></p>
+<p>Point taken. Let's set up a proper deployment process.</p>
+<hr>
+<h2 id="1--cicd-patterns-overview">11.1 — CI/CD Patterns Overview</h2>
+<p>Microsoft Fabric supports multiple deployment patterns. Choosing the right one depends on your team's maturity and requirements:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Pattern</th>
+      <th>Description</th>
+      <th>Best For</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Pipeline-only</strong></td>
+      <td>Use Fabric Deployment Pipelines alone without Git</td>
+      <td>Small teams, quick wins, minimal setup</td>
+    </tr>
+    <tr>
+      <td><strong>Git + Deployment Pipelines</strong> ⭐</td>
+      <td>Connect workspaces to Git, use Deployment Pipelines for promotion</td>
+      <td><strong>Recommended for most teams.</strong> Version control + governed promotion</td>
+    </tr>
+    <tr>
+      <td><strong>Full CI/CD (GitHub Actions)</strong></td>
+      <td>Git integration + GitHub Actions/Azure DevOps pipelines to automate deployments</td>
+      <td>Enterprise teams with existing CI/CD, automated testing requirements</td>
+    </tr>
+    <tr>
+      <td><strong>Python CI/CD (fabric-cicd)</strong></td>
+      <td>Code-first approach using the <code>fabric-cicd</code> Python package</td>
+      <td>Advanced teams wanting full programmatic control</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>💡 <strong>Our recommendation:</strong> Start with <strong>Git + Deployment Pipelines</strong>. It gives you version control, change tracking, and governed promotion without the overhead of full CI/CD automation. Graduate to GitHub Actions or <code>fabric-cicd</code> when your team is ready.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/best-practices-cicd">Lifecycle Management Best Practices</a> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/manage-deployment-using-rest-api">Fabric CI/CD with APIs</a></blockquote>
+<hr>
+<h2 id="2--enable-git-integration">11.2 — Enable Git Integration</h2>
+<p>Git integration in Fabric supports both <strong>GitHub</strong> and <strong>Azure DevOps</strong>. We'll use GitHub since that's where ZOSA stores its code.</p>
+<h3 id="step-by-step-connect-zosa-dev-to-github">Step-by-Step: Connect ZOSA-Dev to GitHub</h3>
+<blockquote>⚠️ <strong>Prerequisite:</strong> Your tenant admin must enable <strong>Git integration</strong> in the Fabric admin portal under <em>Tenant settings</em>. Without this, the Git integration tab will not appear in workspace settings.</blockquote>
+<ol>
+  <li><strong>Open ZOSA-Dev workspace</strong> in the Fabric portal</li>
+</ol>
+<ol>
+  <li><strong>Navigate to Workspace settings:</strong></li>
+  <li>Click the <strong>gear icon</strong> (⚙️) → <strong>Workspace settings</strong></li>
+  <li>Select the <strong>Git integration</strong> tab</li>
+</ol>
+<ol>
+  <li><strong>Connect to GitHub:</strong></li>
+  <li>Under <strong>Git provider</strong>, select <strong>GitHub</strong></li>
+  <li>Click <strong>Connect</strong> and authenticate with your GitHub account</li>
+  <li>Select the repository: <code>zosa-fabric-analytics</code></li>
+  <li>Select the branch: <code>develop</code></li>
+  <li>Set the <strong>Root folder</strong> to <code>/fabric-items</code></li>
+  <li>Click <strong>Connect and sync</strong></li>
+</ol>
+<ol>
+  <li><strong>Verify the connection:</strong></li>
+  <li>You should see a <strong>Git status</strong> column appear next to each item in the workspace</li>
+  <li>Items show as <strong>Uncommitted</strong> (they exist in the workspace but not yet in Git)</li>
+</ol>
+<ol>
+  <li><strong>Commit existing items to Git:</strong></li>
+  <li>Click <strong>Source control</strong> in the top toolbar</li>
+  <li>Review the changes — you'll see all your workspace items listed</li>
+  <li>Add a commit message: <code>Initial commit: ZOSA Dev workspace items</code></li>
+  <li>Click <strong>Commit</strong></li>
+</ol>
+<h3 id="what-gets-stored-in-git">What Gets Stored in Git?</h3>
+<p>Once committed, your Fabric items appear as JSON and code files in the repo:</p>
+<pre><code class="language-plaintext">/fabric-items/
+├── ZOSA_Lakehouse.Lakehouse/
+│   └── .platform
+├── Asteroid_Ingestion.Notebook/
+│   ├── notebook-content.py
+│   └── .platform
+├── Risk_Assessment_Pipeline.DataPipeline/
+│   ├── pipeline-content.json
+│   └── .platform
+├── Threat_Response_Model.MLModel/
+│   └── .platform
+├── ZOSA_Semantic_Model.SemanticModel/
+│   ├── definition.pbism
+│   ├── model.bim
+│   └── .platform
+└── Mission_Control_Report.Report/
+    ├── definition.pbir
+    ├── report.json
+    └── .platform</code></pre>
+<blockquote>💡 <strong>Key benefit:</strong> Every change to a Fabric item now creates a Git commit. You get full history, diffs, and the ability to roll back.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/git-integration/intro-to-git-integration">Introduction to Git Integration</a> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/git-integration/git-get-started">Get Started: Connect to GitHub</a></blockquote>
+<hr>
+<h2 id="3--variable-library-preview">11.3 — Variable Library (Preview)</h2>
+<blockquote>⚠️ <strong>Preview Feature:</strong> Variable Library is currently in Preview. Features and behavior may change before general availability.</blockquote>
+<p>The <strong>Variable Library</strong> lets you define workspace-level variables that change across environments. Instead of hardcoding connection strings or lakehouse names, you reference variables that swap automatically during deployment.</p>
+<h3 id="create-a-variable-library">Create a Variable Library</h3>
+<ol>
+  <li>In the <strong>ZOSA-Dev workspace</strong>, click <strong>+ New Item</strong> → search for <strong>Variable Library</strong> → select it.</li>
+  <li>Name it: <code>ZOSA_Environment_Config</code></li>
+</ol>
+<h3 id="define-variables">Define Variables</h3>
+<p>Add variables to the library using the <strong>+ New variable</strong> button. Enter each variable one at a time:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Variable Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>lakehouse_name</code></td>
+      <td>Target lakehouse for all notebooks and pipelines</td>
+    </tr>
+    <tr>
+      <td><code>connection_string</code></td>
+      <td>SQL analytics endpoint connection string</td>
+    </tr>
+    <tr>
+      <td><code>capacity_id</code></td>
+      <td>Fabric capacity resource ID</td>
+    </tr>
+    <tr>
+      <td><code>alert_email</code></td>
+      <td>Email for pipeline failure alerts</td>
+    </tr>
+    <tr>
+      <td><code>refresh_schedule</code></td>
+      <td>Cron expression for scheduled refreshes</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="configure-value-sets">Configure Value Sets</h3>
+<p>Value sets let you define different values for each environment. Add value sets (e.g., "Dev", "Test", "Prod") and populate the variable values for each:</p>
+<p><strong>Dev Value Set:</strong></p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>lakehouse_name</code></td>
+      <td><code>ZOSA_Lakehouse_Dev</code></td>
+    </tr>
+    <tr>
+      <td><code>connection_string</code></td>
+      <td><code>jdbc:sqlserver://zosa-dev-endpoint.datawarehouse.fabric.microsoft.com</code></td>
+    </tr>
+    <tr>
+      <td><code>capacity_id</code></td>
+      <td><code>/subscriptions/.../capacities/zosa-dev-f64</code></td>
+    </tr>
+    <tr>
+      <td><code>alert_email</code></td>
+      <td><code>dev-team@zosa.space</code></td>
+    </tr>
+    <tr>
+      <td><code>refresh_schedule</code></td>
+      <td><code>0 <em>/2 </em> <em> </em></code></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Test Value Set:</strong></p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>lakehouse_name</code></td>
+      <td><code>ZOSA_Lakehouse_Test</code></td>
+    </tr>
+    <tr>
+      <td><code>connection_string</code></td>
+      <td><code>jdbc:sqlserver://zosa-test-endpoint.datawarehouse.fabric.microsoft.com</code></td>
+    </tr>
+    <tr>
+      <td><code>capacity_id</code></td>
+      <td><code>/subscriptions/.../capacities/zosa-test-f32</code></td>
+    </tr>
+    <tr>
+      <td><code>alert_email</code></td>
+      <td><code>qa-team@zosa.space</code></td>
+    </tr>
+    <tr>
+      <td><code>refresh_schedule</code></td>
+      <td><code>0 6 <em> </em> *</code></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Prod Value Set:</strong></p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>lakehouse_name</code></td>
+      <td><code>ZOSA_Lakehouse_Prod</code></td>
+    </tr>
+    <tr>
+      <td><code>connection_string</code></td>
+      <td><code>jdbc:sqlserver://zosa-prod-endpoint.datawarehouse.fabric.microsoft.com</code></td>
+    </tr>
+    <tr>
+      <td><code>capacity_id</code></td>
+      <td><code>/subscriptions/.../capacities/zosa-prod-f64</code></td>
+    </tr>
+    <tr>
+      <td><code>alert_email</code></td>
+      <td><code>ops-team@zosa.space</code></td>
+    </tr>
+    <tr>
+      <td><code>refresh_schedule</code></td>
+      <td><code>0 <em>/1 </em> <em> </em></code></td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="set-the-active-value-set">Set the Active Value Set</h3>
+<p>Each workspace uses one active value set at a time. For each stage of your deployment pipeline:</p>
+<ol>
+  <li>Open the Variable Library in the corresponding workspace.</li>
+  <li>Select the appropriate value set (e.g., "Dev" for the ZOSA-Dev workspace).</li>
+  <li>Click <strong>Set as active</strong> to make it the active value set for that workspace.</li>
+</ol>
+<blockquote>💡 <strong>Tip:</strong> You can have a different active value set for each stage of a deployment pipeline. The active value set determines which values are used at runtime.</blockquote>
+<h3 id="version-control">Version Control</h3>
+<p>Because Git integration is enabled, the Variable Library is stored as JSON in your repo. This means:</p>
+<ul>
+  <li>Variable definitions are <strong>version-controlled</strong> alongside your Fabric items</li>
+  <li>Changes to variables go through the same <strong>PR review process</strong> as code</li>
+  <li>You can <strong>diff</strong> variable changes across commits</li>
+  <li>Rollback is as simple as reverting a Git commit</li>
+</ul>
+<blockquote>📚 <strong>Learn more:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/environment-manage-spark-conf">Manage Spark Configuration (Environment Variables)</a></blockquote>
+<hr>
+<h2 id="4--create-a-deployment-pipeline">11.4 — Create a Deployment Pipeline</h2>
+<p>Fabric <strong>Deployment Pipelines</strong> provide a governed way to promote items from Dev → Test → Prod.</p>
+<h3 id="create-the-zosa-deployment-pipeline">Create the ZOSA Deployment Pipeline</h3>
+<ol>
+  <li>In the Fabric portal, go to <strong>Workspaces</strong> in the left nav</li>
+  <li>Click <strong>Deployment pipelines</strong> → <strong>+ New pipeline</strong></li>
+  <li>Name it: <code>ZOSA Analytics Pipeline</code></li>
+  <li>Add a description: <code>Promotes ZOSA space analytics items from Dev through Test to Production</code></li>
+  <li><strong>Customize stages:</strong> The pipeline defaults to three stages (Development, Test, Production), but you can configure <strong>2 to 10 stages</strong>. Add, remove, or rename stages to fit your process.</li>
+</ol>
+<blockquote>⚠️ <strong>Important:</strong> The number of pipeline stages is <strong>permanent after creation</strong> — you cannot add or remove stages later. Plan your stages carefully before creating the pipeline.</blockquote>
+<h3 id="configure-pipeline-stages">Configure Pipeline Stages</h3>
+<ol>
+  <li><strong>Assign workspaces to stages:</strong></li>
+</ol>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Stage</th>
+      <th>Workspace</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Development</td>
+      <td>ZOSA-Dev</td>
+    </tr>
+    <tr>
+      <td>Test</td>
+      <td>ZOSA-Test</td>
+    </tr>
+    <tr>
+      <td>Production</td>
+      <td>ZOSA-Prod</td>
+    </tr>
+  </tbody>
+</table>
+<ol>
+  <li>For each stage, click <strong>Assign a workspace</strong> and select the corresponding workspace</li>
+</ol>
+<ol>
+  <li>After assigning all three, you'll see a visual pipeline showing items in each stage</li>
+</ol>
+<blockquote>💡 <strong>Tip:</strong> If the Test and Prod workspaces don't exist yet, create them first. The pipeline can also create them for you by deploying to an empty stage.</blockquote>
+<h3 id="configure-deployment-rules">Configure Deployment Rules</h3>
+<p>Deployment rules control how items change when promoted between stages. Configure rules to automatically use the Variable Library:</p>
+<ol>
+  <li>Click the <strong>⚙️</strong> icon on a pipeline stage</li>
+  <li>Under <strong>Deployment rules</strong>, set:</li>
+  <li>Lakehouse connections → use Variable Library value set for the target stage</li>
+  <li>Data source connections → use Variable Library value set for the target stage</li>
+</ol>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/intro-to-deployment-pipelines">Introduction to Deployment Pipelines</a> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/create-rules">Create Deployment Pipeline Rules</a></blockquote>
+<hr>
+<h2 id="5--deploy-dev--test">11.5 — Deploy Dev → Test</h2>
+<p>Time for the first deployment. Dr. Vasquez watches from over your shoulder.</p>
+<h3 id="run-the-deployment">Run the Deployment</h3>
+<ol>
+  <li>Open the <strong>ZOSA Analytics Pipeline</strong></li>
+  <li>In the <strong>Development</strong> stage, click <strong>Deploy to next stage</strong> (→ Test)</li>
+  <li>Review the deployment summary:</li>
+  <li>Items to deploy: Lakehouses, Notebooks, Pipelines, Semantic Models, Reports</li>
+  <li>Variable Library values will swap to the <strong>Test</strong> value set</li>
+  <li>Click <strong>Deploy</strong></li>
+  <li>Wait for deployment to complete (this may take a few minutes)</li>
+</ol>
+<h3 id="verify-in-the-test-workspace">Verify in the Test Workspace</h3>
+<ol>
+  <li>Navigate to the <strong>ZOSA-Test</strong> workspace</li>
+  <li>Confirm all items are present:</li>
+</ol>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ZOSA_Lakehouse_Test</td>
+      <td>✅ Created with Test name</td>
+    </tr>
+    <tr>
+      <td>Asteroid_Ingestion notebook</td>
+      <td>✅ Deployed, connections updated</td>
+    </tr>
+    <tr>
+      <td>Risk_Assessment_Pipeline</td>
+      <td>✅ Deployed, connections updated</td>
+    </tr>
+    <tr>
+      <td>ZOSA_Semantic_Model</td>
+      <td>✅ Deployed</td>
+    </tr>
+    <tr>
+      <td>Mission_Control_Report</td>
+      <td>✅ Deployed, connected to Test model</td>
+    </tr>
+    <tr>
+      <td>Eventstream items</td>
+      <td>✅ Deployed (paused — will configure for Test)</td>
+    </tr>
+  </tbody>
+</table>
+<ol>
+  <li>Run a quick smoke test:</li>
+  <li>Open the semantic model → verify it connects to the Test lakehouse</li>
+  <li>Open the report → verify visuals render (even with empty data)</li>
+  <li>Run the ingestion pipeline manually with a small test batch</li>
+</ol>
+<blockquote>✅ <strong>Test deployment successful.</strong> Dr. Vasquez unclenches slightly.</blockquote>
+<hr>
+<h2 id="6--deploy-test--prod">11.6 — Deploy Test → Prod</h2>
+<p>Production deployments require more ceremony.</p>
+<h3 id="pre-production-checklist">Pre-Production Checklist</h3>
+<p>Before deploying to Prod, verify:</p>
+<ul>
+  <li>[ ] All pipeline runs succeeded in Test</li>
+  <li>[ ] Semantic model refresh completes without errors</li>
+  <li>[ ] Reports render correctly with test data</li>
+  <li>[ ] Eventstream processes events end-to-end</li>
+  <li>[ ] ML model predictions return valid results</li>
+  <li>[ ] Variable Library Prod values are reviewed and correct</li>
+  <li>[ ] Stakeholders have signed off (Dr. Vasquez, Major Nakamura)</li>
+</ul>
+<h3 id="approval-gates">Approval Gates</h3>
+<blockquote>💡 <strong>Best practice:</strong> Establish a manual approval checklist so deployments to Production require human review. While Fabric Deployment Pipelines do not have built-in pre-deployment approval gates (unlike Azure DevOps), you can enforce governance through your team's process.</blockquote>
+<p>Recommended approach:</p>
+<ol>
+  <li>Use your <strong>branching strategy</strong> (Section 11.7) — require Pull Request approvals before merging to <code>main</code></li>
+  <li>Maintain a <strong>pre-deployment checklist</strong> (see above) that must be signed off before anyone clicks "Deploy"</li>
+  <li>Restrict the <strong>Production workspace</strong> to a small set of admins who control deployments</li>
+  <li>For automated approval gates, consider the <strong>full CI/CD approach</strong> with GitHub Actions (Section 11.8), which supports programmatic validation steps</li>
+</ol>
+<h3 id="execute-the-production-deployment">Execute the Production Deployment</h3>
+<ol>
+  <li>In the pipeline, click <strong>Deploy to next stage</strong> (Test → Production)</li>
+  <li>Verify all pre-deployment checklist items are complete</li>
+  <li>After deploying, Variable Library values swap to the <strong>Prod</strong> value set</li>
+</ol>
+<h3 id="post-deployment-verification">Post-Deployment Verification</h3>
+<ol>
+  <li>Navigate to <strong>ZOSA-Prod</strong> workspace</li>
+  <li>Verify all items deployed and connections point to production resources</li>
+  <li>Run the full pipeline end-to-end</li>
+  <li>Confirm the Mission Control report loads with live data</li>
+</ol>
+<blockquote><em>Dr. Vasquez sends a message to the mission-board channel: "Production dashboards are live. Board meeting is a go."</em></blockquote>
+<hr>
+<h2 id="7--branching-strategy">11.7 — Branching Strategy</h2>
+<p>Now that Git integration is in place, establish a branching strategy for ongoing development:</p>
+<h3 id="recommended-branch-model">Recommended Branch Model</h3>
+<pre><code class="language-plaintext">main ─────────────────────────────────────── Production (ZOSA-Prod)
+  │
+  └── develop ────────────────────────────── Development (ZOSA-Dev)
+        │
+        ├── feature/new-risk-metric ──────── Feature work
+        ├── feature/debris-tracking ──────── Feature work
+        └── hotfix/pipeline-fix ──────────── Urgent fixes</code></pre>
+<h3 id="how-it-works">How It Works</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Process</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>New feature</strong></td>
+      <td>Create <code>feature/*</code> branch from <code>develop</code>. Connect a personal workspace for testing.</td>
+    </tr>
+    <tr>
+      <td><strong>Code review</strong></td>
+      <td>Open a Pull Request from <code>feature/*</code> → <code>develop</code>. Reviewers check diffs in GitHub.</td>
+    </tr>
+    <tr>
+      <td><strong>Merge to Dev</strong></td>
+      <td>After PR approval, merge to <code>develop</code>. ZOSA-Dev workspace syncs automatically.</td>
+    </tr>
+    <tr>
+      <td><strong>Promote to Test</strong></td>
+      <td>Use Deployment Pipeline: Dev → Test. QA team validates.</td>
+    </tr>
+    <tr>
+      <td><strong>Release to Prod</strong></td>
+      <td>Merge <code>develop</code> → <code>main</code> via PR. Then deploy Test → Prod with approval gate.</td>
+    </tr>
+    <tr>
+      <td><strong>Hotfix</strong></td>
+      <td>Branch <code>hotfix/*</code> from <code>main</code>. Fix, test, PR to <code>main</code>. Cherry-pick back to <code>develop</code>.</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="pr-based-promotion">PR-Based Promotion</h3>
+<p>Pull Requests add governance:</p>
+<ul>
+  <li><strong>Required reviewers</strong> — at least 1 approval before merge</li>
+  <li><strong>Status checks</strong> — run validation (e.g., lint notebooks, check variable references)</li>
+  <li><strong>Diff visibility</strong> — see exactly what changed in Fabric item definitions</li>
+  <li><strong>Audit trail</strong> — every change is linked to a PR with discussion history</li>
+</ul>
+<blockquote>📚 <strong>Learn more:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/cicd/git-integration/manage-branches">Manage Branches in Git Integration</a></blockquote>
+<hr>
+<h2 id="8--code-first-cicd-with-fabric-cicd">11.8 — Code-First CI/CD with fabric-cicd</h2>
+<p>For teams wanting full programmatic control, the <strong><code>fabric-cicd</code></strong> Python package enables code-first deployments.</p>
+<h3 id="installation">Installation</h3>
+<pre><code class="language-bash">pip install fabric-cicd</code></pre>
+<h3 id="example-automated-deployment-script">Example: Automated Deployment Script</h3>
+<pre><code class="language-python">from fabric_cicd import FabricWorkspace, publish_all_items
+
+# Connect to the target workspace
+target = FabricWorkspace(
+    workspace_id=&quot;your-workspace-guid&quot;,
+    repository_directory=&quot;/path/to/fabric-items&quot;,
+    item_type_in_scope=[
+        &quot;Notebook&quot;,
+        &quot;DataPipeline&quot;,
+        &quot;SemanticModel&quot;,
+        &quot;Report&quot;,
+        &quot;Lakehouse&quot;,
+        &quot;MLModel&quot;,
+        &quot;Eventstream&quot;
+    ]
+)
+
+# Publish all items from Git to the workspace
+publish_all_items(target)</code></pre>
+<h3 id="github-actions-integration">GitHub Actions Integration</h3>
+<p>You can call <code>fabric-cicd</code> from a GitHub Actions workflow:</p>
+<pre><code class="language-yaml">name: Deploy to Fabric
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: &#x27;3.11&#x27;
+      - run: pip install fabric-cicd
+      - run: python scripts/deploy_to_fabric.py
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}</code></pre>
+<blockquote>💡 <strong>When to use <code>fabric-cicd</code>:</strong> When you need automated testing gates, multi-workspace orchestration, or integration with existing CI/CD systems. For most teams, Git + Deployment Pipelines is sufficient.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/admin/service-admin-portal-developer">Automation with Service Principals</a> - <a href="https://learn.microsoft.com/en-us/rest/api/fabric/core/items">Fabric REST APIs</a></blockquote>
+<hr>
+<h2 id="9--checkpoint-">11.9 — Checkpoint ✅</h2>
+<p>Verify your deployment pipeline is operational:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Check</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ZOSA-Dev workspace connected to GitHub (<code>develop</code> branch)</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>All Fabric items committed to Git</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>Variable Library created with Dev, Test, Prod value sets</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>Deployment Pipeline configured: Dev → Test → Prod</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>Successful deployment from Dev → Test</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>Test workspace items verified</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>Production deployment with governance controls</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>Branching strategy documented and team-aligned</td>
+      <td>⬜</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="what-you-built">What You Built</h3>
+<ul>
+  <li>✅ Git-backed version control for all Fabric items</li>
+  <li>✅ Environment-aware Variable Library with Dev/Test/Prod configs</li>
+  <li>✅ Governed Deployment Pipeline with three stages</li>
+  <li>✅ Governance controls for production deployments (PR approvals, restricted access)</li>
+  <li>✅ Branching strategy for ongoing development</li>
+</ul>
+<hr>
+<h2 id="story-transition">Story Transition</h2>
+<p>Major Nakamura pulls you aside after the deployment:</p>
+<blockquote><em>"Production is live. The board loved the dashboards. But now comes the hard part — keeping it running. Marcus Chen from Finance is already asking questions about our capacity bill. You'll want to get ahead of that."</em></blockquote>
+<p>Time to monitor and optimize.</p>
+<hr>
+<p><strong>Navigation:</strong></p>
+<p><a href="11-ai-agents.md">← Module 11 — AI Agents</a> | <a href="13-monitoring-optimization.md">Module 13 — Monitoring & Optimization →</a></p>
+<p><a href="../README.md">← Back to README</a></p>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      
+        <a href="11-ai-agents.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 11: AI Agents</span>
+        </a>
+      
+        <a href="13-monitoring.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 13: Monitoring</span>
+        </a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

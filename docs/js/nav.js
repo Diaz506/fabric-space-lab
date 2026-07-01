@@ -12,15 +12,17 @@
     { id: '01', title: 'Capacity & Workspace Setup', file: '01-capacity.html', icon: '🏗️', tags: ['admin'] },
     { id: '02', title: 'Governance & Security', file: '02-governance.html', icon: '🔒', tags: ['security'] },
     { id: '03', title: 'Data Ingestion', file: '03-ingestion.html', icon: '📡', tags: ['data'] },
-    { id: '04', title: 'Medallion Lakehouse', file: '04-medallion.html', icon: '💎', tags: ['lakehouse', 'spark'] },
-    { id: '05', title: 'Semantic Model & Direct Lake', file: '05-semantic-model.html', icon: '🧊', tags: ['modeling'] },
-    { id: '06', title: 'Power BI Reports', file: '06-power-bi.html', icon: '📊', tags: ['visualization'] },
-    { id: '07', title: 'Real-Time Intelligence', file: '07-real-time.html', icon: '⚡', tags: ['streaming', 'kql'] },
-    { id: '08', title: 'Data Science & ML', file: '08-data-science.html', icon: '🧬', tags: ['ml', 'mlflow'] },
-    { id: '09', title: 'Ontology & Knowledge Graph', file: '09-ontology.html', icon: '🕸️', tags: ['preview', 'ai'] },
-    { id: '10', title: 'AI Agents', file: '10-ai-agents.html', icon: '🤖', tags: ['agents', 'ai'] },
-    { id: '11', title: 'CI/CD & Deployment', file: '11-ci-cd.html', icon: '🔄', tags: ['devops'] },
-    { id: '12', title: 'Monitoring & Optimization', file: '12-monitoring.html', icon: '📈', tags: ['operations'] }
+    { id: '04', title: 'Data Contracts', file: '04-data-contracts.html', icon: '📜', tags: ['governance', 'quality'] },
+    { id: '05', title: 'Medallion Lakehouse', file: '05-medallion.html', icon: '💎', tags: ['lakehouse', 'spark'] },
+    { id: '06', title: 'Semantic Model & Direct Lake', file: '06-semantic-model.html', icon: '🧊', tags: ['modeling'] },
+    { id: '07', title: 'Power BI Reports', file: '07-power-bi.html', icon: '📊', tags: ['visualization'] },
+    { id: '08', title: 'Real-Time Intelligence', file: '08-real-time.html', icon: '⚡', tags: ['streaming', 'kql'] },
+    { id: '09', title: 'Data Science & ML', file: '09-data-science.html', icon: '🧬', tags: ['ml', 'mlflow'] },
+    { id: '10', title: 'Ontology & Knowledge Graph', file: '10-ontology.html', icon: '🕸️', tags: ['preview', 'ai'] },
+    { id: '11', title: 'AI Agents', file: '11-ai-agents.html', icon: '🤖', tags: ['agents', 'ai'] },
+    { id: '12', title: 'CI/CD & Deployment', file: '12-ci-cd.html', icon: '🔄', tags: ['devops'] },
+    { id: '13', title: 'Monitoring & Optimization', file: '13-monitoring.html', icon: '📈', tags: ['operations'] },
+    { id: '14', title: 'Fabric Apps', file: '14-fabric-apps.html', icon: '🛠️', tags: ['preview', 'apps'] }
   ];
 
   /* Expose for other scripts */

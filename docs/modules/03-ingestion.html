@@ -125,7 +125,7 @@ for date, neos in data[&quot;near_earth_objects&quot;].items():
 
 # Create DataFrame and write as Delta table
 df = spark.createDataFrame(rows)
-df.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;lh_zosa.asteroids_bronze&quot;)
+df.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;asteroids_bronze&quot;)
 
 print(f&quot;✅ Loaded {df.count()} asteroid records into asteroids_bronze&quot;)</code></pre>
 <ol>
@@ -362,7 +362,7 @@ SELECT COUNT(*), &#x27;telemetry&#x27; FROM telemetry_bronze;</code></pre>
 <blockquote><em>You send Dr. Vasquez a screenshot of the SQL query results — six datasets, all loaded. She replies within seconds: "Impressive. Raw data is in. But raw data is like unprocessed telescope images — noisy and hard to read. Tomorrow, we refine it. The science team is waiting."</em></blockquote>
 <hr>
 <p><strong>Navigation:</strong></p>
-<p><a href="02-governance-and-security.md">← Module 02 — Governance & Security</a> | <a href="04-medallion-lakehouse.md">Module 04 — Medallion Lakehouse →</a></p>
+<p><a href="02-governance-and-security.md">← Module 02 — Governance & Security</a> | <a href="04-data-contracts.md">Module 04 — Data Contracts →</a></p>
 <p><a href="../README.md">← Back to README</a></p>
     </section>
 
@@ -374,9 +374,9 @@ SELECT COUNT(*), &#x27;telemetry&#x27; FROM telemetry_bronze;</code></pre>
           <span class="nav-title">Module 02: Governance & Security</span>
         </a>
       
-        <a href="04-medallion.html" class="next">
+        <a href="04-data-contracts.html" class="next">
           <span class="nav-label">Next →</span>
-          <span class="nav-title">Module 04: Medallion Lakehouse</span>
+          <span class="nav-title">Module 04: Data Contracts</span>
         </a>
     </nav>
   </main>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 07 — Module 07 — Real-Time Intelligence · Fabric Space Lab</title>
+  <title>Module 08 — Module 08 — Real-Time Intelligence · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -65,12 +65,12 @@
   <!-- Main Content -->
   <main class="storyboard-content">
     <section class="hero" id="top">
-      <div class="hero-overline">Module 07</div>
-      <h1>Module 07 — Real-Time Intelligence</h1>
+      <div class="hero-overline">Module 08</div>
+      <h1>Module 08 — Real-Time Intelligence</h1>
     </section>
 
     <section class="chapter">
-      <h1 id="module-07--real-time-intelligence">Module 07 — Real-Time Intelligence</h1>
+      <h1 id="module-08--real-time-intelligence">Module 08 — Real-Time Intelligence</h1>
 <blockquote><strong>BREAKING:</strong> Geneva Prime ground station detected a new near-Earth object on an unusual trajectory. Major Nakamura bursts into the data center: <em>"We need real-time alerts. Not tomorrow — NOW. If something comes within 0.05 AU, I want to know within seconds."</em></blockquote>
 <p><strong>⏱️ Estimated time:</strong> 45–60 minutes</p>
 <hr>
@@ -108,11 +108,16 @@
   <li>In the Eventstream canvas, click <strong>Add source</strong> → <strong>Custom endpoint</strong> (also called "Custom App").</li>
   <li>Name the source (e.g., <code>simulator_input</code>) → click <strong>Add</strong>.</li>
   <li>Click <strong>Publish</strong> in the toolbar to save the Eventstream — connection strings are only available after publishing.</li>
-  <li>Click the Custom endpoint source node → in the details pane, switch to the <strong>Keys</strong> tab → copy the <strong>Event Hub-compatible connection string</strong>.</li>
+  <li>Click the Custom endpoint source node → in the details pane, switch to the <strong>Keys</strong> tab:</li>
+  <li>Ensure <strong>Event Hub</strong> protocol is selected at the top</li>
+  <li>In the left sidebar, click <strong>SAS Key Authentication</strong></li>
+  <li>Copy the <strong>Connection string</strong> (starts with <code>Endpoint=sb://...</code>)</li>
 </ol>
 <h3 id="simulator-script">Simulator Script</h3>
-<blockquote>⚠️ <strong>Prerequisites:</strong> Install the Azure Event Hubs SDK first: ``<code>bash pip install azure-eventhub </code>``</blockquote>
-<p>Custom endpoints in Fabric use the <strong>Event Hubs / Kafka protocol</strong> (not HTTP POST). Create a Python file <code>simulate_detections.py</code> on your local machine and run it while you work through the rest of this module:</p>
+<p>The simulator runs <strong>on your local machine</strong> (not in Fabric) to send events to the Custom endpoint.</p>
+<p><strong>Prerequisites:</strong> Open a terminal/PowerShell on your local machine and install the Azure Event Hubs SDK:</p>
+<pre><code class="language-bash">pip install azure-eventhub</code></pre>
+<p>Then create a Python file <code>simulate_detections.py</code> on your local machine:</p>
 <pre><code class="language-python">from azure.eventhub import EventHubProducerClient, EventData
 import json, time, random
 
@@ -161,7 +166,7 @@ finally:
   <li><strong>Eventhouse:</strong> <code>zosa_eventhouse</code></li>
   <li><strong>KQL Database:</strong> <code>asteroid_detections</code></li>
   <li>Under <strong>Table</strong>, choose <strong>Create new</strong> → name it <code>asteroid_detections</code>.</li>
-  <li>Fabric auto-detects the schema from incoming events. Review the column mapping:</li>
+  <li>Fabric auto-detects the schema from incoming events. Review the column mapping and <strong>ensure the timestamp column is set to <code>datetime</code> type</strong> (if it defaulted to <code>string</code>, manually change it to <code>datetime</code>):</li>
 </ol>
 <table class="data-table">
   <thead>
@@ -180,7 +185,7 @@ finally:
     <tr>
       <td><code>timestamp</code></td>
       <td><code>timestamp</code></td>
-      <td><code>datetime</code></td>
+      <td><code>datetime</code> ⚠️</td>
     </tr>
     <tr>
       <td><code>object_name</code></td>
@@ -214,6 +219,7 @@ finally:
     </tr>
   </tbody>
 </table>
+<blockquote>⚠️ <strong>Important:</strong> If the timestamp was auto-detected as <code>string</code>, the time-based KQL queries in the next section will fail. Either update the column type to <code>datetime</code> in the mapping, or add <code>| extend ts = todatetime(timestamp)</code> to queries that use time functions.</blockquote>
 <ol>
   <li>Click <strong>Publish</strong> to activate the ingestion. Within seconds, events from the simulator start landing in the Eventhouse.</li>
 </ol>
@@ -232,17 +238,19 @@ finally:
 | take 10</code></pre>
 <h3 id="close-approaches--005-au-in-the-last-hour">Close Approaches (< 0.05 AU) in the Last Hour</h3>
 <pre><code class="language-kql">asteroid_detections
-| where timestamp &gt; ago(1h)
+| where todatetime(timestamp) &gt; ago(1h)
 | where miss_distance_au &lt; 0.05
 | project timestamp, object_name, miss_distance_au, velocity_kmps
 | order by miss_distance_au asc</code></pre>
+<blockquote>💡 <strong>Note:</strong> The <code>todatetime(timestamp)</code> function converts the timestamp string to datetime for comparison with <code>ago(1h)</code>. If your timestamp column was correctly set to <code>datetime</code> type during ingestion, you can use <code>where timestamp > ago(1h)</code> directly.</blockquote>
 <h3 id="detection-rate-per-10-minute-window">Detection Rate per 10-Minute Window</h3>
 <pre><code class="language-kql">asteroid_detections
-| summarize count() by bin(timestamp, 10m)
+| extend ts = todatetime(timestamp)
+| summarize count() by bin(ts, 10m)
 | render timechart</code></pre>
 <h3 id="hazardous-object-breakdown">Hazardous Object Breakdown</h3>
 <pre><code class="language-kql">asteroid_detections
-| where timestamp &gt; ago(1h)
+| where todatetime(timestamp) &gt; ago(1h)
 | summarize
     total = count(),
     hazardous = countif(is_potentially_hazardous),
@@ -259,17 +267,19 @@ finally:
 <pre><code class="language-kql">.create materialized-view HourlyDetectionSummary on table asteroid_detections
 {
     asteroid_detections
+    | extend ts = todatetime(timestamp)
     | summarize
         total_detections = count(),
         hazardous_count = countif(is_potentially_hazardous),
         min_distance = min(miss_distance_au),
         avg_velocity = avg(velocity_kmps)
-      by bin(timestamp, 1h)
+      by bin(ts, 1h)
 }</code></pre>
+<blockquote>⚠️ <strong>Note:</strong> The <code>extend ts = todatetime(timestamp)</code> converts the string timestamp to datetime for the <code>bin()</code> function. If your timestamp column is already <code>datetime</code> type, you can use <code>by bin(timestamp, 1h)</code> directly.</blockquote>
 <blockquote>⚠️ <strong>Note:</strong> If you get an error about the table being too large, add the <code>async</code> keyword: <code>.create async materialized-view ...</code>. For this lab with simulated data, the standard command should work fine.</blockquote>
 <p>Verify the view is working:</p>
 <pre><code class="language-kql">HourlyDetectionSummary
-| order by timestamp desc
+| order by ts desc
 | take 24</code></pre>
 <blockquote>💡 <strong>Tip:</strong> Materialized views update incrementally as new data arrives — you do not need to refresh them manually. They are ideal for dashboard tiles that display hourly or daily summaries.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/kusto/management/materialized-views/materialized-view-overview">Materialized views overview</a></blockquote>
@@ -295,21 +305,22 @@ finally:
     <tr>
       <td><strong>Total Detections (24 h)</strong></td>
       <td>`asteroid_detections \</td>
-      <td>where timestamp > ago(24h) \</td>
+      <td>where todatetime(timestamp) > ago(24h) \</td>
       <td>count`</td>
-      <td>Stat / KPI card</td>
+      <td>Stat</td>
     </tr>
     <tr>
       <td><strong>Closest Approach</strong></td>
       <td>`asteroid_detections \</td>
-      <td>where timestamp > ago(1h) \</td>
+      <td>where todatetime(timestamp) > ago(1h) \</td>
       <td>summarize min(miss_distance_au)`</td>
-      <td>Gauge</td>
+      <td>Stat</td>
     </tr>
     <tr>
       <td><strong>Detection Timeline</strong></td>
       <td>`asteroid_detections \</td>
-      <td>summarize count() by bin(timestamp, 10m) \</td>
+      <td>extend ts = todatetime(timestamp) \</td>
+      <td>summarize count() by bin(ts, 10m) \</td>
       <td>render timechart`</td>
       <td>Time chart</td>
     </tr>
@@ -317,14 +328,14 @@ finally:
       <td><strong>Hazardous Rate</strong></td>
       <td>`HourlyDetectionSummary \</td>
       <td>extend rate = round(100.0 * hazardous_count / total_detections, 1) \</td>
-      <td>project timestamp, rate \</td>
+      <td>project ts, rate \</td>
       <td>render timechart`</td>
       <td>Time chart</td>
     </tr>
     <tr>
       <td><strong>Ground Station Activity</strong></td>
       <td>`asteroid_detections \</td>
-      <td>where timestamp > ago(1h) \</td>
+      <td>where todatetime(timestamp) > ago(1h) \</td>
       <td>summarize count() by ground_station_id \</td>
       <td>render piechart`</td>
       <td>Pie chart</td>
@@ -335,7 +346,7 @@ finally:
   <li>After adding all tiles, click <strong>Manage</strong> → <strong>Auto refresh</strong> → set interval to <strong>30 seconds</strong>.</li>
   <li>Click <strong>Save</strong> and optionally pin the dashboard to the workspace home.</li>
 </ol>
-<blockquote>🎯 <strong>Pro tip:</strong> Drag and resize tiles to create a Mission Control layout. Put the closest-approach gauge front and center — that is the number Major Nakamura cares about most.</blockquote>
+<blockquote>🎯 <strong>Pro tip:</strong> Drag and resize tiles to create a Mission Control layout. Put the closest-approach stat tile front and center — that is the number Major Nakamura cares about most.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/dashboard-real-time-create">Create a Real-Time Dashboard</a></blockquote>
 <hr>
 <h2 id="data-activator--set-alert">🚨 8 — Data Activator — Set Alert</h2>
@@ -343,7 +354,7 @@ finally:
 <h3 id="steps">Steps</h3>
 <ol>
   <li>Open your <code>Asteroid Mission Control</code> Real-Time Dashboard.</li>
-  <li>Hover over the <strong>Closest Approach</strong> gauge tile.</li>
+  <li>Hover over the <strong>Closest Approach</strong> stat tile.</li>
   <li>Click the <strong>ellipsis (…)</strong> menu → <strong>Set alert</strong>.</li>
   <li>Configure the alert rule:</li>
 </ol>
@@ -435,21 +446,21 @@ finally:
 <blockquote>The Real-Time Dashboard glows on the main screen in Mission Control. A simulated asteroid detection flashes — <strong>0.03 AU</strong>. Within seconds, Major Nakamura's phone buzzes with the alert. He looks up at the screen, then at you.  <em>"This is exactly what we needed. Now… Dr. Osei wants to know if we can</em> predict <em>which asteroids are dangerous before they get close."</em>  <strong>Next up:</strong> Machine learning models in Fabric.</blockquote>
 <hr>
 <p><strong>Navigation:</strong></p>
-<p><a href="06-power-bi-reports.md">← Module 06 — Power BI Reports</a> | <a href="08-data-science.md">Module 08 — Data Science →</a></p>
+<p><a href="07-power-bi-reports.md">← Module 07 — Power BI Reports</a> | <a href="09-data-science.md">Module 09 — Data Science →</a></p>
 <p><a href="../README.md">← Back to README</a></p>
     </section>
 
     <!-- Navigation -->
     <nav class="module-nav">
       
-        <a href="06-power-bi.html" class="prev">
+        <a href="07-power-bi.html" class="prev">
           <span class="nav-label">← Previous</span>
-          <span class="nav-title">Module 06: Power BI Reports</span>
+          <span class="nav-title">Module 07: Power BI Reports</span>
         </a>
       
-        <a href="08-data-science.html" class="next">
+        <a href="09-data-science.html" class="next">
           <span class="nav-label">Next →</span>
-          <span class="nav-title">Module 08: Data Science</span>
+          <span class="nav-title">Module 09: Data Science</span>
         </a>
     </nav>
   </main>

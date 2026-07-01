@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 04 — 📜 Module 04 — Data Contracts · Fabric Space Lab</title>
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#what-youll-build"><span class="toc-dot"></span>What You'll Build</a>
+  <a href="#-section-1--what-is-a-data-contract"><span class="toc-dot"></span>🧭 Section 1 — What Is a Data Contract?</a>
+  <a href="#-section-2--author-the-contract"><span class="toc-dot"></span>📝 Section 2 — Author the Contract</a>
+  <a href="#-section-3--build-the-validation-gate"><span class="toc-dot"></span>🚦 Section 3 — Build the Validation Gate</a>
+  <a href="#-section-4--prove-it-catches-drift"><span class="toc-dot"></span>🔬 Section 4 — Prove It Catches Drift</a>
+  <a href="#-section-5--wire-up-alerting--ownership"><span class="toc-dot"></span>🔔 Section 5 — Wire Up Alerting & Ownership</a>
+  <a href="#checkpoint"><span class="toc-dot"></span>Checkpoint</a>
+</nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 04</div>
+      <h1>📜 Module 04 — Data Contracts</h1>
+    </section>
+
+    <section class="chapter">
+      <h1 id="-module-04--data-contracts">📜 Module 04 — Data Contracts</h1>
+<blockquote><em>It's 3 AM when Major Kai Nakamura's pager screams. A potentially hazardous asteroid slipped past ZOSA's alerting system — no warning, no dashboard flag, nothing. By dawn the whole leadership team is on a call. The culprit? NASA quietly renamed a field in the NeoWs feed and changed <code>is_potentially_hazardous_asteroid</code> from a boolean to the string <code>"true"</code>. Your Bronze table ingested the garbage without complaint, and every downstream filter silently returned zero rows.</em>  <em>"This can never happen again," Dr. Vasquez says flatly. "From now on, no data enters the Silver layer without a signed agreement about its shape and quality. Sofia, back me up on this." Sofia Lindqvist nods: "A data contract. The producer promises a schema and quality bar; we reject anything that breaks it — loudly. Build it."</em></blockquote>
+<hr>
+<h2 id="what-youll-build">🎯 What You'll Build</h2>
+<p>In this module you'll add a <strong>data contract gate</strong> at the Bronze → Silver boundary — the single most important place to catch bad data before it poisons everything downstream. By the end you'll have:</p>
+<ul>
+  <li>A <strong>versioned contract</strong> (YAML) for <code>asteroids_bronze</code> describing its schema, quality rules, freshness SLA, and ownership.</li>
+  <li>A reusable <strong>validation notebook</strong> that enforces the contract, <strong>quarantines</strong> violating rows, and <strong>fails loudly</strong> on schema drift.</li>
+  <li>A <strong>quarantine table</strong> and a validation summary you can alert on.</li>
+</ul>
+<p><strong>Time estimate:</strong> 40 minutes</p>
+<p><strong>Prerequisites:</strong> You need the Bronze tables from <a href="03-data-ingestion.md">Module 03 — Data Ingestion</a> loaded in <code>lh_zosa</code>. This module runs <em>before</em> the Medallion transformations in <a href="05-medallion-lakehouse.md">Module 05</a>.</p>
+<hr>
+<h2 id="-section-1--what-is-a-data-contract">🧭 Section 1 — What Is a Data Contract?</h2>
+<p>A <strong>data contract</strong> is an explicit, machine-enforceable agreement between a data <strong>producer</strong> (NASA's feed, an upstream team, an ingestion pipeline) and its <strong>consumers</strong> (your Silver/Gold tables, semantic models, reports, ML models). It answers four questions <em>before</em> data flows downstream:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Pillar</th>
+      <th>Question it answers</th>
+      <th>Example for <code>asteroids_bronze</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Schema</strong></td>
+      <td>What columns and types must exist?</td>
+      <td><code>is_hazardous</code> <strong>must</strong> be a <code>boolean</code>, not a string</td>
+    </tr>
+    <tr>
+      <td><strong>Quality</strong></td>
+      <td>What values are valid?</td>
+      <td><code>miss_distance_km</code> ≥ 0; <code>neo_id</code> never null; <code>close_approach_date</code> is a real date</td>
+    </tr>
+    <tr>
+      <td><strong>SLA / Freshness</strong></td>
+      <td>How fresh and complete must it be?</td>
+      <td>Updated at least daily; ≥ 1 row per day</td>
+    </tr>
+    <tr>
+      <td><strong>Ownership</strong></td>
+      <td>Who owns it, and what version is this?</td>
+      <td>Owner: Data Engineering; contract <code>v1.0.0</code></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Why enforce it at Bronze → Silver?</strong> Bronze is intentionally a faithful, unfiltered copy of the source — you <em>want</em> to keep the raw garbage for auditing. But Silver is where data becomes <em>trusted</em>. The contract is the checkpoint between "what we received" and "what we promise." Catch drift here and nothing downstream ever sees it.</p>
+<blockquote>💡 <strong>Contracts vs. governance:</strong> In <a href="02-governance-and-security.md">Module 02</a> you controlled <em>who can see</em> data (RLS/CLS/OLS). A data contract controls <em>whether data is allowed to move at all</em>. They're complementary: governance is about access, contracts are about trust.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/governance/data-quality-overview">Data quality in Microsoft Fabric</a> - <a href="https://learn.microsoft.com/en-us/azure/databricks/delta/update-schema">Delta Lake schema enforcement & evolution</a> - <a href="https://learn.microsoft.com/en-us/purview/data-quality-overview">Purview data quality rules</a></blockquote>
+<hr>
+<h2 id="-section-2--author-the-contract">📝 Section 2 — Author the Contract</h2>
+<p>A contract should live <em>with</em> the data as a versioned, human-readable artifact. You'll store it as YAML in your Lakehouse <code>Files</code> area so both people and pipelines can read it.</p>
+<ol>
+  <li>Open the <strong><code>nb_api_ingestion</code></strong> notebook from Module 03 (or create a new notebook <code>nb_data_contracts</code> and attach <code>lh_zosa</code>).</li>
+  <li>Add a cell and run it to write the contract to <code>Files/contracts/asteroids.v1.yaml</code>:</li>
+</ol>
+<pre><code class="language-python">contract = &quot;&quot;&quot;
+# Data Contract — asteroids_bronze
+# The producer (NASA NeoWs ingestion) guarantees this shape &amp; quality.
+name: asteroids_bronze
+version: 1.0.0
+owner: data-engineering@zosa.example
+source: NASA NeoWs API
+description: Near-Earth object close-approach records ingested daily.
+
+# --- Schema: required columns and their types ---
+schema:
+  - {name: neo_id,                    type: string,  nullable: false}
+  - {name: name,                      type: string,  nullable: false}
+  - {name: absolute_magnitude,        type: double,  nullable: true}
+  - {name: is_hazardous,              type: boolean, nullable: false}
+  - {name: close_approach_date,       type: string,  nullable: false}
+  - {name: miss_distance_km,          type: double,  nullable: false}
+  - {name: relative_velocity_kph,     type: double,  nullable: false}
+  - {name: estimated_diameter_min_m,  type: double,  nullable: true}
+  - {name: estimated_diameter_max_m,  type: double,  nullable: true}
+
+# --- Quality: row-level expectations ---
+quality:
+  - {column: neo_id,            rule: not_null}
+  - {column: neo_id,            rule: unique}
+  - {column: miss_distance_km,  rule: min, value: 0}
+  - {column: relative_velocity_kph, rule: min, value: 0}
+  - {column: estimated_diameter_min_m, rule: max, value: 100000}
+  - {column: close_approach_date, rule: matches_regex, value: &#x27;^\\d{4}-\\d{2}-\\d{2}$&#x27;}
+
+# --- SLA: freshness &amp; volume ---
+sla:
+  freshness_hours: 24     # data must be no older than 24h
+  min_rows_per_day: 1     # at least one record per approach date
+&quot;&quot;&quot;
+
+mssparkutils.fs.put(&quot;Files/contracts/asteroids.v1.yaml&quot;, contract, overwrite=True)
+print(&quot;✅ Contract written to Files/contracts/asteroids.v1.yaml&quot;)</code></pre>
+<p><strong>What just happened?</strong> You captured the producer's promise as a versioned file that travels with the data. Anyone — human or pipeline — can now read exactly what <code>asteroids_bronze</code> is supposed to look like. The <code>version</code> field is critical: when NASA legitimately changes the feed, you bump the version and review the change deliberately instead of being surprised at 3 AM.</p>
+<blockquote>⚠️ <strong>Note on the boolean rule:</strong> Notice the contract declares <code>is_hazardous</code> as <code>boolean</code>. This is the exact field that broke Major Kai's alerts when it arrived as the string <code>"true"</code>. The gate you build next will reject that drift instead of silently ingesting it.</blockquote>
+<hr>
+<h2 id="-section-3--build-the-validation-gate">🚦 Section 3 — Build the Validation Gate</h2>
+<p>Now build the enforcement engine: a reusable function that loads a contract and checks a DataFrame against it. It separates <strong>schema violations</strong> (structural — fail the whole load) from <strong>row-level quality violations</strong> (quarantine the bad rows, let the good ones through).</p>
+<p>Add this cell and run it:</p>
+<pre><code class="language-python">import re, yaml
+from pyspark.sql import functions as F
+
+def load_contract(path):
+    return yaml.safe_load(mssparkutils.fs.head(path, 100_000))
+
+def validate(df, contract):
+    errors, warnings = [], []
+
+    # 1) SCHEMA CHECK — structural, breaking
+    actual = dict(df.dtypes)
+    type_map = {&quot;string&quot;: &quot;string&quot;, &quot;double&quot;: &quot;double&quot;, &quot;boolean&quot;: &quot;boolean&quot;,
+                &quot;long&quot;: &quot;bigint&quot;, &quot;integer&quot;: &quot;int&quot;}
+    for field in contract[&quot;schema&quot;]:
+        cname, ctype = field[&quot;name&quot;], field[&quot;type&quot;]
+        if cname not in actual:
+            errors.append(f&quot;MISSING COLUMN: {cname}&quot;)
+        elif actual[cname] != type_map.get(ctype, ctype):
+            errors.append(f&quot;TYPE DRIFT: {cname} is &#x27;{actual[cname]}&#x27;, contract requires &#x27;{ctype}&#x27;&quot;)
+
+    # 2) ROW-LEVEL QUALITY — build a boolean &#x27;is_valid&#x27; column
+    valid = F.lit(True)
+    for q in contract.get(&quot;quality&quot;, []):
+        c, rule = q[&quot;column&quot;], q[&quot;rule&quot;]
+        if c not in actual:
+            continue  # schema check already flagged it
+        if rule == &quot;not_null&quot;:
+            valid = valid &amp; F.col(c).isNotNull()
+        elif rule == &quot;min&quot;:
+            valid = valid &amp; (F.col(c) &gt;= q[&quot;value&quot;])
+        elif rule == &quot;max&quot;:
+            valid = valid &amp; (F.col(c) &lt;= q[&quot;value&quot;])
+        elif rule == &quot;matches_regex&quot;:
+            valid = valid &amp; F.col(c).rlike(q[&quot;value&quot;])
+        elif rule == &quot;unique&quot;:
+            dupes = df.groupBy(c).count().filter(&quot;count &gt; 1&quot;).count()
+            if dupes:
+                warnings.append(f&quot;UNIQUENESS: {dupes} duplicate value(s) in {c}&quot;)
+
+    checked = df.withColumn(&quot;_contract_valid&quot;, valid)
+
+    # 3) SLA CHECK — volume
+    sla = contract.get(&quot;sla&quot;, {})
+    total = checked.count()
+    if total &lt; sla.get(&quot;min_rows_per_day&quot;, 0):
+        warnings.append(f&quot;SLA: only {total} rows (min {sla[&#x27;min_rows_per_day&#x27;]})&quot;)
+
+    return checked, errors, warnings
+
+print(&quot;✅ Contract validation engine ready&quot;)</code></pre>
+<p>Now run the gate against <code>asteroids_bronze</code>:</p>
+<pre><code class="language-python">contract = load_contract(&quot;Files/contracts/asteroids.v1.yaml&quot;)
+df = spark.read.table(&quot;asteroids_bronze&quot;)
+checked, errors, warnings = validate(df, contract)
+
+# Split good vs. bad rows
+passed = checked.filter(&quot;_contract_valid = true&quot;).drop(&quot;_contract_valid&quot;)
+quarantined = (checked.filter(&quot;_contract_valid = false&quot;)
+                      .withColumn(&quot;_quarantined_at&quot;, F.current_timestamp())
+                      .withColumn(&quot;_contract&quot;, F.lit(f&quot;{contract[&#x27;name&#x27;]} v{contract[&#x27;version&#x27;]}&quot;)))
+
+print(f&quot;Rows passed:      {passed.count()}&quot;)
+print(f&quot;Rows quarantined: {quarantined.count()}&quot;)
+print(f&quot;Schema errors:    {errors}&quot;)
+print(f&quot;Warnings:         {warnings}&quot;)
+
+# BREAKING: schema drift stops the pipeline before Silver
+if errors:
+    raise ValueError(f&quot;❌ CONTRACT BROKEN — halting load:\n&quot; + &quot;\n&quot;.join(errors))
+
+# Persist the clean, contract-compliant data for the Medallion module to consume
+passed.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(&quot;asteroids_bronze_validated&quot;)
+
+# Persist rejected rows for investigation instead of throwing them away
+if quarantined.count() &gt; 0:
+    quarantined.write.mode(&quot;append&quot;).format(&quot;delta&quot;).saveAsTable(&quot;asteroids_quarantine&quot;)
+
+print(&quot;✅ Gate passed — asteroids_bronze_validated is safe for Silver&quot;)</code></pre>
+<p><strong>What just happened?</strong> You built a gate that does three things a silent pipeline never would:</p>
+<ol>
+  <li><strong>Fails loudly</strong> (<code>raise ValueError</code>) on schema drift — the exact failure mode that broke Major Kai's alerts now stops the pipeline dead.</li>
+  <li><strong>Quarantines</strong> bad rows into <code>asteroids_quarantine</code> (with a timestamp and contract version) instead of dropping or ingesting them — so you can investigate <em>why</em> the producer sent them.</li>
+  <li>Produces <code>asteroids_bronze_validated</code>, a <strong>trusted</strong> input that Module 05 can safely transform to Silver.</li>
+</ol>
+<blockquote>💡 <strong>Tip:</strong> In production you'd point Module 05's Silver transformation at <code>asteroids_bronze_validated</code> instead of the raw <code>asteroids_bronze</code>. The contract gate becomes a required upstream step in your Data Pipeline (with the notebook activity set to fail the pipeline on error).</blockquote>
+<hr>
+<h2 id="-section-4--prove-it-catches-drift">🔬 Section 4 — Prove It Catches Drift</h2>
+<p>A contract you never test is just a comment. Let's simulate the incident that started this whole mess and confirm the gate catches it.</p>
+<pre><code class="language-python"># Simulate NASA breaking the feed: is_hazardous arrives as a STRING
+bad = spark.read.table(&quot;asteroids_bronze&quot;).withColumn(
+    &quot;is_hazardous&quot;, F.col(&quot;is_hazardous&quot;).cast(&quot;string&quot;))
+
+checked, errors, warnings = validate(bad, contract)
+print(&quot;Schema errors:&quot;, errors)
+assert any(&quot;is_hazardous&quot; in e for e in errors), &quot;Gate failed to catch the drift!&quot;
+print(&quot;✅ Gate correctly REJECTED the string-typed is_hazardous — Major Kai sleeps tonight&quot;)</code></pre>
+<p>You should see a <code>TYPE DRIFT: is_hazardous is 'string', contract requires 'boolean'</code> error. That's the whole point: the drift that once slipped through silently is now a hard, visible failure <strong>before</strong> it can reach a single dashboard.</p>
+<blockquote>⚠️ <strong>Breaking vs. non-breaking changes:</strong> Not every change is an emergency. Adding a <em>new optional</em> column is non-breaking; renaming or retyping a <em>required</em> column is breaking. When NASA makes a legitimate change, you don't patch code in a panic — you author <code>asteroids.v2.yaml</code>, review the diff, and migrate consumers deliberately. <strong>Versioning turns surprises into decisions.</strong></blockquote>
+<hr>
+<h2 id="-section-5--wire-up-alerting--ownership">🔔 Section 5 — Wire Up Alerting & Ownership</h2>
+<p>A quarantine table nobody watches is useless. Two final steps make the contract operational.</p>
+<p><strong>1. Emit a validation summary you can alert on.</strong> Write one row per validation run to a metrics table:</p>
+<pre><code class="language-python">from datetime import datetime
+
+summary = spark.createDataFrame([{
+    &quot;contract&quot;: f&quot;{contract[&#x27;name&#x27;]} v{contract[&#x27;version&#x27;]}&quot;,
+    &quot;run_ts&quot;: datetime.utcnow().isoformat(),
+    &quot;rows_passed&quot;: passed.count(),
+    &quot;rows_quarantined&quot;: quarantined.count(),
+    &quot;schema_errors&quot;: len(errors),
+    &quot;warnings&quot;: len(warnings),
+}])
+summary.write.mode(&quot;append&quot;).format(&quot;delta&quot;).saveAsTable(&quot;contract_validation_log&quot;)
+print(&quot;✅ Logged validation run to contract_validation_log&quot;)</code></pre>
+<p>In <a href="08-real-time-intelligence.md">Module 08 — Real-Time Intelligence</a> you'll learn to set a <strong>Fabric Activator</strong> alert. A natural rule for this table: <em>when <code>rows_quarantined > 0</code> or <code>schema_errors > 0</code>, notify the data-engineering channel.</em> That closes the loop — a broken contract now pages a human instead of failing silently.</p>
+<p><strong>2. Register ownership in Purview.</strong> The contract's <code>owner</code> field should map to a real steward:</p>
+<ul>
+  <li>Open the <strong>Microsoft Purview</strong> hub (used in <a href="02-governance-and-security.md">Module 02</a>).</li>
+  <li>Find the <code>asteroids_bronze</code> asset, assign a <strong>Data Owner</strong>, and attach the contract file as documentation.</li>
+</ul>
+<blockquote>💡 <strong>Tip:</strong> Treat the <code>contracts/</code> folder like source code. Commit it to Git (you'll set up Git integration in <a href="12-ci-cd-deployment.md">Module 12</a>) so every contract change is reviewed in a pull request — the same rigor you'd apply to application code.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction">Fabric Activator (Reflex) alerts</a> - <a href="https://learn.microsoft.com/en-us/purview/how-to-workflow-manual-approval">Assign data stewards in Purview</a></blockquote>
+<hr>
+<h2 id="checkpoint">✅ Checkpoint</h2>
+<p>Verify that you've completed the following before moving on:</p>
+<ul>
+  <li>[ ] Contract <code>asteroids.v1.yaml</code> written to <code>Files/contracts/</code> in <code>lh_zosa</code></li>
+  <li>[ ] Validation engine (<code>validate</code>) runs and separates schema errors from row-level violations</li>
+  <li>[ ] <code>asteroids_bronze_validated</code> table created with only contract-compliant rows</li>
+  <li>[ ] <code>asteroids_quarantine</code> captures rejected rows (with timestamp + contract version)</li>
+  <li>[ ] The drift test in Section 4 <strong>raises/flags</strong> the string-typed <code>is_hazardous</code></li>
+  <li>[ ] <code>contract_validation_log</code> records a summary row per run</li>
+  <li>[ ] You understand the difference between a <strong>breaking</strong> and <strong>non-breaking</strong> contract change</li>
+</ul>
+<hr>
+<blockquote><em>You drop a screenshot of the failed drift test into the leadership channel: <code>TYPE DRIFT: is_hazardous is 'string', contract requires 'boolean' — LOAD HALTED</code>. Dr. Vasquez replies within seconds: "That red error is the most beautiful thing I've seen all week. From now on, nothing untrusted touches Silver." Major Kai adds a single 🛡️. Now that your data is under contract, it's finally safe to refine it — Bronze to Silver to Gold.</em></blockquote>
+<hr>
+<p><strong>Navigation:</strong></p>
+<p><a href="03-data-ingestion.md">← Module 03 — Data Ingestion</a> | <a href="05-medallion-lakehouse.md">Module 05 — Medallion Lakehouse →</a></p>
+<p><a href="../README.md">← Back to README</a></p>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      
+        <a href="03-ingestion.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 03: Data Ingestion</span>
+        </a>
+      
+        <a href="05-medallion.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 05: Medallion Lakehouse</span>
+        </a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

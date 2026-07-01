@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 08 — 🔬 Module 08 — Data Science & AI · Fabric Space Lab</title>
+  <title>Module 09 — 🔬 Module 09 — Data Science & AI · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -59,12 +59,12 @@
   <!-- Main Content -->
   <main class="storyboard-content">
     <section class="hero" id="top">
-      <div class="hero-overline">Module 08</div>
-      <h1>🔬 Module 08 — Data Science & AI</h1>
+      <div class="hero-overline">Module 09</div>
+      <h1>🔬 Module 09 — Data Science & AI</h1>
     </section>
 
     <section class="chapter">
-      <h1 id="-module-08--data-science--ai">🔬 Module 08 — Data Science & AI</h1>
+      <h1 id="-module-09--data-science--ai">🔬 Module 09 — Data Science & AI</h1>
 <blockquote><strong>Story:</strong> Dr. Osei leans forward in her chair, the glow of the dashboard reflecting off her glasses. <em>"We can see the asteroids after they pass. But can we predict which ones are dangerous before they get close?"</em> She taps the table. <em>"The Planetary Defense board needs a risk classifier — not hindsight, but foresight."</em></blockquote>
 <hr>
 <h2 id="learning-objectives">🎯 Learning Objectives</h2>
@@ -76,7 +76,7 @@
   <li>Track experiments with MLflow</li>
   <li>Register the best model and save predictions back to the lakehouse</li>
 </ul>
-<blockquote><strong>Prerequisites:</strong> You need the <code>gold_asteroid_risk</code> table from <a href="04-medallion-lakehouse.md">Module 04</a> and a working ZOSA-Dev workspace.</blockquote>
+<blockquote><strong>Prerequisites:</strong> You need the <code>gold_asteroid_risk</code> table from <a href="05-medallion-lakehouse.md">Module 05</a> and a working ZOSA-Dev workspace.</blockquote>
 <hr>
 <h2 id="-fabric-data-science-overview">1️⃣ Fabric Data Science Overview</h2>
 <p>Microsoft Fabric ships a full data science toolkit — no extra provisioning, no separate compute clusters, no third-party integrations required.</p>
@@ -132,7 +132,8 @@
 <h3 id="load-the-gold-table">Load the Gold Table</h3>
 <p>In the first cell, load your gold asteroid risk data:</p>
 <pre><code class="language-python"># Cell 1 — Load gold asteroid risk data
-df = spark.sql(&quot;SELECT * FROM lh_zosa.gold_asteroid_risk&quot;)
+# Use dbo schema — the default lakehouse sets the catalog but tables live under dbo
+df = spark.sql(&quot;SELECT * FROM dbo.gold_asteroid_risk&quot;)
 print(f&quot;Total records: {df.count()}&quot;)
 df.printSchema()
 df.show(5)</code></pre>
@@ -143,38 +144,32 @@ from pyspark.sql import functions as F
 
 features_df = df.select(
     # === Identification ===
-    F.col(&quot;neo_reference_id&quot;),
+    F.col(&quot;neo_id&quot;),
     
     # === Size features ===
-    ((F.col(&quot;estimated_diameter_max_km&quot;) + F.col(&quot;estimated_diameter_min_km&quot;)) / 2)
-        .alias(&quot;avg_diameter_km&quot;),
-    (F.col(&quot;estimated_diameter_max_km&quot;) - F.col(&quot;estimated_diameter_min_km&quot;))
-        .alias(&quot;diameter_uncertainty_km&quot;),
+    F.col(&quot;avg_diameter_m&quot;),
+    (F.col(&quot;avg_diameter_m&quot;) / 1000).alias(&quot;avg_diameter_km&quot;),
     
     # === Velocity features ===
-    F.col(&quot;relative_velocity_kmps&quot;).alias(&quot;relative_velocity_kmps&quot;),
+    F.col(&quot;relative_velocity_kph&quot;),
+    (F.col(&quot;relative_velocity_kph&quot;) / 3600).alias(&quot;relative_velocity_kps&quot;),
     
     # === Distance features ===
-    F.col(&quot;miss_distance_au&quot;).alias(&quot;miss_distance_au&quot;),
-    F.col(&quot;miss_distance_km&quot;).alias(&quot;miss_distance_km&quot;),
+    F.col(&quot;miss_distance_km&quot;),
     
     # === Interaction features ===
-    (F.col(&quot;relative_velocity_kmps&quot;) / F.col(&quot;miss_distance_au&quot;))
+    (F.col(&quot;relative_velocity_kph&quot;) / F.col(&quot;miss_distance_km&quot;))
         .alias(&quot;velocity_distance_ratio&quot;),
-    (((F.col(&quot;estimated_diameter_max_km&quot;) + F.col(&quot;estimated_diameter_min_km&quot;)) / 2)
-        * F.col(&quot;relative_velocity_kmps&quot;))
+    (F.col(&quot;avg_diameter_m&quot;) * F.col(&quot;relative_velocity_kph&quot;))
         .alias(&quot;size_velocity_product&quot;),
-    (((F.col(&quot;estimated_diameter_max_km&quot;) + F.col(&quot;estimated_diameter_min_km&quot;)) / 2)
-        / F.col(&quot;miss_distance_au&quot;))
+    (F.col(&quot;avg_diameter_m&quot;) / F.col(&quot;miss_distance_km&quot;))
         .alias(&quot;size_distance_ratio&quot;),
     
-    # === Orbital features ===
-    F.col(&quot;orbiting_body&quot;),
-    
     # === Label ===
-    F.when(F.col(&quot;is_potentially_hazardous&quot;) == True, 1)
+    F.when(F.col(&quot;is_hazardous&quot;) == True, 1)
      .otherwise(0)
-     .alias(&quot;is_hazardous&quot;)
+     .cast(&quot;int&quot;)
+     .alias(&quot;is_hazardous_label&quot;)
 )
 
 print(f&quot;Feature matrix: {features_df.count()} rows, {len(features_df.columns)} columns&quot;)
@@ -186,16 +181,15 @@ from pyspark.sql import functions as F
 
 # Drop rows with nulls in feature columns
 feature_cols = [
-    &quot;avg_diameter_km&quot;, &quot;diameter_uncertainty_km&quot;, &quot;relative_velocity_kmps&quot;,
-    &quot;miss_distance_au&quot;, &quot;miss_distance_km&quot;, &quot;velocity_distance_ratio&quot;,
-    &quot;size_velocity_product&quot;, &quot;size_distance_ratio&quot;
+    &quot;avg_diameter_km&quot;, &quot;relative_velocity_kps&quot;, &quot;miss_distance_km&quot;,
+    &quot;velocity_distance_ratio&quot;, &quot;size_velocity_product&quot;, &quot;size_distance_ratio&quot;
 ]
 
 clean_df = features_df.dropna(subset=feature_cols)
 print(f&quot;Records after cleaning: {clean_df.count()} (dropped {features_df.count() - clean_df.count()} nulls)&quot;)
 
 # Convert to Pandas for sklearn
-pdf = clean_df.select(feature_cols + [&quot;is_hazardous&quot;]).toPandas()
+pdf = clean_df.select(feature_cols + [&quot;is_hazardous_label&quot;]).toPandas()
 
 # Normalize numeric features
 from sklearn.preprocessing import StandardScaler as SkScaler
@@ -205,14 +199,14 @@ scaler = SkScaler()
 pdf[feature_cols] = scaler.fit_transform(pdf[feature_cols])
 
 print(f&quot;\nLabel distribution:&quot;)
-print(pdf[&quot;is_hazardous&quot;].value_counts())
-print(f&quot;\nHazardous ratio: {pdf[&#x27;is_hazardous&#x27;].mean():.2%}&quot;)</code></pre>
+print(pdf[&quot;is_hazardous_label&quot;].value_counts())
+print(f&quot;\nHazardous ratio: {pdf[&#x27;is_hazardous_label&#x27;].mean():.2%}&quot;)</code></pre>
 <h3 id="traintest-split">Train/Test Split</h3>
 <pre><code class="language-python"># Cell 4 — Stratified train/test split
 from sklearn.model_selection import train_test_split
 
 X = pdf[feature_cols]
-y = pdf[&quot;is_hazardous&quot;]
+y = pdf[&quot;is_hazardous_label&quot;]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -226,6 +220,7 @@ print(f&quot;Test set:     {len(X_test)} samples&quot;)
 print(f&quot;\nTraining label distribution:\n{y_train.value_counts(normalize=True)}&quot;)
 print(f&quot;\nTest label distribution:\n{y_test.value_counts(normalize=True)}&quot;)</code></pre>
 <blockquote>⚠️ <strong>Important:</strong> The <code>stratify=y</code> parameter ensures your train and test sets have the same proportion of hazardous vs. non-hazardous asteroids. Without this, you might accidentally train on an unbalanced split and get misleading metrics.</blockquote>
+<blockquote>💡 <strong>Note:</strong> Cell 5 below calls <code>mlflow.set_experiment("asteroid_risk_prediction")</code> — make sure this name matches exactly what you created in §2 (step 3).</blockquote>
 <blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/train-models-scikit-learn">Scikit-learn in Fabric</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-science/synapseml-overview">SynapseML</a></blockquote>
 <hr>
 <h2 id="-train-classification-models">4️⃣ Train Classification Models</h2>
@@ -277,15 +272,17 @@ for name, model in models.items():
         for k, v in metrics.items():
             print(f&quot;  {k:&gt;12}: {v:.4f}&quot;)</code></pre>
 <blockquote>💡 <strong>What's happening under the hood:</strong> Each <code>mlflow.start_run()</code> creates a tracked experiment run. Parameters, metrics, and the serialized model artifact all get stored automatically — no extra storage configuration needed. You'll see all three runs appear in the Fabric experiment UI within seconds.</blockquote>
+<blockquote>⚠️ <strong>Expect near-perfect scores:</strong> The <code>is_hazardous</code> flag in the gold table was derived from the same physical features (size, velocity, distance) used here for training. Tree-based models (RandomForest, GradientBoosting) will learn this relationship perfectly, producing 1.0 across all metrics. This is expected — the exercise focuses on the <strong>MLflow tracking workflow</strong>, not on building a novel classifier. In a real scenario, you'd use features that weren't used to compute the label.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-science/mlflow-autologging">MLflow Autologging in Fabric</a></blockquote>
 <hr>
 <h2 id="-compare--select-best-model">5️⃣ Compare & Select Best Model</h2>
 <h3 id="compare-in-the-fabric-ui">Compare in the Fabric UI</h3>
+<blockquote>💡 <strong>Note:</strong> Runs appear here after you execute Cell 5 in your notebook. The <code>mlflow.set_experiment("asteroid_risk_prediction")</code> call links the notebook to this experiment. If runs don't appear immediately, click the <strong>refresh</strong> button (🔄) in the toolbar.</blockquote>
 <ol>
   <li>Go back to your <strong>ZOSA-Dev</strong> workspace</li>
   <li>Open the <strong>asteroid_risk_prediction</strong> experiment</li>
   <li>You'll see three runs — one per model</li>
-  <li>Click <strong>Customize columns</strong> to display: accuracy, precision, recall, f1, roc_auc</li>
+  <li>Click <strong>Columns</strong> to display: accuracy, precision, recall, f1, roc_auc</li>
   <li>Click a column header to sort — <strong>sort by <code>roc_auc</code> descending</strong> to find the best overall classifier</li>
 </ol>
 <blockquote>📋 <strong>What to look for:</strong> For planetary defense, <strong>recall</strong> matters most — you never want to miss a truly hazardous asteroid (a false negative could be catastrophic). But high recall with low precision means too many false alarms. The <strong>F1 score</strong> balances both, and <strong>ROC AUC</strong> captures overall discriminative ability.</blockquote>
@@ -294,8 +291,8 @@ for name, model in models.items():
 import pandas as pd
 
 results_df = pd.DataFrame(results).T
-results_df = results_df.sort_values(&quot;roc_auc&quot;, ascending=False)
-print(&quot;Model Comparison (sorted by ROC AUC):\n&quot;)
+results_df = results_df.sort_values([&quot;roc_auc&quot;, &quot;f1&quot;], ascending=False)
+print(&quot;Model Comparison (sorted by ROC AUC, then F1):\n&quot;)
 print(results_df.to_string())
 
 best_model_name = results_df.index[0]
@@ -303,10 +300,10 @@ print(f&quot;\n🏆 Best model: {best_model_name}&quot;)</code></pre>
 <p>To register in the Fabric UI:</p>
 <ol>
   <li>Open the winning run in the experiment view</li>
-  <li>Click <strong>Register model</strong></li>
+  <li>Click <strong>Save as ML model</strong> in the ribbon</li>
   <li>Name: <code>asteroid_hazard_classifier</code></li>
-  <li>Version: <code>1</code></li>
-  <li>Click <strong>Register</strong></li>
+  <li>Click <strong>Save</strong> — the version number is assigned automatically (starting at 1)</li>
+  <li>Navigate back to your workspace and confirm the <strong>ML Model</strong> item <code>asteroid_hazard_classifier</code> appears</li>
 </ol>
 <p>Your model is now a first-class citizen in the workspace — versioned, trackable, and ready for downstream use.</p>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-science/machine-learning-model">ML Models / Model Registry</a></blockquote>
@@ -325,7 +322,7 @@ pdf[&quot;predicted_hazardous&quot;] = best_model.predict(full_X)
 pdf[&quot;hazard_probability&quot;] = best_model.predict_proba(full_X)[:, 1]
 
 # Merge predictions with original IDs
-results_pdf = clean_df.select(&quot;neo_reference_id&quot;).toPandas()
+results_pdf = clean_df.select(&quot;neo_id&quot;).toPandas()
 results_pdf[&quot;predicted_hazardous&quot;] = pdf[&quot;predicted_hazardous&quot;]
 results_pdf[&quot;hazard_probability&quot;] = pdf[&quot;hazard_probability&quot;]
 results_pdf[&quot;model_name&quot;] = best_model_name
@@ -334,7 +331,7 @@ results_pdf[&quot;prediction_timestamp&quot;] = pd.Timestamp.now()
 # Save back to lakehouse as a Gold prediction table
 predictions_df = spark.createDataFrame(results_pdf)
 predictions_df.write.mode(&quot;overwrite&quot;).format(&quot;delta&quot;).saveAsTable(
-    &quot;lh_zosa.gold_asteroid_predictions&quot;
+    &quot;dbo.gold_asteroid_predictions&quot;
 )
 
 print(f&quot;✅ Saved {predictions_df.count()} predictions to gold_asteroid_predictions&quot;)
@@ -342,7 +339,7 @@ print(f&quot;\nPrediction distribution:&quot;)
 print(results_pdf[&quot;predicted_hazardous&quot;].value_counts())
 print(f&quot;\nSample predictions:&quot;)
 predictions_df.show(10)</code></pre>
-<blockquote>💡 <strong>Why save predictions as a Gold table?</strong> Downstream consumers — Power BI reports, real-time dashboards, and the ontology layer you'll build in Module 09 — can query this table directly. The model's output becomes a reusable data product, not a one-off notebook result.</blockquote>
+<blockquote>💡 <strong>Why save predictions as a Gold table?</strong> Downstream consumers — Power BI reports, real-time dashboards, and the ontology layer you'll build in Module 10 — can query this table directly. The model's output becomes a reusable data product, not a one-off notebook result.</blockquote>
 <blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/data-science/model-scoring-predict">PREDICT Function</a></blockquote>
 <hr>
 <h2 id="-feature-importance-analysis">7️⃣ Feature Importance Analysis</h2>
@@ -375,7 +372,7 @@ ax.spines[&quot;right&quot;].set_visible(False)
 plt.tight_layout()
 plt.show()
 
-# Log the chart to MLflow
+# Log the chart to MLflow (a separate run is needed because the training runs are already closed)
 with mlflow.start_run(run_name=f&quot;{best_model_name}_feature_importance&quot;):
     mlflow.log_figure(fig, &quot;feature_importance.png&quot;)
     print(&quot;📊 Feature importance chart logged to MLflow&quot;)</code></pre>
@@ -420,14 +417,14 @@ with mlflow.start_run(run_name=f&quot;{best_model_name}_feature_importance&quot;
   </tbody>
 </table>
 <pre><code class="language-python"># Quick verification cell
-print(&quot;=== Module 08 Checkpoint ===\n&quot;)
+print(&quot;=== Module 09 Checkpoint ===\n&quot;)
 
-pred_count = spark.sql(&quot;SELECT COUNT(*) as cnt FROM lh_zosa.gold_asteroid_predictions&quot;).collect()[0][&quot;cnt&quot;]
+pred_count = spark.sql(&quot;SELECT COUNT(*) as cnt FROM dbo.gold_asteroid_predictions&quot;).collect()[0][&quot;cnt&quot;]
 print(f&quot;✅ gold_asteroid_predictions: {pred_count} rows&quot;)
 
 hazard_count = spark.sql(&quot;&quot;&quot;
     SELECT predicted_hazardous, COUNT(*) as cnt
-    FROM lh_zosa.gold_asteroid_predictions
+    FROM dbo.gold_asteroid_predictions
     GROUP BY predicted_hazardous
 &quot;&quot;&quot;).show()
 
@@ -436,24 +433,24 @@ print(&quot;\n✅ All checkpoint items verified!&quot;)</code></pre>
 <hr>
 <h2 id="-whats-next">🌉 What's Next?</h2>
 <blockquote>Dr. Osei reviews the predictions dashboard, nodding slowly. <em>"Good — the model catches 96% of the hazardous ones. But this knowledge is trapped in a table."</em> She looks up. <em>"How do we make this accessible to every team at ZOSA — scientists, engineers, mission planners — without everyone needing to write SQL?"</em></blockquote>
-<p>In <strong><a href="09-ontology-knowledge-graph.md">Module 09 — Ontology & Knowledge Graph</a></strong>, you'll build a semantic layer that turns your lakehouse tables and ML predictions into a navigable knowledge graph — making ZOSA's data self-describing and discoverable.</p>
+<p>In <strong><a href="10-ontology-knowledge-graph.md">Module 10 — Ontology & Knowledge Graph</a></strong>, you'll build a semantic layer that turns your lakehouse tables and ML predictions into a navigable knowledge graph — making ZOSA's data self-describing and discoverable.</p>
 <hr>
 <p><strong>Navigation:</strong></p>
-<p><a href="07-real-time-intelligence.md">← Module 07 — Real-Time Intelligence</a> | <a href="09-ontology-knowledge-graph.md">Module 09 — Ontology & Knowledge Graph →</a></p>
+<p><a href="08-real-time-intelligence.md">← Module 08 — Real-Time Intelligence</a> | <a href="10-ontology-knowledge-graph.md">Module 10 — Ontology & Knowledge Graph →</a></p>
 <p><a href="../README.md">← Back to README</a></p>
     </section>
 
     <!-- Navigation -->
     <nav class="module-nav">
       
-        <a href="07-real-time.html" class="prev">
+        <a href="08-real-time.html" class="prev">
           <span class="nav-label">← Previous</span>
-          <span class="nav-title">Module 07: Real-Time Intelligence</span>
+          <span class="nav-title">Module 08: Real-Time Intelligence</span>
         </a>
       
-        <a href="09-ontology.html" class="next">
+        <a href="10-ontology.html" class="next">
           <span class="nav-label">Next →</span>
-          <span class="nav-title">Module 09: Ontology</span>
+          <span class="nav-title">Module 10: Ontology</span>
         </a>
     </nav>
   </main>

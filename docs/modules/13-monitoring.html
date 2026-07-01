@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 13 — Module 13 — Monitoring & Optimization · Fabric Space Lab</title>
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#the-story-so-far"><span class="toc-dot"></span>The Story So Far</a>
+  <a href="#1--fabric-capacity-metrics-app"><span class="toc-dot"></span>.1 — Fabric Capacity Metrics App</a>
+    <a href="#what-are-capacity-units-cus"><span class="toc-dot"></span>What Are Capacity Units (CUs)?</a>
+    <a href="#install-the-capacity-metrics-app"><span class="toc-dot"></span>Install the Capacity Metrics App</a>
+    <a href="#navigate-the-monitoring-hub"><span class="toc-dot"></span>Navigate the Monitoring Hub</a>
+  <a href="#2--analyze-cu-consumption"><span class="toc-dot"></span>.2 — Analyze CU Consumption</a>
+    <a href="#cu-usage-by-workload-type"><span class="toc-dot"></span>CU Usage by Workload Type</a>
+    <a href="#peak-vs-off-peak-patterns"><span class="toc-dot"></span>Peak vs. Off-Peak Patterns</a>
+    <a href="#top-consuming-items"><span class="toc-dot"></span>Top Consuming Items</a>
+    <a href="#interactive-vs-background-consumption"><span class="toc-dot"></span>Interactive vs. Background Consumption</a>
+  <a href="#3--identify-throttling"><span class="toc-dot"></span>.3 — Identify Throttling</a>
+    <a href="#the-throttling-cascade"><span class="toc-dot"></span>The Throttling Cascade</a>
+    <a href="#spotting-throttling-events"><span class="toc-dot"></span>Spotting Throttling Events</a>
+  <a href="#4--optimization-strategies"><span class="toc-dot"></span>.4 — Optimization Strategies</a>
+    <a href="#-pauseresume-capacity-during-off-hours"><span class="toc-dot"></span>. Pause/Resume Capacity During Off-Hours</a>
+    <a href="#-optimize-spark-notebooks"><span class="toc-dot"></span>. Optimize Spark Notebooks</a>
+    <a href="#-eventstream-efficiency"><span class="toc-dot"></span>. Eventstream Efficiency</a>
+    <a href="#-monitor-direct-lake-fallback"><span class="toc-dot"></span>. Monitor Direct Lake Fallback</a>
+    <a href="#-semantic-model-optimization"><span class="toc-dot"></span>. Semantic Model Optimization</a>
+    <a href="#-right-size-capacity"><span class="toc-dot"></span>. Right-Size Capacity</a>
+  <a href="#5--set-up-alerts"><span class="toc-dot"></span>.5 — Set Up Alerts</a>
+    <a href="#configure-capacity-alerts-via-azure-monitor"><span class="toc-dot"></span>Configure Capacity Alerts via Azure Monitor</a>
+    <a href="#configure-pipeline--refresh-failure-notifications"><span class="toc-dot"></span>Configure Pipeline & Refresh Failure Notifications</a>
+    <a href="#azure-monitor-integration"><span class="toc-dot"></span>Azure Monitor Integration</a>
+  <a href="#6--cost-optimization-checklist"><span class="toc-dot"></span>.6 — Cost Optimization Checklist</a>
+  <a href="#7--zosa-graduation-ceremony-"><span class="toc-dot"></span>.7 — ZOSA Graduation Ceremony 🎓</a>
+  <a href="#8--whats-next"><span class="toc-dot"></span>.8 — What's Next?</a>
+  <a href="#9--final-checkpoint-"><span class="toc-dot"></span>.9 — Final Checkpoint ✅</a>
+</nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 13</div>
+      <h1>Module 13 — Monitoring & Optimization</h1>
+    </section>
+
+    <section class="chapter">
+      <h1 id="module-13--monitoring--optimization">Module 13 — Monitoring & Optimization</h1>
+<blockquote>The CFO asks about costs — Capacity Metrics, CU analysis, and optimization strategies</blockquote>
+<p><strong>Estimated time:</strong> 45 minutes</p>
+<hr>
+<h2 id="the-story-so-far">The Story So Far</h2>
+<p>Three months in. Everything is running in production. Eventstreams are flowing, pipelines are refreshing, dashboards are live, and the ML model is predicting asteroid threats daily.</p>
+<p>Then Marcus Chen, the CFO, slides a printout across your desk:</p>
+<blockquote><em>"Our Fabric bill is 40% higher than projected. I need to know where the capacity units are going — and how to bring them down."</em></blockquote>
+<p>Time to put on your FinOps hat.</p>
+<hr>
+<h2 id="1--fabric-capacity-metrics-app">12.1 — Fabric Capacity Metrics App</h2>
+<p>The <strong>Microsoft Fabric Capacity Metrics</strong> app gives you detailed visibility into how your capacity is being consumed.</p>
+<h3 id="what-are-capacity-units-cus">What Are Capacity Units (CUs)?</h3>
+<p>Every operation in Fabric consumes <strong>Capacity Units (CUs)</strong> — a normalized measure of compute:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>SKU</th>
+      <th>CUs</th>
+      <th>Typical Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>F2</td>
+      <td>2 CUs</td>
+      <td>Dev/test, small teams</td>
+    </tr>
+    <tr>
+      <td>F32</td>
+      <td>32 CUs</td>
+      <td>Departmental workloads</td>
+    </tr>
+    <tr>
+      <td>F64</td>
+      <td>64 CUs</td>
+      <td>Production analytics (ZOSA's current tier)</td>
+    </tr>
+    <tr>
+      <td>F128</td>
+      <td>128 CUs</td>
+      <td>Large-scale enterprise</td>
+    </tr>
+  </tbody>
+</table>
+<p>CU consumption is measured in <strong>CU-seconds</strong>. A query that uses 4 CUs for 10 seconds consumes 40 CU-seconds. Fabric tracks consumption over <strong>30-second evaluation windows</strong> — if you exceed your capacity's CU allowance in a window, smoothing and throttling kick in.</p>
+<h3 id="install-the-capacity-metrics-app">Install the Capacity Metrics App</h3>
+<ol>
+  <li>Go to <strong>Microsoft AppSource</strong> (appsource.microsoft.com)</li>
+  <li>Search for <strong>"Microsoft Fabric Capacity Metrics"</strong></li>
+  <li>Click <strong>Get it now</strong> and install it to a workspace (use ZOSA-Prod or a dedicated monitoring workspace)</li>
+  <li>After installation, open the app and connect it to your capacity</li>
+  <li>The app will begin populating with data — historical data goes back <strong>14 days</strong></li>
+</ol>
+<blockquote>📝 <strong>Note:</strong> You must be a <strong>capacity admin</strong> to access the Capacity Metrics app. Users also need a <strong>Pro or PPU license</strong> (or an F64+ capacity) to view the app.</blockquote>
+<h3 id="navigate-the-monitoring-hub">Navigate the Monitoring Hub</h3>
+<p>The Fabric portal also has a built-in monitoring hub:</p>
+<ol>
+  <li>Click <strong>Monitor</strong> in the left navigation pane</li>
+  <li>The <strong>Activities</strong> page displays up to <strong>100 Fabric activities from the past 30 days</strong>, ordered by start time</li>
+  <li>Filter by workspace, item type, status, and time range</li>
+  <li>Use <strong>Historical runs</strong> on any activity to see its full 30-day execution history</li>
+</ol>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app">Capacity Metrics App</a> - <a href="https://learn.microsoft.com/en-us/fabric/admin/monitoring-hub">Monitoring Hub</a> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/licenses">Fabric Capacities & Licensing</a></blockquote>
+<hr>
+<h2 id="2--analyze-cu-consumption">12.2 — Analyze CU Consumption</h2>
+<p>Open the Capacity Metrics app and dig into ZOSA's consumption patterns.</p>
+<h3 id="cu-usage-by-workload-type">CU Usage by Workload Type</h3>
+<p>The app breaks down consumption by workload engine:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Workload</th>
+      <th>CU Usage (30-day avg)</th>
+      <th>% of Total</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Spark (Notebooks)</strong></td>
+      <td>18.4 CU-hrs/day</td>
+      <td>38%</td>
+      <td>ML training notebook is the top consumer</td>
+    </tr>
+    <tr>
+      <td><strong>Eventstream</strong></td>
+      <td>11.2 CU-hrs/day</td>
+      <td>23%</td>
+      <td>Continuous real-time processing</td>
+    </tr>
+    <tr>
+      <td><strong>SQL Analytics</strong></td>
+      <td>8.7 CU-hrs/day</td>
+      <td>18%</td>
+      <td>Semantic model queries, SQL endpoint</td>
+    </tr>
+    <tr>
+      <td><strong>Power BI</strong></td>
+      <td>6.1 CU-hrs/day</td>
+      <td>13%</td>
+      <td>Report renders, DAX queries</td>
+    </tr>
+    <tr>
+      <td><strong>Data Pipelines</strong></td>
+      <td>3.8 CU-hrs/day</td>
+      <td>8%</td>
+      <td>Orchestration, Copy activities</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="peak-vs-off-peak-patterns">Peak vs. Off-Peak Patterns</h3>
+<p>Look at the <strong>hourly consumption chart</strong>:</p>
+<ul>
+  <li><strong>Peak hours (09:00–17:00 UTC):</strong> CU usage averages 85% of capacity — driven by interactive report queries, ad-hoc notebook runs, and pipeline refreshes</li>
+  <li><strong>Off-peak hours (22:00–06:00 UTC):</strong> CU usage drops to 15% — only Eventstream and scheduled refreshes running</li>
+  <li><strong>Spike events:</strong> ML model retraining (Tuesdays, 02:00 UTC) causes a 2-hour burst to 95% capacity</li>
+</ul>
+<h3 id="top-consuming-items">Top Consuming Items</h3>
+<p>Drill into the <strong>item-level breakdown</strong>:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Avg CU/day</th>
+      <th>Observation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Threat_Response_Model</code> notebook</td>
+      <td>9.2 CU-hrs</td>
+      <td>Full model retraining runs weekly — very expensive</td>
+    </tr>
+    <tr>
+      <td>Eventstream (asteroid telemetry)</td>
+      <td>8.1 CU-hrs</td>
+      <td>Always on, continuous ingestion</td>
+    </tr>
+    <tr>
+      <td><code>Risk_Assessment_Pipeline</code></td>
+      <td>3.4 CU-hrs</td>
+      <td>Runs every hour, includes Spark transforms</td>
+    </tr>
+    <tr>
+      <td>Mission Control Report</td>
+      <td>2.8 CU-hrs</td>
+      <td>High viewer count, complex DAX</td>
+    </tr>
+    <tr>
+      <td>Scheduled semantic model refresh</td>
+      <td>2.1 CU-hrs</td>
+      <td>Full refresh 4x daily</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="interactive-vs-background-consumption">Interactive vs. Background Consumption</h3>
+<p>Fabric categorizes consumption into two buckets:</p>
+<ul>
+  <li><strong>Interactive:</strong> User-initiated queries, report renders, notebook executions. These get priority scheduling.</li>
+  <li><strong>Background:</strong> Scheduled refreshes, pipeline runs, Eventstream processing. These can be smoothed over time.</li>
+</ul>
+<blockquote>💡 <strong>Key insight:</strong> Background operations can be <strong>deferred</strong> during peak hours, while interactive operations get immediate CUs. Understanding this split is crucial for optimization.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/fabric-operations">Workload Management</a> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/azure-billing">Azure Billing for Fabric</a></blockquote>
+<hr>
+<h2 id="3--identify-throttling">12.3 — Identify Throttling</h2>
+<p>When consumption exceeds your capacity's CU allowance, Fabric applies a progressive response:</p>
+<h3 id="the-throttling-cascade">The Throttling Cascade</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Phase</th>
+      <th>Trigger</th>
+      <th>Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Smoothing</strong></td>
+      <td>Usage exceeds capacity in a 30-second window</td>
+      <td>Background jobs are spread over a longer window (up to 24 hours). No user impact.</td>
+    </tr>
+    <tr>
+      <td><strong>Throttling</strong></td>
+      <td>Sustained overage after smoothing</td>
+      <td>Interactive queries are delayed. Users experience slower report loads and query responses.</td>
+    </tr>
+    <tr>
+      <td><strong>Rejection</strong></td>
+      <td>Extreme sustained overage</td>
+      <td>New requests are rejected with an error. Critical — immediate action required.</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="spotting-throttling-events">Spotting Throttling Events</h3>
+<p>In the Capacity Metrics app:</p>
+<ol>
+  <li>Go to the <strong>Throttling</strong> tab</li>
+  <li>Look for:</li>
+  <li>🟡 <strong>Yellow bars</strong> — smoothing active (background jobs deferred)</li>
+  <li>🟠 <strong>Orange bars</strong> — throttling active (interactive delays)</li>
+  <li>🔴 <strong>Red bars</strong> — rejection events (requests failing)</li>
+  <li>Correlate throttling events with specific items using the <strong>timeline view</strong></li>
+</ol>
+<p>For ZOSA, you discover:</p>
+<ul>
+  <li><strong>Tuesday mornings</strong> see throttling during ML model retraining</li>
+  <li><strong>Occasional spikes</strong> when Dr. Osei runs ad-hoc Spark analysis during peak hours</li>
+  <li><strong>No rejections</strong> — we're close to the edge but not over</li>
+</ul>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/enterprise/throttling">Throttling & Smoothing in Fabric</a></blockquote>
+<hr>
+<h2 id="4--optimization-strategies">12.4 — Optimization Strategies</h2>
+<p>Now for the part Marcus Chen cares about. Here's how to reduce CU consumption:</p>
+<h3 id="-pauseresume-capacity-during-off-hours">1. Pause/Resume Capacity During Off-Hours</h3>
+<p>ZOSA's capacity runs 24/7 but is only busy 10 hours/day.</p>
+<p><strong>Option A — Azure Automation Runbook:</strong></p>
+<pre><code class="language-powershell"># Schedule this to run at 22:00 UTC (pause) and 06:00 UTC (resume)
+
+# Pause (suspend) capacity
+Suspend-AzFabricCapacity `
+  -ResourceGroupName &quot;zosa-rg&quot; `
+  -CapacityName &quot;zosa-prod-f64&quot;
+
+# Resume capacity
+Resume-AzFabricCapacity `
+  -ResourceGroupName &quot;zosa-rg&quot; `
+  -CapacityName &quot;zosa-prod-f64&quot;</code></pre>
+<p><strong>Option B — Azure Logic App</strong> with a recurrence trigger and Azure Resource Manager actions.</p>
+<blockquote>⚠️ <strong>Important:</strong> When capacity is paused, all Fabric operations stop — Eventstreams, scheduled refreshes, everything. Plan accordingly. Consider keeping a smaller capacity (F2) for critical real-time streams.</blockquote>
+<p><strong>Estimated savings:</strong> ~58% capacity cost (14 hours/day paused)</p>
+<h3 id="-optimize-spark-notebooks">2. Optimize Spark Notebooks</h3>
+<p>The ML training notebook is the single biggest consumer. Optimize it:</p>
+<pre><code class="language-python"># BEFORE: Reading full dataset every time
+df = spark.read.format(&quot;delta&quot;).load(&quot;Tables/asteroid_observations&quot;)
+df_features = df.select(&quot;*&quot;).filter(df.year &gt;= 2020)
+
+# AFTER: Partition pruning + column selection + caching
+df = (spark.read.format(&quot;delta&quot;)
+      .load(&quot;Tables/asteroid_observations&quot;)
+      .filter(&quot;observation_year &gt;= 2020&quot;)   # Pushdown filter to Delta
+      .select(&quot;asteroid_id&quot;, &quot;velocity&quot;, &quot;diameter&quot;,
+              &quot;distance_km&quot;, &quot;risk_score&quot;, &quot;observation_date&quot;))
+
+df.cache()  # Cache for reuse in multiple training steps</code></pre>
+<p>Additional Spark optimizations:</p>
+<ul>
+  <li><strong>Partition tables</strong> by date (already done in Module 4 — verify it's being leveraged)</li>
+  <li><strong>Use V-Order</strong> optimization on Delta tables for faster reads</li>
+  <li><strong>Reduce shuffles</strong> — avoid <code>repartition()</code> unless necessary, prefer <code>coalesce()</code> for reducing partitions</li>
+  <li><strong>Set appropriate executor counts</strong> — don't use <code>spark.conf.set("spark.executor.instances", 20)</code> for a 1GB dataset</li>
+</ul>
+<p><strong>Estimated savings:</strong> 30–50% reduction in Spark CU consumption</p>
+<h3 id="-eventstream-efficiency">3. Eventstream Efficiency</h3>
+<p>The asteroid telemetry Eventstream runs 24/7 but derives multiple outputs:</p>
+<ul>
+  <li><strong>Derived stream for ML features</strong> — only needed during training (weekly)</li>
+  <li><strong>Derived stream for archival</strong> — can batch instead of stream</li>
+  <li><strong>Real-time alerting stream</strong> — must stay active</li>
+</ul>
+<p><strong>Action:</strong> Pause derived streams that don't need real-time processing during off-hours. Keep only the critical alerting stream active 24/7.</p>
+<p><strong>Estimated savings:</strong> 15–20% reduction in Eventstream CU consumption</p>
+<h3 id="-monitor-direct-lake-fallback">4. Monitor Direct Lake Fallback</h3>
+<p>Direct Lake mode reads directly from OneLake — but it can <strong>fall back to DirectQuery</strong> if:</p>
+<ul>
+  <li>Table sizes exceed memory limits</li>
+  <li>Too many columns are loaded</li>
+  <li>Row-level security is complex</li>
+</ul>
+<p><strong>How to detect fallback:</strong></p>
+<ol>
+  <li>Open the <strong>Semantic model</strong> in the Fabric portal</li>
+  <li>Go to <strong>Settings</strong> → <strong>Direct Lake behavior</strong></li>
+  <li>Check the <strong>Refresh history</strong> for fallback events</li>
+  <li>In the Capacity Metrics app, look for SQL analytics CU spikes that correlate with report usage</li>
+</ol>
+<p><strong>Fix it:</strong></p>
+<ul>
+  <li>Split large tables into fact/dimension with proper star schema</li>
+  <li>Remove unused columns from the model</li>
+  <li>Ensure Delta tables have V-Order optimization enabled</li>
+</ul>
+<h3 id="-semantic-model-optimization">5. Semantic Model Optimization</h3>
+<p>Reduce the model's memory footprint:</p>
+<ul>
+  <li><strong>Remove unused columns</strong> — does the model really need all 47 columns from the asteroid table?</li>
+  <li><strong>Remove unused tables</strong> — staging tables shouldn't be in the semantic model</li>
+  <li><strong>Optimize cardinality</strong> — high-cardinality text columns (like <code>asteroid_name</code> with 50K uniques) are expensive</li>
+  <li><strong>Use calculated columns sparingly</strong> — prefer measures over calculated columns</li>
+  <li><strong>Disable auto date/time</strong> — it creates hidden date tables for every date column</li>
+</ul>
+<h3 id="-right-size-capacity">6. Right-Size Capacity</h3>
+<p>After 30 days of monitoring:</p>
+<ul>
+  <li>If peak sustained usage is consistently below <strong>50% of capacity</strong> → consider downsizing</li>
+  <li>If throttling occurs frequently → consider upsizing or optimizing first</li>
+</ul>
+<p>For ZOSA: After optimizations, if average consumption drops from 85% to 45% of F64, consider moving to <strong>F32</strong> and pocketing the savings.</p>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/pause-resume">Pause/Resume Capacity</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/spark-job-concurrency-and-queueing">Spark Job Concurrency & Optimization</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-engineering/author-execute-notebook">Notebook Optimization</a> - <a href="https://learn.microsoft.com/en-us/power-bi/enterprise/directlake-overview">Direct Lake Overview</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-warehouse/performance-guidelines">Performance Best Practices (Data Warehouse)</a> - <a href="https://learn.microsoft.com/en-us/fabric/data-warehouse/query-insights">Query Insights</a> - <a href="https://learn.microsoft.com/en-us/fabric/admin/service-admin-portal-capacity-settings">Capacity Settings</a></blockquote>
+<hr>
+<h2 id="5--set-up-alerts">12.5 — Set Up Alerts</h2>
+<p>Don't wait for Marcus Chen to tell you there's a problem. Set up proactive alerts.</p>
+<h3 id="configure-capacity-alerts-via-azure-monitor">Configure Capacity Alerts via Azure Monitor</h3>
+<p>Capacity-level alerts (CU usage, throttling, rejection) are configured through <strong>Azure Monitor</strong>, not the Capacity Metrics app itself. The app is for visualization and analysis only.</p>
+<ol>
+  <li>In the <strong>Azure portal</strong>, navigate to your Fabric capacity resource</li>
+  <li>Go to <strong>Alerts</strong> → <strong>+ New alert rule</strong></li>
+  <li>Configure alert conditions:</li>
+</ol>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Alert</th>
+      <th>Condition</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>High CU Usage</strong></td>
+      <td>CU usage > 80% sustained for 30+ minutes</td>
+      <td>Email ops-team@zosa.space</td>
+    </tr>
+    <tr>
+      <td><strong>Throttling Detected</strong></td>
+      <td>Any throttling event</td>
+      <td>Email ops-team@zosa.space + Teams notification</td>
+    </tr>
+    <tr>
+      <td><strong>Rejection Event</strong></td>
+      <td>Any rejection event</td>
+      <td>Email ops-team@zosa.space + page on-call engineer</td>
+    </tr>
+  </tbody>
+</table>
+<ol>
+  <li>Connect to <strong>Action Groups</strong> for email, SMS, webhook, or PagerDuty notifications</li>
+</ol>
+<h3 id="configure-pipeline--refresh-failure-notifications">Configure Pipeline & Refresh Failure Notifications</h3>
+<p>For pipeline and refresh failure alerts, use the <strong>Schedule failures</strong> page in the monitoring hub:</p>
+<ol>
+  <li>Open <strong>Monitor</strong> from the left navigation pane</li>
+  <li>Select the <strong>Schedule failures</strong> tab</li>
+  <li>Click <strong>+ Configure notifications</strong></li>
+  <li>Select the scheduled item (pipeline, semantic model refresh, etc.)</li>
+  <li>Enter the recipients who should receive failure emails</li>
+  <li>Click <strong>Save</strong></li>
+</ol>
+<p>You can also configure failure notifications per item:</p>
+<ol>
+  <li>Open the specific pipeline or semantic model</li>
+  <li>Go to the <strong>job scheduler</strong> settings</li>
+  <li>Enable failure notifications and set recipients</li>
+</ol>
+<h3 id="azure-monitor-integration">Azure Monitor Integration</h3>
+<p>For enterprise alerting, integrate Fabric capacity metrics with Azure Monitor:</p>
+<p>For additional Azure Monitor integration beyond the capacity alerts configured above:</p>
+<ol>
+  <li>In the Azure portal, navigate to your Fabric capacity resource</li>
+  <li>Go to <strong>Metrics</strong> → configure dashboards for long-term capacity utilization trends</li>
+  <li>Set up <strong>diagnostic settings</strong> to export capacity metrics to a Log Analytics workspace for advanced querying</li>
+</ol>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app-install">Azure Monitor Integration (Metrics App Install)</a> - <a href="https://learn.microsoft.com/en-us/fabric/enterprise/azure-billing">Cost Management & Azure Billing</a></blockquote>
+<hr>
+<h2 id="6--cost-optimization-checklist">12.6 — Cost Optimization Checklist</h2>
+<p>Summary of all recommendations for Marcus Chen:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Optimization</th>
+      <th>Current Cost Impact</th>
+      <th>Estimated Savings</th>
+      <th>Effort</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Pause/Resume capacity off-hours</td>
+      <td>24/7 capacity cost</td>
+      <td><strong>~58% cost reduction</strong></td>
+      <td>Low — Azure Automation setup</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Optimize Spark notebooks</td>
+      <td>38% of CU consumption</td>
+      <td><strong>30–50% Spark savings</strong></td>
+      <td>Medium — code changes</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Pause non-critical Eventstreams</td>
+      <td>23% of CU consumption</td>
+      <td><strong>15–20% Eventstream savings</strong></td>
+      <td>Low — configuration</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Fix Direct Lake fallback</td>
+      <td>Hidden DirectQuery costs</td>
+      <td><strong>Variable — depends on fallback frequency</strong></td>
+      <td>Medium — model redesign</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Optimize semantic model</td>
+      <td>13% of CU consumption</td>
+      <td><strong>10–20% Power BI savings</strong></td>
+      <td>Low — column cleanup</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Right-size capacity (after optimization)</td>
+      <td>F64 cost</td>
+      <td><strong>Up to 50%</strong> if F32 suffices</td>
+      <td>Low — SKU change</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Schedule ML training off-peak</td>
+      <td>Tuesday peak throttling</td>
+      <td><strong>Eliminates throttling events</strong></td>
+      <td>Low — schedule change</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>💡 <strong>Combined impact:</strong> Implementing items 1, 2, and 3 alone could bring ZOSA's Fabric costs back to projected levels — and possibly below.</blockquote>
+<p>Marcus Chen reviews the plan:</p>
+<blockquote><em>"If you can deliver even half of these savings, I'll approve the budget for that second capacity you've been asking about."</em></blockquote>
+<hr>
+<h2 id="7--zosa-graduation-ceremony-">12.7 — ZOSA Graduation Ceremony 🎓</h2>
+<p>Six months after your first day, ZOSA's analytics platform is running in production. Real-time asteroid monitoring, AI-powered risk predictions, automated threat responses — all on Microsoft Fabric.</p>
+<p>Dr. Vasquez presents you with the <strong>"Order of the Golden Capacity Unit"</strong> award at the quarterly all-hands. Major Nakamura gives you a nod of approval. Dr. Osei is already planning v2 of the ML model. Marcus Chen admits the cost is <em>"acceptable."</em> And Sofia? She's already asking about the next security feature.</p>
+<blockquote><strong>Welcome to the team, Engineer. Your mission continues.</strong> 🚀</blockquote>
+<hr>
+<h2 id="8--whats-next">12.8 — What's Next?</h2>
+<p>Your Fabric journey doesn't end here. Areas to explore:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Topic</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Advanced ML with Fabric</strong></td>
+      <td>Deep learning, MLflow model registry, A/B testing of models</td>
+    </tr>
+    <tr>
+      <td><strong>Copilot in Fabric</strong></td>
+      <td>AI-assisted DAX, SQL, Spark code generation, natural language queries</td>
+    </tr>
+    <tr>
+      <td><strong>Cross-Tenant Sharing</strong></td>
+      <td>Share datasets across organizations with Fabric's external data sharing</td>
+    </tr>
+    <tr>
+      <td><strong>Fabric REST APIs</strong></td>
+      <td>Automate workspace management, item deployment, and monitoring programmatically</td>
+    </tr>
+    <tr>
+      <td><strong>OneLake Data Hub</strong></td>
+      <td>Discover and govern data across the entire organization</td>
+    </tr>
+    <tr>
+      <td><strong>Fabric Databases (Mirroring)</strong></td>
+      <td>Mirror Azure SQL, Cosmos DB, or Snowflake data into OneLake</td>
+    </tr>
+    <tr>
+      <td><strong>Power BI Embedded</strong></td>
+      <td>Embed ZOSA dashboards into the mission control web application</td>
+    </tr>
+    <tr>
+      <td><strong>GraphQL API in Fabric</strong></td>
+      <td>Expose Fabric data through GraphQL for custom applications</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="9--final-checkpoint-">12.9 — Final Checkpoint ✅</h2>
+<p>The complete ZOSA Space Analytics Platform:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What You Built</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Workspace setup & architecture</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Lakehouse & medallion architecture</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Data ingestion pipelines</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Spark notebooks & transformations</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>SQL analytics & warehouse</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Real-time with Eventstream & KQL</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Semantic model & Power BI reports</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Security, governance & compliance</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Ontology & Knowledge Graph</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>AI Agents (Data Agent & Operations Agent)</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>CI/CD & Deployment Pipelines</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>Monitoring & Optimization</td>
+      <td>⬜</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>🎯 <strong>Congratulations!</strong> You've built a complete, production-grade analytics platform on Microsoft Fabric — from raw data ingestion to real-time monitoring, AI-powered predictions, governed deployments, and cost-optimized operations.</blockquote>
+<hr>
+<p><strong>Navigation:</strong></p>
+<p><a href="12-ci-cd-deployment.md">← Module 12 — CI/CD & Deployment</a> | <a href="14-fabric-apps.md">Module 14 — Fabric Apps →</a></p>
+<p><a href="../README.md">← Back to README</a></p>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      
+        <a href="12-ci-cd.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 12: CI/CD</span>
+        </a>
+      
+        <a href="14-fabric-apps.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 14: Fabric Apps</span>
+        </a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

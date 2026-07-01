@@ -659,17 +659,17 @@
       <td><strong>Confidential</strong></td>
     </tr>
     <tr>
-      <td><strong>Module 05</strong></td>
+      <td><strong>Module 06</strong></td>
       <td><code>ZOSA Semantic Model</code></td>
       <td><strong>Confidential</strong></td>
     </tr>
     <tr>
-      <td><strong>Module 06</strong></td>
+      <td><strong>Module 07</strong></td>
       <td>Power BI reports</td>
       <td><strong>Confidential</strong></td>
     </tr>
     <tr>
-      <td><strong>Module 08</strong></td>
+      <td><strong>Module 09</strong></td>
       <td>ML experiments & models</td>
       <td><strong>Top Secret</strong></td>
     </tr>
@@ -746,8 +746,8 @@
 <p>OneLake Security is the <strong>unified data access control layer</strong> for Microsoft Fabric. Once configured, permissions propagate to <strong>all engines</strong> — Spark notebooks, SQL analytics endpoints, Power BI semantic models, Dataflows, and even Copilot. You define rules once; they're enforced everywhere.</p>
 <p><strong>⚠️ Note: OneLake Security, once enabled on a lakehouse, cannot be turned off. Plan your roles and rules carefully before flipping the switch.</strong></p>
 <h3 id="enabling-onelake-security">Enabling OneLake Security</h3>
-<blockquote>⚠️ <strong>Prerequisite:</strong> You need a lakehouse with tables before you can enable OneLake Security. The option <strong>Manage OneLake Security</strong> appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 04 — then come back here to enable security.</blockquote>
-<p><strong>When you're ready (after Module 04):</strong></p>
+<blockquote>⚠️ <strong>Prerequisite:</strong> You need a lakehouse with tables before you can enable OneLake Security. The option <strong>Manage OneLake Security</strong> appears inside a lakehouse item (not at the workspace level). You'll create the lakehouse in Module 03 and load data in Module 05 — then come back here to enable security.</blockquote>
+<p><strong>When you're ready (after Module 05):</strong></p>
 <ol>
   <li>Open <strong>ZOSA-Dev</strong> workspace</li>
   <li>Open your <strong>Lakehouse</strong> item</li>
@@ -757,7 +757,7 @@
 <p>Once enabled, you'll see the role management interface where you can create roles with specific data access rules.</p>
 <hr>
 <h3 id="-4a--row-level-security-rls">🔒 4a — Row-Level Security (RLS)</h3>
-<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 04.</blockquote>
+<blockquote>📋 <strong>Plan now, implement in Module 05</strong> — The tables referenced below don't exist yet. Use this section to understand the concept and plan your roles. You'll configure RLS after data is loaded in Module 05.</blockquote>
 <p><strong>Scenario:</strong> ZOSA operates ground stations across the globe. Scientists at each station should only see observation data from <strong>their region</strong>. A European analyst shouldn't browse Asian station data.</p>
 <h4 id="how-to-configure-rls-after-data-ingestion">How to Configure RLS (after data ingestion)</h4>
 <ol>
@@ -804,7 +804,7 @@
 SELECT * FROM observations WHERE region = &#x27;Europe&#x27;</code></pre>
 <hr>
 <h3 id="-4b--column-level-security-cls">🔒 4b — Column-Level Security (CLS)</h3>
-<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.</blockquote>
+<blockquote>📋 <strong>Plan now, implement in Module 05</strong> — CLS requires existing tables. Review the concept and plan which columns to restrict. You'll run these T-SQL statements after data is loaded.</blockquote>
 <p><strong>Scenario:</strong> Budget data and crew security clearance levels are highly sensitive. Scientists and engineers need to work with mission and crew tables, but they should <strong>never see</strong> the <code>budget_usd</code> or <code>clearance_level</code> columns.</p>
 <h4 id="how-to-configure-cls-after-data-ingestion">How to Configure CLS (after data ingestion)</h4>
 <p>Use the <strong>SQL analytics endpoint</strong> of your lakehouse and run T-SQL <code>DENY</code> statements:</p>
@@ -820,7 +820,7 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];</code></pre>
 <p><strong>🧪 How to verify:</strong> Sign in as <code>zosa.scientist</code> in an InPrivate browser → open the SQL analytics endpoint → run <code>SELECT * FROM missions</code> → the <code>budget_usd</code> column should not appear in the results.</p>
 <hr>
 <h3 id="-4c--object-level-security-ols">🔒 4c — Object-Level Security (OLS)</h3>
-<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — OLS is configured via Tabular Editor on the semantic model, which is created in Module 05. Review the concept now and implement later.</blockquote>
+<blockquote>📋 <strong>Plan now, implement in Module 05</strong> — OLS is configured via Tabular Editor on the semantic model, which is created in Module 06. Review the concept now and implement later.</blockquote>
 <p><strong>Scenario:</strong> ZOSA has a <code>classified_defense_missions</code> table containing data about planetary defense operations. This table should be <strong>completely invisible</strong> to anyone without defense clearance.</p>
 <h4 id="how-to-configure-ols-after-semantic-model-creation">How to Configure OLS (after semantic model creation)</h4>
 <p>OLS is configured via the <strong>Tabular Editor</strong> (a free external tool) or the <strong>XMLA endpoint</strong>:</p>
@@ -838,7 +838,7 @@ DENY SELECT ON dbo.missions(budget_usd) TO [ZOSA-Engineers];</code></pre>
 <p><strong>💡 Tip:</strong> OLS is the most restrictive data security layer — it hides entire tables or columns from the model itself. Use it for truly classified data that certain roles should have zero awareness of.</p>
 <hr>
 <h3 id="-4d--dynamic-data-masking-ddm">🔒 4d — Dynamic Data Masking (DDM)</h3>
-<blockquote>📋 <strong>Plan now, implement in Module 04</strong> — DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.</blockquote>
+<blockquote>📋 <strong>Plan now, implement in Module 05</strong> — DDM requires existing tables with data. Review the masking functions and plan which columns to mask. You'll apply these after data ingestion.</blockquote>
 <p><strong>Scenario:</strong> External analysts occasionally access crew data for scheduling purposes. They need to see that records exist, but crew email addresses and full names should be <strong>partially masked</strong>.</p>
 <h4 id="how-to-configure-ddm-after-data-ingestion">How to Configure DDM (after data ingestion)</h4>
 <p>Use T-SQL on the SQL analytics endpoint:</p>
@@ -950,7 +950,7 @@ GRANT UNMASK TO [ZOSA-Admins];</code></pre>
   <li>[ ] Sensitivity labels configured and published via policy (Internal default baseline)</li>
   <li>[ ] Endorsement process understood (Promoted vs. Certified)</li>
   <li>[ ] You understand the 4 data security layers: <strong>RLS</strong> (row filter), <strong>CLS</strong> (column deny), <strong>OLS</strong> (object hide), <strong>DDM</strong> (value mask)</li>
-  <li>[ ] OneLake Security planning documented — you'll implement the data-level rules in Module 04 after data is loaded</li>
+  <li>[ ] OneLake Security planning documented — you'll implement the data-level rules in Module 05 after data is loaded</li>
 </ul>
 <h3 id="-how-youll-validate-security-preview">🧪 How You'll Validate Security (Preview)</h3>
 <p>You've defined the rules — but how do you prove they work? Here's what you'll do once data exists (Modules 04–05):</p>
@@ -980,7 +980,7 @@ GRANT UNMASK TO [ZOSA-Admins];</code></pre>
     </tr>
   </tbody>
 </table>
-<p><strong>⚠️ Note:</strong> We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be <strong>implemented</strong> in Module 04 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.</p>
+<p><strong>⚠️ Note:</strong> We've configured workspace roles and sensitivity labels now. The data-level security (RLS, CLS, OLS, DDM) will be <strong>implemented</strong> in Module 05 after you ingest data in Module 03. You can't secure tables that don't exist yet! For now, make sure you understand the concepts and have your plan ready.</p>
 <hr>
 <blockquote>Sofia reviews your security plan and nods slowly. <em>"This is solid. Defense-in-depth, least privilege, everything auditable. I'll sign off on moving forward."</em> She pauses at the door. <em>"Oh, and one more thing — the first data drop from NASA arrives tomorrow. Don't let any of it land unencrypted."</em>  You glance at your plan: data ingestion is next. Time to build the pipelines.</blockquote>
 <hr>

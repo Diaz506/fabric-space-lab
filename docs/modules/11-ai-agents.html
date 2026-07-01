@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 10 — Module 10 — AI Agents · Fabric Space Lab</title>
+  <title>Module 11 — Module 11 — AI Agents · Fabric Space Lab</title>
   <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <link rel="stylesheet" href="../css/theme.css">
@@ -64,12 +64,12 @@
   <!-- Main Content -->
   <main class="storyboard-content">
     <section class="hero" id="top">
-      <div class="hero-overline">Module 10</div>
-      <h1>Module 10 — AI Agents</h1>
+      <div class="hero-overline">Module 11</div>
+      <h1>Module 11 — AI Agents</h1>
     </section>
 
     <section class="chapter">
-      <h1 id="module-10--ai-agents">Module 10 — AI Agents</h1>
+      <h1 id="module-11--ai-agents">Module 11 — AI Agents</h1>
 <blockquote>Ask in plain English, act automatically — Data Agents and Operations Agents bring natural language intelligence and autonomous workflows to your unified data estate.</blockquote>
 <table class="data-table">
   <thead>
@@ -81,11 +81,11 @@
   <tbody>
     <tr>
       <td>🎯 Goal</td>
-      <td>Create a <strong>Data Agent</strong> (GA) for natural language Q&A and an <strong>Operations Agent</strong> (Preview) for automated threat response — both grounded to the ontology you built in Module 09.</td>
+      <td>Create a <strong>Data Agent</strong> (GA) for natural language Q&A and an <strong>Operations Agent</strong> (Preview) for automated threat response — both grounded to the ontology you built in Module 10.</td>
     </tr>
     <tr>
       <td>📋 Prerequisites</td>
-      <td>Modules <a href="07-activator-alerts.md">07</a>, <a href="08-data-science.md">08</a>, and <a href="09-ontology-knowledge-graph.md">09</a> completed. Gold lakehouse tables populated. ZOSA Knowledge Model ontology published.</td>
+      <td>Modules <a href="08-real-time-intelligence.md">08</a>, <a href="09-data-science.md">09</a>, and <a href="10-ontology-knowledge-graph.md">10</a> completed. Gold lakehouse tables populated. ZOSA Knowledge Model ontology published.</td>
     </tr>
   </tbody>
 </table>
@@ -98,7 +98,7 @@
 <p>Data Agents provide <strong>natural language Q&A</strong> over your entire data estate. They were announced as GA at <strong>FabCon Atlanta (March 2026)</strong> and represent the evolution of what was previously called "AI Skills."</p>
 <p>What makes Data Agents special:</p>
 <ul>
-  <li><strong>Grounded to your ontology</strong> — the agent doesn't just guess at table relationships. It operates on the shared business meaning you defined in Module 09. When someone asks about "dangerous asteroids," the agent <em>knows</em> that means <code>hazard_score > 100</code> because your ontology says so.</li>
+  <li><strong>Grounded to your ontology</strong> — the agent doesn't just guess at table relationships. It operates on the shared business meaning you defined in Module 10. When someone asks about "dangerous asteroids," the agent <em>knows</em> that means <code>hazard_score > 100</code> because your ontology says so.</li>
   <li><strong>Not just ad-hoc SQL</strong> — Data Agents understand business concepts, hierarchies, and relationships. They translate intent into precise queries across lakehouses, warehouses, and semantic models.</li>
   <li><strong>Security-aware</strong> — every query respects Row-Level Security (RLS), Column-Level Security (CLS), and Object-Level Security (OLS). Users only see what they're authorized to see.</li>
 </ul>
@@ -117,7 +117,7 @@
 </ol>
 <ol>
   <li>After creation, the <strong>OneLake catalog</strong> opens automatically. Add your data sources (up to <strong>5 total</strong> — lakehouses, warehouses, semantic models, KQL databases, or ontologies in any combination):</li>
-  <li>Select <strong>ZOSA Knowledge Model</strong> (the ontology from Module 09) → click <strong>Add</strong></li>
+  <li>Select <strong>ZOSA Knowledge Model</strong> (the ontology from Module 10) → click <strong>Add</strong></li>
   <li>Select the <strong>Gold Lakehouse</strong> → click <strong>Add</strong></li>
   <li>Optionally add the <strong>ZOSA semantic model</strong> → click <strong>Add</strong></li>
 </ol>
@@ -177,7 +177,7 @@
 <pre><code class="language-text">What is our mission success rate by region?</code></pre>
 <h4 id="security-scoped-queries">Security-Scoped Queries</h4>
 <pre><code class="language-text">List crew members with Top Secret clearance at European stations.</code></pre>
-<blockquote>⚠️ <strong>Expected behavior:</strong> If your RLS rules from Module 06 are active, this last query should only return results for crew members the current user is authorized to see. Try testing with different user accounts to verify.</blockquote>
+<blockquote>⚠️ <strong>Expected behavior:</strong> If your RLS rules from Module 07 are active, this last query should only return results for crew members the current user is authorized to see. Try testing with different user accounts to verify.</blockquote>
 <p>For each query, review:</p>
 <ul>
   <li>✅ Did the agent return the correct results?</li>
@@ -274,7 +274,7 @@
 <blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/operations-agent">Operations Agent</a> - <a href="https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction">Data Activator / Reflex</a></blockquote>
 <hr>
 <h3 id="step-6--design-the-automation">📐 Step 6 — Design the Automation</h3>
-<p>Before building, plan the workflow. When the ML model (Module 08) scores a new asteroid as <strong>Critical</strong>, or the Activator (Module 07) fires an alert, the Operations Agent should:</p>
+<p>Before building, plan the workflow. When the ML model (Module 09) scores a new asteroid as <strong>Critical</strong>, or the Activator (Module 08) fires an alert, the Operations Agent should:</p>
 <pre><code class="language-plaintext">┌─────────────────────────────────────────────────────┐
 │  TRIGGER: New row in gold_asteroid_risk              │
 │           where risk_category = &#x27;Critical&#x27;           │
@@ -393,7 +393,7 @@
    )
 
    df = spark.createDataFrame([test_asteroid])
-   df.write.mode(&quot;append&quot;).saveAsTable(&quot;lh_zosa.gold_asteroid_risk&quot;)</code></pre>
+   df.write.mode(&quot;append&quot;).saveAsTable(&quot;gold_asteroid_risk&quot;)</code></pre>
 <ol>
   <li><strong>Watch the Operations Agent respond.</strong> When the agent detects the new critical data:</li>
   <li>✅ You should receive a <strong>Teams message</strong> from the Fabric Operations Agent app with a threat assessment and recommended actions</li>
@@ -403,7 +403,7 @@
 <ol>
   <li>Verify each step completed successfully in the agent's <strong>Execution History</strong>.</li>
 </ol>
-<blockquote>⚠️ <strong>Cleanup:</strong> After testing, remove the test row to avoid confusion: ``<code>python spark.sql("DELETE FROM lh_zosa.gold_asteroid_risk WHERE neo_reference_id = 'TEST-2029-XR7'") </code>``</blockquote>
+<blockquote>⚠️ <strong>Cleanup:</strong> After testing, remove the test row to avoid confusion: ``<code>python spark.sql("DELETE FROM dbo.gold_asteroid_risk WHERE neo_reference_id = 'TEST-2029-XR7'") </code>``</blockquote>
 <hr>
 <h3 id="step-9--monitor-agent-execution">📊 Step 9 — Monitor Agent Execution</h3>
 <ol>
@@ -470,7 +470,7 @@
 </ul>
 <hr>
 <h2 id="-story-closing">🎬 Story Closing</h2>
-<blockquote>Major Nakamura watches the Operations Agent fire in real-time after the simulated detection. A threat brief appears in the ZOSA-Defense Teams channel within seconds. The mission proposals table updates automatically.  <em>"This,"</em> he says, tapping the screen, <em>"is why we migrated to Fabric."</em>  Dr. Vasquez nods, but she's already thinking ahead. <em>"Now let's make sure this runs reliably in production. We need CI/CD pipelines, deployment gates, and a rollback plan. One workspace for dev, one for prod — no cowboy deployments."</em>  You smile. That's Module 11.</blockquote>
+<blockquote>Major Nakamura watches the Operations Agent fire in real-time after the simulated detection. A threat brief appears in the ZOSA-Defense Teams channel within seconds. The mission proposals table updates automatically.  <em>"This,"</em> he says, tapping the screen, <em>"is why we migrated to Fabric."</em>  Dr. Vasquez nods, but she's already thinking ahead. <em>"Now let's make sure this runs reliably in production. We need CI/CD pipelines, deployment gates, and a rollback plan. One workspace for dev, one for prod — no cowboy deployments."</em>  You smile. That's Module 12.</blockquote>
 <hr>
 <h2 id="-navigation">🧭 Navigation</h2>
 <table class="data-table">
@@ -482,8 +482,8 @@
   </thead>
   <tbody>
     <tr>
-      <td><a href="09-ontology-knowledge-graph.md">← Module 09 — Ontology & Knowledge Graph</a></td>
-      <td><a href="11-ci-cd-deployment.md">Module 11 — CI/CD & Deployment →</a></td>
+      <td><a href="10-ontology-knowledge-graph.md">← Module 10 — Ontology & Knowledge Graph</a></td>
+      <td><a href="12-ci-cd-deployment.md">Module 12 — CI/CD & Deployment →</a></td>
     </tr>
   </tbody>
 </table>
@@ -493,14 +493,14 @@
     <!-- Navigation -->
     <nav class="module-nav">
       
-        <a href="09-ontology.html" class="prev">
+        <a href="10-ontology.html" class="prev">
           <span class="nav-label">← Previous</span>
-          <span class="nav-title">Module 09: Ontology</span>
+          <span class="nav-title">Module 10: Ontology</span>
         </a>
       
-        <a href="11-ci-cd.html" class="next">
+        <a href="12-ci-cd.html" class="next">
           <span class="nav-label">Next →</span>
-          <span class="nav-title">Module 11: CI/CD</span>
+          <span class="nav-title">Module 12: CI/CD</span>
         </a>
     </nav>
   </main>

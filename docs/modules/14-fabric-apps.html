@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 14 — 🚀 Module 14 — Fabric Apps · Fabric Space Lab</title>
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#learning-objectives"><span class="toc-dot"></span>Learning Objectives</a>
+  <a href="#-prerequisites"><span class="toc-dot"></span>📋 Prerequisites</a>
+  <a href="#1--understanding-fabric-apps--rayfin"><span class="toc-dot"></span>.1 — Understanding Fabric Apps & Rayfin</a>
+    <a href="#what-are-fabric-apps"><span class="toc-dot"></span>What Are Fabric Apps?</a>
+    <a href="#what-is-rayfin"><span class="toc-dot"></span>What Is Rayfin?</a>
+    <a href="#architecture"><span class="toc-dot"></span>Architecture</a>
+    <a href="#when-to-use-fabric-apps-vs-other-options"><span class="toc-dot"></span>When to Use Fabric Apps vs. Other Options</a>
+  <a href="#2--enable-fabric-apps-in-your-tenant"><span class="toc-dot"></span>.2 — Enable Fabric Apps in Your Tenant</a>
+  <a href="#3--install-rayfin-cli--scaffold-the-project"><span class="toc-dot"></span>.3 — Install Rayfin CLI & Scaffold the Project</a>
+    <a href="#install-prerequisites"><span class="toc-dot"></span>Install Prerequisites</a>
+    <a href="#scaffold-the-zosa-crew-portal"><span class="toc-dot"></span>Scaffold the ZOSA Crew Portal</a>
+    <a href="#understand-rayfinyml"><span class="toc-dot"></span>Understand `rayfin.yml`</a>
+  <a href="#4--define-data-models"><span class="toc-dot"></span>.4 — Define Data Models</a>
+    <a href="#zosa-crew-operations-model"><span class="toc-dot"></span>ZOSA Crew Operations Model</a>
+    <a href="#what-the-decorators-do"><span class="toc-dot"></span>What the Decorators Do</a>
+    <a href="#understanding-role-policies"><span class="toc-dot"></span>Understanding `@role` Policies</a>
+  <a href="#5--local-development"><span class="toc-dot"></span>.5 — Local Development</a>
+    <a href="#test-the-graphql-api"><span class="toc-dot"></span>Test the GraphQL API</a>
+  <a href="#6--build-the-frontend"><span class="toc-dot"></span>.6 — Build the Frontend</a>
+    <a href="#using-the-rayfin-client-sdk"><span class="toc-dot"></span>Using the Rayfin Client SDK</a>
+    <a href="#build-a-simple-crew-portal-ui"><span class="toc-dot"></span>Build a Simple Crew Portal UI</a>
+  <a href="#7--deploy-to-fabric"><span class="toc-dot"></span>.7 — Deploy to Fabric</a>
+    <a href="#after-deployment"><span class="toc-dot"></span>After Deployment</a>
+    <a href="#verify-in-the-fabric-portal"><span class="toc-dot"></span>Verify in the Fabric Portal</a>
+  <a href="#8--schema-updates--iteration"><span class="toc-dot"></span>.8 — Schema Updates & Iteration</a>
+    <a href="#add-a-new-field"><span class="toc-dot"></span>Add a New Field</a>
+    <a href="#apply-changes"><span class="toc-dot"></span>Apply Changes</a>
+  <a href="#9--permissions--sharing"><span class="toc-dot"></span>.9 — Permissions & Sharing</a>
+    <a href="#item-permissions"><span class="toc-dot"></span>Item Permissions</a>
+    <a href="#share-the-app"><span class="toc-dot"></span>Share the App</a>
+  <a href="#10--challenge-exoplanet-explorer-web-app-"><span class="toc-dot"></span>.10 — Challenge: Exoplanet Explorer Web App 🏆</a>
+    <a href="#requirements"><span class="toc-dot"></span>Requirements:</a>
+  <a href="#11--checkpoint-"><span class="toc-dot"></span>.11 — Checkpoint ✅</a>
+  <a href="#-key-takeaways"><span class="toc-dot"></span>🧠 Key Takeaways</a>
+  <a href="#-additional-resources"><span class="toc-dot"></span>📚 Additional Resources</a>
+</nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 14</div>
+      <h1>🚀 Module 14 — Fabric Apps</h1>
+    </section>
+
+    <section class="chapter">
+      <h1 id="-module-14--fabric-apps">🚀 Module 14 — Fabric Apps</h1>
+<blockquote><strong>The Director-General gathered her engineering leads. "Our dashboards tell the story. Our AI agents answer questions. But the ground station crews still copy data into spreadsheets to log maintenance tickets, and the public affairs team wants a web portal where journalists can explore our exoplanet catalog — not a Power BI report, a real <em>application</em>." She turned to you. "I heard Fabric can host full-stack apps now — TypeScript, APIs, databases, authentication — all managed. Build us a Crew Operations Portal. And if you can get a public Exoplanet Explorer web app running too? Even better."</strong></blockquote>
+<hr>
+<p><strong>Estimated time:</strong> 60 minutes</p>
+<hr>
+<h2 id="learning-objectives">🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+  <li>Understand what <strong>Fabric Apps (Preview)</strong> are — a full-stack application platform inside Microsoft Fabric</li>
+  <li>Install and use the <strong>Rayfin CLI</strong> to scaffold, develop, and deploy a Fabric App</li>
+  <li>Define <strong>TypeScript data models</strong> with decorators that auto-generate SQL schemas and GraphQL APIs</li>
+  <li>Implement <strong>row-level authorization</strong> using <code>@role</code> decorators</li>
+  <li>Deploy a working web application with <strong>Fabric SSO</strong> authentication</li>
+  <li>Build a <strong>Crew Operations Portal</strong> connected to ZOSA's Fabric data</li>
+</ul>
+<h2 id="-prerequisites">📋 Prerequisites</h2>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Requirement</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Module 05 complete</strong></td>
+      <td>Gold layer tables available in the Lakehouse</td>
+    </tr>
+    <tr>
+      <td><strong>Workspace access</strong></td>
+      <td>Admin or Member on a Fabric-capacity workspace</td>
+    </tr>
+    <tr>
+      <td><strong>Tenant setting enabled</strong></td>
+      <td>Fabric Apps (Preview) workload enabled by your Fabric admin</td>
+    </tr>
+    <tr>
+      <td><strong>Node.js 18+</strong></td>
+      <td>Required for Rayfin CLI</td>
+    </tr>
+    <tr>
+      <td><strong>Docker Desktop</strong></td>
+      <td>Required for local development</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>⚠️ <strong>Preview notice:</strong> Fabric Apps is in public preview. Features may change before GA.</blockquote>
+<blockquote>📚 <strong>Learn more:</strong> <a href="https://learn.microsoft.com/en-us/fabric/apps/overview">What is Fabric Apps?</a></blockquote>
+<hr>
+<h2 id="1--understanding-fabric-apps--rayfin">13.1 — Understanding Fabric Apps & Rayfin</h2>
+<h3 id="what-are-fabric-apps">What Are Fabric Apps?</h3>
+<p><strong>Fabric Apps</strong> is a platform for building and deploying <strong>data-driven web applications</strong> directly inside Microsoft Fabric. Unlike Power BI reports (which visualize data), Fabric Apps let you build custom <strong>interactive applications</strong> — forms, portals, tools — with a managed backend.</p>
+<p>When you deploy a Fabric App, Fabric provisions and manages:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>What It Provides</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>SQL Database in Fabric</strong></td>
+      <td>A managed database with your schema (generated from TypeScript models)</td>
+    </tr>
+    <tr>
+      <td><strong>GraphQL API</strong></td>
+      <td>Auto-generated CRUD endpoints for your data models</td>
+    </tr>
+    <tr>
+      <td><strong>Authentication</strong></td>
+      <td>Fabric SSO via Microsoft Entra ID — no auth code needed</td>
+    </tr>
+    <tr>
+      <td><strong>Static Hosting</strong></td>
+      <td>Your frontend (HTML/CSS/JS) served from a public URL on OneLake storage</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="what-is-rayfin">What Is Rayfin?</h3>
+<p><strong>Rayfin</strong> is the open-source CLI and SDK for Fabric Apps. It handles:</p>
+<ul>
+  <li>Project scaffolding from templates</li>
+  <li>Local development with Docker (database + API + frontend)</li>
+  <li>Schema generation from TypeScript decorators</li>
+  <li>Deployment to Fabric (<code>rayfin up</code>)</li>
+</ul>
+<p>Think of it as <strong><code>azd</code> (Azure Developer CLI) but for Fabric Apps</strong>.</p>
+<h3 id="architecture">Architecture</h3>
+<pre><code class="language-plaintext">┌──────────────────────────────────────────────────────┐
+│                   Fabric App                          │
+├──────────────────────────────────────────────────────┤
+│  Static Frontend   │  GraphQL API  │  Auth Service   │
+│  (HTML/CSS/JS)     │  /api/graphql │  /auth (SSO)    │
+├──────────────────────────────────────────────────────┤
+│              SQL Database in Fabric                   │
+│         (schema from TypeScript models)              │
+└──────────────────────────────────────────────────────┘
+         ▲
+         │  Deployed via: npx rayfin up
+         │
+┌────────┴─────────┐
+│  Developer (You) │
+│  rayfin.yml      │
+│  /rayfin/data/   │ ← TypeScript data models
+│  /app/           │ ← Frontend code
+└──────────────────┘</code></pre>
+<h3 id="when-to-use-fabric-apps-vs-other-options">When to Use Fabric Apps vs. Other Options</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Custom web portal with forms, CRUD, and business logic</td>
+      <td>✅ Fabric Apps</td>
+    </tr>
+    <tr>
+      <td>Dashboards and data visualization</td>
+      <td>❌ Power BI Reports</td>
+    </tr>
+    <tr>
+      <td>AI agent with persistent state</td>
+      <td>✅ Fabric Apps</td>
+    </tr>
+    <tr>
+      <td>Rapid internal tool / admin interface</td>
+      <td>✅ Fabric Apps</td>
+    </tr>
+    <tr>
+      <td>Complex multi-service microarchitecture</td>
+      <td>❌ Azure App Service / Container Apps</td>
+    </tr>
+    <tr>
+      <td>Public unauthenticated website</td>
+      <td>❌ Static Web Apps</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="2--enable-fabric-apps-in-your-tenant">13.2 — Enable Fabric Apps in Your Tenant</h2>
+<p>Before creating your first app, a Fabric admin must enable the workload:</p>
+<ol>
+  <li>Sign in to the <a href="https://app.fabric.microsoft.com/admin-portal">Fabric Admin Portal</a>.</li>
+  <li>Navigate to <strong>Tenant settings</strong>.</li>
+  <li>Search for <strong>Fabric Apps (preview)</strong>.</li>
+  <li>Toggle to <strong>Enabled</strong>.</li>
+  <li>Choose: entire organization or specific security groups.</li>
+  <li>Click <strong>Apply</strong> (changes propagate in a few minutes).</li>
+</ol>
+<blockquote>📝 <strong>Note:</strong> If you're on a Fabric trial, you may already have this enabled. Check by going to your workspace → <strong>+ New item</strong> and looking for <strong>Fabric App</strong>.</blockquote>
+<hr>
+<h2 id="3--install-rayfin-cli--scaffold-the-project">13.3 — Install Rayfin CLI & Scaffold the Project</h2>
+<h3 id="install-prerequisites">Install Prerequisites</h3>
+<pre><code class="language-bash"># Verify Node.js 18+
+node --version
+
+# Verify Docker is running
+docker --version</code></pre>
+<h3 id="scaffold-the-zosa-crew-portal">Scaffold the ZOSA Crew Portal</h3>
+<pre><code class="language-bash"># Create a new Fabric App project from a template
+npm create @microsoft/rayfin@latest
+
+# When prompted:
+#   Project name: zosa-crew-portal
+#   Template: default (or blank)</code></pre>
+<p>This generates the project structure:</p>
+<pre><code class="language-plaintext">zosa-crew-portal/
+├── rayfin.yml              ← Project configuration
+├── rayfin/
+│   └── data/
+│       └── models.ts       ← TypeScript data models (your schema)
+├── app/                    ← Frontend application code
+│   ├── index.html
+│   ├── src/
+│   └── package.json
+├── package.json
+└── node_modules/</code></pre>
+<h3 id="understand-rayfinyml">Understand <code>rayfin.yml</code></h3>
+<pre><code class="language-yaml">name: zosa-crew-portal
+workspace: ZOSA-Dev           # Target Fabric workspace</code></pre>
+<p>This file tells Rayfin where to deploy and how to configure the app.</p>
+<hr>
+<h2 id="4--define-data-models">13.4 — Define Data Models</h2>
+<p>The heart of a Fabric App is its <strong>TypeScript data models</strong>. You decorate classes with Rayfin decorators, and the CLI generates:</p>
+<ul>
+  <li>SQL database tables</li>
+  <li>GraphQL queries and mutations</li>
+  <li>Row-level authorization rules</li>
+</ul>
+<h3 id="zosa-crew-operations-model">ZOSA Crew Operations Model</h3>
+<p>Edit <code>rayfin/data/models.ts</code>:</p>
+<pre><code class="language-typescript">import {
+  entity,
+  role,
+  text,
+  boolean,
+  date,
+  uuid,
+  int,
+  relation,
+} from &#x27;@microsoft/rayfin-core&#x27;;
+
+// --- Crew Members ---
+@entity()
+@role(&#x27;authenticated&#x27;, &#x27;read&#x27;)  // Any authenticated user can read
+@role(&#x27;authenticated&#x27;, &#x27;create&#x27;, {
+  policy: (claims) =&gt; claims.roles.includes(&#x27;ops_admin&#x27;),
+})
+export class CrewMember {
+  @uuid() id!: string;
+  @text({ min: 1, max: 100 }) fullName!: string;
+  @text() role!: string;          // Commander, Pilot, Specialist, Engineer
+  @text() specialty!: string;
+  @text() clearanceLevel!: string; // L1, L2, L3, L4, L5
+  @text() homeStation!: string;
+  @boolean() isActive!: boolean;
+  @date() assignedDate!: Date;
+}
+
+// --- Maintenance Tickets ---
+@entity()
+@role(&#x27;authenticated&#x27;, &#x27;read&#x27;)
+@role(&#x27;authenticated&#x27;, &#x27;create&#x27;)  // Any crew can create tickets
+@role(&#x27;authenticated&#x27;, &#x27;update&#x27;, {
+  policy: (claims, item) =&gt; 
+    claims.sub === item.assignedTo || claims.roles.includes(&#x27;ops_admin&#x27;),
+})
+export class MaintenanceTicket {
+  @uuid() id!: string;
+  @text({ min: 1, max: 200 }) title!: string;
+  @text({ max: 2000 }) description!: string;
+  @text() priority!: string;       // Critical, High, Medium, Low
+  @text() status!: string;         // Open, InProgress, Resolved, Closed
+  @text() groundStation!: string;
+  @text() assignedTo!: string;     // crew member ID
+  @text() createdBy!: string;      // user ID from auth
+  @date() createdAt!: Date;
+  @date({ optional: true }) resolvedAt?: Date;
+}
+
+// --- Mission Log Entries ---
+@entity()
+@role(&#x27;authenticated&#x27;, &#x27;read&#x27;)
+@role(&#x27;authenticated&#x27;, &#x27;create&#x27;, {
+  policy: (claims) =&gt; claims.roles.includes(&#x27;mission_lead&#x27;),
+})
+export class MissionLogEntry {
+  @uuid() id!: string;
+  @text() missionId!: string;
+  @text({ min: 1, max: 500 }) entry!: string;
+  @text() logType!: string;        // Status, Anomaly, Milestone, Note
+  @text() author!: string;
+  @date() timestamp!: Date;
+}</code></pre>
+<h3 id="what-the-decorators-do">What the Decorators Do</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Decorator</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@entity()</code></td>
+      <td>Marks a class as a database table + GraphQL type</td>
+    </tr>
+    <tr>
+      <td><code>@uuid()</code></td>
+      <td>Auto-generated unique ID column</td>
+    </tr>
+    <tr>
+      <td><code>@text({ min, max })</code></td>
+      <td>String column with validation</td>
+    </tr>
+    <tr>
+      <td><code>@boolean()</code></td>
+      <td>Boolean column</td>
+    </tr>
+    <tr>
+      <td><code>@date()</code></td>
+      <td>Timestamp column</td>
+    </tr>
+    <tr>
+      <td><code>@int()</code></td>
+      <td>Integer column</td>
+    </tr>
+    <tr>
+      <td><code>@role(audience, action, options)</code></td>
+      <td>Row-level authorization rule</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="understanding-role-policies">Understanding <code>@role</code> Policies</h3>
+<p>The <code>@role</code> decorator controls <strong>who can do what</strong>:</p>
+<pre><code class="language-typescript">// Anyone authenticated can read
+@role(&#x27;authenticated&#x27;, &#x27;read&#x27;)
+
+// Only ops_admin role can create
+@role(&#x27;authenticated&#x27;, &#x27;create&#x27;, {
+  policy: (claims) =&gt; claims.roles.includes(&#x27;ops_admin&#x27;),
+})
+
+// Only the assigned user or admins can update
+@role(&#x27;authenticated&#x27;, &#x27;update&#x27;, {
+  policy: (claims, item) =&gt; claims.sub === item.assignedTo || claims.roles.includes(&#x27;ops_admin&#x27;),
+})</code></pre>
+<p>This generates <strong>row-level security</strong> enforced at the API layer — no manual SQL policies needed.</p>
+<hr>
+<h2 id="5--local-development">13.5 — Local Development</h2>
+<p>Run the full stack locally before deploying to Fabric:</p>
+<pre><code class="language-bash">cd zosa-crew-portal
+
+# Install dependencies
+npm install
+
+# Start local dev environment (spins up Docker containers)
+npx rayfin dev</code></pre>
+<p>This starts:</p>
+<ul>
+  <li>A local SQL database (Docker container)</li>
+  <li>A local GraphQL API server</li>
+  <li>Your frontend with hot-reload</li>
+  <li>A local auth simulator (email/password for testing)</li>
+</ul>
+<h3 id="test-the-graphql-api">Test the GraphQL API</h3>
+<p>Open <code>http://localhost:4000/api/graphql</code> in your browser to access the GraphQL playground.</p>
+<p><strong>Create a crew member:</strong></p>
+<pre><code class="language-graphql">mutation {
+  createCrewMember(input: {
+    fullName: &quot;Elena Vasquez&quot;
+    role: &quot;Commander&quot;
+    specialty: &quot;Deep Space Navigation&quot;
+    clearanceLevel: &quot;L5&quot;
+    homeStation: &quot;Houston&quot;
+    isActive: true
+    assignedDate: &quot;2026-01-15&quot;
+  }) {
+    id
+    fullName
+    role
+  }
+}</code></pre>
+<p><strong>Query all crew:</strong></p>
+<pre><code class="language-graphql">query {
+  crewMembers {
+    id
+    fullName
+    role
+    homeStation
+    isActive
+  }
+}</code></pre>
+<p><strong>Create a maintenance ticket:</strong></p>
+<pre><code class="language-graphql">mutation {
+  createMaintenanceTicket(input: {
+    title: &quot;Antenna array misalignment - Dish 3&quot;
+    description: &quot;Tracking accuracy degraded by 0.3 arcsec. Needs recalibration.&quot;
+    priority: &quot;High&quot;
+    status: &quot;Open&quot;
+    groundStation: &quot;Perth&quot;
+    assignedTo: &quot;elena-vasquez-id&quot;
+    createdBy: &quot;current-user-id&quot;
+    createdAt: &quot;2026-06-11T10:00:00Z&quot;
+  }) {
+    id
+    title
+    status
+  }
+}</code></pre>
+<blockquote>💡 <strong>Tip:</strong> The GraphQL playground gives you autocomplete and schema docs — explore the auto-generated queries and mutations.</blockquote>
+<hr>
+<h2 id="6--build-the-frontend">13.6 — Build the Frontend</h2>
+<p>The <code>app/</code> folder contains your frontend. You can use any framework (React, Vue, Svelte, vanilla JS). The scaffold provides a starter.</p>
+<h3 id="using-the-rayfin-client-sdk">Using the Rayfin Client SDK</h3>
+<p>The <strong>RayfinClient</strong> provides type-safe access to your GraphQL API:</p>
+<pre><code class="language-typescript">// app/src/main.ts
+import { RayfinClient } from &#x27;@microsoft/rayfin-client&#x27;;
+
+const client = new RayfinClient();
+
+// Fetch all open tickets
+async function loadTickets() {
+  const tickets = await client.maintenanceTickets.findMany({
+    where: { status: &#x27;Open&#x27; },
+    orderBy: { createdAt: &#x27;desc&#x27; },
+  });
+  
+  renderTickets(tickets);
+}
+
+// Create a new ticket
+async function submitTicket(form: FormData) {
+  const ticket = await client.maintenanceTickets.create({
+    title: form.get(&#x27;title&#x27;) as string,
+    description: form.get(&#x27;description&#x27;) as string,
+    priority: form.get(&#x27;priority&#x27;) as string,
+    status: &#x27;Open&#x27;,
+    groundStation: form.get(&#x27;station&#x27;) as string,
+    assignedTo: form.get(&#x27;assignee&#x27;) as string,
+    createdBy: client.auth.currentUser.id,
+    createdAt: new Date(),
+  });
+  
+  console.log(&#x27;Ticket created:&#x27;, ticket.id);
+}</code></pre>
+<h3 id="build-a-simple-crew-portal-ui">Build a Simple Crew Portal UI</h3>
+<p>Your frontend could include:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Page</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Dashboard</strong></td>
+      <td>Open tickets by station, priority breakdown</td>
+    </tr>
+    <tr>
+      <td><strong>Crew Directory</strong></td>
+      <td>List active crew, search by station/role</td>
+    </tr>
+    <tr>
+      <td><strong>Submit Ticket</strong></td>
+      <td>Form to create maintenance tickets</td>
+    </tr>
+    <tr>
+      <td><strong>Mission Log</strong></td>
+      <td>Timeline of mission log entries</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>💡 <strong>Tip:</strong> Since the GraphQL API handles all data operations and auth, your frontend is purely UI logic — no backend code to write.</blockquote>
+<hr>
+<h2 id="7--deploy-to-fabric">13.7 — Deploy to Fabric</h2>
+<p>When you're ready to go live:</p>
+<pre><code class="language-bash"># Authenticate with Fabric
+npx rayfin login
+
+# Deploy everything to your Fabric workspace
+npx rayfin up</code></pre>
+<p><code>rayfin up</code> does the following:</p>
+<ol>
+  <li>Creates a <strong>Fabric App</strong> item in your workspace (if it doesn't exist)</li>
+  <li>Provisions a <strong>SQL Database in Fabric</strong> with your schema</li>
+  <li>Deploys your <strong>GraphQL API</strong> endpoints</li>
+  <li>Uploads your <strong>static frontend</strong> to OneLake hosting</li>
+  <li>Configures <strong>Fabric SSO</strong> (Microsoft Entra ID)</li>
+</ol>
+<h3 id="after-deployment">After Deployment</h3>
+<p>Your app is live at:</p>
+<pre><code class="language-plaintext">https://zosa-crew-portal-app.rayfin.windows.net/</code></pre>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Endpoint</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>/</code></td>
+      <td>Your frontend (static hosting)</td>
+    </tr>
+    <tr>
+      <td><code>/api/graphql</code></td>
+      <td>Data API (GraphQL)</td>
+    </tr>
+    <tr>
+      <td><code>/auth</code></td>
+      <td>Authentication service (Fabric SSO)</td>
+    </tr>
+    <tr>
+      <td><code>/storage</code></td>
+      <td>File storage</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="verify-in-the-fabric-portal">Verify in the Fabric Portal</h3>
+<ol>
+  <li>Navigate to your workspace in the Fabric portal.</li>
+  <li>You'll see a new <strong>Fabric App</strong> item: <code>zosa-crew-portal</code>.</li>
+  <li>Click it to see child items:</li>
+  <li><strong>SQL Database</strong> — view tables, run queries</li>
+  <li><strong>Authentication</strong> — see authenticated users</li>
+  <li><strong>Static Content</strong> — hosting URL</li>
+</ol>
+<hr>
+<h2 id="8--schema-updates--iteration">13.8 — Schema Updates & Iteration</h2>
+<p>As ZOSA's needs evolve, update your models and redeploy:</p>
+<h3 id="add-a-new-field">Add a New Field</h3>
+<pre><code class="language-typescript">// Add urgency escalation tracking to tickets
+export class MaintenanceTicket {
+  // ... existing fields ...
+  @boolean() escalated!: boolean;
+  @date({ optional: true }) escalatedAt?: Date;
+  @text({ optional: true }) escalatedTo?: string;
+}</code></pre>
+<h3 id="apply-changes">Apply Changes</h3>
+<pre><code class="language-bash"># Apply schema migration
+npx rayfin up db apply</code></pre>
+<p>Rayfin generates and runs the SQL migration automatically. The GraphQL API updates to expose the new fields.</p>
+<blockquote>⚠️ <strong>Important:</strong> Schema changes should always be made in code (TypeScript models), not directly in the SQL Database in the portal. Direct DB changes can cause conflicts on the next <code>rayfin up</code>.</blockquote>
+<hr>
+<h2 id="9--permissions--sharing">13.9 — Permissions & Sharing</h2>
+<h3 id="item-permissions">Item Permissions</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Permission</th>
+      <th>What It Allows</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Run and interact</strong></td>
+      <td>Open and use the app (default for workspace members)</td>
+    </tr>
+    <tr>
+      <td><strong>Edit (Write)</strong></td>
+      <td>Deploy code via <code>rayfin up</code>, modify settings</td>
+    </tr>
+    <tr>
+      <td><strong>Reshare</strong></td>
+      <td>Grant other users access (requires workspace Admin)</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="share-the-app">Share the App</h3>
+<p>To give ZOSA ground station crews access:</p>
+<ol>
+  <li>In the Fabric portal, select the <strong>Fabric App</strong> item.</li>
+  <li>Click <strong>Share</strong> → add users or security groups.</li>
+  <li>Assign <strong>Run and interact</strong> permission.</li>
+  <li>Users sign in with their Microsoft Entra ID credentials — Fabric SSO handles everything.</li>
+</ol>
+<blockquote>💡 <strong>Key insight:</strong> Authentication is <em>built in</em>. You never write login/logout code. Every user who accesses the app URL is authenticated via Fabric SSO automatically.</blockquote>
+<hr>
+<h2 id="10--challenge-exoplanet-explorer-web-app-">13.10 — Challenge: Exoplanet Explorer Web App 🏆</h2>
+<p><strong>Scenario:</strong> Build a second Fabric App — an interactive Exoplanet Explorer for ZOSA's public affairs team to share with journalists (authenticated via guest access).</p>
+<h3 id="requirements">Requirements:</h3>
+<pre><code class="language-typescript">   @entity()
+   @role(&#x27;authenticated&#x27;, &#x27;read&#x27;)  // Read-only for all authenticated users
+   export class Exoplanet {
+     @uuid() id!: string;
+     @text() planetName!: string;
+     @text() hostStar!: string;
+     @text() discoveryMethod!: string;
+     @text() habitabilityZone!: string;
+     @int() distanceLightYears!: number;
+     @int() earthSimilarityIndex!: number;
+   }</code></pre>
+<ol>
+  <li><strong>Data model:</strong></li>
+</ol>
+<ol>
+  <li><strong>Frontend:</strong> A searchable, filterable catalog with cards showing planet details.</li>
+</ol>
+<ol>
+  <li><strong>Data population:</strong> Seed from your Gold layer exoplanet data (export → import via GraphQL mutations or direct SQL insert).</li>
+</ol>
+<ol>
+  <li><strong>Deploy</strong> as a separate Fabric App in a <code>ZOSA-Public</code> workspace.</li>
+</ol>
+<blockquote>💡 <strong>Bonus:</strong> Use the Rayfin client SDK to add interactive features — let users "favorite" exoplanets (add a <code>Favorite</code> entity with a user-to-planet relation).</blockquote>
+<hr>
+<h2 id="11--checkpoint-">13.11 — Checkpoint ✅</h2>
+<p>Verify your Fabric Apps setup:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Check</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Rayfin CLI installed and authenticated</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>TypeScript data models defined with decorators</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Local dev environment running (Docker + GraphQL playground)</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>CRUD operations tested via GraphQL</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Frontend connects to API via RayfinClient</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>App deployed to Fabric (<code>rayfin up</code> successful)</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Fabric SSO authentication working</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>App shared with team (Run and interact permission)</td>
+      <td>⬜</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>(Bonus) Exoplanet Explorer web app deployed</td>
+      <td>⬜</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-key-takeaways">🧠 Key Takeaways</h2>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Concept</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Fabric Apps ≠ Power BI Apps</strong></td>
+      <td>Fabric Apps are full-stack web applications; Power BI Apps distribute reports</td>
+    </tr>
+    <tr>
+      <td><strong>Rayfin CLI</strong></td>
+      <td>Scaffolds, develops locally, and deploys Fabric Apps</td>
+    </tr>
+    <tr>
+      <td><strong>TypeScript → Everything</strong></td>
+      <td>Data models generate SQL schemas, GraphQL APIs, and auth rules</td>
+    </tr>
+    <tr>
+      <td><strong>Managed infrastructure</strong></td>
+      <td>Fabric handles hosting, database, networking, and scaling</td>
+    </tr>
+    <tr>
+      <td><strong>Fabric SSO</strong></td>
+      <td>Authentication is built in via Microsoft Entra ID — no auth code required</td>
+    </tr>
+    <tr>
+      <td><strong>Schema-first development</strong></td>
+      <td>Change models in code → <code>rayfin up</code> → database migrates automatically</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-additional-resources">📚 Additional Resources</h2>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fabric Apps overview</td>
+      <td><a href="https://learn.microsoft.com/en-us/fabric/apps/overview">Microsoft Learn</a></td>
+    </tr>
+    <tr>
+      <td>Rayfin CLI reference</td>
+      <td><a href="https://learn.microsoft.com/en-us/fabric/apps/cli-reference">Microsoft Learn</a></td>
+    </tr>
+    <tr>
+      <td>Data model decorators</td>
+      <td><a href="https://learn.microsoft.com/en-us/fabric/apps/data-models">Microsoft Learn</a></td>
+    </tr>
+    <tr>
+      <td>Fabric Apps permissions</td>
+      <td><a href="https://learn.microsoft.com/en-us/fabric/apps/permissions">Microsoft Learn</a></td>
+    </tr>
+    <tr>
+      <td>Local development guide</td>
+      <td><a href="https://learn.microsoft.com/en-us/fabric/apps/local-development">Microsoft Learn</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<p><strong>Navigation:</strong></p>
+<p><a href="13-monitoring-optimization.md">← Module 13 — Monitoring & Optimization</a></p>
+<p><a href="../README.md">← Back to README</a></p>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      
+        <a href="13-monitoring.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 13: Monitoring</span>
+        </a>
+      
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 10 — Module 10 — Ontology & Knowledge Graph · Fabric Space Lab</title>
+  <script>(function(){var t=localStorage.getItem('zosa-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/storyboard.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../assets/vendor/prism-tomorrow.min.css">
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-logo">
+        <img src="../assets/svg/logo.svg" alt="" width="32" height="32">
+        <div>
+          <div class="logo-text">ZOSA</div>
+          <div class="logo-sub">Fabric Space Lab</div>
+        </div>
+      </a>
+      <nav class="header-nav">
+        <a href="../index.html">Modules</a>
+        <a href="https://github.com/Diaz506/fabric-space-lab" target="_blank" rel="noopener">GitHub</a>
+        <button class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mini TOC Sidebar -->
+  <nav class="mini-toc" aria-label="Table of contents">
+  <div class="toc-title">Contents</div>
+  <a href="#top"><span class="toc-dot"></span>Overview</a>
+  <a href="#-the-story-so-far"><span class="toc-dot"></span>📖 The Story So Far</a>
+  <a href="#-what-is-fabric-iq"><span class="toc-dot"></span>⃣ What Is Fabric IQ?</a>
+  <a href="#-design-the-zosa-ontology"><span class="toc-dot"></span>⃣ Design the ZOSA Ontology</a>
+    <a href="#entity-types"><span class="toc-dot"></span>Entity Types</a>
+    <a href="#relationships"><span class="toc-dot"></span>Relationships</a>
+    <a href="#entity-relationship-diagram"><span class="toc-dot"></span>Entity-Relationship Diagram</a>
+  <a href="#-create-an-ontology"><span class="toc-dot"></span>⃣ Create an Ontology</a>
+  <a href="#-map-entities-to-gold-tables"><span class="toc-dot"></span>⃣ Map Entities to Gold Tables</a>
+    <a href="#steps-repeat-for-each-entity"><span class="toc-dot"></span>Steps (repeat for each entity)</a>
+  <a href="#-define-business-terms--synonyms"><span class="toc-dot"></span>⃣ Define Business Terms & Synonyms</a>
+    <a href="#key-terms-to-document"><span class="toc-dot"></span>Key Terms to Document</a>
+    <a href="#steps"><span class="toc-dot"></span>Steps</a>
+  <a href="#-add-derived-properties"><span class="toc-dot"></span>⃣ Add Derived Properties</a>
+    <a href="#properties-to-define"><span class="toc-dot"></span>Properties to Define</a>
+    <a href="#steps"><span class="toc-dot"></span>Steps</a>
+  <a href="#-test-the-ontology"><span class="toc-dot"></span>⃣ Test the Ontology</a>
+    <a href="#browse-entities"><span class="toc-dot"></span>Browse Entities</a>
+    <a href="#search"><span class="toc-dot"></span>Search</a>
+    <a href="#traverse-relationships"><span class="toc-dot"></span>Traverse Relationships</a>
+    <a href="#validate-derived-properties"><span class="toc-dot"></span>Validate Derived Properties</a>
+  <a href="#-ontology-governance"><span class="toc-dot"></span>⃣ Ontology Governance</a>
+    <a href="#ownership-model"><span class="toc-dot"></span>Ownership Model</a>
+    <a href="#change-management-process"><span class="toc-dot"></span>Change Management Process</a>
+    <a href="#version-history"><span class="toc-dot"></span>Version History</a>
+    <a href="#integration-with-external-agents-mcp"><span class="toc-dot"></span>Integration with External Agents (MCP)</a>
+  <a href="#module-10-checkpoint"><span class="toc-dot"></span>Module 10 Checkpoint</a>
+  <a href="#-closing-story"><span class="toc-dot"></span>📖 Closing Story</a>
+</nav>
+
+  <!-- Main Content -->
+  <main class="storyboard-content">
+    <section class="hero" id="top">
+      <div class="hero-overline">Module 10</div>
+      <h1>Module 10 — Ontology & Knowledge Graph</h1>
+    </section>
+
+    <section class="chapter">
+      <h1 id="module-10--ontology--knowledge-graph">Module 10 — Ontology & Knowledge Graph</h1>
+<blockquote>One language for the whole agency — Fabric IQ Ontology</blockquote>
+<blockquote>⚠️ <strong>Public Preview Notice:</strong> Fabric IQ and Ontology are in <strong>Public Preview</strong> as of April 2026. Features, APIs, and UI may change before General Availability. Use in production at your own discretion.</blockquote>
+<hr>
+<h2 id="-the-story-so-far">📖 The Story So Far</h2>
+<blockquote>During the weekly standup, the Science team refers to <em>"celestial targets,"</em> Mission Ops calls them <em>"threat objects,"</em> and the Defense team says <em>"NEOs."</em> Dr. Vasquez slams her coffee mug on the table:  <em>"We need ONE language. Every team, every dashboard, every AI agent — same definitions. Build me an ontology."</em></blockquote>
+<p>You've built every data layer — Bronze through Gold — stood up reports, real-time dashboards, and machine-learning models. But terminology chaos still slows the agency down. Today you'll fix that by creating a <strong>Fabric IQ Ontology</strong> that gives ZOSA a single, governed vocabulary.</p>
+<hr>
+<h2 id="-what-is-fabric-iq">1️⃣ What Is Fabric IQ?</h2>
+<p><strong>Fabric IQ</strong> is the semantic intelligence layer for Microsoft Fabric, first announced at <strong>Ignite 2025</strong>. It provides a shared vocabulary for <strong>humans AND AI agents</strong> by mapping plain-language business concepts to live data assets.</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Concept</th>
+      <th>What It Does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Ontology</strong></td>
+      <td>A container that holds entity types, relationships, and business terms — all linked to your Delta tables.</td>
+    </tr>
+    <tr>
+      <td><strong>Entity Type</strong></td>
+      <td>A first-class business object (e.g., <em>Asteroid</em>, <em>Mission</em>, <em>Crew Member</em>).</td>
+    </tr>
+    <tr>
+      <td><strong>Business Term / Synonym</strong></td>
+      <td>Aliases that ensure "NEO," "threat object," and "celestial target" all resolve to the same entity.</td>
+    </tr>
+    <tr>
+      <td><strong>Derived Property</strong></td>
+      <td>A derived column defined once in the ontology and available everywhere — dashboards, notebooks, AI agents.</td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>💡 <strong>Why it matters:</strong> Without an ontology, every team writes its own filters, every AI agent hallucinates its own joins, and every report defines "hazardous" differently. The ontology is the <strong>single source of truth</strong> for meaning.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/iq/ontology/overview">Fabric IQ Ontology Overview</a> - <a href="https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-create-entity-types">Create Entity Types</a> - <a href="https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview">Fabric Copilot Overview</a></blockquote>
+<blockquote>⚠️ <strong>Preview Reminder:</strong> Fabric IQ Ontology is in <strong>Public Preview</strong>. The steps below reflect the current UI — expect minor changes as the feature evolves toward GA.</blockquote>
+<hr>
+<h2 id="-design-the-zosa-ontology">2️⃣ Design the ZOSA Ontology</h2>
+<p>Before you touch Fabric, grab a whiteboard (or a Mermaid diagram). Good ontology design happens on paper first.</p>
+<h3 id="entity-types">Entity Types</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Entity</th>
+      <th>Key Properties</th>
+      <th>Source Table</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Asteroid</strong></td>
+      <td><code>neo_id</code>, <code>name</code>, <code>avg_diameter_m</code>, <code>is_hazardous</code>, <code>risk_category</code></td>
+      <td><code>gold_asteroid_risk</code></td>
+    </tr>
+    <tr>
+      <td><strong>Mission</strong></td>
+      <td><code>mission_id</code>, <code>mission_name</code>, <code>mission_type</code>, <code>status</code>, <code>budget_usd</code></td>
+      <td><code>gold_mission_summary</code></td>
+    </tr>
+    <tr>
+      <td><strong>Crew Member</strong></td>
+      <td><code>crew_id</code>, <code>full_name</code>, <code>role</code>, <code>specialty</code>, <code>clearance_level</code></td>
+      <td><code>gold_dim_crew</code></td>
+    </tr>
+    <tr>
+      <td><strong>Ground Station</strong></td>
+      <td><code>ground_station_id</code>, <code>ground_station_name</code>, <code>region</code></td>
+      <td><code>gold_dim_ground_stations</code></td>
+    </tr>
+    <tr>
+      <td><strong>Solar Event</strong></td>
+      <td><code>event_month</code>, <code>event_type</code>, <code>event_count</code>, <code>avg_severity</code></td>
+      <td><code>gold_solar_activity</code></td>
+    </tr>
+    <tr>
+      <td><strong>Exoplanet</strong></td>
+      <td><code>planet_name</code>, <code>host_star</code>, <code>discovery_method</code>, <code>habitability_zone</code></td>
+      <td><code>gold_exoplanet_catalog</code></td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="relationships">Relationships</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>From</th>
+      <th>Relationship</th>
+      <th>To</th>
+      <th>Cardinality</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mission</td>
+      <td><strong>targets</strong></td>
+      <td>Asteroid</td>
+      <td>Many-to-One</td>
+    </tr>
+    <tr>
+      <td>Mission</td>
+      <td><strong>assigned_to</strong></td>
+      <td>Crew Member</td>
+      <td>Many-to-Many</td>
+    </tr>
+    <tr>
+      <td>Mission</td>
+      <td><strong>operates_from</strong></td>
+      <td>Ground Station</td>
+      <td>Many-to-One</td>
+    </tr>
+    <tr>
+      <td>Ground Station</td>
+      <td><strong>monitors</strong></td>
+      <td>Asteroid</td>
+      <td>Many-to-Many</td>
+    </tr>
+    <tr>
+      <td>Crew Member</td>
+      <td><strong>stationed_at</strong></td>
+      <td>Ground Station</td>
+      <td>Many-to-One</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="entity-relationship-diagram">Entity-Relationship Diagram</h3>
+<pre><code class="language-mermaid">erDiagram
+    ASTEROID {
+        string neo_id PK
+        string name
+        float avg_diameter_m
+        boolean is_hazardous
+        string risk_category
+    }
+    MISSION {
+        string mission_id PK
+        string mission_name
+        string mission_type
+        string status
+        float budget_usd
+    }
+    CREW_MEMBER {
+        string crew_id PK
+        string full_name
+        string role
+        string specialty
+        string clearance_level
+    }
+    GROUND_STATION {
+        string ground_station_id PK
+        string ground_station_name
+        string region
+    }
+    SOLAR_EVENT {
+        date event_month PK
+        string event_type PK
+        int event_count
+        float avg_severity
+    }
+    EXOPLANET {
+        string planet_name PK
+        string host_star
+        string discovery_method
+        string habitability_zone
+    }
+
+    MISSION }o--|| ASTEROID : &quot;targets&quot;
+    MISSION }o--o{ CREW_MEMBER : &quot;assigned_to&quot;
+    MISSION }o--|| GROUND_STATION : &quot;operates_from&quot;
+    GROUND_STATION }o--o{ ASTEROID : &quot;monitors&quot;
+    CREW_MEMBER }o--|| GROUND_STATION : &quot;stationed_at&quot;</code></pre>
+<blockquote>💡 <strong>Tip:</strong> Print this diagram and tape it to the wall. Every data engineer, analyst, and AI builder should reference the same picture.</blockquote>
+<hr>
+<h2 id="-create-an-ontology">3️⃣ Create an Ontology</h2>
+<p>Now translate the whiteboard design into Fabric.</p>
+<ol>
+  <li>Open the <strong>ZOSA-Dev</strong> workspace in the Fabric portal.</li>
+  <li>Click <strong>+ New Item</strong> → search for <strong>"Ontology"</strong> → select <strong>Ontology (preview)</strong>.</li>
+  <li>Name the ontology: <strong><code>zosa_knowledge_model</code></strong>.</li>
+  <li>Add an optional description: <em>"Unified ontology for ZOSA asteroid-defense operations."</em></li>
+  <li>Choose the creation method:</li>
+  <li><strong>Generate from semantic model</strong> — if your Gold layer already feeds a Power BI semantic model with trusted measures and dimensions, start here to accelerate ontology mapping.</li>
+  <li><strong>Build from OneLake</strong> — if you want to map directly to Delta tables in your Lakehouse.</li>
+  <li>Click <strong>Create</strong>. Fabric opens the ontology designer canvas.</li>
+</ol>
+<blockquote>⚠️ <strong>Preview Note:</strong> If you don't see <em>Ontology (preview)</em> under <strong>+ New Item</strong>, ensure your tenant admin has enabled the <strong>Fabric IQ (Preview)</strong> feature in the admin portal under <em>Tenant settings → Fabric IQ</em>. You may also need to enable <strong>Microsoft Copilot and Azure OpenAI</strong> tenant settings.</blockquote>
+<blockquote>💡 <strong>Pro Tip:</strong> If your Gold layer already feeds a <strong>Power BI semantic model</strong>, choose "Generate from semantic model" — it already contains trusted measures and dimension hierarchies that accelerate ontology mapping.</blockquote>
+<hr>
+<h2 id="-map-entities-to-gold-tables">4️⃣ Map Entities to Gold Tables</h2>
+<p>For each entity type in your design, connect it to the underlying Delta table.</p>
+<h3 id="steps-repeat-for-each-entity">Steps (repeat for each entity)</h3>
+<ol>
+  <li>In the ontology designer, click <strong>+ Add Entity Type</strong>.</li>
+  <li>Name it (e.g., <code>Asteroid</code>).</li>
+  <li>Under the <strong>Bindings</strong> tab, bind the entity to your data:</li>
+  <li>Select the Lakehouse → <strong>Tables</strong> → choose the corresponding Gold table (e.g., <code>gold_asteroid_risk</code>).</li>
+  <li><strong>Map columns to entity properties:</strong></li>
+  <li>Click <strong>Add entity type key</strong> to designate the key field (e.g., <code>neo_id</code>) ✅</li>
+  <li><code>name</code> → Display Name ✅</li>
+  <li>Map remaining columns: <code>avg_diameter_m</code>, <code>is_hazardous</code>, <code>risk_category</code>.</li>
+  <li>After mapping all entities, <strong>Save</strong> the ontology (changes are saved at the ontology level, not per entity).</li>
+  <li>Click <strong>Refresh the graph model</strong> to sync data bindings with the underlying tables.</li>
+</ol>
+<p>Repeat for all six entity types:</p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Entity</th>
+      <th>Delta Table</th>
+      <th>Entity Type Key</th>
+      <th>Display Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Asteroid</td>
+      <td><code>gold_asteroid_risk</code></td>
+      <td><code>neo_id</code></td>
+      <td><code>name</code></td>
+    </tr>
+    <tr>
+      <td>Mission</td>
+      <td><code>gold_mission_summary</code></td>
+      <td><code>mission_id</code></td>
+      <td><code>mission_name</code></td>
+    </tr>
+    <tr>
+      <td>Crew Member</td>
+      <td><code>gold_dim_crew</code></td>
+      <td><code>crew_id</code></td>
+      <td><code>full_name</code></td>
+    </tr>
+    <tr>
+      <td>Ground Station</td>
+      <td><code>gold_dim_ground_stations</code></td>
+      <td><code>ground_station_id</code></td>
+      <td><code>ground_station_name</code></td>
+    </tr>
+    <tr>
+      <td>Solar Event</td>
+      <td><code>gold_solar_activity</code></td>
+      <td><code>event_month</code> + <code>event_type</code></td>
+      <td><code>event_type</code></td>
+    </tr>
+    <tr>
+      <td>Exoplanet</td>
+      <td><code>gold_exoplanet_catalog</code></td>
+      <td><code>planet_name</code></td>
+      <td><code>planet_name</code></td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>💡 <strong>Tip:</strong> Set friendly property names (e.g., rename <code>is_hazardous</code> to <code>Is Hazardous</code>). AI agents and search will use these names in natural-language answers.</blockquote>
+<hr>
+<h2 id="-define-business-terms--synonyms">5️⃣ Define Business Terms & Synonyms</h2>
+<p>This is the step that ends the vocabulary wars. For each concept that different teams name differently, create aliases so the ontology resolves them.</p>
+<blockquote>⚠️ <strong>Preview Limitation:</strong> Dedicated synonym fields are not yet a first-class UI feature in the current preview. Use the <strong>description field</strong> on each entity type to document common aliases. As the ontology matures toward GA, expect native synonym support to be added.</blockquote>
+<h3 id="key-terms-to-document">Key Terms to Document</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Canonical Term</th>
+      <th>Aliases (add to description field)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Asteroid</strong></td>
+      <td>Near-Earth Object, NEO, Target Object, Threat, Celestial Target</td>
+    </tr>
+    <tr>
+      <td><strong>Hazard Score</strong></td>
+      <td>Risk Index, Threat Level, Danger Rating</td>
+    </tr>
+    <tr>
+      <td><strong>Ground Station</strong></td>
+      <td>Observatory, Tracking Station, Monitoring Facility</td>
+    </tr>
+    <tr>
+      <td><strong>Mission</strong></td>
+      <td>Operation, Campaign, Deployment</td>
+    </tr>
+    <tr>
+      <td><strong>Crew Member</strong></td>
+      <td>Operator, Astronaut, Personnel</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="steps">Steps</h3>
+<ol>
+  <li>Select an entity type (e.g., <code>Asteroid</code>).</li>
+  <li>Open the entity's <strong>description</strong> or <strong>metadata</strong> section.</li>
+  <li>Add common aliases — e.g., <em>"Also known as: Near-Earth Object, NEO, Threat Object, Celestial Target."</em></li>
+  <li>Repeat for property-level terms (e.g., <code>risk_category</code> description: <em>"Also called: Hazard Score, Threat Level, Danger Rating."</em>).</li>
+  <li><strong>Save</strong> the ontology after updating descriptions.</li>
+</ol>
+<blockquote>🎯 <strong>Why this matters:</strong> When an analyst types <em>"show me all NEOs near Earth"</em> into a Fabric search bar or an AI agent prompt, the ontology resolves <strong>NEO → Asteroid</strong> automatically. No more guesswork, no more mismatched filters.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/purview/concept-business-glossary">Business Glossary / Purview</a> - <a href="https://learn.microsoft.com/en-us/fabric/admin/metadata-scanning-overview">Metadata Scanning</a></blockquote>
+<hr>
+<h2 id="-add-derived-properties">6️⃣ Add Derived Properties</h2>
+<p>Derived properties are calculated values defined once in the ontology and usable everywhere — reports, notebooks, Copilot answers.</p>
+<h3 id="properties-to-define">Properties to Define</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Entity</th>
+      <th>Derived Property</th>
+      <th>Logic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Asteroid</strong></td>
+      <td><code>threat_level</code></td>
+      <td>Derived from <code>relative_velocity_kph</code>, <code>avg_diameter_m</code>, and <code>miss_distance_km</code>. Example: <code>CASE WHEN relative_velocity_kph > 72000 AND avg_diameter_m > 500 AND miss_distance_km < 7500000 THEN 'Critical' WHEN is_hazardous = true THEN 'High' ELSE 'Normal' END</code></td>
+    </tr>
+    <tr>
+      <td><strong>Mission</strong></td>
+      <td><code>is_long_duration</code></td>
+      <td><code>CASE WHEN duration_days > 365 THEN true ELSE false END</code></td>
+    </tr>
+    <tr>
+      <td><strong>Exoplanet</strong></td>
+      <td><code>is_earth_like</code></td>
+      <td><code>CASE WHEN earth_similarity_index > 0.8 AND habitability_zone = 'Habitable Zone' THEN true ELSE false END</code></td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="steps">Steps</h3>
+<ol>
+  <li>Select the entity (e.g., <code>Asteroid</code>).</li>
+  <li>Click <strong>+ Add Property</strong>.</li>
+  <li>Enter the property name: <code>threat_level</code>.</li>
+  <li>Write the expression using the ontology expression editor.</li>
+  <li>Set the return type (<code>String</code> for threat_level, <code>Boolean</code> for is_long_duration and is_earth_like).</li>
+  <li><strong>Save</strong> the ontology.</li>
+</ol>
+<blockquote>⚠️ <strong>Preview Limitation:</strong> Expression support is limited in preview. Complex expressions may need to be pre-computed in your Gold layer notebook and exposed as regular mapped properties instead.</blockquote>
+<hr>
+<h2 id="-test-the-ontology">7️⃣ Test the Ontology</h2>
+<p>Before handing the ontology to the rest of the agency, verify it works as expected.</p>
+<h3 id="browse-entities">Browse Entities</h3>
+<ol>
+  <li>In the ontology designer, open the <strong>Preview experience</strong> to launch the graph visualization.</li>
+  <li>Select <strong>Asteroid</strong> — you should see a paginated list of all asteroid entities with their properties.</li>
+  <li>Click any asteroid to view its <strong>detail card</strong>: properties, relationships, and derived values.</li>
+</ol>
+<h3 id="search">Search</h3>
+<ol>
+  <li>Use the ontology <strong>Search</strong> bar.</li>
+  <li>Type: <em>"dangerous asteroids near Earth"</em></li>
+  <li>Verify the search resolves the synonym "dangerous" to <code>is_hazardous = true</code> and returns the correct filtered list.</li>
+</ol>
+<h3 id="traverse-relationships">Traverse Relationships</h3>
+<ol>
+  <li>From an asteroid detail card, click the <strong>Relationships</strong> tab.</li>
+  <li>Verify you can navigate: Asteroid → targeted by → Mission → assigned to → Crew Members.</li>
+  <li>Confirm the relationship chain resolves correctly across all entity types.</li>
+</ol>
+<h3 id="validate-derived-properties">Validate Derived Properties</h3>
+<ol>
+  <li>Open the <strong>Asteroid</strong> entity list.</li>
+  <li>Confirm the <code>threat_level</code> column shows derived values (Critical / High / Normal).</li>
+  <li>Spot-check a few records against the Gold table to ensure the logic is correct.</li>
+</ol>
+<blockquote>✅ If all of the above works, your ontology is ready for production use.</blockquote>
+<hr>
+<h2 id="-ontology-governance">8️⃣ Ontology Governance</h2>
+<p>An ontology is only as good as its governance. Establish clear ownership and change-management processes.</p>
+<h3 id="ownership-model">Ownership Model</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Responsibility</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Ontology Owner</strong> (Data Architect)</td>
+      <td>Approves new entity types and relationship changes</td>
+    </tr>
+    <tr>
+      <td><strong>Domain Steward</strong> (per team)</td>
+      <td>Maintains synonyms and business terms for their domain</td>
+    </tr>
+    <tr>
+      <td><strong>Data Engineer</strong></td>
+      <td>Ensures Gold tables stay aligned with entity mappings</td>
+    </tr>
+    <tr>
+      <td><strong>AI/Agent Builder</strong></td>
+      <td>Consumes the ontology; reports gaps or missing terms</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="change-management-process">Change Management Process</h3>
+<ol>
+  <li><strong>Propose</strong> — Submit a change request (new entity, synonym, or relationship) via your team's governance channel.</li>
+  <li><strong>Review</strong> — The Ontology Owner and affected Domain Stewards review the proposal.</li>
+  <li><strong>Approve & Implement</strong> — Changes are made in the ontology.</li>
+  <li><strong>Validate</strong> — Run the test steps from Section 7 to confirm nothing breaks.</li>
+  <li><strong>Publish</strong> — The updated ontology is available to all consumers.</li>
+</ol>
+<h3 id="version-history">Version History</h3>
+<p>Fabric IQ Ontology maintains a <strong>version history</strong>. Use it to:</p>
+<ul>
+  <li>Track who changed what and when.</li>
+  <li>Roll back if a synonym causes unintended query behavior.</li>
+  <li>Audit changes for compliance.</li>
+</ul>
+<h3 id="integration-with-external-agents-mcp">Integration with External Agents (MCP)</h3>
+<blockquote>⚠️ <strong>Preview Feature:</strong> MCP (Model Context Protocol) integration is part of the Fabric IQ public preview.</blockquote>
+<p>Fabric IQ ontologies can be exposed to <strong>third-party AI agents</strong> via MCP endpoints. This means external tools and custom agents can query your ontology for entity definitions, relationships, and business terms — ensuring consistent language even outside the Fabric ecosystem.</p>
+<p>The MCP server endpoint follows this format:</p>
+<pre><code class="language-plaintext">https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/&lt;workspace-ID&gt;/items/&lt;ontology-item-ID&gt;/ontologyEndpoint</code></pre>
+<p>To connect an MCP-compatible client (VS Code Agent Mode, Claude Desktop, etc.), register this endpoint URL with OAuth 2.1 authentication.</p>
+<blockquote>💡 <strong>Future-Proofing:</strong> As MCP support matures, your ontology becomes the <strong>universal contract</strong> between ZOSA's internal dashboards and external partner systems.</blockquote>
+<blockquote>📚 <strong>Official Documentation:</strong> - <a href="https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-use-ontology-mcp-server">Use Ontology MCP Server</a> - <a href="https://learn.microsoft.com/en-us/fabric/governance/lineage">Lineage</a> - <a href="https://learn.microsoft.com/en-us/fabric/governance/impact-analysis">Impact Analysis</a></blockquote>
+<hr>
+<h2 id="module-10-checkpoint">✅ Module 10 Checkpoint</h2>
+<p>Verify you've completed each milestone before proceeding:</p>
+<ul>
+  <li>[ ] Ontology <strong><code>zosa_knowledge_model</code></strong> created in the ZOSA-Dev workspace</li>
+  <li>[ ] <strong>6 entity types</strong> (Asteroid, Mission, Crew Member, Ground Station, Solar Event, Exoplanet) mapped to Gold Delta tables</li>
+  <li>[ ] <strong>5 relationships</strong> defined and resolvable (targets, assigned_to, operates_from, monitors, stationed_at)</li>
+  <li>[ ] <strong>Business terms and synonyms</strong> documented for at least 5 canonical terms</li>
+  <li>[ ] <strong>3 derived properties</strong> defined (threat_level, is_long_duration, is_earth_like)</li>
+  <li>[ ] <strong>Ontology browsing and search</strong> returns expected results</li>
+  <li>[ ] <strong>Governance roles</strong> and change-management process documented</li>
+</ul>
+<hr>
+<h2 id="-closing-story">📖 Closing Story</h2>
+<blockquote>Dr. Vasquez reviews the ontology diagram projected on the main screen. She nods slowly.  <em>"Now everyone speaks the same language — Science, Mission Ops, Defense, even the interns. But here's the real question…"</em>  She turns to you, coffee mug in hand.  <em>"Can our AI agents use this to answer questions automatically? Can I ask 'Which high-risk asteroids have no active mission?' and get a real answer — from live data — without filing a ticket?"</em>  She looks at you expectantly. You smile. That's Module 11.</blockquote>
+<hr>
+<p><strong>Navigation:</strong></p>
+<p><a href="09-data-science.md">← Module 09 — Data Science & AI</a> | <a href="11-ai-agents.md">Module 11 — AI Agents →</a></p>
+<p><a href="../README.md">← Back to README</a></p>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      
+        <a href="09-data-science.html" class="prev">
+          <span class="nav-label">← Previous</span>
+          <span class="nav-title">Module 09: Data Science</span>
+        </a>
+      
+        <a href="11-ai-agents.html" class="next">
+          <span class="nav-label">Next →</span>
+          <span class="nav-title">Module 11: AI Agents</span>
+        </a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>ZOSA Fabric Space Lab &copy; 2025 · <a href="https://github.com/Diaz506/fabric-space-lab">GitHub</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../assets/vendor/prism.min.js"></script>
+  <script src="../assets/vendor/prism-python.min.js"></script>
+  <script src="../assets/vendor/prism-sql.min.js"></script>
+  <script src="../assets/vendor/prism-powershell.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-kusto.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/storyboard.js"></script>
+  <script src="../js/code-blocks.js"></script>
+</body>
+</html>
