@@ -22,7 +22,7 @@
 
 ## 🗺️ What You'll Build
 
-Over the next 13 modules (~8 hours total), you'll go from an empty Fabric tenant to a fully operational, AI-powered analytics platform for ZOSA. Here's the journey:
+Over the next 14 modules (~8 hours total), you'll go from an empty Fabric tenant to a fully operational, AI-powered analytics platform for ZOSA. Here's the journey:
 
 | Module | Title | What You'll Do |
 |--------|-------|----------------|
@@ -30,15 +30,17 @@ Over the next 13 modules (~8 hours total), you'll go from an empty Fabric tenant
 | **01** | Capacity & Workspace Setup | Provision Fabric capacity and configure workspaces |
 | **02** | Governance & Security | Lock down workspaces with roles, labels, and data security |
 | **03** | Data Ingestion | Ingest raw data into lakehouses and connect external sources |
-| **04** | Medallion Lakehouse | Build Bronze, Silver, and Gold layers with PySpark |
-| **05** | Semantic Model | Create a star schema semantic model for analytics |
-| **06** | Power BI Reports | Build interactive reports and dashboards |
-| **07** | Real-Time Intelligence | Stream telemetry with Eventhouse and KQL |
-| **08** | Data Science | Train and deploy ML models in Fabric |
-| **09** | Ontology & Knowledge Graph | Model domain knowledge and entity relationships |
-| **10** | AI Agents | Build AI-powered agents for data interaction |
-| **11** | CI/CD & Deployment | Version control and automated deployments |
-| **12** | Monitoring & Optimization | Capacity management, lineage, and performance tuning |
+| **04** | Data Contracts | Define versioned schema contracts with quality and freshness rules |
+| **05** | Medallion Lakehouse | Build Bronze, Silver, and Gold layers with PySpark |
+| **06** | Semantic Model (Direct Lake) | Create a Direct Lake star-schema semantic model for analytics |
+| **07** | Power BI Reports | Build interactive reports and dashboards |
+| **08** | Real-Time Intelligence | Stream telemetry with Eventhouse and KQL |
+| **09** | Data Science & AI | Train and deploy ML models in Fabric |
+| **10** | Ontology & Knowledge Graph | Model domain knowledge and entity relationships |
+| **11** | AI Agents | Build AI-powered agents for data interaction |
+| **12** | CI/CD & Deployment | Version control and automated deployments |
+| **13** | Monitoring & Optimization | Capacity management, lineage, and performance tuning |
+| **14** | Fabric Apps | Build a full-stack data application inside Fabric |
 
 ---
 
