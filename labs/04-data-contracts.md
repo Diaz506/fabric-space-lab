@@ -36,7 +36,7 @@ A **data contract** is an explicit, machine-enforceable agreement between a data
 > 💡 **Contracts vs. governance:** In [Module 02](02-governance-and-security.md) you controlled *who can see* data (RLS/CLS/OLS). A data contract controls *whether data is allowed to move at all*. They're complementary: governance is about access, contracts are about trust.
 
 > 📚 **Official Documentation:**
-> - [Data quality in Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/governance/data-quality-overview)
+> - [Data quality in Microsoft Fabric](https://learn.microsoft.com/en-us/purview/data-quality-overview)
 > - [Delta Lake schema enforcement & evolution](https://learn.microsoft.com/en-us/azure/databricks/delta/update-schema)
 > - [Purview data quality rules](https://learn.microsoft.com/en-us/purview/data-quality-overview)
 
@@ -250,7 +250,7 @@ In [Module 08 — Real-Time Intelligence](08-real-time-intelligence.md) you'll l
 
 > 📚 **Official Documentation:**
 > - [Fabric Activator (Reflex) alerts](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction)
-> - [Assign data stewards in Purview](https://learn.microsoft.com/en-us/purview/how-to-workflow-manual-approval)
+> - [Approval workflows in Microsoft Purview](https://learn.microsoft.com/en-us/purview/concept-workflow)
 
 ---
 
