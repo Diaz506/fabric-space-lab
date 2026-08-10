@@ -33,7 +33,7 @@ Microsoft Fabric supports multiple deployment patterns. Choosing the right one d
 
 > 📚 **Official Documentation:**
 > - [Lifecycle Management Best Practices](https://learn.microsoft.com/en-us/fabric/cicd/best-practices-cicd)
-> - [Fabric CI/CD with APIs](https://learn.microsoft.com/en-us/fabric/cicd/manage-deployment-using-rest-api)
+> - [Fabric CI/CD with APIs](https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/pipeline-automation)
 
 ---
 
@@ -180,7 +180,7 @@ Because Git integration is enabled, the Variable Library is stored as JSON in yo
 - Rollback is as simple as reverting a Git commit
 
 > 📚 **Learn more:**
-> - [Manage Spark Configuration (Environment Variables)](https://learn.microsoft.com/en-us/fabric/data-engineering/environment-manage-spark-conf)
+> - [Manage compute in Fabric environments](https://learn.microsoft.com/en-us/fabric/data-engineering/environment-manage-compute)
 
 ---
 

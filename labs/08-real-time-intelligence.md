@@ -19,7 +19,7 @@ The **Real-Time Hub** is Fabric's centralized management surface for all streami
 > 💡 **Tip:** As you build artifacts in this module, return to the Real-Time Hub to see them appear automatically. It is the single pane of glass for everything real-time.
 
 > 📚 **Official Documentation:**
-> - [Real-Time Hub Overview](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/real-time-hub-overview)
+> - [Real-Time Hub Overview](https://learn.microsoft.com/en-us/fabric/real-time-hub/real-time-hub-overview)
 > - [Real-Time Intelligence Overview](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/overview)
 
 ---
@@ -110,8 +110,8 @@ finally:
 > ⚠️ **Important:** Replace `<your-custom-endpoint-connection-string>` with the actual connection string copied from step 5. The connection string is only available **after publishing** the Eventstream. Keep the script running in a terminal for the remainder of this module.
 
 > 📚 **Official Documentation:**
-> - [Create and manage an Eventstream](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-manage-an-eventstream)
-> - [Add Custom endpoint source](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/add-source-custom-endpoint)
+> - [Create and manage an Eventstream](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/create-manage-an-eventstream)
+> - [Add Custom endpoint source](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/add-source-custom-app)
 
 ---
 

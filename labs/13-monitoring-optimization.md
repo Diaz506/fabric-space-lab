@@ -255,7 +255,7 @@ For ZOSA: After optimizations, if average consumption drops from 85% to 45% of F
 > - [Spark Job Concurrency & Optimization](https://learn.microsoft.com/en-us/fabric/data-engineering/spark-job-concurrency-and-queueing)
 > - [Notebook Optimization](https://learn.microsoft.com/en-us/fabric/data-engineering/author-execute-notebook)
 > - [Direct Lake Overview](https://learn.microsoft.com/en-us/power-bi/enterprise/directlake-overview)
-> - [Performance Best Practices (Data Warehouse)](https://learn.microsoft.com/en-us/fabric/data-warehouse/performance-guidelines)
+> - [Performance Best Practices (Data Warehouse)](https://learn.microsoft.com/en-us/fabric/data-warehouse/guidelines-warehouse-performance)
 > - [Query Insights](https://learn.microsoft.com/en-us/fabric/data-warehouse/query-insights)
 > - [Capacity Settings](https://learn.microsoft.com/en-us/fabric/admin/service-admin-portal-capacity-settings)
 

@@ -196,7 +196,7 @@ This is the step that ends the vocabulary wars. For each concept that different 
 
 > 📚 **Official Documentation:**
 > - [Business Glossary / Purview](https://learn.microsoft.com/en-us/purview/concept-business-glossary)
-> - [Metadata Scanning](https://learn.microsoft.com/en-us/fabric/admin/metadata-scanning-overview)
+> - [Metadata Scanning](https://learn.microsoft.com/en-us/fabric/governance/metadata-scanning-overview)
 
 ---
 
