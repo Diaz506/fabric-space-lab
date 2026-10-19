@@ -2,7 +2,7 @@
 
 > One language for the whole agency — Fabric IQ Ontology
 
-> ⚠️ **Public Preview Notice:** Fabric IQ and Ontology are in **Public Preview** as of April 2026. Features, APIs, and UI may change before General Availability. Use in production at your own discretion.
+> ⚠️ **Public Preview Notice:** The **Ontology** item in Fabric IQ remains in **Public Preview**. Other Fabric IQ integrations may have different release states — for example, the Fabric IQ MCP Server reached GA in September 2026.
 
 ---
 
@@ -34,7 +34,7 @@ You've built every data layer — Bronze through Gold — stood up reports, real
 > - [Create Entity Types](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-create-entity-types)
 > - [Fabric Copilot Overview](https://learn.microsoft.com/en-us/fabric/get-started/copilot-fabric-overview)
 
-> ⚠️ **Preview Reminder:** Fabric IQ Ontology is in **Public Preview**. The steps below reflect the current UI — expect minor changes as the feature evolves toward GA.
+> ⚠️ **Preview Reminder:** Fabric IQ Ontology is in **Public Preview**. The steps below reflect the current UI — expect minor changes as the ontology item evolves toward GA.
 
 ---
 
@@ -130,7 +130,7 @@ Now translate the whiteboard design into Fabric.
    - **Build from OneLake** — if you want to map directly to Delta tables in your Lakehouse.
 6. Click **Create**. Fabric opens the ontology designer canvas.
 
-> ⚠️ **Preview Note:** If you don't see *Ontology (preview)* under **+ New Item**, ensure your tenant admin has enabled the **Fabric IQ (Preview)** feature in the admin portal under *Tenant settings → Fabric IQ*. You may also need to enable **Microsoft Copilot and Azure OpenAI** tenant settings.
+> ⚠️ **Preview Note:** If you don't see *Ontology (preview)* under **+ New Item**, ensure your tenant admin has enabled the relevant **Ontology (preview)** tenant setting. You may also need to enable **Microsoft Copilot and Azure OpenAI** tenant settings.
 
 > 💡 **Pro Tip:** If your Gold layer already feeds a **Power BI semantic model**, choose "Generate from semantic model" — it already contains trusted measures and dimension hierarchies that accelerate ontology mapping.
 
@@ -196,7 +196,7 @@ This is the step that ends the vocabulary wars. For each concept that different 
 
 > 📚 **Official Documentation:**
 > - [Business Glossary / Purview](https://learn.microsoft.com/en-us/purview/concept-business-glossary)
-> - [Metadata Scanning](https://learn.microsoft.com/en-us/fabric/admin/metadata-scanning-overview)
+> - [Metadata Scanning](https://learn.microsoft.com/en-us/fabric/governance/metadata-scanning-overview)
 
 ---
 
@@ -288,9 +288,9 @@ Fabric IQ Ontology maintains a **version history**. Use it to:
 
 ### Integration with External Agents (MCP)
 
-> ⚠️ **Preview Feature:** MCP (Model Context Protocol) integration is part of the Fabric IQ public preview.
+> ✅ **Generally Available:** The Fabric IQ MCP Server reached **GA in September 2026**. Ontology itself remains preview, so validate the specific ontology endpoint experience in your tenant before using it for production automation.
 
-Fabric IQ ontologies can be exposed to **third-party AI agents** via MCP endpoints. This means external tools and custom agents can query your ontology for entity definitions, relationships, and business terms — ensuring consistent language even outside the Fabric ecosystem.
+Fabric IQ can expose governed business context to **third-party AI agents** via MCP endpoints. This means external tools and custom agents can query approved Fabric business context — and, where supported for your tenant, ontology definitions, relationships, and business terms — ensuring consistent language even outside the Fabric ecosystem.
 
 The MCP server endpoint follows this format:
 ```
@@ -299,10 +299,10 @@ https://api.fabric.microsoft.com/v1/mcp/dataPlane/workspaces/<workspace-ID>/item
 
 To connect an MCP-compatible client (VS Code Agent Mode, Claude Desktop, etc.), register this endpoint URL with OAuth 2.1 authentication.
 
-> 💡 **Future-Proofing:** As MCP support matures, your ontology becomes the **universal contract** between ZOSA's internal dashboards and external partner systems.
+> 💡 **Future-Proofing:** As Fabric IQ MCP adoption grows, your ontology becomes the **universal contract** between ZOSA's internal dashboards and external partner systems.
 
 > 📚 **Official Documentation:**
-> - [Use Ontology MCP Server](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-use-ontology-mcp-server)
+> - [Fabric IQ MCP Server](https://learn.microsoft.com/en-us/fabric/iq/connectors/fabric-iq-mcp)
 > - [Lineage](https://learn.microsoft.com/en-us/fabric/governance/lineage)
 > - [Impact Analysis](https://learn.microsoft.com/en-us/fabric/governance/impact-analysis)
 

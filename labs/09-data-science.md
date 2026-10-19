@@ -33,7 +33,7 @@ Microsoft Fabric ships a full data science toolkit — no extra provisioning, no
 
 > 📚 **Official Documentation:**
 > - [Data Science in Fabric Overview](https://learn.microsoft.com/en-us/fabric/data-science/data-science-overview)
-> - [Notebooks for Data Science](https://learn.microsoft.com/en-us/fabric/data-science/notebooks-overview)
+> - [Create and use notebooks](https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook)
 
 ---
 
@@ -178,7 +178,7 @@ print(f"\nTest label distribution:\n{y_test.value_counts(normalize=True)}")
 
 > 📚 **Official Documentation:**
 > - [Scikit-learn in Fabric](https://learn.microsoft.com/en-us/fabric/data-science/train-models-scikit-learn)
-> - [SynapseML](https://learn.microsoft.com/en-us/fabric/data-science/synapseml-overview)
+> - [SynapseML](https://learn.microsoft.com/en-us/fabric/data-science/synapse-overview)
 
 ---
 
@@ -416,4 +416,3 @@ In **[Module 10 — Ontology & Knowledge Graph](10-ontology-knowledge-graph.md)*
 [← Module 08 — Real-Time Intelligence](08-real-time-intelligence.md) | [Module 10 — Ontology & Knowledge Graph →](10-ontology-knowledge-graph.md)
 
 [← Back to README](../README.md)
-

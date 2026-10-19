@@ -580,8 +580,8 @@ Verify your Fabric Apps setup:
 | Fabric Apps overview | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/overview) |
 | Rayfin CLI reference | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/cli-reference) |
 | Data model decorators | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/data-models) |
-| Fabric Apps permissions | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/permissions) |
-| Local development guide | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/local-development) |
+| Fabric Apps authentication & permissions | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/authentication) |
+| Local development (create an app with the CLI) | [Microsoft Learn](https://learn.microsoft.com/en-us/fabric/apps/create-app-with-cli) |
 
 ---
 
