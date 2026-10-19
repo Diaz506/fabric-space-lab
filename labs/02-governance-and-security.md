@@ -47,7 +47,7 @@ Fabric security isn't a single gate — it's a series of concentric walls. Each 
 **💡 Tip:** Think of it like a building. Tenant security is the perimeter fence, workspace security is the building door, item security is the office door, and data security is the locked file cabinet inside the office.
 
 > 📚 **Official Documentation:**
-> - [OneLake Security — Get Started](https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-security)
+> - [OneLake Security — Get Started](https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-onelake-security)
 
 ---
 
@@ -392,6 +392,8 @@ This gives your organization a searchable inventory of every dataset, report, an
 
 OneLake Security is the **unified data access control layer** for Microsoft Fabric. Once configured, permissions propagate to **all engines** — Spark notebooks, SQL analytics endpoints, Power BI semantic models, Dataflows, and even Copilot. You define rules once; they're enforced everywhere.
 
+> ✅ **Generally Available:** OneLake security and OneLake data access roles reached **GA in May 2026**, and OneLake security is enabled by default on all supported items. GA added a wizard-based role creation flow (with RLS and CLS defined at creation time), inline RLS validation, and cross-region shortcut support.
+
 **⚠️ Note: OneLake Security, once enabled on a lakehouse, cannot be turned off. Plan your roles and rules carefully before flipping the switch.**
 
 ### Enabling OneLake Security
@@ -548,7 +550,7 @@ GRANT UNMASK TO [ZOSA-Admins];
 > - [Column-Level Security](https://learn.microsoft.com/en-us/fabric/data-warehouse/column-level-security)
 > - [Object-Level Security](https://learn.microsoft.com/en-us/power-bi/enterprise/service-admin-ols)
 > - [Dynamic Data Masking](https://learn.microsoft.com/en-us/fabric/data-warehouse/dynamic-data-masking)
-> - [OneLake Security — Get Started](https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-security)
+> - [OneLake Security — Get Started](https://learn.microsoft.com/en-us/fabric/onelake/security/get-started-onelake-security)
 
 ---
 
@@ -583,7 +585,7 @@ Verify you've completed the following:
 - [ ] You understand the 4 data security layers: **RLS** (row filter), **CLS** (column deny), **OLS** (object hide), **DDM** (value mask)
 - [ ] OneLake Security planning documented — you'll implement the data-level rules in Module 05 after data is loaded
 
-### 🧪 How You'll Validate Security (Preview)
+### 🧪 How You'll Validate Security
 
 You've defined the rules — but how do you prove they work? Here's what you'll do once data exists (Modules 04–05):
 

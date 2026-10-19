@@ -40,14 +40,16 @@ What makes Data Agents special:
 
 ---
 
-### 🆕 What's New (June 2026)
+### 🆕 What's New (October 2026)
 
 Data Agents have moved fast since the March 2026 GA. The most relevant recent additions:
 
-- **Creator Agent (Preview)** — an AI assistant that *builds and refines your data agent for you* (schema exploration, few-shot generation, instructions). You'll try it in Step 2b below.
+- **Build agent with AI (Preview)** — an AI assistant that *builds and refines your data agent for you* (schema exploration, few-shot generation, instructions). You'll try it in Step 2b below.
 - **Mirrored databases as a source** — alongside lakehouses, warehouses, semantic models, KQL databases, and ontologies, you can now ground an agent on a **mirrored database**.
 - **Service Principal authentication (Preview)** — agents can authenticate as a service principal (not just a signed-in user), enabling the automated, CI/CD-driven consumption you set up in [Module 12](12-ci-cd-deployment.md).
 - **Microsoft 365 Copilot integration (GA)** — publish an agent so users can ask questions in **Teams and Excel**, not just the Fabric portal.
+- **Fabric data agent visualizations (GA)** — data agents can return interactive charts alongside text and tables.
+- **Data-agent MCP tasks (GA)** — published data-agent endpoints can support long-running Model Context Protocol operations.
 - **Observability via Microsoft Foundry (Preview)** — richer monitoring of agent performance and query behavior.
 - **Purview DLP enforcement (GA)** — Data Loss Prevention policies can restrict what an agent returns, on top of RLS/CLS/OLS.
 - **Response sizing** — agent answers are optimized for *conversational insights* (a capped number of rows/columns per request), not bulk data export.
@@ -100,9 +102,9 @@ Select which entities and tables the agent can query. You're giving it a "lens" 
 
 ---
 
-### 🧠 Step 2b — Build with AI: Creator Agent (Preview)
+### 🧠 Step 2b — Build with AI (Preview)
 
-Manually writing agent instructions and example queries is tedious. The **Creator Agent** is a specialized AI assistant that does the heavy lifting for you — it explores your schema, learns from past query patterns, and generates the four configuration artifacts that drive answer quality:
+Manually writing agent instructions and example queries is tedious. **Build agent with AI** is a specialized assistant that does the heavy lifting for you — it explores your schema, learns from past query patterns, and generates the four configuration artifacts that drive answer quality:
 
 | Configuration | What it controls |
 |---|---|
@@ -111,9 +113,9 @@ Manually writing agent instructions and example queries is tedious. The **Creato
 | **Data Source Descriptions** | What each source contains and how it's organized |
 | **Example Queries** | Natural-language questions paired with queries that capture business logic |
 
-> ⚠️ **Preview scope:** Creator Agent currently supports **SQL and Eventhouse data sources only**. It won't appear for a lakehouse/ontology/semantic-model agent. To try it in ZOSA, attach a supported source — for example the **Eventhouse you built in [Module 08](08-real-time-intelligence.md)** or your lakehouse's **SQL analytics endpoint** — to a data agent, with the relevant tables selected.
+> ⚠️ **Preview scope:** Build agent with AI currently supports **SQL and Eventhouse data sources only**. It won't appear for a lakehouse/ontology/semantic-model agent. To try it in ZOSA, attach a supported source — for example the **Eventhouse you built in [Module 08](08-real-time-intelligence.md)** or your lakehouse's **SQL analytics endpoint** — to a data agent, with the relevant tables selected.
 
-**To launch it:** open your data agent and select **Build agent with AI** in the ribbon. This opens the Creator Agent chat. (**Test data agent** switches back to the normal test mode.)
+**To launch it:** open your data agent and select **Build agent with AI** in the ribbon. This opens the build assistant chat. (**Test data agent** switches back to the normal test mode.)
 
 **The recommended loop — Explore → Learn → Generate → Validate → Apply:**
 
@@ -144,10 +146,10 @@ Manually writing agent instructions and example queries is tedious. The **Creato
 
 5. **Apply** — review each suggestion and click **Accept** to apply it, then switch to **Test mode** to try sample questions.
 
-> ⚠️ **Two things to know:** Creator Agent runs **read-only** queries only (data modifications are blocked), and accepting a suggestion **replaces** the corresponding configuration block during preview — so review changes before applying.
+> ⚠️ **Two things to know:** Build agent with AI runs **read-only** queries only (data modifications are blocked), and accepting a suggestion **replaces** the corresponding configuration block during preview — so review changes before applying.
 
 > 📚 **Official Documentation:**
-> - [Creator agent for data agent (Preview)](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-creator-agent-overview)
+> - [Build agent with AI for data agent (Preview)](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-creator-agent-overview)
 > - [Configure Fabric data agent tenant settings](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-tenant-settings)
 
 ---
@@ -222,7 +224,7 @@ You can improve accuracy by adding custom instructions and example Q&A pairs.
    | "Any solar storms?" | Query `gold_solar_activity` for flares with `intensity_class IN ('X', 'M')` in the past 7 days |
    | "Station status" | Query `gold_mission_summary` grouped by `ground_station` showing active mission count |
 
-> 📚 **Learn more:** [Creator agent for data agent](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-creator-agent-overview) — use it to generate and refine these instructions and few-shot examples automatically.
+> 📚 **Learn more:** [Build agent with AI for data agent](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-creator-agent-overview) — use it to generate and refine these instructions and few-shot examples automatically.
 
 ---
 
@@ -508,4 +510,3 @@ Verify you've completed all key objectives:
 | [← Module 10 — Ontology & Knowledge Graph](10-ontology-knowledge-graph.md) | [Module 12 — CI/CD & Deployment →](12-ci-cd-deployment.md) |
 
 [← Back to README](../README.md)
-
